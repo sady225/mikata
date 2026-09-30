@@ -228,6 +228,25 @@
             object-fit: cover;
             display: block;
         }
+        .thumb-row {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            margin-top: 12px;
+            max-width: 680px;
+        }
+        .thumb-row button.thumb {
+            min-width: 0;
+            border: none;
+            padding: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: zoom-in;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+            background: #fff;
+            line-height: 0;
+        }
+        .thumb-row button.thumb img { width: 100%; height: auto; display: block; }
         .photo-note {
             font-size: 0.75em;
             color: #888;
@@ -249,7 +268,10 @@
         }
 
         .modal-overlay {
-            display: none;
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0s linear 0.25s;
             position: fixed;
             inset: 0;
             background: rgba(20,25,30,0.85);
@@ -258,7 +280,16 @@
             justify-content: center;
             padding: 20px;
         }
-        .modal-overlay.open { display: flex; }
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.25s ease;
+        }
+        .modal-overlay #modalPhotoWrap {
+            transform: scale(0.96);
+            transition: transform 0.25s ease;
+        }
+        .modal-overlay.open #modalPhotoWrap { transform: scale(1); }
         .modal-overlay img {
             max-width: 100%;
             max-height: 80vh;
@@ -568,13 +599,6 @@
                         </button>
                     </div>
                     <p class="photo-note">写真タップで拡大表示します。</p>
-                    <p style="margin-top:24px;"><strong>2026年9月28日（月）開催「子育て勉強会 〜地域の子どもと、どう関わる？〜」</strong><br>19:00〜21:00／喜名公民館／参加費無料</p>
-                    <div class="photo-grid" style="margin-top:12px; max-width:340px;">
-                        <button class="thumb" type="button" data-modal-src="2026-kcs/kosodate-20260928-flyer.jpg" data-modal-cap="2026年9月28日 子育て勉強会のチラシ">
-                            <img src="2026-kcs/kosodate-20260928-flyer.jpg" alt="2026年9月28日 子育て勉強会のチラシ" loading="lazy" style="aspect-ratio:auto;">
-                        </button>
-                    </div>
-                    <p class="photo-note">チラシをタップで拡大表示します。</p>
                 </div>
             </div>
 
@@ -682,6 +706,18 @@
                     <div class="timeline-body">
                         <h4>子育て勉強会「地域の子どもと、どう関わる？」<span class="timeline-badge">開催</span></h4>
                         <p>喜名公民館にて19:00〜21:00に開催。第1部で8/20の夏期講座での実践報告を共有し、第2部では「地域・家庭・学校について、思うこと・求めること・気になること・協力できること」を付箋に書き出して、グループで意見交換しました。意見交換では43件の声が集まり、終了後には15件の感想が寄せられました。いただいた声は、読谷村教育委員会 学校指導課とも共有し、今後のワーキングチームでの検討や、来年度のKCS事業の企画に活かしていきます。今後の子育て勉強会は、青少年センター・社会福祉協議会との共催で進めていく予定です。</p>
+                        <div class="thumb-row">
+                            <button class="thumb" type="button" style="flex:0.667 1 0;" data-modal-src="2026-kcs/kosodate-20260928-flyer2.jpg" data-modal-cap="2026年9月28日 子育て勉強会のチラシ">
+                                <img src="2026-kcs/kosodate-20260928-flyer2.jpg" alt="2026年9月28日 子育て勉強会のチラシ" loading="lazy">
+                            </button>
+                            <button class="thumb" type="button" style="flex:0.667 1 0;" data-modal-src="2026-kcs/kosodate-20260928-flyer.jpg" data-modal-cap="2026年9月28日 子育て勉強会のチラシ">
+                                <img src="2026-kcs/kosodate-20260928-flyer.jpg" alt="2026年9月28日 子育て勉強会のチラシ" loading="lazy">
+                            </button>
+                            <button class="thumb" type="button" style="flex:1.684 1 0;" data-modal-src="2026-kcs/kosodate-20260928-photo.jpg" data-modal-cap="子育て勉強会の様子（2026年9月28日開催）">
+                                <img src="2026-kcs/kosodate-20260928-photo.jpg" alt="2026年9月28日 子育て勉強会の様子" loading="lazy">
+                            </button>
+                        </div>
+                        <p class="photo-note">チラシ・写真をタップで拡大表示します。</p>
                     </div>
                 </li>
             </ul>
@@ -689,10 +725,10 @@
             <p class="timeline-subhead upcoming">今後の予定</p>
             <ul class="timeline">
                 <li class="timeline-item upcoming">
-                    <span class="timeline-date">2026.11</span>
+                    <span class="timeline-date">2026.11.5</span>
                     <div class="timeline-body">
                         <h4>第3回地域連携会議<span class="timeline-badge upcoming">予定</span></h4>
-                        <p>開催予定です。詳細が決まり次第、このページでお知らせします。</p>
+                        <p>11月5日（木）10:00〜11:30、喜名公民館にて開催予定です。</p>
                     </div>
                 </li>
                 <li class="timeline-item upcoming">
@@ -806,15 +842,18 @@
                 if (existing) existing.remove();
                 modalWrap.style.width = '';
 
-                modalImg.onload = function () {
-                    var natW = modalImg.naturalWidth;
-                    var natH = modalImg.naturalHeight;
+                var pre = new Image();
+                pre.onload = function () {
+                    var natW = pre.naturalWidth;
+                    var natH = pre.naturalHeight;
                     var maxW = Math.min(window.innerWidth * 0.9, natW);
                     var maxH = window.innerHeight * 0.8;
                     var scale = Math.min(maxW / natW, maxH / natH, 1);
                     modalWrap.style.width = Math.round(natW * scale) + 'px';
+                    modalImg.src = src;
+                    modal.classList.add('open');
                 };
-                modalImg.src = src;
+                pre.src = src;
 
                 var left = btn.getAttribute('data-face-left');
                 var top = btn.getAttribute('data-face-top');
@@ -829,11 +868,10 @@
                     modalWrap.appendChild(span);
                 }
 
-                modal.classList.add('open');
             });
         });
 
-        function closeModal() { modal.classList.remove('open'); modalImg.src = ''; }
+        function closeModal() { modal.classList.remove('open'); }
         document.getElementById('modalClose').addEventListener('click', closeModal);
         modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
