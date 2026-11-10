@@ -57,7 +57,19 @@ export default {
       if(!sameOrigin(req)||req.headers.get("Content-Type")?.split(";")[0].toLowerCase()!=="application/x-www-form-urlencoded")return deny();
       const attempt=await env.LOGIN_LIMITER.limit({key:req.headers.get("CF-Connecting-IP")||"unknown"});
       if(!attempt.success)return new Response("Too many attempts",{status:429,headers:{...security,"Retry-After":"60"}});
-      const payload=await req.text();if(payload.length>1024)return deny();
+      // Reject oversized payloads without buffering the full request.
+      if(Number(req.headers.get("Content-Length")||0)>1024)return deny();
+      const reader=req.body?.getReader();if(!reader)return deny();
+      const chunks=[];let total=0;
+      while(true){
+        const part=await reader.read();if(part.done)break;
+        total+=part.value.byteLength;
+        if(total>1024){await reader.cancel();return deny();}
+        chunks.push(part.value);
+      }
+      const combined=new Uint8Array(total);let offset=0;
+      for(const chunk of chunks){combined.set(chunk,offset);offset+=chunk.byteLength;}
+      const payload=new TextDecoder("utf-8",{fatal:true}).decode(combined);
       const passcode=new URLSearchParams(payload).get("passcode")||"";
       if(passcode.length>128||!(await equalSecret(passcode,env.SEMINAR_PASSCODE)))return htmlPage(true);
       const session=await issue(env);
