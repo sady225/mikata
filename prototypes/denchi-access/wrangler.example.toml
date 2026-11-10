@@ -1,0 +1,16 @@
+# Copy to wrangler.toml only in a dedicated test project; review before deploy.
+name = "denchi-seminar-access-prototype"
+main = "src/worker.mjs"
+compatibility_date = "2026-11-11"
+workers_dev = false
+
+[[r2_buckets]]
+binding = "PRIVATE_MATERIALS"
+bucket_name = "REPLACE_WITH_PRIVATE_R2_BUCKET"
+
+[[unsafe.bindings]]
+# Placeholder, DO NOT deploy as-is. Replace with the currently documented
+# ratelimits configuration after reviewing the Cloudflare dashboard/account.
+# NOTE: this example deliberately does not contain working deployment bindings.
+name = "REPLACE_ME"
+type = "REPLACE_ME"
