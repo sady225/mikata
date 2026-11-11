@@ -8,7 +8,8 @@ const security = {
   "Referrer-Policy":"no-referrer",
   "X-Content-Type-Options":"nosniff",
   "X-Frame-Options":"DENY",
-  "Cross-Origin-Resource-Policy":"same-origin"
+  "Cross-Origin-Resource-Policy":"same-origin",
+  "Permissions-Policy":"camera=(), microphone=(), geolocation=(), payment=()"
 };
 function htmlPage(error=false) {
   const msg=error?"<p role='alert'>合言葉が違います。</p>":"";
@@ -55,10 +56,13 @@ export default {
     if(u.pathname==="/"&&req.method==="GET")return htmlPage();
     if(u.pathname==="/login"&&req.method==="POST"){
       if(!sameOrigin(req)||req.headers.get("Content-Type")?.split(";")[0].toLowerCase()!=="application/x-www-form-urlencoded")return deny();
-      const attempt=await env.LOGIN_LIMITER.limit({key:req.headers.get("CF-Connecting-IP")||"unknown"});
-      if(!attempt.success)return new Response("Too many attempts",{status:429,headers:{...security,"Retry-After":"60"}});
+      let attempt;
+      try{attempt=await env.LOGIN_LIMITER.limit({key:req.headers.get("CF-Connecting-IP")||"unknown"});}
+      catch{return new Response("Service unavailable",{status:503,headers:security});}
+      if(!attempt?.success)return new Response("Too many attempts",{status:429,headers:{...security,"Retry-After":"60"}});
       // Reject oversized payloads without buffering the full request.
-      if(Number(req.headers.get("Content-Length")||0)>1024)return deny();
+      const contentLength=req.headers.get("Content-Length");
+      if(contentLength!==null&&(!/^\d+$/.test(contentLength)||Number(contentLength)>1024))return deny();
       const reader=req.body?.getReader();if(!reader)return deny();
       const chunks=[];let total=0;
       while(true){
@@ -69,7 +73,9 @@ export default {
       }
       const combined=new Uint8Array(total);let offset=0;
       for(const chunk of chunks){combined.set(chunk,offset);offset+=chunk.byteLength;}
-      const payload=new TextDecoder("utf-8",{fatal:true}).decode(combined);
+      let payload;
+      try{payload=new TextDecoder("utf-8",{fatal:true}).decode(combined);}
+      catch{return deny();}
       const passcode=new URLSearchParams(payload).get("passcode")||"";
       if(passcode.length>128||!(await equalSecret(passcode,env.SEMINAR_PASSCODE)))return htmlPage(true);
       const session=await issue(env);
@@ -77,7 +83,9 @@ export default {
     }
     if(u.pathname==="/material"&&req.method==="GET"){
       if(!(await authorized(req,env)))return deny();
-      const obj=await env.PRIVATE_MATERIALS.get(privateObject);
+      let obj;
+      try{obj=await env.PRIVATE_MATERIALS.get(privateObject);}
+      catch{return new Response("Service unavailable",{status:503,headers:security});}
       if(!obj)return new Response("Material not configured",{status:404,headers:security});
       return new Response(obj.body,{headers:{...security,"Content-Type":"application/pdf","Content-Disposition":'inline; filename="seminar-theme-01.pdf"',"Vary":"Cookie"}});
     }
