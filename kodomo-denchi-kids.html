@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f3f8f6"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>こどものでんち Kids｜自分でえらぶ気持ちカード</title>
+<style>
+:root{--ink:#253e38;--green:#247a65;--pale:#eaf5f0;--edge:#cddfd8;--paper:#fff;--muted:#536d64}
+*{box-sizing:border-box}body{margin:0;background:#f1f6f3;color:var(--ink);font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;line-height:1.65;font-size:17px}
+button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #d38b2e;outline-offset:3px}
+.shell{max-width:720px;margin:auto;min-height:100dvh;background:var(--paper);padding:20px 16px 55px}
+header{text-align:center;padding:12px 0 16px}header h1{font-size:clamp(26px,6vw,38px);margin:4px}header p{margin:4px;color:var(--muted)}
+.tag{display:inline-block;background:var(--pale);border-radius:99px;padding:4px 12px;font-size:13px;font-weight:700}
+.panel{border:1px solid var(--edge);border-radius:20px;padding:20px 16px;margin:12px 0;background:#fff}
+.panel h2{font-size:clamp(22px,5vw,29px);line-height:1.4;margin:8px 0 14px}
+.small{font-size:14px;color:var(--muted)}.progress{height:9px;background:#e5efea;border-radius:99px;overflow:hidden}.progress span{display:block;background:var(--green);height:100%;transition:width .2s}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.option{background:#fff;border:2px solid var(--edge);border-radius:16px;padding:15px 8px;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;color:var(--ink)}
+.option .emoji{font-size:32px;line-height:1.2}.option.selected{background:var(--pale);border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}.option.selected:after{content:"✓ えらんだよ";font-size:12px;color:var(--green);font-weight:700}
+.actions{display:flex;gap:10px;margin:18px 0}.btn{border:0;border-radius:13px;padding:13px 16px;background:var(--green);color:#fff;font-weight:700;min-height:48px;flex:1}.btn.alt{background:#e9f2ed;color:var(--ink)}.btn:disabled{opacity:.35;cursor:not-allowed}
+textarea{width:100%;border:1px solid #aabeb5;border-radius:12px;padding:12px;min-height:80px;resize:vertical}
+select{padding:10px;border-radius:12px;border:1px solid var(--edge);background:#fff}
+.note{background:#f4f8f6;border-radius:14px;padding:12px;margin:12px 0}
+.cardline{border-bottom:1px solid var(--edge);padding:12px 0}.cardline:last-child{border-bottom:0}
+.cardline strong{display:block}.toolbar{display:flex;flex-wrap:wrap;gap:8px}.toolbar button{flex:1;min-width:120px}
+details{border:1px solid var(--edge);border-radius:12px;padding:10px 12px;margin-top:14px}summary{cursor:pointer;font-weight:700}
+.hide{display:none!important}a{color:#185c96}footer{margin-top:30px;border-top:1px solid var(--edge);padding-top:15px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.shell{padding:26px 34px 65px}}
+@media print{body{background:#fff}.shell{padding:0;max-width:none}header,.progress,.actions,.toolbar,footer,#stage,#historyPanel,#privacyInfo{display:none!important}#resultPanel{display:block!important;border:0;padding:0}.print-hide{display:none!important}}
+</style></head>
+<body><div class="shell">
+<header><div class="tag">琉球のタネ｜子どものMIKATA</div><h1>🔋 こどものでんち Kids</h1><p>じぶんの気持ちを、じぶんでえらぼう</p><p class="small">テストでも、しんだんでもないよ。答えなくてもいいよ。</p></header>
+<div class="panel" id="privacyInfo"><label for="wording">ことばのえらび方　</label><select id="wording"><option value="easy">やさしいことば</option><option value="normal">ふつうのことば（中高生向け）</option></select>
+<p class="small">このページは大人の記録とは別。名前は聞かないよ。記録はこの端末のブラウザにだけ保存できるよ。</p></div>
+<main>
+<div id="stage"><div class="progress" aria-label="すすみぐあい"><span id="bar"></span></div><p class="small" id="stepLabel" aria-live="polite"></p><section class="panel" id="questionPanel" aria-live="polite"></section>
+<div class="actions"><button type="button" id="prev" class="btn alt">← もどる</button><button type="button" id="next" class="btn">つぎへ →</button></div><button class="btn alt" id="stop" type="button" style="width:100%">ここでおわる（保存しない）</button></div>
+<section id="resultPanel" class="panel hide"><h2>🌱 きょうのわたしカード</h2><p class="small">これはあなたがえらんだこと。人に見せるかどうかも、あなたが決めていいよ。</p><div id="card"></div>
+<div class="toolbar print-hide"><button class="btn" id="print" type="button">🖨️ 印刷・PDF</button><button class="btn alt" id="copy" type="button">📋 コピー</button><button class="btn alt" id="save" type="button">💾 この端末に保存</button></div>
+<p class="small print-hide" id="saveNotice">保存しなくても大丈夫。学校など共有の端末では保存しないでね。</p>
+<div class="actions print-hide"><button class="btn alt" id="edit" type="button">← こたえを見なおす</button><button class="btn" id="restart" type="button">もういちど</button></div></section>
+<section id="historyPanel" class="panel"><h2>📅 この端末の記録</h2><p class="small">保存したものだけここに出るよ。ほかの人が同じ端末を使うと見えることがあるよ。</p><div id="history"></div><button type="button" class="btn alt" id="clear" style="width:100%;margin-top:12px">保存した記録をぜんぶ消す</button></section>
+</main><footer class="small">このページは医療や診断の代わりではありません。困ったときは、安心して話せる人に相談してね。<br><a href="https://mikata.ryukyu-tane.com/kodomo-denchi.html">大人向けの「こどものでんち」</a> ／ <a href="https://mikata.ryukyu-tane.com/care-torisetu.html">ケア・トリセツ</a></footer>
+</div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),KEY='kodomo_denchi_kids_v01_records',MAX=30;
+const opts={
+energy:[['⚡','元気いっぱい','元気がある'],['🙂','まあまあ','ふつう'],['😮‍💨','ちょっとつかれた','少し疲れている'],['🪫','もう休みたい','休息が必要'],['❔','わからない','わからない']],
+day:[['😵','人が多かった','人が多くて疲れた'],['🔊','音が気になった','音が負担だった'],['📚','勉強がむずかしかった','学習が難しかった'],['😟','気をつかった','人に気を使った'],['😊','楽しいことがあった','楽しいことがあった'],['🏃','体を動かした','体を動かした'],['❔','わからない','わからない']],
+restore:[['🛋️','休んだ','休息をとった'],['🎵','好きなことをした','好きな活動をした'],['🤝','話を聞いてもらった','誰かに話した'],['🌿','ひとりになれた','ひとりの時間をとった'],['😴','ねた','睡眠をとった'],['❔','わからない','わからない']],
+wish:[['🛋️','休みたい','休みたい'],['🤝','手伝ってほしい','手伝ってほしい'],['🗣️','話を聞いてほしい','話を聞いてほしい'],['🧸','ひとりでいたい','ひとりでいたい'],['🎮','好きなことをしたい','好きなことをしたい'],['❔','まだわからない','まだわからない']],
+share:[['🔒','自分だけで見たい','自分だけで見たい'],['💬','だれかに話したい','だれかに話したい'],['📄','カードを見せたい','カードを見せたい'],['❔','まだ決めない','まだ決めない']]
+};
+const titles=[['いま、どんな感じ？','今のコンディションは？'],['今日、どんなことがあった？','今日、負担や楽しさを感じたことは？'],['元気がもどったことは？','少し楽になったきっかけは？'],['どうしてほしい？','どんなサポートがほしい？'],['このカード、どうしたい？','この記録をどう扱いたい？']];
+const descriptions=['ひとつえらんでね。','いくつえらんでもいいよ。','なければえらばなくてもいいよ。','いくつえらんでもいいよ。','まだ決めなくてもいいよ。'];
+const keys=['energy','day','restore','wish','share'];let step=0;let data=blank();let showing=null;
+function blank(){return{energy:[],day:[],restore:[],wish:[],share:[],memo:''}}
+function text(t){return document.createTextNode(String(t))}
+function node(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
+function label(k){const o=opts[k].find(x=>x[1]===k);return o?o[1]:k}
+function render(){ $('stage').classList.remove('hide');$('resultPanel').classList.add('hide');$('bar').style.width=((step+1)/5*100)+'%';$('stepLabel').textContent='STEP '+(step+1)+' / 5';
+const normal=$('wording').value==='normal',p=$('questionPanel');p.replaceChildren();p.append(node('h2','',titles[step][normal?1:0]),node('p','small',descriptions[step]));
+const k=keys[step],grid=node('div','grid');opts[k].forEach(o=>{const b=node('button','option'+(data[k].includes(o[1])?' selected':''));b.type='button';b.setAttribute('aria-pressed',String(data[k].includes(o[1])));b.append(node('span','emoji',o[0]),node('span','',o[normal?2:1]));b.addEventListener('click',()=>{const selected=data[k].includes(o[1]),isUnknown=o[1].includes('わからない')||o[1].includes('決めない');if(k==='energy'||k==='share'){data[k]=selected?[]:[o[1]]}else if(isUnknown){data[k]=selected?[]:[o[1]]}else{data[k]=selected?data[k].filter(x=>x!==o[1]):[...data[k].filter(x=>!x.includes('わからない')),o[1]]}render()});grid.append(b)});p.append(grid);
+if(step===3){const details=node('details');details.append(node('summary','','✏️ 書きたいときだけ書く（任意）'));const ta=node('textarea');ta.maxLength=400;ta.placeholder='書かなくてもいいよ';ta.value=data.memo;ta.setAttribute('aria-label','ほかに伝えたいこと');ta.addEventListener('input',()=>data.memo=ta.value);details.append(ta);p.append(details)}
+$('prev').disabled=step===0;$('next').textContent=step===4?'カードを見る →':'つぎへ →';
+}
+function values(k){return data[k].length?data[k].join('、'):'えらんでいない'}
+function cardText(){return 'きょうのわたしカード\n日付：'+new Date().toLocaleDateString('ja-JP')+'\nいまの元気：'+values('energy')+'\n今日のこと：'+values('day')+'\n元気がもどったこと：'+values('restore')+'\nしてほしいこと：'+values('wish')+'\nカードの扱い：'+values('share')+(data.memo?'\nメッセージ：'+data.memo:'')+'\n※診断ではありません。'}
+function showCard(){showing=JSON.parse(JSON.stringify(data));$('stage').classList.add('hide');$('resultPanel').classList.remove('hide');const c=$('card');c.replaceChildren();[['いまの元気','energy'],['今日のこと','day'],['元気がもどったこと','restore'],['してほしいこと','wish'],['カードの扱い','share']].forEach(([title,k])=>{const line=node('div','cardline');line.append(node('strong','',title),node('span','',values(k)));c.append(line)});if(data.memo){const line=node('div','cardline');line.append(node('strong','','メッセージ'),node('span','',data.memo));c.append(line)}$('saveNotice').textContent='保存しなくても大丈夫。学校など共有の端末では保存しないでね。';window.scrollTo(0,0)}
+function readRecords(){try{const r=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(r)?r.filter(x=>x&&typeof x==='object').slice(0,MAX):[]}catch{return[]}}
+function history(){const area=$('history');area.replaceChildren();const records=readRecords();if(!records.length)area.append(node('p','small','まだ記録はないよ。'));records.forEach((r,i)=>{const wrap=node('div','note'),date=node('strong','',new Date(r.at).toLocaleString('ja-JP'));wrap.append(date);const b=node('button','btn alt','見る');b.type='button';b.style.margin='8px 0';b.addEventListener('click',()=>{const d=blank();for(const k of keys)d[k]=Array.isArray(r.data?.[k])?r.data[k].filter(x=>typeof x==='string'):[];d.memo=typeof r.data?.memo==='string'?r.data.memo:'';data=d;showCard()});wrap.append(b);area.append(wrap)})}
+$('wording').addEventListener('change',render);
+$('prev').addEventListener('click',()=>{if(step>0){step--;render();window.scrollTo(0,0)}});
+$('next').addEventListener('click',()=>{if(step<4){step++;render();window.scrollTo(0,0)}else showCard()});
+$('stop').addEventListener('click',()=>{if(confirm('ここまでのこたえを保存せずに終わる？')){data=blank();step=0;render();window.scrollTo(0,0)}});
+$('edit').addEventListener('click',()=>{step=4;render()});
+$('restart').addEventListener('click',()=>{data=blank();step=0;render()});
+$('print').addEventListener('click',()=>window.print());
+$('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(cardText());alert('コピーしたよ')}catch{alert('コピーできなかったよ。印刷・PDFを使ってね')}});
+$('save').addEventListener('click',()=>{if(!confirm('この端末に記録を残す？ 同じ端末を使う人には見えることがあるよ。'))return;try{const r=readRecords();r.unshift({at:new Date().toISOString(),data:JSON.parse(JSON.stringify(data))});localStorage.setItem(KEY,JSON.stringify(r.slice(0,MAX)));$('saveNotice').textContent='この端末に保存したよ。';history()}catch{$('saveNotice').textContent='保存できなかったよ。印刷・PDFを使ってね。'}});
+$('clear').addEventListener('click',()=>{if(confirm('この端末のKids版の記録を全部消す？ もとには戻せないよ。')){try{localStorage.removeItem(KEY);history()}catch{alert('削除できなかったよ')}}});
+render();history();
+})();
+</script></body></html>
