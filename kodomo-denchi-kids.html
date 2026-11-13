@@ -51,28 +51,39 @@ details{border:1px solid var(--edge);border-radius:12px;padding:10px 12px;margin
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='kodomo_denchi_kids_v01_records',MAX=30,THEME_KEY='kodomo_denchi_kids_theme';
 const opts={
-energy:[['⚡','元気いっぱい','元気がある'],['🙂','まあまあ','ふつう'],['😮‍💨','ちょっとつかれた','少し疲れている'],['🪫','もう休みたい','休息が必要'],['❔','わからない','わからない']],
-day:[['😵','人が多かった','人が多くて疲れた'],['🔊','音が気になった','音が負担だった'],['📚','勉強がむずかしかった','学習が難しかった'],['😟','気をつかった','人に気を使った'],['😊','楽しいことがあった','楽しいことがあった'],['🏃','体を動かした','体を動かした'],['❔','わからない','わからない']],
-restore:[['🛋️','休んだ','休息をとった'],['🎵','好きなことをした','好きな活動をした'],['🤝','話を聞いてもらった','誰かに話した'],['🌿','ひとりになれた','ひとりの時間をとった'],['😴','ねた','睡眠をとった'],['❔','わからない','わからない']],
-wish:[['🛋️','休みたい','休みたい'],['🤝','手伝ってほしい','手伝ってほしい'],['🗣️','話を聞いてほしい','話を聞いてほしい'],['🧸','ひとりでいたい','ひとりでいたい'],['🎮','好きなことをしたい','好きなことをしたい'],['❔','まだわからない','まだわからない']],
-share:[['🔒','自分だけで見たい','自分だけで見たい'],['💬','だれかに話したい','だれかに話したい'],['📄','カードを見せたい','カードを見せたい'],['❔','まだ決めない','まだ決めない']]
+energy:[['⚡','げんき いっぱい','十分にエネルギーがある'],['🙂','まあまあ','大きな疲れはない'],['😮‍💨','ちょっと つかれた','疲れを感じている'],['🪫','もう やすみたい','休息が必要な状態'],['❔','わからない','自分でも判断できない']],
+day:[['😵','ひとが おおかった','人の多い環境が負担だった'],['🔊','おとが きになった','周囲の音が気になった'],['📚','べんきょうが むずかしかった','学習内容や課題が難しかった'],['😟','ひとに きをつかった','対人関係で気を使った'],['😊','たのしいことが あった','楽しい出来事があった'],['🏃','からだを うごかした','運動や身体活動をした'],['❔','わからない','思い当たらない']],
+restore:[['🛋️','やすんだ','休憩をとった'],['🎵','すきなことを した','好きな活動に取り組んだ'],['🤝','はなしを きいてもらった','誰かに気持ちを聞いてもらった'],['🌿','ひとりに なれた','一人で過ごす時間があった'],['😴','ねた','睡眠をとった'],['❔','わからない','何が役立ったか分からない']],
+wish:[['🛋️','やすみたい','休息する時間がほしい'],['🤝','てつだってほしい','必要な場面で手助けしてほしい'],['🗣️','はなしを きいてほしい','気持ちを聞いてほしい'],['🧸','ひとりで いたい','一人で過ごせる環境がほしい'],['🎮','すきなことを したい','自分の好きな活動をする時間がほしい'],['❔','まだ わからない','今は決められない']],
+share:[['🔒','じぶんだけで みる','自分だけで記録を確認する'],['💬','だれかに はなす','信頼できる人に話す'],['📄','カードを みせる','記録を相手に見せる'],['❔','あとで きめる','共有するか後で決める']]
 };
 const titles=[['いま、どんな感じ？','今のコンディションは？'],['今日、どんなことがあった？','今日、負担や楽しさを感じたことは？'],['元気がもどったことは？','少し楽になったきっかけは？'],['どうしてほしい？','どんなサポートがほしい？'],['このカード、どうしたい？','この記録をどう扱いたい？']];
-const descriptions=['ひとつえらんでね。','いくつえらんでもいいよ。','なければえらばなくてもいいよ。','いくつえらんでもいいよ。','まだ決めなくてもいいよ。'];
+const descriptions=[
+['ひとつ えらんでね。','現在の心身の状態に近いものを一つ選んでください。'],
+['きょう あったことを えらんでね。いくつでも いいよ。','今日の出来事や、負担・楽しさを感じた場面を選んでください。複数選択できます。'],
+['すこし げんきに なったことは ある？ なければ そのままで いいよ。','気持ちや体が楽になった行動・環境があれば選んでください。該当しなければ飛ばせます。'],
+['これから どうしたい？ いくつでも いいよ。','今、周囲に希望する配慮やサポートを選んでください。複数選択できます。'],
+['このカードを どうするか えらんでね。あとで きめても いいよ。','記録の共有方法を選んでください。共有するかどうかは自分で決められます。']
+];
+const cardTitles=[['きょうの わたしカード','今日のコンディション記録'],['いまの げんき','現在の状態'],['きょうの こと','今日の出来事・負担'],['げんきに なったこと','回復につながったこと'],['してほしい こと','希望するサポート'],['カードを どうする？','記録の共有について'],['つたえたい こと','補足・伝えたいこと']];
+const uiText={easy:{prev:'← もどる',next:'つぎへ →',finish:'カードを みる →',memo:'✏️ ほかに つたえたい こと（かかなくても いいよ）',placeholder:'かかなくても いいよ',unselected:'えらんで いない',saveNotice:'ほぞんしなくても だいじょうぶ。みんなが つかう たんまつには ほぞんしないでね。'},normal:{prev:'← 前の質問',next:'次の質問へ →',finish:'記録を確認する →',memo:'✏️ 自由記述（任意）',placeholder:'伝えておきたいことがあれば入力してください',unselected:'未選択',saveNotice:'保存は任意です。学校などの共用端末には個人的な記録を残さないでください。'}};
+function isNormal(){return $('wording').value==='normal'}
+function ui(){return uiText[isNormal()?'normal':'easy']}
+function displayValue(k,v){const o=opts[k].find(x=>x[1]===v);return o?o[isNormal()?2:1]:v}
 const keys=['energy','day','restore','wish','share'];let step=0;let data=blank();let showing=null;let started=false;const THEMES=['default','sea','warm','bw','by'];const THEME_NAMES=['標準','海','あたたかい','白黒','黒黄'];
 function blank(){return{energy:[],day:[],restore:[],wish:[],share:[],memo:''}}
 function text(t){return document.createTextNode(String(t))}
 function node(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
 function label(k){const o=opts[k].find(x=>x[1]===k);return o?o[1]:k}
 function render(){if(!started)return; $('stage').classList.remove('hide');$('resultPanel').classList.add('hide');$('bar').style.width=((step+1)/5*100)+'%';$('stepLabel').textContent='STEP '+(step+1)+' / 5';
-const normal=$('wording').value==='normal',p=$('questionPanel');p.replaceChildren();p.append(node('h2','',titles[step][normal?1:0]),node('p','small',descriptions[step]));
-const k=keys[step],grid=node('div','grid');opts[k].forEach(o=>{const b=node('button','option'+(data[k].includes(o[1])?' selected':''));b.type='button';b.setAttribute('aria-pressed',String(data[k].includes(o[1])));b.append(node('span','emoji',o[0]),node('span','',o[normal?2:1]));b.addEventListener('click',()=>{const selected=data[k].includes(o[1]),isUnknown=o[1].includes('わからない')||o[1].includes('決めない');if(k==='energy'||k==='share'){data[k]=selected?[]:[o[1]]}else if(isUnknown){data[k]=selected?[]:[o[1]]}else{data[k]=selected?data[k].filter(x=>x!==o[1]):[...data[k].filter(x=>!x.includes('わからない')),o[1]]}render()});grid.append(b)});p.append(grid);
-if(step===3){const details=node('details');details.append(node('summary','','✏️ 書きたいときだけ書く（任意）'));const ta=node('textarea');ta.maxLength=400;ta.placeholder='書かなくてもいいよ';ta.value=data.memo;ta.setAttribute('aria-label','ほかに伝えたいこと');ta.addEventListener('input',()=>data.memo=ta.value);details.append(ta);p.append(details)}
-$('prev').disabled=step===0;$('next').textContent=step===4?'カードを見る →':'つぎへ →';
+const normal=isNormal(),p=$('questionPanel');p.replaceChildren();p.append(node('h2','',titles[step][normal?1:0]),node('p','small',descriptions[step][normal?1:0]));
+const k=keys[step],grid=node('div','grid');opts[k].forEach(o=>{const b=node('button','option'+(data[k].includes(o[1])?' selected':''));b.type='button';b.setAttribute('aria-pressed',String(data[k].includes(o[1])));b.append(node('span','emoji',o[0]),node('span','',o[normal?2:1]));b.addEventListener('click',()=>{const selected=data[k].includes(o[1]),isUnknown=o[0]==='❔';if(k==='energy'||k==='share'){data[k]=selected?[]:[o[1]]}else if(isUnknown){data[k]=selected?[]:[o[1]]}else{data[k]=selected?data[k].filter(x=>x!==o[1]):[...data[k].filter(x=>!opts[k].some(z=>z[0]==='❔'&&z[1]===x)),o[1]]}render()});grid.append(b)});p.append(grid);
+if(step===3){const details=node('details');details.append(node('summary','',ui().memo));const ta=node('textarea');ta.maxLength=400;ta.placeholder=ui().placeholder;ta.value=data.memo;ta.setAttribute('aria-label','ほかに伝えたいこと');ta.addEventListener('input',()=>data.memo=ta.value);details.append(ta);p.append(details)}
+$('prev').disabled=step===0;$('prev').textContent=ui().prev;$('next').textContent=step===4?ui().finish:ui().next;
 }
-function values(k){return data[k].length?data[k].join('、'):'えらんでいない'}
-function cardText(){return 'きょうのわたしカード\n日付：'+new Date().toLocaleDateString('ja-JP')+'\nいまの元気：'+values('energy')+'\n今日のこと：'+values('day')+'\n元気がもどったこと：'+values('restore')+'\nしてほしいこと：'+values('wish')+'\nカードの扱い：'+values('share')+(data.memo?'\nメッセージ：'+data.memo:'')+'\n※診断ではありません。'}
-function showCard(){showing=JSON.parse(JSON.stringify(data));$('stage').classList.add('hide');$('resultPanel').classList.remove('hide');const c=$('card');c.replaceChildren();[['いまの元気','energy'],['今日のこと','day'],['元気がもどったこと','restore'],['してほしいこと','wish'],['カードの扱い','share']].forEach(([title,k])=>{const line=node('div','cardline');line.append(node('strong','',title),node('span','',values(k)));c.append(line)});if(data.memo){const line=node('div','cardline');line.append(node('strong','','メッセージ'),node('span','',data.memo));c.append(line)}$('saveNotice').textContent='保存しなくても大丈夫。学校など共有の端末では保存しないでね。';window.scrollTo(0,0)}
+function values(k){return data[k].length?data[k].map(v=>displayValue(k,v)).join('、'):ui().unselected}
+function cardText(){const t=cardTitles.map(x=>x[isNormal()?1:0]);return t[0]+'\\n日付：'+new Date().toLocaleDateString('ja-JP')+'\\n'+t[1]+'：'+values('energy')+'\\n'+t[2]+'：'+values('day')+'\\n'+t[3]+'：'+values('restore')+'\\n'+t[4]+'：'+values('wish')+'\\n'+t[5]+'：'+values('share')+(data.memo?'\\n'+t[6]+'：'+data.memo:'')+'\\n※これは診断ではありません。'}
+function showCard(){showing=JSON.parse(JSON.stringify(data));$('stage').classList.add('hide');$('resultPanel').classList.remove('hide');const c=$('card');c.replaceChildren();[['energy',1],['day',2],['restore',3],['wish',4],['share',5]].forEach(([k,i])=>{const line=node('div','cardline');line.append(node('strong','',cardTitles[i][isNormal()?1:0]),node('span','',values(k)));c.append(line)});if(data.memo){const line=node('div','cardline');line.append(node('strong','',cardTitles[6][isNormal()?1:0]),node('span','',data.memo));c.append(line)}$('saveNotice').textContent=ui().saveNotice;window.scrollTo(0,0)}
 function readRecords(){try{const r=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(r)?r.filter(x=>x&&typeof x==='object').slice(0,MAX):[]}catch{return[]}}
 function history(){const area=$('history');area.replaceChildren();const records=readRecords();if(!records.length)area.append(node('p','small','まだ記録はないよ。'));records.forEach((r,i)=>{const wrap=node('div','note'),date=node('strong','',new Date(r.at).toLocaleString('ja-JP'));wrap.append(date);const b=node('button','btn alt','見る');b.type='button';b.style.margin='8px 0';b.addEventListener('click',()=>{const d=blank();for(const k of keys)d[k]=Array.isArray(r.data?.[k])?r.data[k].filter(x=>typeof x==='string'):[];d.memo=typeof r.data?.memo==='string'?r.data.memo:'';data=d;showCard()});wrap.append(b);area.append(wrap)})}
 function applyTheme(v){const i=THEMES.indexOf(v);const n=i<0?0:i;document.documentElement.setAttribute('data-theme',THEMES[n]);document.querySelectorAll('[data-theme-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.themeChoice===THEMES[n])));try{localStorage.setItem(THEME_KEY,THEMES[n])}catch{}}
