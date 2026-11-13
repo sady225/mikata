@@ -4,45 +4,52 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>こどものでんち Kids｜自分でえらぶ気持ちカード</title>
 <style>
-:root{--ink:#253e38;--green:#247a65;--pale:#eaf5f0;--edge:#cddfd8;--paper:#fff;--muted:#536d64}
-*{box-sizing:border-box}body{margin:0;background:#f1f6f3;color:var(--ink);font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;line-height:1.65;font-size:17px}
-button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #d38b2e;outline-offset:3px}
+:root{--ink:#253e38;--green:#247a65;--pale:#eaf5f0;--edge:#cddfd8;--paper:#fff;--muted:#536d64;--page:#f1f6f3;--card:#fff;--secondary:#e9f2ed;--focus:#d38b2e}
+[data-theme="sea"]{--ink:#063c58;--green:#075c83;--pale:#e2f3fa;--edge:#8ab5ca;--paper:#fff;--muted:#31586a;--page:#e7f4fb;--card:#fff;--secondary:#dcecf4}
+[data-theme="warm"]{--ink:#4b2d17;--green:#78502b;--pale:#f7ead9;--edge:#c6a886;--paper:#fffdf8;--muted:#654e39;--page:#f9f0e4;--card:#fffdf8;--secondary:#f3e3ce}
+[data-theme="bw"]{--ink:#000;--green:#000;--pale:#fff;--edge:#000;--paper:#fff;--muted:#111;--page:#fff;--card:#fff;--secondary:#e6e6e6;--focus:#b10000}
+[data-theme="by"]{--ink:#ffe600;--green:#ffe600;--pale:#1a1a00;--edge:#ffe600;--paper:#000;--muted:#fff28a;--page:#000;--card:#000;--secondary:#333300;--focus:#fff}
+[data-theme="by"] .btn:not(.alt){color:#000}[data-theme="by"] .option,[data-theme="by"] select,[data-theme="by"] textarea{background:#000;color:#ffe600}
+[data-theme="by"] .option.selected{background:#242400}[data-theme="by"] .note{background:#141400}
+[data-theme="bw"] .option.selected{background:#e5e5e5}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;line-height:1.65;font-size:17px}
+button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
 .shell{max-width:720px;margin:auto;min-height:100dvh;background:var(--paper);padding:20px 16px 55px}
 header{text-align:center;padding:12px 0 16px}header h1{font-size:clamp(26px,6vw,38px);margin:4px}header p{margin:4px;color:var(--muted)}
 .tag{display:inline-block;background:var(--pale);border-radius:99px;padding:4px 12px;font-size:13px;font-weight:700}
-.panel{border:1px solid var(--edge);border-radius:20px;padding:20px 16px;margin:12px 0;background:#fff}
+.panel{border:1px solid var(--edge);border-radius:20px;padding:20px 16px;margin:12px 0;background:var(--card)}
 .panel h2{font-size:clamp(22px,5vw,29px);line-height:1.4;margin:8px 0 14px}
-.small{font-size:14px;color:var(--muted)}.progress{height:9px;background:#e5efea;border-radius:99px;overflow:hidden}.progress span{display:block;background:var(--green);height:100%;transition:width .2s}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.option{background:#fff;border:2px solid var(--edge);border-radius:16px;padding:15px 8px;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;color:var(--ink)}
+.small{font-size:14px;color:var(--muted)}.progress{height:9px;background:var(--secondary);border-radius:99px;overflow:hidden}.progress span{display:block;background:var(--green);height:100%;transition:width .2s}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px} .option{background:var(--card);border:2px solid var(--edge);border-radius:16px;padding:15px 8px;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;color:var(--ink)}
 .option .emoji{font-size:32px;line-height:1.2}.option.selected{background:var(--pale);border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}.option.selected:after{content:"✓ えらんだよ";font-size:12px;color:var(--green);font-weight:700}
-.actions{display:flex;gap:10px;margin:18px 0}.btn{border:0;border-radius:13px;padding:13px 16px;background:var(--green);color:#fff;font-weight:700;min-height:48px;flex:1}.btn.alt{background:#e9f2ed;color:var(--ink)}.btn:disabled{opacity:.35;cursor:not-allowed}
-textarea{width:100%;border:1px solid #aabeb5;border-radius:12px;padding:12px;min-height:80px;resize:vertical}
-select{padding:10px;border-radius:12px;border:1px solid var(--edge);background:#fff}
-.note{background:#f4f8f6;border-radius:14px;padding:12px;margin:12px 0}
+.actions{display:flex;gap:10px;margin:18px 0}.btn{border:0;border-radius:13px;padding:13px 16px;background:var(--green);color:#fff;font-weight:700;min-height:48px;flex:1}.btn.alt{background:var(--secondary);color:var(--ink)}.btn:disabled{opacity:.35;cursor:not-allowed}
+textarea{width:100%;border:1px solid var(--edge);border-radius:12px;padding:12px;min-height:80px;resize:vertical}
+select{padding:10px;border-radius:12px;border:1px solid var(--edge);background:var(--card);color:var(--ink)}
+.note{background:var(--secondary);border-radius:14px;padding:12px;margin:12px 0}
 .cardline{border-bottom:1px solid var(--edge);padding:12px 0}.cardline:last-child{border-bottom:0}
 .cardline strong{display:block}.toolbar{display:flex;flex-wrap:wrap;gap:8px}.toolbar button{flex:1;min-width:120px}
 details{border:1px solid var(--edge);border-radius:12px;padding:10px 12px;margin-top:14px}summary{cursor:pointer;font-weight:700}
-.hide{display:none!important}a{color:#185c96}footer{margin-top:30px;border-top:1px solid var(--edge);padding-top:15px}
+.hide{display:none!important}a{color:inherit;text-decoration:underline}footer{margin-top:30px;border-top:1px solid var(--edge);padding-top:15px}
 @media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.shell{padding:26px 34px 65px}}
-@media print{body{background:#fff}.shell{padding:0;max-width:none}header,.progress,.actions,.toolbar,footer,#stage,#historyPanel,#privacyInfo{display:none!important}#resultPanel{display:block!important;border:0;padding:0}.print-hide{display:none!important}}
-</style></head>
-<body><div class="shell">
+@media print{html,body{background:#fff!important;color:#000!important}body{font-size:15px}.shell{padding:0;max-width:none;background:#fff!important}header,.progress,.actions,.toolbar,footer,#stage,#historyPanel,#privacyInfo,#themeButton,#printHelp{display:none!important}#resultPanel{display:block!important;visibility:visible!important;border:0;padding:0;color:#000!important;background:#fff!important}#resultPanel *{visibility:visible!important;color:#000!important;background:#fff!important}.print-hide{display:none!important}.cardline{border-color:#888!important;break-inside:avoid} @page{size:auto;margin:15mm}}
+.theme-button{position:fixed;top:12px;right:max(12px,env(safe-area-inset-right));z-index:10;border:2px solid var(--edge);border-radius:999px;background:var(--card);color:var(--ink);padding:8px 12px;font-weight:800;box-shadow:0 2px 8px #0002;min-height:44px}.setup-only{margin-top:12px}.setup-only .btn{width:100%}#printHelp{border:2px solid var(--edge);border-radius:12px;padding:12px;margin-top:12px}#printHelp p{margin:6px 0}@media print{#themeButton{display:none!important}}</style></head>
+<body><button type="button" class="theme-button" id="themeButton" aria-label="画面の色を変更する">🎨 標準</button><div class="shell">
 <header><div class="tag">琉球のタネ｜子どものMIKATA</div><h1>🔋 こどものでんち Kids</h1><p>じぶんの気持ちを、じぶんでえらぼう</p><p class="small">テストでも、しんだんでもないよ。答えなくてもいいよ。</p></header>
-<div class="panel" id="privacyInfo"><label for="wording">ことばのえらび方　</label><select id="wording"><option value="easy">やさしいことば</option><option value="normal">ふつうのことば（中高生向け）</option></select>
+<div class="panel" id="privacyInfo"><h2>はじめに ことばをえらぼう</h2><label for="wording">ことばのえらび方　</label><select id="wording"><option value="easy">やさしいことば</option><option value="normal">ふつうのことば（中高生向け）</option></select><div class="setup-only"><button type="button" class="btn" id="start">これではじめる →</button></div>
 <p class="small">このページは大人の記録とは別。名前は聞かないよ。記録はこの端末のブラウザにだけ保存できるよ。</p></div>
 <main>
-<div id="stage"><div class="progress" aria-label="すすみぐあい"><span id="bar"></span></div><p class="small" id="stepLabel" aria-live="polite"></p><section class="panel" id="questionPanel" aria-live="polite"></section>
+<div id="stage" class="hide"><div class="progress" aria-label="すすみぐあい"><span id="bar"></span></div><p class="small" id="stepLabel" aria-live="polite"></p><section class="panel" id="questionPanel" aria-live="polite"></section>
 <div class="actions"><button type="button" id="prev" class="btn alt">← もどる</button><button type="button" id="next" class="btn">つぎへ →</button></div><button class="btn alt" id="stop" type="button" style="width:100%">ここでおわる（保存しない）</button></div>
 <section id="resultPanel" class="panel hide"><h2>🌱 きょうのわたしカード</h2><p class="small">これはあなたがえらんだこと。人に見せるかどうかも、あなたが決めていいよ。</p><div id="card"></div>
 <div class="toolbar print-hide"><button class="btn" id="print" type="button">🖨️ 印刷・PDF</button><button class="btn alt" id="copy" type="button">📋 コピー</button><button class="btn alt" id="save" type="button">💾 この端末に保存</button></div>
-<p class="small print-hide" id="saveNotice">保存しなくても大丈夫。学校など共有の端末では保存しないでね。</p>
+<div id="printHelp" class="hide print-hide" role="status"><strong>印刷画面が開かないとき</strong><p>スマートフォンではブラウザの「共有」から「プリント」を選んでね。PDFにしたい場合は、印刷画面の保存先で「PDFに保存」を選んでね。</p><button type="button" class="btn alt" id="closePrintHelp">閉じる</button></div><p class="small print-hide" id="saveNotice">保存しなくても大丈夫。学校など共有の端末では保存しないでね。</p>
 <div class="actions print-hide"><button class="btn alt" id="edit" type="button">← こたえを見なおす</button><button class="btn" id="restart" type="button">もういちど</button></div></section>
 <section id="historyPanel" class="panel"><h2>📅 この端末の記録</h2><p class="small">保存したものだけここに出るよ。ほかの人が同じ端末を使うと見えることがあるよ。</p><div id="history"></div><button type="button" class="btn alt" id="clear" style="width:100%;margin-top:12px">保存した記録をぜんぶ消す</button></section>
 </main><footer class="small">このページは医療や診断の代わりではありません。困ったときは、安心して話せる人に相談してね。<br><a href="https://mikata.ryukyu-tane.com/kodomo-denchi.html">大人向けの「こどものでんち」</a> ／ <a href="https://mikata.ryukyu-tane.com/care-torisetu.html">ケア・トリセツ</a></footer>
 </div>
 <script>
 (()=>{'use strict';
-const $=id=>document.getElementById(id),KEY='kodomo_denchi_kids_v01_records',MAX=30;
+const $=id=>document.getElementById(id),KEY='kodomo_denchi_kids_v01_records',MAX=30,THEME_KEY='kodomo_denchi_kids_theme';
 const opts={
 energy:[['⚡','元気いっぱい','元気がある'],['🙂','まあまあ','ふつう'],['😮‍💨','ちょっとつかれた','少し疲れている'],['🪫','もう休みたい','休息が必要'],['❔','わからない','わからない']],
 day:[['😵','人が多かった','人が多くて疲れた'],['🔊','音が気になった','音が負担だった'],['📚','勉強がむずかしかった','学習が難しかった'],['😟','気をつかった','人に気を使った'],['😊','楽しいことがあった','楽しいことがあった'],['🏃','体を動かした','体を動かした'],['❔','わからない','わからない']],
@@ -52,12 +59,12 @@ share:[['🔒','自分だけで見たい','自分だけで見たい'],['💬','�
 };
 const titles=[['いま、どんな感じ？','今のコンディションは？'],['今日、どんなことがあった？','今日、負担や楽しさを感じたことは？'],['元気がもどったことは？','少し楽になったきっかけは？'],['どうしてほしい？','どんなサポートがほしい？'],['このカード、どうしたい？','この記録をどう扱いたい？']];
 const descriptions=['ひとつえらんでね。','いくつえらんでもいいよ。','なければえらばなくてもいいよ。','いくつえらんでもいいよ。','まだ決めなくてもいいよ。'];
-const keys=['energy','day','restore','wish','share'];let step=0;let data=blank();let showing=null;
+const keys=['energy','day','restore','wish','share'];let step=0;let data=blank();let showing=null;let started=false;const THEMES=['default','sea','warm','bw','by'];const THEME_NAMES=['標準','海','あたたかい','白黒','黒黄'];
 function blank(){return{energy:[],day:[],restore:[],wish:[],share:[],memo:''}}
 function text(t){return document.createTextNode(String(t))}
 function node(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
 function label(k){const o=opts[k].find(x=>x[1]===k);return o?o[1]:k}
-function render(){ $('stage').classList.remove('hide');$('resultPanel').classList.add('hide');$('bar').style.width=((step+1)/5*100)+'%';$('stepLabel').textContent='STEP '+(step+1)+' / 5';
+function render(){if(!started)return; $('stage').classList.remove('hide');$('resultPanel').classList.add('hide');$('bar').style.width=((step+1)/5*100)+'%';$('stepLabel').textContent='STEP '+(step+1)+' / 5';
 const normal=$('wording').value==='normal',p=$('questionPanel');p.replaceChildren();p.append(node('h2','',titles[step][normal?1:0]),node('p','small',descriptions[step]));
 const k=keys[step],grid=node('div','grid');opts[k].forEach(o=>{const b=node('button','option'+(data[k].includes(o[1])?' selected':''));b.type='button';b.setAttribute('aria-pressed',String(data[k].includes(o[1])));b.append(node('span','emoji',o[0]),node('span','',o[normal?2:1]));b.addEventListener('click',()=>{const selected=data[k].includes(o[1]),isUnknown=o[1].includes('わからない')||o[1].includes('決めない');if(k==='energy'||k==='share'){data[k]=selected?[]:[o[1]]}else if(isUnknown){data[k]=selected?[]:[o[1]]}else{data[k]=selected?data[k].filter(x=>x!==o[1]):[...data[k].filter(x=>!x.includes('わからない')),o[1]]}render()});grid.append(b)});p.append(grid);
 if(step===3){const details=node('details');details.append(node('summary','','✏️ 書きたいときだけ書く（任意）'));const ta=node('textarea');ta.maxLength=400;ta.placeholder='書かなくてもいいよ';ta.value=data.memo;ta.setAttribute('aria-label','ほかに伝えたいこと');ta.addEventListener('input',()=>data.memo=ta.value);details.append(ta);p.append(details)}
@@ -68,16 +75,20 @@ function cardText(){return 'きょうのわたしカード\n日付：'+new Date(
 function showCard(){showing=JSON.parse(JSON.stringify(data));$('stage').classList.add('hide');$('resultPanel').classList.remove('hide');const c=$('card');c.replaceChildren();[['いまの元気','energy'],['今日のこと','day'],['元気がもどったこと','restore'],['してほしいこと','wish'],['カードの扱い','share']].forEach(([title,k])=>{const line=node('div','cardline');line.append(node('strong','',title),node('span','',values(k)));c.append(line)});if(data.memo){const line=node('div','cardline');line.append(node('strong','','メッセージ'),node('span','',data.memo));c.append(line)}$('saveNotice').textContent='保存しなくても大丈夫。学校など共有の端末では保存しないでね。';window.scrollTo(0,0)}
 function readRecords(){try{const r=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(r)?r.filter(x=>x&&typeof x==='object').slice(0,MAX):[]}catch{return[]}}
 function history(){const area=$('history');area.replaceChildren();const records=readRecords();if(!records.length)area.append(node('p','small','まだ記録はないよ。'));records.forEach((r,i)=>{const wrap=node('div','note'),date=node('strong','',new Date(r.at).toLocaleString('ja-JP'));wrap.append(date);const b=node('button','btn alt','見る');b.type='button';b.style.margin='8px 0';b.addEventListener('click',()=>{const d=blank();for(const k of keys)d[k]=Array.isArray(r.data?.[k])?r.data[k].filter(x=>typeof x==='string'):[];d.memo=typeof r.data?.memo==='string'?r.data.memo:'';data=d;showCard()});wrap.append(b);area.append(wrap)})}
-$('wording').addEventListener('change',render);
+function applyTheme(v){const i=THEMES.indexOf(v);const n=i<0?0:i;document.documentElement.setAttribute('data-theme',THEMES[n]);$('themeButton').textContent='🎨 '+THEME_NAMES[n];$('themeButton').setAttribute('aria-label','画面の色：'+THEME_NAMES[n]+'。押すと次の色に変更');try{localStorage.setItem(THEME_KEY,THEMES[n])}catch{}}
+$('themeButton').addEventListener('click',()=>{const cur=document.documentElement.getAttribute('data-theme');applyTheme(THEMES[(THEMES.indexOf(cur)+1)%THEMES.length])});
+try{applyTheme(localStorage.getItem(THEME_KEY)||'default')}catch{applyTheme('default')}
+$('start').addEventListener('click',()=>{started=true;$('privacyInfo').classList.add('hide');render();window.scrollTo(0,0)});
+$('wording').addEventListener('change',()=>{if(started)render()});
 $('prev').addEventListener('click',()=>{if(step>0){step--;render();window.scrollTo(0,0)}});
 $('next').addEventListener('click',()=>{if(step<4){step++;render();window.scrollTo(0,0)}else showCard()});
 $('stop').addEventListener('click',()=>{if(confirm('ここまでのこたえを保存せずに終わる？')){data=blank();step=0;render();window.scrollTo(0,0)}});
 $('edit').addEventListener('click',()=>{step=4;render()});
 $('restart').addEventListener('click',()=>{data=blank();step=0;render()});
-$('print').addEventListener('click',()=>window.print());
+$('print').addEventListener('click',()=>{$('printHelp').classList.remove('hide');try{window.print()}catch{$('printHelp').classList.remove('hide')}});$('closePrintHelp').addEventListener('click',()=>$('printHelp').classList.add('hide'));
 $('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(cardText());alert('コピーしたよ')}catch{alert('コピーできなかったよ。印刷・PDFを使ってね')}});
 $('save').addEventListener('click',()=>{if(!confirm('この端末に記録を残す？ 同じ端末を使う人には見えることがあるよ。'))return;try{const r=readRecords();r.unshift({at:new Date().toISOString(),data:JSON.parse(JSON.stringify(data))});localStorage.setItem(KEY,JSON.stringify(r.slice(0,MAX)));$('saveNotice').textContent='この端末に保存したよ。';history()}catch{$('saveNotice').textContent='保存できなかったよ。印刷・PDFを使ってね。'}});
 $('clear').addEventListener('click',()=>{if(confirm('この端末のKids版の記録を全部消す？ もとには戻せないよ。')){try{localStorage.removeItem(KEY);history()}catch{alert('削除できなかったよ')}}});
-render();history();
+history();
 })();
 </script></body></html>
