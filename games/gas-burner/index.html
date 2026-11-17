@@ -369,6 +369,27 @@ header{position:absolute;z-index:5;top:7px;left:0;right:0;height:122px;backgroun
  #app.reason-mode .reasonQuestion{font-size:12px}
  #app.reason-mode .labArea{min-height:76px}
 }
+
+/* Stage 4: failure-as-discovery simulation */
+#app.stage4-mode .labArea{min-height:180px}
+#app.stage4-mode .controls{max-height:min(36dvh,210px)}
+.stage4Lab{width:100%;height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto;place-items:center;position:relative}
+.stage4Burner{width:100%;height:100%;min-height:0;display:grid;place-items:center}
+.stage4Burner .labsvg{width:100%;height:100%;max-height:100%;max-width:345px}
+.stage4Status{align-self:end;background:#ffffffea;color:#075575;border:2px solid #8bd6df;border-radius:20px;padding:5px 11px;font-size:11px;font-weight:1000;margin-bottom:2px}
+.stage4Lab.wrong .flameY{animation:stage4Flutter .18s ease-in-out infinite alternate!important;transform-origin:160px 85px}
+.stage4Lab.wrong .stage4Status{background:#ffe0d9;color:#9b3027;border-color:#ef8b77}
+.stage4Lab.air .stage4Status{background:#fff5c8;color:#8b5912}
+.stage4Lab.gas .stage4Status{background:#dcf9e8;color:#176443}
+.stage4Choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stage4Try{min-height:52px!important;font-size:12px!important;line-height:1.2!important}
+.stage4Hint{font-size:9px;color:#dff8ff;text-align:center;margin:6px 0 0}
+.discoveryBadge{background:#fff3a9;color:#705000;border-radius:12px;padding:5px 8px;font-size:10px;font-weight:900;margin-bottom:5px}
+.discoveryCard{background:#ffffffed;color:#0b526f;border-radius:14px;padding:10px;font-size:11px;line-height:1.45}
+.discoveryCard strong{font-size:13px;color:#9b5b00}.discoveryCard p{margin:5px 0 8px}
+@keyframes stage4Flutter{from{transform:scale(.62,.85) rotate(-2deg);opacity:.72}to{transform:scale(.82,1.02) rotate(3deg);opacity:1}}
+@media(max-height:600px){#app.stage4-mode .labArea{min-height:145px}.stage4Try{min-height:47px!important}}
+@media(prefers-reduced-motion:reduce){.stage4Lab.wrong .flameY{animation:none!important}}
 </style>
 </head>
 <body><div id="app" class="title-mode">
@@ -381,12 +402,12 @@ header{position:absolute;z-index:5;top:7px;left:0;right:0;height:122px;backgroun
 </div>
 <script>
 (()=>{'use strict';
-const $=q=>document.querySelector(q);let stage=-1,step=0,score=0,time=45,timer=null,locked=false,sound=true,actx=null,errors=[],stageDone=[false,false,false,false,false,false],air=0,lit=false,gas=false,cock=false,match=false,slides=0,ignitionVisual='start',ignitionBusy=false,extinguishVisual='start',stepBusy=false,reasonIndex=0,reasonBusy=false;
+const $=q=>document.querySelector(q);let stage=-1,step=0,score=0,time=45,timer=null,locked=false,sound=true,actx=null,errors=[],stageDone=[false,false,false,false,false,false],air=0,lit=false,gas=false,cock=false,match=false,slides=0,ignitionVisual='start',ignitionBusy=false,extinguishVisual='start',stepBusy=false,reasonIndex=0,reasonBusy=false,stage4State='ready',stage4WrongSeen=false;
 const STAGES=[
 {title:'点火しよう！',desc:'安全な手順を選んで、炎をつけよう。',why:'調節ねじが閉じていることを確認し、火を近づけてからガスを少しずつ出す。'},
 {title:'青い炎をつくろう！',desc:'空気調節ねじを動かして、適切な炎に。',why:'空気を取り込む量を増やすと、ガスに酸素を含む空気がよく混ざり、より完全に燃焼しやすくなる。'},
 {title:'安全に消火しよう！',desc:'閉める順番を守って、実験を終了。',why:'空気調節ねじ、ガス調節ねじ、コック・元栓の順で閉じる。実物では学校の器具と先生の指示を優先する。'},
-{title:'なぜ青い炎になる？',desc:'炎の色と空気の関係を説明しよう。',why:'空気調節ねじを開くと、ガスに酸素を含む空気が多く混ざり、燃焼がより完全に近づくため青い炎になる。'},
+{title:'失敗から発見！消火編',desc:'消す順番を試して、炎の変化から理由を見つけよう。',why:'標準手順では空気調節ねじを先に閉じ、その後ガス調節ねじを閉じる。ガスを先に減らすと、空気側が開いたままなので空気の割合が相対的に多くなり、炎が不安定になりやすい。'},
 {title:'なぜこの順番？',desc:'操作の順番には、安全の理由がある。',why:'ガスを急に出さない、未燃焼のガスをためない、炎を安定して消すなど、安全のために操作順を守る。'},
 {title:'原因を見抜け！',desc:'炎やにおいの変化から、安全な判断をしよう。',why:'炎の色・大きさ・音・においは状態を判断する手がかり。異常時は無理に操作を続けず、ガスを止めて先生に知らせる。'}
 ]
@@ -482,7 +503,7 @@ function show(name){$('#app').classList.toggle('title-mode',name==='title');for(
  const box=$('#pills');
  if(stage<0){box.innerHTML='<span class="pill on">操作 1〜3</span><span class="pill">考える 4〜6</span>';return}
  const first=stage<3;
- const labels=first?['① 点火','② 調節','③ 消火']:['④ 炎の理由','⑤ 順番の理由','⑥ 原因診断'];
+ const labels=first?['① 点火','② 調節','③ 消火']:['④ 消火のなぜ','⑤ 順番の理由','⑥ 原因診断'];
  const offset=first?0:3;
  box.innerHTML=labels.map((label,i)=>`<span class="pill ${stageDone[offset+i]?'done':offset+i===stage?'on':''}">${label}</span>`).join('');
 }
@@ -506,13 +527,14 @@ function beginStage(){
  locked=false;show('game');
  $('#app').classList.toggle('stage2-mode',stage===1);
  $('#app').classList.toggle('reason-mode',stage>=3);
+ $('#app').classList.toggle('stage4-mode',stage===3);
  $('#phase').textContent=`ステージ ${stage+1} / 6`;
  $('#tasktitle').textContent=STAGES[stage].title;
  $('#taskdesc').textContent=STAGES[stage].desc;
  air=stage===0?0:stage===1?12:70;lit=stage!==0;gas=stage!==0;cock=stage!==0;
- match=false;slides=0;ignitionVisual='start';ignitionBusy=false;extinguishVisual='start';stepBusy=false;
+ match=false;slides=0;ignitionVisual='start';ignitionBusy=false;extinguishVisual='start';stepBusy=false;stage4State='ready';stage4WrongSeen=false;
  renderControls();draw();setHud();
- say(stage===0?'まず、安全を確認しよう！':stage===1?'空気調節ねじを動かそう！':stage===2?'安全な順番で消火しよう！':'「なぜ？」を考えて答えよう！');
+ say(stage===0?'まず、安全を確認しよう！':stage===1?'空気調節ねじを動かそう！':stage===2?'安全な順番で消火しよう！':stage===3?'予想して試そう。まちがえても「発見」になるよ！':'「なぜ？」を考えて答えよう！');
  $('#timer').textContent=time+'秒';
  timer=setInterval(()=>{
   if(locked||ignitionBusy||stepBusy||reasonBusy)return;
@@ -578,9 +600,50 @@ const REASON_QUESTIONS=[
 ];
 function reasonScene(st,idx){
  const q=REASON_QUESTIONS[st-3]?.[idx];
- if(st===3)return `<div class="reasonScene"><div class="compareFlames"><div><i class="miniFlame yellow"></i><b>空気 少</b><small>黄色っぽい</small></div><div class="arrowWhy">空気 →</div><div><i class="miniFlame blue"></i><b>空気 適量</b><small>青い炎</small></div></div><div class="reasonFormula">ガス ＋ 空気中の酸素 → 燃え方が変わる</div></div>`;
+ if(st===3){
+  const status=stage4State==='wrong'?'⚠ 炎が不安定になった':stage4State==='air'?'空気を閉じた → 黄色っぽい炎':stage4State==='gas'?'消火できた！':'青い炎が安定している';
+  return `<div class="stage4Lab ${stage4State}"><div class="stage4Burner">${svg(air,lit)}</div><div class="stage4Status">${status}</div></div>`;
+ }
  if(st===4)return `<div class="reasonScene"><div class="whySequence"><span>🔍 確認</span><b>→</b><span>🔥 点火</span><b>→</b><span>🔧 調節</span><b>→</b><span>⏹ 消火</span></div><div class="reasonFormula">「順番」は暗記ではなく、安全のため</div></div>`;
  return `<div class="reasonScene scenario"><div class="scenarioIcon">${q?.icon||'🔎'}</div><strong>状況から原因を見抜こう</strong><small>炎・音・においは大事な手がかり</small></div>`;
+}
+function stage4PopSound(){
+ if(!sound)return;wakeSound();if(!actx)return;
+ try{
+  const t=actx.currentTime;
+  [0,.18].forEach((d,k)=>{const o=actx.createOscillator(),g=actx.createGain();o.type='triangle';o.frequency.setValueAtTime(k?115:145,t+d);o.frequency.exponentialRampToValueAtTime(72,t+d+.13);g.gain.setValueAtTime(.0001,t+d);g.gain.exponentialRampToValueAtTime(.055,t+d+.018);g.gain.exponentialRampToValueAtTime(.0001,t+d+.15);o.connect(g);g.connect(actx.destination);o.start(t+d);o.stop(t+d+.16);});
+ }catch(e){}
+}
+function renderStage4Controls(box){
+ const discovery=stage4WrongSeen?'<div class="discoveryBadge">🔬 発見 1：ガスを先に減らすと炎が不安定になりやすい</div>':'';
+ box.innerHTML=`${discovery}<div class="reasonProgress">失敗しても減点なし</div><p class="reasonQuestion">青い炎を消すなら、どちらを先に閉じる？ 予想して試してみよう。</p><div class="stage4Choices"><button class="action stage4Try" data-stage4="gas">ガスを先に閉じる</button><button class="action stage4Try" data-stage4="air">空気を先に閉じる</button></div><p class="stage4Hint">※学習用シミュレーション。実物では先生の指示に従おう。</p>`;
+ box.querySelectorAll('.stage4Try').forEach(btn=>btn.addEventListener('pointerup',()=>runStage4(btn.dataset.stage4)));
+}
+function runStage4(choice){
+ if(locked||reasonBusy||stage!==3)return;
+ reasonBusy=true;
+ document.querySelectorAll('.stage4Try').forEach(b=>b.disabled=true);
+ if(choice==='gas'){
+  stage4WrongSeen=true;stage4State='wrong';air=95;lit=true;draw();stage4PopSound();
+  score+=40;setHud();
+  say('発見！ ガスを先に減らすと、空気側が開いたままなので、空気の割合が相対的に多くなり、炎が不安定になりやすい。','bad');
+  const box=$('#controls');
+  setTimeout(()=>{
+   if(stage!==3||locked)return;
+   box.innerHTML=`<div class="discoveryCard"><strong>🔬 失敗からわかった！</strong><p>ガスだけ先に減らすと、ガスに対して空気が多い状態になりやすい。だから標準手順では、まず空気調節ねじを閉じるんだ。</p><button class="action" id="stage4Retry">もう一度ためす ▶</button></div>`;
+   $('#stage4Retry').addEventListener('pointerup',()=>{stage4State='ready';air=70;lit=true;gas=true;reasonBusy=false;draw();renderStage4Controls($('#controls'));say('今度は炎の変化を予想して、もう一度試そう。');});
+  },900);
+  return;
+ }
+ stage4State='air';air=0;lit=true;draw();extinguishSound('air');
+ say('空気を先に閉じると、青い炎が黄色っぽい炎に変わった。次にガスを閉じるよ。','good');
+ setTimeout(()=>{
+  if(stage!==3||locked)return;
+  stage4State='gas';gas=false;lit=false;draw();extinguishSound('gas');
+  say('消火できた！ 空気を先に閉じてからガスを閉じると、炎を安定して消しやすい。','good');
+  score+=160+Math.ceil(time/4);setHud();
+  setTimeout(()=>{if(stage===3&&!locked){reasonBusy=false;finishStage(true)}},1200);
+ },1000);
 }
 function renderReasonControls(box){
  const qs=REASON_QUESTIONS[stage-3],q=qs[reasonIndex];
@@ -605,7 +668,7 @@ function answerReason(i){
   reasonBusy=false;renderControls();draw();say('次の「なぜ？」も考えてみよう。');
  },900);
 }
-function renderControls(){let box=$('#controls');if(stage>=3){renderReasonControls(box);return}if(stage===1){
+function renderControls(){let box=$('#controls');if(stage===3){renderStage4Controls(box);return}if(stage>=4){renderReasonControls(box);return}if(stage===1){
  box.innerHTML=`<p class="question">🌀 空気調節ねじを回して、炎の色を変えよう！</p>
  <div class="airControl">
  <div class="airHelp"><span>🔧 ねじを操作</span><strong id="airState">空気：少ない</strong></div>
@@ -676,8 +739,8 @@ draw();score+=35;setHud();say(need.explain,'good');
 if(step===list.length){score+=Math.ceil(time/2);setHud();finishStage(true)}}
 function finishStage(success){if(locked)return;locked=true;clearInterval(timer);stageDone[stage]=success;$('#overlayIcon').textContent=success?'✨':'📖';$('#overlayTitle').textContent=success?'ステージクリア！':'ここで復習！';$('#overlayTitle').style.color=success?'#167d66':'#b94737';$('#overlayText').textContent=STAGES[stage].why;$('#continue').textContent=stage===5?'結果を見る ▶':'つぎへ ▶';$('#overlay').classList.add('show');if(success)beep(true)}
 function next(){if(!locked)return;$('#overlay').classList.remove('show');if(stage<5){stage++;beginStage()}else finishGame()}
-function finishGame(){clearInterval(timer);$('#app').classList.remove('stage2-mode','reason-mode');show('end');let best=storageGet();if(score>best){best=score;storageSet(score)}$('#finalScore').textContent=score;$('#finalBest').textContent=best;$('#ending').textContent=errors.length?'間違えた理由を確認して、もう一度挑戦！':'全6ステージ完了！ 操作も理由も説明できるね！';$('#review').innerHTML='<strong>📘 きょうの復習</strong>'+STAGES.map((x,i)=>`<p><b>${i+1}. ${x.title}</b>　${stageDone[i]?'✓':'要復習'}<br>${x.why}</p>`).join('')+(errors.length?`<strong>見直しポイント（${errors.length}件）</strong>`+errors.slice(0,8).map(x=>`<p>・${x.text}</p>`).join(''):'<p>ノーミス！ 手順の理由も言葉で説明できるかな？</p>');setHud()}
-$('#start').addEventListener('pointerup',begin);$('#again').addEventListener('pointerup',begin);$('#home').addEventListener('pointerup',()=>{clearInterval(timer);stage=-1;$('#app').classList.remove('stage2-mode','reason-mode');ignitionVisual='start';lit=true;air=70;draw();show('title');setHud()});$('#continue').addEventListener('pointerup',next);$('#sound').addEventListener('pointerup',()=>{sound=!sound;$('#sound').textContent=sound?'♪ おと ON':'♪ おと OFF';if(sound)beep(true)});document.addEventListener('visibilitychange',()=>{if(document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);say('画面を戻したら、操作を続けよう。');}else if(!document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);timer=setInterval(()=>{if(locked||ignitionBusy||stepBusy||reasonBusy)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。理由を確認しよう。');finishStage(false)}},1000)}});
+function finishGame(){clearInterval(timer);$('#app').classList.remove('stage2-mode','reason-mode','stage4-mode');show('end');let best=storageGet();if(score>best){best=score;storageSet(score)}$('#finalScore').textContent=score;$('#finalBest').textContent=best;$('#ending').textContent=errors.length?'間違えた理由を確認して、もう一度挑戦！':'全6ステージ完了！ 操作も理由も説明できるね！';$('#review').innerHTML='<strong>📘 きょうの復習</strong>'+STAGES.map((x,i)=>`<p><b>${i+1}. ${x.title}</b>　${stageDone[i]?'✓':'要復習'}<br>${x.why}</p>`).join('')+(errors.length?`<strong>見直しポイント（${errors.length}件）</strong>`+errors.slice(0,8).map(x=>`<p>・${x.text}</p>`).join(''):'<p>ノーミス！ 手順の理由も言葉で説明できるかな？</p>');setHud()}
+$('#start').addEventListener('pointerup',begin);$('#again').addEventListener('pointerup',begin);$('#home').addEventListener('pointerup',()=>{clearInterval(timer);stage=-1;$('#app').classList.remove('stage2-mode','reason-mode','stage4-mode');ignitionVisual='start';lit=true;air=70;draw();show('title');setHud()});$('#continue').addEventListener('pointerup',next);$('#sound').addEventListener('pointerup',()=>{sound=!sound;$('#sound').textContent=sound?'♪ おと ON':'♪ おと OFF';if(sound)beep(true)});document.addEventListener('visibilitychange',()=>{if(document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);say('画面を戻したら、操作を続けよう。');}else if(!document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);timer=setInterval(()=>{if(locked||ignitionBusy||stepBusy||reasonBusy)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。理由を確認しよう。');finishStage(false)}},1000)}});
 lit=true;air=70;draw();setHud();
 })();
 </script></body></html>
