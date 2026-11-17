@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#07516d">
+<title>電気回路のひみつ！ — 子どものMIKATA</title>
+<style>
+:root{
+  --navy:#06384b;--blue:#0a6687;--sky:#8bdbe3;--yellow:#ffdd62;--orange:#f49a4c;
+  --green:#42a875;--red:#d85c55;--ink:#173f4b;--paper:#fffdf6;
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#052f40}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}
+button{font:inherit}
+button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
+#app{
+  width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#42b7cd 0%,#93dfe6 48%,#edf5dc 100%);user-select:none;-webkit-user-select:none
+}
+header{
+  position:absolute;z-index:20;top:0;left:0;right:0;
+  min-height:calc(88px + var(--safe-top));padding:calc(8px + var(--safe-top)) 11px 8px;
+  background:linear-gradient(#0b6888,#07506a);color:white;border-bottom:3px solid #ffffff8a
+}
+.headrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{font-size:10px;font-weight:1000}
+.stage{font-size:12px;font-weight:1000;background:#ffffff24;padding:5px 9px;border-radius:999px}
+.hud{display:flex;gap:6px;align-items:center}
+.hud button{border:0;border-radius:999px;min-height:32px;background:white;color:#07506a;font-weight:1000;font-size:11px;padding:0 10px}
+.progress{height:7px;margin-top:7px;border-radius:999px;background:#ffffff25;overflow:hidden}
+.progress span{display:block;height:100%;width:14.3%;background:var(--yellow)}
+.screen{position:absolute;inset:0;display:none}
+.screen.active{display:flex}
+.title{
+  flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:calc(100px + var(--safe-top)) 18px calc(16px + var(--safe-bottom))
+}
+.badge{background:white;color:#0b6787;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:1000;box-shadow:0 4px #07506a30}
+.title h1{font-size:clamp(35px,10vw,48px);line-height:1.05;margin:12px 0 5px;color:white;text-shadow:0 4px #07516d}
+.title h1 em{font-style:normal;color:var(--yellow)}
+.subtitle{font-size:14px;font-weight:900;color:#0a4d63;margin:0 0 10px}
+.hero{width:min(76vw,290px);height:min(31dvh,225px);min-height:150px;display:grid;place-items:center}
+.start,.check,.closeBtn,.retry{
+  border:0;border-radius:999px;background:var(--yellow);color:#7b4c17;font-weight:1000;
+  box-shadow:0 5px #c59531,0 0 0 3px white inset
+}
+.start{width:min(86vw,320px);min-height:56px;font-size:20px}
+.start:active,.check:active,.retry:active{transform:translateY(3px);box-shadow:0 2px #c59531,0 0 0 3px white inset}
+.title small{max-width:340px;font-size:11px;line-height:1.45;color:#0a536b;font-weight:800;margin-top:10px}
+.game{flex-direction:column;padding-top:calc(96px + var(--safe-top));min-height:0}
+.task{flex:0 0 auto;margin:6px 10px 4px;background:#fff;border-radius:17px;padding:7px 10px;box-shadow:0 4px #0a728c30}
+.task b{display:block;color:var(--orange);font-size:10px}
+.task h2{font-size:16px;margin:2px 0}.task p{font-size:10px;margin:0;color:#5e7a84;font-weight:800;line-height:1.32}
+.lab{
+  position:relative;flex:1 1 auto;min-height:250px;margin:0 8px 4px;border:3px solid #ffffffb5;border-radius:22px;
+  background:linear-gradient(#f9feffdd,#edf8f5e9);overflow:hidden
+}
+.board{position:absolute;inset:0}
+svg{width:100%;height:100%;display:block;touch-action:none}
+.component-label{font-size:12px;font-weight:1000;fill:#365661}
+.terminal{fill:#fff;stroke:#244e5a;stroke-width:3}
+.terminal.hot{fill:#ffe66d;stroke:#d28b23;filter:drop-shadow(0 0 5px #ffd95a)}
+.wirePath{fill:none;stroke:#334f5a;stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.wirePath.live{stroke:#ef9c3e}
+.wireEnd{fill:#f6f8f8;stroke:#334f5a;stroke-width:4;cursor:grab}
+.wireEnd.dragging{fill:#ffe66d}
+.electron{fill:#fff176;opacity:0}
+.circuit-live .electron{opacity:1;animation:flow 1.2s linear infinite}
+@keyframes flow{from{stroke-dashoffset:0}to{stroke-dashoffset:-36}}
+.bulbGlow{opacity:0;transition:opacity .25s}
+.circuit-live .bulbGlow{opacity:1;filter:drop-shadow(0 0 18px #ffd95a)}
+.bulbFilament{stroke:#7d5d24;stroke-width:3;fill:none}
+.circuit-live .bulbFilament{stroke:#fff3a4}
+.spark{opacity:0}.spark.show{opacity:1;animation:spark .5s ease-out}
+@keyframes spark{0%{transform:scale(.2);opacity:0}50%{opacity:1}100%{transform:scale(1.4);opacity:0}}
+.message{flex:0 0 auto;margin:0 10px 4px;min-height:42px;border-radius:14px;padding:7px 9px;background:#fffffff2;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:900;box-shadow:0 3px #0a718a25}
+.message.good{background:#e6f8df;color:#2e684a}.message.warn{background:#fff0d7;color:#8a5c20}.message.bad{background:#ffe3df;color:#9b403b}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--blue);flex:0 0 auto}.good .dot{background:var(--green)}.warn .dot{background:var(--orange)}.bad .dot{background:var(--red)}
+.controls{flex:0 0 auto;background:#07516de8;color:white;border-top:3px solid #ffffff72;padding:8px 10px calc(10px + var(--safe-bottom))}
+.controlTitle{text-align:center;font-size:10px;font-weight:1000;color:#dff8ff;margin:0 0 6px}
+.check{width:100%;min-height:46px;font-size:15px}
+.hint{text-align:center;font-size:9px;font-weight:800;color:#d8f4fa;margin-top:6px}
+.overlay{position:absolute;z-index:60;inset:0;display:none;place-items:center;padding:18px;background:#052f42dd}
+.overlay.show{display:grid}
+.card{width:100%;max-width:350px;background:white;border-radius:24px;padding:19px;text-align:center;box-shadow:0 10px #052938}
+.card .emoji{font-size:42px}.card h2{margin:2px 0 6px;color:var(--green);font-size:26px}.card p{font-size:12px;line-height:1.55;font-weight:800;color:#49656e}
+.discoveryList{text-align:left;max-height:48dvh;overflow:auto;padding:0;list-style:none;margin:10px 0}
+.discoveryList li{background:#eff8f3;margin:6px 0;padding:8px 10px;border-radius:12px;font-size:11px;font-weight:800}
+.discoveryList li.locked{background:#f1f2f2;color:#9aa5a8}
+.closeBtn{background:#07516d;color:white;box-shadow:none;padding:10px 18px}
+.retry{width:100%;min-height:48px;font-size:16px;margin-top:8px}
+@media(max-height:650px){
+  header{min-height:calc(78px + var(--safe-top));padding-top:calc(5px + var(--safe-top))}
+  .game{padding-top:calc(85px + var(--safe-top))}
+  .task{padding:5px 8px;margin-top:3px}.task h2{font-size:14px}.task p{display:none}
+  .lab{min-height:210px}.message{min-height:34px;font-size:10px}.controls{padding-top:6px}
+}
+@media(max-height:570px){
+  .brand{display:none}.game{padding-top:calc(75px + var(--safe-top))}.lab{min-height:180px}.message{min-height:31px}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="headrow">
+    <div><div class="brand">子どものMIKATA｜理科体験ゲーム</div><div class="stage">💡 回路をつくる 1 / 7</div></div>
+    <div class="hud"><button id="discoverBtn">🔬 発見 0</button><button id="muteBtn">🔊</button></div>
+  </div>
+  <div class="progress"><span></span></div>
+</header>
+
+<main id="title" class="screen title active">
+  <div class="badge">触ってつないで、結果を見る</div>
+  <h1>電気回路の<br><em>ひみつ！</em></h1>
+  <p class="subtitle">導線を指でつないで、電球を光らせよう。</p>
+  <div class="hero" aria-hidden="true">
+    <svg viewBox="0 0 300 230">
+      <rect x="28" y="85" width="78" height="90" rx="16" fill="#f6f7f2" stroke="#315762" stroke-width="6"/>
+      <rect x="53" y="69" width="28" height="16" rx="4" fill="#e5e6df" stroke="#315762" stroke-width="5"/>
+      <text x="67" y="133" text-anchor="middle" font-size="32" font-weight="1000" fill="#d7554c">＋</text>
+      <circle cx="228" cy="120" r="42" fill="#fff6bd" stroke="#315762" stroke-width="7"/>
+      <path d="M210 118 Q228 92 246 118 Q228 143 210 118" fill="none" stroke="#7e5e24" stroke-width="4"/>
+      <path d="M107 100 C145 60 190 64 210 91" fill="none" stroke="#334f5a" stroke-width="8" stroke-linecap="round"/>
+      <path d="M106 160 C145 200 194 183 212 150" fill="none" stroke="#334f5a" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="228" cy="120" r="30" fill="#ffd95a" opacity=".38"/>
+    </svg>
+  </div>
+  <button id="startBtn" class="start">実験を始める</button>
+  <small>正解を押すゲームではありません。導線の端をつかんで端子へつなぎ、見え方を確かめて自分で判定します。</small>
+</main>
+
+<main id="game" class="screen game">
+  <section class="task">
+    <b>MISSION 01</b>
+    <h2>導線をつないで、電球が光る回路をつくろう</h2>
+    <p>導線の丸い端をドラッグして端子につなぐ。正解位置に触れただけではクリアにならない。</p>
+  </section>
+
+  <section class="lab">
+    <div id="board" class="board">
+      <svg id="circuitSvg" viewBox="0 0 390 360" aria-label="電気回路実験エリア">
+        <defs>
+          <filter id="glow"><feGaussianBlur stdDeviation="7"/></filter>
+        </defs>
+
+        <g id="battery">
+          <rect x="35" y="118" width="88" height="124" rx="18" fill="#f8f8f2" stroke="#315762" stroke-width="7"/>
+          <rect x="57" y="101" width="22" height="18" rx="4" fill="#dddeda" stroke="#315762" stroke-width="5"/>
+          <rect x="88" y="105" width="13" height="14" rx="3" fill="#dddeda" stroke="#315762" stroke-width="4"/>
+          <text x="66" y="179" text-anchor="middle" font-size="30" font-weight="1000" fill="#d7554c">＋</text>
+          <text x="96" y="181" text-anchor="middle" font-size="28" font-weight="1000" fill="#47636c">−</text>
+          <text x="80" y="265" text-anchor="middle" class="component-label">乾電池</text>
+          <circle id="batteryPlus" class="terminal" cx="68" cy="104" r="12"/>
+          <circle id="batteryMinus" class="terminal" cx="95" cy="110" r="12"/>
+        </g>
+
+        <g id="bulb">
+          <circle id="bulbGlow" class="bulbGlow" cx="300" cy="166" r="58" fill="#ffd95a" opacity=".5" filter="url(#glow)"/>
+          <circle cx="300" cy="166" r="47" fill="#fff9d5" stroke="#315762" stroke-width="7"/>
+          <path class="bulbFilament" d="M282 160 Q300 132 318 160 Q300 191 282 160"/>
+          <rect x="281" y="211" width="38" height="34" rx="5" fill="#afb8ba" stroke="#315762" stroke-width="6"/>
+          <line x1="284" y1="222" x2="316" y2="222" stroke="#6f8085" stroke-width="4"/>
+          <line x1="284" y1="233" x2="316" y2="233" stroke="#6f8085" stroke-width="4"/>
+          <text x="300" y="271" text-anchor="middle" class="component-label">豆電球</text>
+          <circle id="bulbA" class="terminal" cx="279" cy="224" r="12"/>
+          <circle id="bulbB" class="terminal" cx="321" cy="224" r="12"/>
+        </g>
+
+        <path id="wire1Path" class="wirePath" d="M68 104 C145 55 205 65 215 90"/>
+        <circle id="wire1Fixed" cx="68" cy="104" r="7" fill="#334f5a"/>
+        <circle id="wire1End" class="wireEnd" cx="215" cy="90" r="15" data-wire="wire1"/>
+
+        <path id="wire2Path" class="wirePath" d="M95 110 C158 315 236 302 237 292"/>
+        <circle id="wire2Fixed" cx="95" cy="110" r="7" fill="#334f5a"/>
+        <circle id="wire2End" class="wireEnd" cx="237" cy="292" r="15" data-wire="wire2"/>
+
+        <circle class="electron" cx="150" cy="84" r="5"/>
+        <circle class="electron" cx="185" cy="79" r="5"/>
+        <circle id="spark" class="spark" cx="300" cy="166" r="9" fill="#fff176"/>
+      </svg>
+    </div>
+  </section>
+
+  <div id="message" class="message warn" aria-live="polite">
+    <span class="dot"></span><span>導線の丸い端をつかんで、豆電球の端子へつないでみよう。</span>
+  </div>
+
+  <section class="controls">
+    <p class="controlTitle">つないだ結果を観察してから、自分で判断しよう</p>
+    <button id="checkBtn" class="check">💡 この回路で光る！</button>
+    <div class="hint">端子の近くまで持っていくと光る。離せば接続。導線同士が近いだけでは通電しない。</div>
+  </section>
+</main>
+
+<div id="successOverlay" class="overlay">
+  <div class="card">
+    <div class="emoji">💡✨</div>
+    <h2>回路ができた！</h2>
+    <p>乾電池から出て、豆電球を通り、乾電池へ戻る道がつながった。電流が流れるには、一周できる道が必要なんだ。</p>
+    <button id="retryBtn" class="retry">もう一度つなぎ直す</button>
+  </div>
+</div>
+
+<div id="discoverOverlay" class="overlay">
+  <div class="card">
+    <div class="emoji">🔬</div>
+    <h2>今日の発見</h2>
+    <ul id="discoverList" class="discoveryList"></ul>
+    <button id="closeDiscover" class="closeBtn">戻る</button>
+  </div>
+</div>
+</div>
+
+<script>
+(()=>{
+  const svg=document.getElementById('circuitSvg');
+  const app=document.getElementById('app');
+  const board=document.getElementById('board');
+  const msg=document.getElementById('message');
+  const terminals={
+    batteryPlus:{x:68,y:104,el:document.getElementById('batteryPlus')},
+    batteryMinus:{x:95,y:110,el:document.getElementById('batteryMinus')},
+    bulbA:{x:279,y:224,el:document.getElementById('bulbA')},
+    bulbB:{x:321,y:224,el:document.getElementById('bulbB')}
+  };
+  const wires={
+    wire1:{fixed:'batteryPlus',end:'wire1End',path:'wire1Path',x:215,y:90,target:null},
+    wire2:{fixed:'batteryMinus',end:'wire2End',path:'wire2Path',x:237,y:292,target:null}
+  };
+  const discoveries=new Set();
+  const allDiscoveries=[
+    ['open','回路が途中で切れている → 電球は光らない'],
+    ['closed','乾電池から戻る道までつながる → 電球が光る'],
+    ['one-side','片方だけつないでも → 電流は一周できない'],
+    ['near-not-connected','近くにあるだけでは → 接続したことにならない']
+  ];
+  let dragging=null, muted=false, audio=null;
+
+  const $=s=>document.querySelector(s);
+  function ensureAudio(){
+    if(muted)return null;
+    if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}
+    if(audio&&audio.state==='suspended')audio.resume();
+    return audio;
+  }
+  function tone(f=440,d=.06,g=.025){
+    const c=ensureAudio();if(!c)return;
+    const o=c.createOscillator(),a=c.createGain(),t=c.currentTime;
+    o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);
+    a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(a).connect(c.destination);o.start(t);o.stop(t+d+.03)
+  }
+  function setMsg(text,cls='warn'){
+    msg.className='message '+cls;
+    msg.querySelector('span:last-child').textContent=text
+  }
+  function addDiscovery(id){
+    if(discoveries.has(id))return;
+    discoveries.add(id);tone(720,.06,.02);
+    $('#discoverBtn').textContent='🔬 発見 '+discoveries.size
+  }
+  function svgPoint(evt){
+    const p=svg.createSVGPoint();p.x=evt.clientX;p.y=evt.clientY;
+    return p.matrixTransform(svg.getScreenCTM().inverse())
+  }
+  function nearestTerminal(x,y){
+    let best=null,dist=Infinity;
+    Object.entries(terminals).forEach(([id,t])=>{
+      if(id==='batteryPlus'||id==='batteryMinus')return;
+      const d=Math.hypot(t.x-x,t.y-y);
+      if(d<dist){dist=d;best=id}
+    });
+    return dist<=34?best:null
+  }
+  function setHot(id){
+    Object.values(terminals).forEach(t=>t.el.classList.remove('hot'));
+    if(id)terminals[id].el.classList.add('hot')
+  }
+  function updateWire(wire){
+    const w=wires[wire], fixed=terminals[w.fixed];
+    const end=document.getElementById(w.end);
+    end.setAttribute('cx',w.x);end.setAttribute('cy',w.y);
+    const mx=(fixed.x+w.x)/2, bend=wire==='wire1'?-58:78;
+    document.getElementById(w.path).setAttribute('d',
+      'M'+fixed.x+' '+fixed.y+' C'+mx+' '+(fixed.y+bend)+' '+mx+' '+(w.y+bend)+' '+w.x+' '+w.y
+    )
+  }
+  function connectionState(){
+    const a=wires.wire1.target,b=wires.wire2.target;
+    const both=!!a&&!!b;
+    const opposite=both&&a!==b&&(a==='bulbA'||a==='bulbB')&&(b==='bulbA'||b==='bulbB');
+    return {both,closed:opposite,one:!!a!==!!b,same:both&&a===b}
+  }
+  function renderCircuit(){
+    const s=connectionState();
+    app.classList.toggle('circuit-live',s.closed);
+    ['wire1Path','wire2Path'].forEach(id=>document.getElementById(id).classList.toggle('live',s.closed));
+    if(s.closed){
+      setMsg('電球が光った！ でも、まだ自動クリアではないよ。自分で「光る」と判断しよう。','good');
+      addDiscovery('closed');
+      const sp=$('#spark');sp.classList.remove('show');void sp.getBBox();sp.classList.add('show');
+      tone(560,.05,.02);setTimeout(()=>tone(740,.08,.02),60)
+    }else if(s.one){
+      setMsg('片方はつながった。でも、電流が一周する道はまだできていない。','warn');
+      addDiscovery('one-side');addDiscovery('open')
+    }else if(s.same){
+      setMsg('2本とも同じ端子につながっている。電球を通って一周する道になっていない。','bad');
+      addDiscovery('open')
+    }else{
+      setMsg('回路が途中で切れている。電球はまだ光らない。','warn');
+      addDiscovery('open')
+    }
+  }
+  function attachDrag(id){
+    const el=document.getElementById(id);
+    el.addEventListener('pointerdown',e=>{
+      dragging=el.dataset.wire;el.classList.add('dragging');el.setPointerCapture(e.pointerId);ensureAudio()
+    });
+    el.addEventListener('pointermove',e=>{
+      if(!dragging)return;
+      const p=svgPoint(e),w=wires[dragging];
+      w.x=Math.max(18,Math.min(372,p.x));w.y=Math.max(18,Math.min(342,p.y));w.target=null;
+      const near=nearestTerminal(w.x,w.y);setHot(near);updateWire(dragging)
+    });
+    const end=e=>{
+      if(!dragging)return;
+      const w=wires[dragging],near=nearestTerminal(w.x,w.y);
+      if(near){
+        w.target=near;w.x=terminals[near].x;w.y=terminals[near].y;
+        tone(360,.04,.02);setTimeout(()=>tone(500,.04,.018),35)
+      }else{
+        addDiscovery('near-not-connected')
+      }
+      setHot(null);updateWire(dragging);renderCircuit();
+      el.classList.remove('dragging');dragging=null
+    };
+    el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end)
+  }
+  function showDiscoveries(){
+    const ul=$('#discoverList');ul.innerHTML='';
+    allDiscoveries.forEach(([id,text])=>{
+      const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';
+      li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+text;ul.appendChild(li)
+    });
+    $('#discoverOverlay').classList.add('show')
+  }
+  function reset(){
+    wires.wire1.target=null;wires.wire1.x=215;wires.wire1.y=90;
+    wires.wire2.target=null;wires.wire2.x=237;wires.wire2.y=292;
+    updateWire('wire1');updateWire('wire2');renderCircuit()
+  }
+
+  attachDrag('wire1End');attachDrag('wire2End');
+  $('#startBtn').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');reset()};
+  $('#checkBtn').onclick=()=>{
+    const s=connectionState();
+    if(s.closed){$('#successOverlay').classList.add('show');tone(660,.08,.03);setTimeout(()=>tone(830,.12,.03),90)}
+    else{setMsg('まだ光る回路ではない。電流が乾電池から出て、豆電球を通り、乾電池へ戻れるか見直そう。','bad');tone(160,.1,.03)}
+  };
+  $('#retryBtn').onclick=()=>{$('#successOverlay').classList.remove('show');reset()};
+  $('#discoverBtn').onclick=showDiscoveries;
+  $('#closeDiscover').onclick=()=>$('#discoverOverlay').classList.remove('show');
+  $('#muteBtn').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
+})();
+</script>
+</body>
+</html>
