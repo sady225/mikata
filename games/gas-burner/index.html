@@ -250,6 +250,76 @@ header{position:absolute;z-index:5;top:7px;left:0;right:0;height:122px;backgroun
  #app.title-mode .titleScreen .tag{font-size:10px}
  #app.title-mode .titleScreen h1{font-size:27px}
 }
+/* Unified iPhone portrait layout: one geometry for ALL three stages */
+#app{--layout-safe-top:env(safe-area-inset-top,0px);--layout-hud:76px;}
+#app>header,#app.stage2-mode>header,#app.title-mode>header{
+ top:0;height:calc(var(--layout-hud) + var(--layout-safe-top));
+ padding:calc(5px + var(--layout-safe-top)) 11px 5px;
+ overflow:visible;box-shadow:0 2px 0 #a83a32;
+}
+#app>header .hudrow,#app.stage2-mode>header .hudrow,#app.title-mode>header .hudrow{min-height:34px;height:34px;align-items:center;gap:7px}
+#app>header .little,#app.stage2-mode>header .little,#app.title-mode>header .little{font-size:9px;line-height:1.1;letter-spacing:0}
+#app>header #best,#app.stage2-mode>header #best,#app.title-mode>header #best{display:none}
+#app>header .score,#app.stage2-mode>header .score,#app.title-mode>header .score{font-size:23px;line-height:1}
+#app>header .mute,#app.stage2-mode>header .mute,#app.title-mode>header .mute{min-width:76px;min-height:30px;padding:3px 8px;font-size:12px;border-width:2px}
+#app>header .pills,#app.stage2-mode>header .pills,#app.title-mode>header .pills{margin-top:1px;min-height:26px;gap:5px}
+#app>header .pill,#app.stage2-mode>header .pill,#app.title-mode>header .pill{min-height:26px;font-size:11px;line-height:1.1;padding:4px 3px}
+#app>header:after{height:7px;background-size:18px 7px;background:radial-gradient(circle at 9px 0,var(--red) 7px,transparent 8px) repeat-x;background-size:18px 7px}
+#app>.screen.active.game,#app.stage2-mode>.screen.active.game{
+ display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;
+ padding:calc(var(--layout-hud) + var(--layout-safe-top) + 9px) 0 0;
+ height:100%;min-height:0;max-height:100%;
+ overflow:hidden;touch-action:manipulation;scroll-padding:0;
+}
+#app .game .task,#app.stage2-mode .game .task{margin:0 10px 2px;padding:6px 10px;border-radius:14px;box-shadow:0 2px #0087ae66;min-height:0}
+#app .game .task .kicker,#app.stage2-mode .game .task .kicker{font-size:10px;line-height:1.15}
+#app .game .task h2,#app.stage2-mode .game .task h2{font-size:17px;line-height:1.22;margin:1px 0 0}
+#app .game .task p,#app.stage2-mode .game .task p{font-size:11px;line-height:1.2;margin:1px 0 0}
+#app .game .task .timer,#app.stage2-mode .game .task .timer{font-size:12px;padding:3px 7px}
+#app .game .labArea,#app.stage2-mode .game .labArea{
+ display:flex;align-items:center;justify-content:center;
+ flex:none;height:100%;max-height:none;min-height:0;overflow:hidden;
+ margin:0 2px;padding:0;position:relative;
+}
+#app .game .labArea #labImage,#app.stage2-mode .game .labArea #labImage{height:100%!important;width:100%;min-height:0;max-height:100%;overflow:hidden;display:flex!important;align-items:center;justify-content:center}
+#app .game .labArea svg,#app.stage2-mode .game .labArea svg{width:100%;height:100%;max-width:350px;max-height:100%;overflow:visible}
+#app .game .labArea .note,#app.stage2-mode .game .labArea .note{top:4px;right:7px;padding:4px 7px;font-size:10px;z-index:2}
+#app .game .message,#app.stage2-mode .game .message{
+ min-height:31px;max-height:48px;padding:5px 9px;
+ margin:2px 9px 3px;border-radius:10px;
+ font-size:11px;line-height:1.2;overflow:auto;
+ box-shadow:0 2px #008db04d;
+}
+#app .game .controls,#app.stage2-mode .game .controls{
+ position:relative;bottom:auto;left:auto;right:auto;z-index:5;
+ flex:none;min-height:0;height:auto;max-height:min(35dvh,190px);
+ overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
+ margin:0;padding:7px 10px calc(7px + env(safe-area-inset-bottom));
+ border-top:2px solid #fff7;background:#036e9df2;
+}
+#app .game .controls .question,#app.stage2-mode .game .controls .question{font-size:11px;line-height:1.2;margin:0 0 4px}
+#app .game .controls .steptext,#app.stage2-mode .game .controls .steptext{font-size:11px;line-height:1.2;margin:2px 0 6px}
+#app .game .controls .choices,#app.stage2-mode .game .controls .choices{gap:7px}
+#app .game .controls .action,#app.stage2-mode .game .controls .action{min-height:46px;padding:9px 5px;font-size:13px;line-height:1.15}
+#app .game .controls .airControl,#app.stage2-mode .game .controls .airControl{padding:5px 7px;border-radius:12px;border-width:1px}
+#app .game .controls .airHelp,#app.stage2-mode .game .controls .airHelp{font-size:11px;margin-bottom:3px}
+#app .game .controls .airAdjust,#app.stage2-mode .game .controls .airAdjust{gap:7px}
+#app .game .controls .airNudge,#app.stage2-mode .game .controls .airNudge{min-height:41px;height:41px;min-width:45px;width:45px;font-size:23px}
+#app .game .controls .airHelpSmall,#app.stage2-mode .game .controls .airHelpSmall{display:none}
+#app .game .controls .miniActions,#app.stage2-mode .game .controls .miniActions{margin-top:6px;gap:7px}
+#app.title-mode>.titleScreen.active{
+ padding:calc(var(--layout-hud) + var(--layout-safe-top) + 11px) 14px calc(9px + env(safe-area-inset-bottom));
+}
+#app.title-mode .titleScreen .hero{flex:1 1 65px;min-height:56px;max-height:190px}
+#app>.end.active{padding-top:calc(var(--layout-hud) + var(--layout-safe-top) + 15px)}
+@media(max-height:520px){
+ #app{--layout-hud:70px}
+ #app .game .task p{display:none}
+ #app .game .controls,#app.stage2-mode .game .controls{max-height:38dvh}
+ #app .game .controls .action{min-height:43px}
+ #app .game .message{min-height:27px}
+ #app.title-mode .titleScreen .hero{max-height:125px}
+}
 </style>
 </head>
 <body><div id="app" class="title-mode">
