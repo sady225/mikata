@@ -34,6 +34,45 @@ header{position:absolute;z-index:5;top:7px;left:0;right:0;height:122px;backgroun
 @media(max-height:750px){.screen.active.game{padding-top:116px}.game .task h2{font-size:17px}.game .controls .action{min-height:44px}.game .controls .dial{width:66px;height:66px}.game .message{min-height:37px}.game .labArea{min-height:65px}}
 @media(max-height:610px){.screen.active.game{padding-top:112px}.game .task p{font-size:11px}.game .labArea{min-height:55px}.titleScreen.active{padding-top:124px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
+/* iPhone 17 / Dynamic Island safe-area header repair */
+:root{--ui-safe-top:env(safe-area-inset-top,0px);}
+#app{padding-top:0;}
+#app>header{
+  top:0;
+  height:calc(140px + var(--ui-safe-top));
+  padding:calc(14px + var(--ui-safe-top)) 14px 12px;
+  overflow:visible;
+}
+#app>header .hudrow{min-height:67px;align-items:flex-start;}
+#app>header .pills{position:relative;margin-top:6px;gap:6px;min-height:35px;}
+#app>header .pill{
+  display:flex;align-items:center;justify-content:center;
+  min-width:0;min-height:34px;line-height:1.2;
+  padding:7px 3px;white-space:nowrap;
+}
+#app>.screen.active.game{
+  padding-top:calc(154px + var(--ui-safe-top));
+  scroll-padding-top:calc(154px + var(--ui-safe-top));
+}
+#app>.titleScreen.active{padding-top:calc(162px + var(--ui-safe-top));}
+#app>.end.active{padding-top:calc(157px + var(--ui-safe-top));}
+@media(max-height:750px){
+ #app>header{height:calc(133px + var(--ui-safe-top));padding-top:calc(10px + var(--ui-safe-top));}
+ #app>header .hudrow{min-height:61px;}
+ #app>.screen.active.game{padding-top:calc(146px + var(--ui-safe-top));}
+ #app>.titleScreen.active{padding-top:calc(146px + var(--ui-safe-top));}
+ #app>.end.active{padding-top:calc(144px + var(--ui-safe-top));}
+}
+@media(max-height:610px){
+ #app>header{height:calc(126px + var(--ui-safe-top));padding-top:calc(8px + var(--ui-safe-top));}
+ #app>header .hudrow{min-height:58px;}
+ #app>header .pill{min-height:31px;padding-block:5px;}
+ #app>.screen.active.game{padding-top:calc(138px + var(--ui-safe-top));}
+ #app>.titleScreen.active{padding-top:calc(138px + var(--ui-safe-top));}
+ #app>.end.active{padding-top:calc(135px + var(--ui-safe-top));}
+}
+
 </style>
 </head>
 <body><div id="app">
