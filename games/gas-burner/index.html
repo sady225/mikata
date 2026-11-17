@@ -419,25 +419,40 @@ function wakeSound(){
 function buildCelebrationAudio(){
  if(clearAudio)return clearAudio;
  try{
-  const sr=22050,dur=1.75,n=Math.floor(sr*dur),samples=new Float32Array(n);
+  const sr=22050,dur=1.55,n=Math.floor(sr*dur),samples=new Float32Array(n);
   const notes=[
-   {f:392.00,t:0.00,d:.26,a:.30},
-   {f:523.25,t:.18,d:.28,a:.33},
-   {f:659.25,t:.38,d:.30,a:.36},
-   {f:783.99,t:.60,d:.48,a:.42},
-   {f:1046.50,t:.92,d:.34,a:.28},
-   {f:1318.51,t:1.08,d:.32,a:.25},
-   {f:1567.98,t:1.24,d:.40,a:.22}
+   {f:783.99,t:0.00,d:.24,a:.24},
+   {f:1046.50,t:.14,d:.26,a:.27},
+   {f:1318.51,t:.29,d:.28,a:.29},
+   {f:1567.98,t:.47,d:.34,a:.31},
+   {f:1318.51,t:.70,d:.24,a:.22},
+   {f:1760.00,t:.88,d:.42,a:.27}
   ];
   for(const note of notes){
    const start=Math.floor(note.t*sr),len=Math.floor(note.d*sr);
    for(let i=0;i<len&&start+i<n;i++){
-    const x=i/len,env=Math.sin(Math.PI*Math.min(1,x/.18))*Math.exp(-3.4*x);
-    const t=i/sr;
-    samples[start+i]+=note.a*env*(Math.sin(2*Math.PI*note.f*t)+.30*Math.sin(2*Math.PI*note.f*2*t));
+    const x=i/len,t=i/sr;
+    const attack=Math.min(1,x/.07),decay=Math.exp(-4.8*x),env=attack*decay;
+    const bell=
+      Math.sin(2*Math.PI*note.f*t)
+      +.42*Math.sin(2*Math.PI*note.f*2.01*t)
+      +.18*Math.sin(2*Math.PI*note.f*3.98*t);
+    samples[start+i]+=note.a*env*bell;
    }
   }
-  for(let i=0;i<n;i++)samples[i]=Math.max(-.92,Math.min(.92,samples[i]));
+  const twinkles=[
+   {f:2093.00,t:.56,d:.14,a:.12},
+   {f:2349.32,t:.76,d:.13,a:.10},
+   {f:2637.02,t:1.05,d:.17,a:.09}
+  ];
+  for(const note of twinkles){
+   const start=Math.floor(note.t*sr),len=Math.floor(note.d*sr);
+   for(let i=0;i<len&&start+i<n;i++){
+    const x=i/len,t=i/sr,env=Math.sin(Math.PI*Math.min(1,x/.16))*Math.exp(-6*x);
+    samples[start+i]+=note.a*env*(Math.sin(2*Math.PI*note.f*t)+.25*Math.sin(2*Math.PI*note.f*2*t));
+   }
+  }
+  for(let i=0;i<n;i++)samples[i]=Math.max(-.86,Math.min(.86,samples[i]));
   const buf=new ArrayBuffer(44+n*2),v=new DataView(buf);
   const w=(o,str)=>{for(let i=0;i<str.length;i++)v.setUint8(o+i,str.charCodeAt(i))};
   w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');
@@ -447,7 +462,7 @@ function buildCelebrationAudio(){
   for(let i=0;i<n;i++)v.setInt16(44+i*2,Math.round(samples[i]*32767),true);
   clearAudioUrl=URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
   clearAudio=new Audio(clearAudioUrl);
-  clearAudio.preload='auto';clearAudio.playsInline=true;clearAudio.volume=.95;
+  clearAudio.preload='auto';clearAudio.playsInline=true;clearAudio.volume=.92;
   return clearAudio;
  }catch(e){return null}
 }
@@ -468,18 +483,19 @@ function clearSoundFallback(){
  try{
   const now=actx.currentTime;
   const notes=[
-   {f:392.00,t:0,d:.22,g:.10},
-   {f:523.25,t:.16,d:.24,g:.11},
-   {f:659.25,t:.34,d:.26,g:.12},
-   {f:783.99,t:.55,d:.42,g:.14}
+   {f:783.99,t:0,d:.20,g:.075},
+   {f:1046.50,t:.13,d:.22,g:.08},
+   {f:1318.51,t:.27,d:.24,g:.085},
+   {f:1567.98,t:.44,d:.28,g:.09},
+   {f:1760.00,t:.72,d:.36,g:.08}
   ];
   notes.forEach(n=>{
    const o=actx.createOscillator(),g=actx.createGain();
-   o.type='triangle';o.frequency.setValueAtTime(n.f,now+n.t);
+   o.type='sine';o.frequency.setValueAtTime(n.f,now+n.t);
    g.gain.setValueAtTime(.0001,now+n.t);
-   g.gain.exponentialRampToValueAtTime(n.g,now+n.t+.015);
+   g.gain.exponentialRampToValueAtTime(n.g,now+n.t+.012);
    g.gain.exponentialRampToValueAtTime(.0001,now+n.t+n.d);
-   o.connect(g);g.connect(actx.destination);o.start(now+n.t);o.stop(now+n.t+n.d+.04);
+   o.connect(g);g.connect(actx.destination);o.start(now+n.t);o.stop(now+n.t+n.d+.03);
   });
  }catch(e){}
 }
