@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#8b4b32">
+<title>消化の大冒険！〜食べ物とからだのひみつ〜</title>
+<style>
+:root{--brown:#7a3f2b;--orange:#f59f55;--yellow:#ffe179;--cream:#fff8e8;--green:#43a879;--red:#d95b55;--blue:#4b9fc6;--ink:#4c342b;--safe:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#4b2a22}body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}button{font:inherit;touch-action:manipulation}
+#app{width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(#ffcf86 0%,#ffdca8 46%,#ffeecb 100%);user-select:none}
+header{position:absolute;z-index:20;top:0;left:0;right:0;height:92px;padding:10px 11px;background:linear-gradient(#8a4b34,#693523);color:#fff;border-bottom:4px solid #f6c06c}
+.headrow{display:flex;justify-content:space-between;align-items:center;gap:8px}.brand{font-size:10px;font-weight:1000}.stage{font-size:12px;font-weight:1000;background:#ffffff20;padding:6px 9px;border-radius:999px}.hud{display:flex;gap:6px}.hud button{border:0;border-radius:999px;background:white;color:#713b29;min-height:32px;font-size:11px;font-weight:1000;padding:0 10px}.progress{height:7px;margin-top:8px;background:#ffffff22;border-radius:999px;overflow:hidden}.progress span{display:block;height:100%;width:16.6%;background:var(--yellow);transition:.25s}
+.screen{position:absolute;inset:0;display:none}.screen.active{display:flex}
+.title{padding:110px 18px 18px;flex-direction:column;align-items:center;justify-content:center;text-align:center}.badge{background:white;color:#8a4b34;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:1000;box-shadow:0 4px #7b402533}.title h1{font-size:clamp(34px,9vw,46px);line-height:1.02;color:white;text-shadow:0 4px #8e4a31;margin:12px 0 4px;letter-spacing:-.04em}.title h1 em{font-style:normal;color:var(--yellow)}.subtitle{font-size:14px;font-weight:900;color:#7a452d;margin:0 0 8px}.hero{height:min(31dvh,230px);min-height:150px;width:min(80vw,310px);display:grid;place-items:center}.start,.check,.next,.retry,.small{border:0;border-radius:999px;background:var(--yellow);color:#7a4a1d;font-weight:1000;box-shadow:0 5px #c68f31,0 0 0 3px white inset}.start{width:min(88vw,330px);min-height:56px;font-size:20px}.start:active,.check:active,.next:active,.retry:active,.small:active{transform:translateY(3px);box-shadow:0 2px #c68f31,0 0 0 3px white inset}.title small{max-width:340px;font-size:11px;line-height:1.45;color:#754832;font-weight:800;margin-top:10px}
+.game{flex-direction:column;padding-top:100px;min-height:0}.task{flex:0 0 auto;margin:6px 10px 4px;background:white;border-radius:18px;padding:7px 10px;box-shadow:0 4px #9f653d30}.task b{display:block;color:#dc7445;font-size:10px}.task h2{font-size:16px;margin:2px 0}.task p{font-size:10px;font-weight:800;color:#7c6255;margin:0;line-height:1.35}
+.lab{position:relative;flex:1 1 auto;min-height:170px;margin:0 9px 4px;border:3px solid #ffffffbb;border-radius:24px;background:#fff6e8dd;overflow:hidden}.organTitle{position:absolute;left:10px;top:8px;font-size:11px;font-weight:1000;color:#824d36;background:#ffffffd8;padding:4px 8px;border-radius:999px;z-index:3}
+.body{position:absolute;inset:0;display:grid;place-items:center}.organ{position:relative;width:86%;height:82%}.tube{position:absolute;left:46%;top:2%;width:10%;height:30%;border-radius:30px;background:#e89a87;border:4px solid #b96859}.stomach{position:absolute;left:35%;top:28%;width:34%;height:31%;background:#e68172;border:5px solid #b95e55;border-radius:50% 45% 55% 45%;transform:rotate(-12deg)}.smallInt{position:absolute;left:29%;top:55%;width:44%;height:34%;border:9px solid #e8a46d;border-radius:35%;background:repeating-radial-gradient(circle at 50% 50%,transparent 0 9px,#f2bd83 10px 14px,transparent 15px 22px)}.largeInt{position:absolute;left:22%;top:50%;width:58%;height:43%;border:11px solid #b97b61;border-radius:28%;background:transparent}
+.foodArea{position:absolute;inset:0;pointer-events:none}.food{position:absolute;width:56px;height:40px;border-radius:45% 55% 40% 60%;background:#f2bd5f;border:4px solid #b8752b;display:grid;place-items:center;font-size:24px;transition:.25s;left:50%;top:15%;transform:translate(-50%,-50%) scale(var(--foodscale,1)) rotate(var(--rot,0deg))}.particle{position:absolute;width:12px;height:12px;border-radius:50%;background:#ffd35b;border:2px solid #b47a28;transition:.25s}.nutrient{position:absolute;width:9px;height:9px;border-radius:50%;background:#4cb6d7;box-shadow:0 0 0 2px #fff7;transition:.35s}.villiWrap{position:absolute;inset:0;display:none;align-items:center;justify-content:center}.villiWrap.show{display:flex}.villi{width:90%;height:82%;background:#fff3dc;border-radius:22px;padding:12px;display:flex;gap:5px;align-items:flex-end;justify-content:center}.villus{width:18px;height:75%;background:linear-gradient(#f3a4a3,#e88988);border-radius:18px 18px 4px 4px;position:relative}.villus:after{content:"";position:absolute;left:50%;top:12%;bottom:12%;width:3px;background:#c85662;transform:translateX(-50%);border-radius:4px}.blood{position:absolute;right:10px;top:15%;bottom:15%;width:42px;border-radius:20px;background:#d9f1ff;border:4px solid #5fa6c7}.blood:before{content:"血液";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(90deg);font-size:10px;font-weight:1000;color:#347b9b}
+.message{flex:0 0 auto;margin:0 10px 4px;min-height:40px;border-radius:14px;padding:7px 9px;background:#fffffff3;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:900;box-shadow:0 3px #9d603526}.message.good{background:#e6f8df;color:#2e684a}.message.warn{background:#fff0d7;color:#8a5c20}.message.bad{background:#ffe3df;color:#9b403b}.dot{width:9px;height:9px;border-radius:50%;background:#bf6e43;flex:0 0 auto}.good .dot{background:var(--green)}.warn .dot{background:var(--orange)}.bad .dot{background:var(--red)}
+.controls{flex:0 0 auto;background:#713c2be8;color:white;border-top:3px solid #ffffff72;padding:7px 9px calc(9px + var(--safe))}.ctitle{text-align:center;font-size:10px;font-weight:1000;color:#ffedd6;margin:0 0 6px}.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.actions.three{grid-template-columns:repeat(3,1fr)}.action{min-height:48px;border:0;border-radius:14px;background:white;color:#7a422d;font-size:11px;font-weight:1000;box-shadow:0 4px #4f281c;padding:6px}.action.active{background:var(--yellow)}.action:active{transform:translateY(2px);box-shadow:0 2px #4f281c}.check{width:100%;min-height:43px;margin-top:7px;font-size:14px}.meter{height:12px;background:#ffffff24;border-radius:999px;overflow:hidden;margin:6px 0}.meter span{display:block;height:100%;background:linear-gradient(90deg,#f2a55b,#ffe179,#45ad7b);width:var(--m,0%);transition:.2s}.hint{font-size:9px;text-align:center;color:#ffead6;font-weight:800;margin-top:5px}
+.overlay{position:absolute;z-index:50;inset:0;display:none;place-items:center;padding:18px;background:#4b281fdc}.overlay.show{display:grid}.card{width:100%;max-width:350px;background:white;border-radius:24px;padding:18px;text-align:center;box-shadow:0 10px #3c2118}.emoji{font-size:40px}.card h2{margin:2px 0 6px;font-size:25px;color:var(--green)}.card p{font-size:12px;font-weight:800;line-height:1.55;color:#695249}.next,.retry,.small{width:100%;min-height:48px;margin-top:8px;font-size:15px}.discoverList{list-style:none;padding:0;margin:10px 0;max-height:48dvh;overflow:auto;text-align:left}.discoverList li{font-size:11px;font-weight:800;background:#f0f8f1;padding:8px 10px;margin:6px 0;border-radius:12px}.discoverList .locked{background:#f2f2f2;color:#9ba3a5}.sources{font-size:10px;text-align:left;background:#fff6e8;padding:10px;border-radius:12px;margin-top:10px}.sources a{color:#7a422d}
+@media(max-height:650px){header{height:80px}.game{padding-top:87px}.task{padding:5px 8px}.task h2{font-size:14px}.task p{display:none}.lab{min-height:135px}.message{min-height:32px;font-size:10px}.action{min-height:42px}.controls{padding-top:5px}}
+@media(max-height:570px){.brand{display:none}.game{padding-top:78px}.lab{min-height:116px}.message{min-height:29px}.ctitle{display:none}}
+</style>
+</head>
+<body>
+<div id="app">
+<header><div class="headrow"><div><div class="brand">子どものMIKATA｜理科体験ゲーム</div><div id="stageLabel" class="stage">🍙 口 1 / 6</div></div><div class="hud"><button id="discoverBtn">🔬 発見 0</button><button id="mute">🔊</button></div></div><div class="progress"><span id="progress"></span></div></header>
+
+<main id="title" class="screen title active">
+<div class="badge">失敗すると発見が増える</div>
+<h1>消化の<em>大冒険！</em></h1>
+<p class="subtitle">食べ物は、からだの中でどう変わる？</p>
+<div class="hero" aria-hidden="true"><svg viewBox="0 0 300 220"><path d="M145 12 C110 14 93 37 92 65 C91 93 111 105 121 125 C129 140 122 168 106 189" fill="none" stroke="#e58d77" stroke-width="24" stroke-linecap="round"/><path d="M159 87 C209 72 225 101 207 133 C194 154 160 159 143 135 C129 116 136 94 159 87 Z" fill="#e48172" stroke="#b85e55" stroke-width="6"/><path d="M117 165 C129 145 185 145 198 170 C210 194 180 206 157 194 C134 210 103 194 117 165 Z" fill="#f0b177" stroke="#c57c50" stroke-width="9"/><circle cx="137" cy="31" r="12" fill="#ffd35b"/><circle cx="159" cy="170" r="7" fill="#49abd1"/><circle cx="178" cy="180" r="7" fill="#49abd1"/></svg></div>
+<button id="start" class="start">大冒険を始める</button>
+<small>正解だけを急がなくてOK。間違った操作で何が起こるか観察すると「発見コレクション」が増える。</small>
+</main>
+
+<main id="game" class="screen game">
+<section class="task"><b id="mission"></b><h2 id="taskTitle"></h2><p id="taskText"></p></section>
+<section class="lab">
+<div id="organTitle" class="organTitle">口</div>
+<div class="body"><div class="organ"><div class="tube"></div><div class="stomach"></div><div class="largeInt"></div><div class="smallInt"></div></div></div>
+<div id="foodArea" class="foodArea"><div id="food" class="food">🍞</div></div>
+<div id="villiWrap" class="villiWrap"><div class="villi"><div class="villus"></div><div class="villus"></div><div class="villus"></div><div class="villus"></div><div class="villus"></div><div class="villus"></div><div class="villus"></div><div class="blood"></div></div></div>
+</section>
+<div id="message" class="message warn"><span class="dot"></span><span></span></div>
+<section class="controls"><p id="ctitle" class="ctitle"></p><div id="controlArea"></div></section>
+</main>
+
+<div id="stageClear" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">発見！</h2><p id="clearText"></p><button id="next" class="next">次の器官へ</button></div></div>
+<div id="discoverOverlay" class="overlay"><div class="card"><div class="emoji">🔬</div><h2>発見コレクション</h2><ul id="discoverList" class="discoverList"></ul><button id="closeDiscover" class="small">戻る</button></div></div>
+<div id="finish" class="overlay"><div class="card"><div class="emoji">🧠✨</div><h2>消化研究員！</h2><p id="finishText"></p><div class="sources"><strong>📚 出典・参考</strong><br><a href="https://www.mext.go.jp/content/20210830-mxt_kyoiku01-100002608_05.pdf" target="_blank" rel="noopener noreferrer">文部科学省「中学校学習指導要領（理科編）解説」</a><br><a href="https://www.mext.go.jp/a_menu/shotou/eiyou/20220216-mxt_kouhou02-1.pdf" target="_blank" rel="noopener noreferrer">文部科学省「中学生用食育教材」</a></div><button id="showCollection" class="small">発見コレクションを見る</button><button id="retry" class="retry">最初からもう一度</button></div></div>
+</div>
+
+<script>
+(()=>{
+let stage=0,muted=false,audio=null,cleared=false;
+let chews=0,saliva=false,water=false,stomachMix=0,smallChoice='',largeChoice='',troubleStep=0;
+const discoveries=new Set();
+const allDiscoveries=[
+['chew-small','よくかむ → 食べ物が細かくなり、消化液がはたらきやすくなる'],
+['swallow-big','大きいまま飲み込む → 胃に大きなかたまりが届く'],
+['saliva','だ液 → でんぷんの消化が始まる'],
+['water-only','水だけ → でんぷんを消化する働きはない'],
+['stomach-not-all','胃だけで食べ物の消化が全部終わるわけではない'],
+['stomach-mix','胃 → 消化液と混ざり、食べ物を次へ送る'],
+['small-main','小腸 → 消化された養分を主に吸収する'],
+['villi','柔毛 → 表面積を大きくし、効率よく吸収する'],
+['large-water','大腸 → 主に水分を吸収する'],
+['large-not-main','大腸は養分吸収の主役ではない'],
+['trouble-stomach','「胃で全部吸収」は誤り → 主な吸収の場は小腸'],
+['trouble-large','「大腸で全部吸収」は誤り → 大腸では主に水分を吸収']
+];
+const defs=[
+{label:'🍙 口 1 / 6',mission:'MISSION 01',title:'まずは、食べ物をどうする？',text:'かむ回数で食べ物の大きさが変わる。早く飲み込む失敗も試せる。'},
+{label:'💧 だ液 2 / 6',mission:'MISSION 02',title:'でんぷんを変化させるのはどれ？',text:'水とだ液を自由に試して、違いを観察しよう。'},
+{label:'🫙 胃 3 / 6',mission:'MISSION 03',title:'胃では何が起こっている？',text:'「胃で全部終わる」と思って進めるとどうなるか試してみよう。'},
+{label:'🧬 小腸 4 / 6',mission:'MISSION 04',title:'分解された養分は、どこから体内へ？',text:'柔毛を大きく表示して、腸壁を通る様子を観察する。'},
+{label:'💦 大腸 5 / 6',mission:'MISSION 05',title:'大腸の主な仕事はどっち？',text:'「残った養分を全部吸収」と「水分を吸収」を比べよう。'},
+{label:'🧪 研究所 6 / 6',mission:'MISSION 06',title:'消化の思い込みを実験で壊そう',text:'間違いを選ぶと、なぜ違うのかを結果で確認できる。'}
+];
+const $=s=>document.querySelector(s),food=$('#food'),control=$('#controlArea'),msg=$('#message'),villi=$('#villiWrap');
+function tone(f=440,d=.06,g=.025){if(muted)return;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}if(!audio)return;if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),a=audio.createGain(),t=audio.currentTime;o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(audio.destination);o.start();o.stop(t+d+.03)}
+function setMsg(t,c=''){msg.className='message '+c;msg.querySelector('span:last-child').textContent=t}
+function addDiscovery(id){if(!discoveries.has(id)){discoveries.add(id);tone(720,.05,.025);$('#discoverBtn').textContent='🔬 発見 '+discoveries.size}}
+function resetLab(){document.querySelector('.body').style.display='grid';food.style.display='grid';food.style.left='50%';food.style.top='15%';food.style.setProperty('--foodscale','1');food.style.setProperty('--rot','0deg');food.textContent='🍞';villi.classList.remove('show');document.querySelectorAll('.particle,.nutrient').forEach(n=>n.remove())}
+function render(){
+ cleared=false;resetLab();const d=defs[stage];$('#stageLabel').textContent=d.label;$('#mission').textContent=d.mission;$('#taskTitle').textContent=d.title;$('#taskText').textContent=d.text;$('#progress').style.width=((stage+1)/6*100)+'%';
+ if(stage===0){$('#organTitle').textContent='口';chews=0;$('#ctitle').textContent='かむ／飲み込むを自分で選ぶ';control.innerHTML='<div class="actions"><button id="chew" class="action">🦷 かむ</button><button id="swallow" class="action">⬇️ 飲み込む</button></div><div class="meter"><span id="chewMeter"></span></div><div class="hint">食べ物の大きさを見ながら判断しよう。</div>';$('#chew').onclick=chew;$('#swallow').onclick=swallow;setMsg('パンはまだ大きなかたまり。どうする？','warn')}
+ if(stage===1){$('#organTitle').textContent='口・だ液';saliva=false;water=false;food.style.top='22%';$('#ctitle').textContent='水とだ液を自由に試す';control.innerHTML='<div class="actions"><button id="water" class="action">💧 水を加える</button><button id="saliva" class="action">🧪 だ液を加える</button></div><button id="checkSaliva" class="check">👁️ 変化を判断する</button>';$('#water').onclick=()=>{water=true;food.style.filter='saturate(.8)';setMsg('ぬれた。でも、でんぷんが消化された証拠にはならない。','warn');addDiscovery('water-only')};$('#saliva').onclick=()=>{saliva=true;food.textContent='✨';food.style.setProperty('--foodscale','.65');spawnParticles(8,'particle');setMsg('小さな物質へ変化していくイメージ。だ液の働きを確認。','good');addDiscovery('saliva')};$('#checkSaliva').onclick=()=>saliva?clear('だ液の働きを発見！','だ液には、でんぷんの消化を始める働きがある。','💧'):setMsg('まだ「消化が始まった」とはいえない。水とだ液を比べよう。','bad')}
+ if(stage===2){$('#organTitle').textContent='胃';food.style.top='43%';food.style.left='54%';stomachMix=0;$('#ctitle').textContent='胃で混ぜる／「全部終わった」と判断する';control.innerHTML='<div class="actions"><button id="mix" class="action">🌀 胃で混ぜる</button><button id="finishStomach" class="action">✅ 胃で全部消化完了</button></div><button id="sendSmall" class="check">➡️ 小腸へ送る</button>';$('#mix').onclick=()=>{stomachMix++;food.style.setProperty('--rot',(stomachMix*60)+'deg');food.style.setProperty('--foodscale',Math.max(.45,1-stomachMix*.16));setMsg('胃の中で消化液と混ざり、さらに細かくなっていく。','good');addDiscovery('stomach-mix')};$('#finishStomach').onclick=()=>{setMsg('あれ？ まだ小腸で続きがある。胃だけで全部終わるわけではない！','bad');addDiscovery('stomach-not-all')};$('#sendSmall').onclick=()=>stomachMix>=2?clear('次は小腸へ！','消化は胃だけで完結せず、小腸でも続く。','🫙'):setMsg('まだほとんど混ざっていない。胃の働きも観察してみよう。','warn')}
+ if(stage===3){$('#organTitle').textContent='小腸の柔毛';document.querySelector('.body').style.display='none';food.style.display='none';villi.classList.add('show');smallChoice='';$('#ctitle').textContent='養分をどこへ移動させる？';control.innerHTML='<div class="actions"><button id="stay" class="action">🟡 腸の中に残す</button><button id="absorb" class="action">🔵 腸壁を通して血液側へ</button></div><button id="checkSmall" class="check">👁️ これが吸収だと判断する</button>';spawnNutrients();$('#stay').onclick=()=>{smallChoice='stay';setMsg('消化されても、腸の中にあるだけでは体内へ取り込まれたことにならない。','warn')};$('#absorb').onclick=()=>{smallChoice='absorb';moveNutrientsToBlood();setMsg('養分が柔毛のある腸壁を通って吸収される。','good');addDiscovery('small-main');addDiscovery('villi')};$('#checkSmall').onclick=()=>smallChoice==='absorb'?clear('吸収を発見！','小腸の柔毛は表面積を大きくし、養分を効率よく吸収する。','🧬'):setMsg('「消化」と「吸収」は別。腸壁を通って体内へ入るところを見よう。','bad')}
+ if(stage===4){$('#organTitle').textContent='大腸';food.style.top='76%';food.style.left='50%';food.textContent='◼︎';food.style.background='#a87a57';largeChoice='';$('#ctitle').textContent='大腸の主な仕事を試す';control.innerHTML='<div class="actions"><button id="nutrientAll" class="action">🍚 残りの養分を全部吸収</button><button id="waterAbsorb" class="action">💦 水分を吸収</button></div><button id="checkLarge" class="check">👁️ 大腸の働きを判断する</button>';$('#nutrientAll').onclick=()=>{largeChoice='nutrient';food.style.setProperty('--foodscale','.85');setMsg('それだと「大腸が養分吸収の主役」になってしまう。主な吸収場所を思い出そう。','bad');addDiscovery('large-not-main')};$('#waterAbsorb').onclick=()=>{largeChoice='water';food.style.setProperty('--foodscale','.7');food.style.filter='brightness(.8)';setMsg('水分が吸収され、残りが便へまとまっていく。','good');addDiscovery('large-water')};$('#checkLarge').onclick=()=>largeChoice==='water'?clear('大腸の役割を発見！','大腸では主に水分が吸収され、残ったものが便へまとまる。','💦'):setMsg('大腸は養分吸収の主役ではない。小腸との違いを考えよう。','bad')}
+ if(stage===5){$('#organTitle').textContent='消化トラブル研究所';troubleStep=0;renderTrouble()}
+}
+function chew(){chews=Math.min(6,chews+1);food.style.setProperty('--foodscale',Math.max(.35,1-chews*.11));food.style.setProperty('--rot',(chews*24)+'deg');$('#chewMeter').style.width=(chews/6*100)+'%';tone(290,.035,.02);if(chews>=4){setMsg('かなり細かくなった。消化液が触れやすくなりそう。','good');addDiscovery('chew-small')}else setMsg('少し小さくなった。まだかめそう。','warn')}
+function swallow(){if(chews<3){food.style.top='43%';food.style.left='54%';setMsg('大きなかたまりのまま胃へ！ よくかんだ時との違いを観察。','bad');addDiscovery('swallow-big');setTimeout(()=>{food.style.top='15%';food.style.left='50%'},650)}else clear('よくかんで飲み込んだ！','かみ砕くことで食べ物が細かくなり、消化液がはたらきやすくなる。','🍙')}
+function spawnParticles(n,cls){for(let i=0;i<n;i++){const p=document.createElement('span');p.className=cls;p.style.left=(38+Math.random()*24)+'%';p.style.top=(16+Math.random()*18)+'%';$('#foodArea').appendChild(p)}}
+function spawnNutrients(){for(let i=0;i<10;i++){const p=document.createElement('span');p.className='nutrient';p.style.left=(15+Math.random()*58)+'%';p.style.top=(25+Math.random()*48)+'%';villi.querySelector('.villi').appendChild(p)}}
+function moveNutrientsToBlood(){villi.querySelectorAll('.nutrient').forEach((p,i)=>{setTimeout(()=>{p.style.left='84%';p.style.top=(22+(i%6)*10)+'%'},i*45)})}
+function renderTrouble(){
+ resetLab();$('#organTitle').textContent='消化トラブル研究所';
+ if(troubleStep===0){food.style.top='43%';food.style.left='54%';$('#taskTitle').textContent='「胃で栄養が全部吸収される」って本当？';control.innerHTML='<div class="actions"><button class="action" data-t="a">本当。胃で全部吸収</button><button class="action" data-t="b">違う。小腸が主な吸収の場</button></div>';setMsg('あえて間違いを押してもOK。どうなるか見てみよう。','warn')}
+ else{food.style.top='76%';food.style.left='50%';food.textContent='◼︎';food.style.background='#a87a57';$('#taskTitle').textContent='「大腸で栄養を全部吸収する」って本当？';control.innerHTML='<div class="actions"><button class="action" data-t="c">本当。大腸で全部吸収</button><button class="action" data-t="d">違う。大腸は主に水分を吸収</button></div>';setMsg('小腸と大腸の役割を比べよう。','warn')}
+ control.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>trouble(b.dataset.t))
+}
+function trouble(x){
+ if(troubleStep===0){
+   if(x==='a'){food.style.setProperty('--foodscale','.25');setMsg('全部消えた！？ でもこれは誤ったモデル。主な養分吸収は小腸で起こる。','bad');addDiscovery('trouble-stomach')}
+   if(x==='b'){setMsg('その通り。胃では消化が進み、主な養分吸収は小腸へ。','good');addDiscovery('small-main');setTimeout(()=>{troubleStep=1;renderTrouble()},700)}
+ }else{
+   if(x==='c'){food.style.opacity='.15';setMsg('全部吸収されたように見えるけど、これは誤り。大腸は養分吸収の主役ではない。','bad');addDiscovery('trouble-large')}
+   if(x==='d'){food.style.setProperty('--foodscale','.7');food.style.filter='brightness(.8)';setMsg('水分が吸収され、残りがまとまっていく。','good');addDiscovery('large-water');setTimeout(()=>clear('思い込みを撃破！','胃・小腸・大腸は同じ仕事をしているわけではない。消化と吸収を分けて考えられた。','🧪'),600)}
+ }
+}
+function clear(title,body,emoji){if(cleared)return;cleared=true;tone(650,.08,.03);setTimeout(()=>tone(820,.12,.03),90);$('#clearTitle').textContent=title;$('#clearText').textContent=body;$('#clearEmoji').textContent=emoji;$('#stageClear').classList.add('show')}
+function showDiscoveries(){const ul=$('#discoverList');ul.innerHTML='';allDiscoveries.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#discoverOverlay').classList.add('show')}
+$('#start').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');stage=0;render()};
+$('#next').onclick=()=>{$('#stageClear').classList.remove('show');if(stage<5){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+allDiscoveries.length+'。間違いも観察しながら、消化と吸収の違いを体験できた。';$('#finish').classList.add('show')}};
+$('#retry').onclick=()=>{$('#finish').classList.remove('show');discoveries.clear();$('#discoverBtn').textContent='🔬 発見 0';stage=0;render()};
+$('#discoverBtn').onclick=showDiscoveries;$('#showCollection').onclick=showDiscoveries;$('#closeDiscover').onclick=()=>$('#discoverOverlay').classList.remove('show');
+$('#mute').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
+})();
+</script>
+</body></html>
