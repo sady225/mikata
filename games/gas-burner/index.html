@@ -320,20 +320,55 @@ header{position:absolute;z-index:5;top:7px;left:0;right:0;height:122px;backgroun
  #app .game .message{min-height:27px}
  #app.title-mode .titleScreen .hero{max-height:125px}
 }
+
+/* Stages 4-6: reasoning game */
+#app.reason-mode .labArea{min-height:120px}
+#app.reason-mode .controls{max-height:min(45dvh,245px)}
+#app.reason-mode .message{max-height:58px}
+.reasonScene{width:min(96%,340px);margin:auto;color:#07506e;text-align:center;display:grid;gap:9px;place-items:center}
+.compareFlames{display:flex;align-items:end;justify-content:center;gap:16px;width:100%}
+.compareFlames>div{display:grid;place-items:center;gap:2px;font-size:11px}.compareFlames b{font-size:12px}.compareFlames small{font-size:10px}
+.arrowWhy{align-self:center!important;color:#0877a4;font-size:14px;font-weight:1000}
+.miniFlame{display:block;width:37px;height:62px;border-radius:55% 45% 55% 45%;transform:rotate(45deg);box-shadow:0 3px 0 #07506e33}
+.miniFlame.yellow{background:radial-gradient(circle at 70% 70%,#fff6b0 0 18%,#ffc34c 20% 58%,#f28b34 60%)}
+.miniFlame.blue{background:radial-gradient(circle at 70% 70%,#cbfbff 0 18%,#55cfff 20% 58%,#167ce8 60%)}
+.reasonFormula{background:#ffffffdd;border:2px solid #8fd7e3;border-radius:14px;padding:7px 10px;font-size:11px;font-weight:900;line-height:1.3}
+.whySequence{display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;background:#ffffffc7;border-radius:17px;padding:10px}
+.whySequence span{background:#e9fbff;border:1px solid #75cbd9;border-radius:12px;padding:8px 7px;font-size:11px;font-weight:900}.whySequence b{color:#0877a4}
+.reasonScene.scenario{background:#ffffffce;border-radius:18px;padding:12px}.scenarioIcon{font-size:44px;line-height:1}.reasonScene.scenario strong{font-size:14px}.reasonScene.scenario small{font-size:11px}
+.reasonProgress{font-size:10px;font-weight:1000;color:#ffe66d;margin-bottom:3px}
+.reasonQuestion{margin:0 0 7px;font-size:13px;line-height:1.35;font-weight:1000;color:#fff}
+.reasonChoices{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.reasonChoice{min-height:56px!important;height:auto!important;padding:7px!important;font-size:11px!important;line-height:1.28!important;background:#fff!important;color:#075575!important;box-shadow:0 4px #164f67!important}
+.reasonChoice.rightPick{background:#d9f9ce!important;color:#145f38!important;box-shadow:0 4px #2c8f67!important}
+.reasonChoice.wrongPick{background:#ffd9d3!important;color:#a42e2b!important;box-shadow:0 4px #a94a3b!important;animation:shake .25s}
+@media(max-height:600px){
+ #app.reason-mode .controls{max-height:48dvh}
+ #app.reason-mode .labArea{min-height:90px}
+ .reasonChoice{min-height:48px!important;font-size:10px!important}
+ .reasonScene{gap:5px}.miniFlame{width:31px;height:49px}
+}
 </style>
 </head>
 <body><div id="app" class="title-mode">
 <div class="decor" aria-hidden="true"><div class="sun"></div><div class="cloud"></div><div class="cloud c2"></div><div class="wave"></div><div class="wave w2"></div><div class="bubbles"><span style="--x:13%;--t:9s;--d:-2s"></span><span style="--x:70%;--t:7s;--d:-4s"></span><span style="--x:35%;--t:11s;--d:-6s"></span><span style="--x:82%;--t:8s;--d:-1s"></span></div></div>
-<header><div class="hudrow"><div><div class="little">おきなわ理科チャレンジ</div><div class="score" id="score">0000</div><div class="little" id="best">ベスト 0000</div></div><button class="mute" id="sound" aria-label="おとの切り替え">♪ おと ON</button></div><div class="pills" id="pills"><span class="pill on">① 点火</span><span class="pill">② 調節</span><span class="pill">③ 消火</span></div></header>
-<section id="title" class="screen titleScreen active"><span class="tag">⚗ さわって学ぶ実験ゲーム</span><h1>ガスバーナー<br><em>名人！</em></h1><p class="subtitle">ねじをまわして、青い炎をつくろう！</p><div class="hero" id="hero"></div><button class="startBtn" id="start">▶ じっけん開始！</button><p class="caption">3ステージ ・ 約2分 ・ 何度でも挑戦！</p><p class="safety">※これは学習用シミュレーションです。実物の操作は必ず先生の指導で行いましょう。</p></section>
-<section id="game" class="screen game"><div class="task"><span class="timer" id="timer">45秒</span><div class="kicker" id="phase">ステージ 1 / 3</div><h2 id="tasktitle">点火しよう！</h2><p id="taskdesc">安全な順番を選ぼう</p></div><div class="labArea" id="labArea"><span class="note" id="flameNote">火が消えているよ</span><div id="labImage" style="height:100%;width:100%;display:grid;place-items:center"></div></div><div class="message" id="message" role="status" aria-live="polite">何から始めるかな？</div><div class="controls" id="controls"></div></section>
+<header><div class="hudrow"><div><div class="little">おきなわ理科チャレンジ</div><div class="score" id="score">0000</div><div class="little" id="best">ベスト 0000</div></div><button class="mute" id="sound" aria-label="おとの切り替え">♪ おと ON</button></div><div class="pills" id="pills"><span class="pill on">操作 1〜3</span><span class="pill">考える 4〜6</span></div></header>
+<section id="title" class="screen titleScreen active"><span class="tag">⚗ 操作して「なぜ？」まで学ぶ</span><h1>ガスバーナー<br><em>名人！</em></h1><p class="subtitle">操作して、理由まで説明できるようになろう！</p><div class="hero" id="hero"></div><button class="startBtn" id="start">▶ じっけん開始！</button><p class="caption">6ステージ ・ 操作3＋思考3 ・ 何度でも挑戦！</p><p class="safety">※これは学習用シミュレーションです。実物の操作は必ず先生の指導で行いましょう。</p></section>
+<section id="game" class="screen game"><div class="task"><span class="timer" id="timer">45秒</span><div class="kicker" id="phase">ステージ 1 / 6</div><h2 id="tasktitle">点火しよう！</h2><p id="taskdesc">安全な順番を選ぼう</p></div><div class="labArea" id="labArea"><span class="note" id="flameNote">火が消えているよ</span><div id="labImage" style="height:100%;width:100%;display:grid;place-items:center"></div></div><div class="message" id="message" role="status" aria-live="polite">何から始めるかな？</div><div class="controls" id="controls"></div></section>
 <section id="end" class="screen end"><span class="tag">実験おわり！</span><h1>実験レポート</h1><div class="bigscore" id="finalScore">0</div><p style="font-weight:900">点 / ベスト <span id="finalBest">0</span>点</p><div id="ending" style="font-weight:900;color:#0b5571"></div><div class="review" id="review"></div><button class="startBtn next" id="again">▶ もう一度あそぶ</button><button class="action alt" style="width:100%;max-width:300px" id="home">タイトルへ</button></section>
 <div class="feedbackOverlay" id="overlay"><div class="feedbackCard"><div style="font-size:30px" id="overlayIcon">◎</div><h2 id="overlayTitle">クリア！</h2><p id="overlayText"></p><button class="action" id="continue">つぎへ ▶</button></div></div>
 </div>
 <script>
 (()=>{'use strict';
-const $=q=>document.querySelector(q);let stage=-1,step=0,score=0,time=45,timer=null,locked=false,sound=true,actx=null,errors=[],stageDone=[false,false,false],air=0,lit=false,gas=false,cock=false,match=false,slides=0,ignitionVisual='start',ignitionBusy=false,extinguishVisual='start',stepBusy=false;
-const STAGES=[{title:'点火しよう！',desc:'安全な手順を選んで、炎をつけよう。',why:'調節ねじが閉じていることを確認し、火のついたマッチを先に近づけてから、ガスを少しずつ出す。'},{title:'青い炎をつくろう！',desc:'空気調節ねじを動かして、適切な炎に。',why:'空気を取り込む量を増やすと、燃焼がより完全になり、青い炎になる。空気の入れすぎにも注意。'},{title:'安全に消火しよう！',desc:'閉める順番を守って、実験を終了。',why:'空気調節ねじ、ガス調節ねじ、ガスの元栓・コックを安全な順で閉める。学校の器具や先生の指示を優先する。'}];
+const $=q=>document.querySelector(q);let stage=-1,step=0,score=0,time=45,timer=null,locked=false,sound=true,actx=null,errors=[],stageDone=[false,false,false,false,false,false],air=0,lit=false,gas=false,cock=false,match=false,slides=0,ignitionVisual='start',ignitionBusy=false,extinguishVisual='start',stepBusy=false,reasonIndex=0,reasonBusy=false;
+const STAGES=[
+{title:'点火しよう！',desc:'安全な手順を選んで、炎をつけよう。',why:'調節ねじが閉じていることを確認し、火を近づけてからガスを少しずつ出す。'},
+{title:'青い炎をつくろう！',desc:'空気調節ねじを動かして、適切な炎に。',why:'空気を取り込む量を増やすと、ガスに酸素を含む空気がよく混ざり、より完全に燃焼しやすくなる。'},
+{title:'安全に消火しよう！',desc:'閉める順番を守って、実験を終了。',why:'空気調節ねじ、ガス調節ねじ、コック・元栓の順で閉じる。実物では学校の器具と先生の指示を優先する。'},
+{title:'なぜ青い炎になる？',desc:'炎の色と空気の関係を説明しよう。',why:'空気調節ねじを開くと、ガスに酸素を含む空気が多く混ざり、燃焼がより完全に近づくため青い炎になる。'},
+{title:'なぜこの順番？',desc:'操作の順番には、安全の理由がある。',why:'ガスを急に出さない、未燃焼のガスをためない、炎を安定して消すなど、安全のために操作順を守る。'},
+{title:'原因を見抜け！',desc:'炎やにおいの変化から、安全な判断をしよう。',why:'炎の色・大きさ・音・においは状態を判断する手がかり。異常時は無理に操作を続けず、ガスを止めて先生に知らせる。'}
+]
 function storageGet(){try{return +(localStorage.getItem('burner-v2-best')||0)}catch(e){return 0}}function storageSet(v){try{localStorage.setItem('burner-v2-best',String(v))}catch(e){}}
 function wakeSound(){if(!actx)try{actx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}if(actx?.state==='suspended')actx.resume().catch(()=>{})}
 function beep(good=true){if(!sound)return;wakeSound();if(!actx)return;try{let o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime;o.type='sine';o.frequency.setValueAtTime(good?570:220,t);o.frequency.exponentialRampToValueAtTime(good?800:170,t+.1);g.gain.setValueAtTime(.045,t);g.gain.exponentialRampToValueAtTime(.0001,t+.15);o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+.17)}catch(e){}}
@@ -420,16 +455,136 @@ function ignitionArt(){const state=ignitionVisual;return `<g aria-hidden="true">
 ${state==='match'||state==='cock'||state==='gas'?'<g class="match-enter"><path d="M250 120L177 87" stroke="#ab6239" stroke-width="8" stroke-linecap="round"/><path d="M176 85Q166 73 172 67Q183 70 184 83Q180 90 176 85Z" fill="#ffb52d"/><path d="M176 83Q173 77 178 72Q181 78 178 83Z" fill="#fff2a2"/></g>':''}
 ${state==='gas'?'<g class="spark-pop" fill="#ffe66d"><circle cx="161" cy="83" r="5"/><path d="M139 73l-12 -8m56 6l12 -9m-35 -13v-13" stroke="#fff9cb" stroke-width="5" stroke-linecap="round"/></g>':''}</g>`}
 
-function show(name){$('#app').classList.toggle('title-mode',name==='title');for(const s of ['title','game','end'])$('#'+s).classList.toggle('active',s===name)}function setHud(){ $('#score').textContent=String(score).padStart(4,'0');$('#best').textContent='ベスト '+String(Math.max(storageGet(),score)).padStart(4,'0');$('#pills').innerHTML=['① 点火','② 調節','③ 消火'].map((s,i)=>`<span class="pill ${stageDone[i]?'done':i===stage?'on':''}">${s}</span>`).join('')}
-function draw(){const el=stage===-1?$('#hero'):$('#labImage');el.innerHTML=svg(air,lit);if(stage>=0){$('#flameNote').textContent=lit?(air>=48?'青い炎になった！':'黄色い炎だよ'):'火が消えているよ'}}
+function show(name){$('#app').classList.toggle('title-mode',name==='title');for(const s of ['title','game','end'])$('#'+s).classList.toggle('active',s===name)}function setHud(){
+ $('#score').textContent=String(score).padStart(4,'0');
+ $('#best').textContent='ベスト '+String(Math.max(storageGet(),score)).padStart(4,'0');
+ const box=$('#pills');
+ if(stage<0){box.innerHTML='<span class="pill on">操作 1〜3</span><span class="pill">考える 4〜6</span>';return}
+ const first=stage<3;
+ const labels=first?['① 点火','② 調節','③ 消火']:['④ 炎の理由','⑤ 順番の理由','⑥ 原因診断'];
+ const offset=first?0:3;
+ box.innerHTML=labels.map((label,i)=>`<span class="pill ${stageDone[offset+i]?'done':offset+i===stage?'on':''}">${label}</span>`).join('');
+}
+function draw(){
+ const el=stage===-1?$('#hero'):$('#labImage');
+ if(stage>=3){
+  el.innerHTML=reasonScene(stage,reasonIndex);
+  $('#flameNote').textContent=stage===3?'炎の色を比べよう':stage===4?'手順の理由を考えよう':'原因と安全な対応を考えよう';
+  return;
+ }
+ el.innerHTML=svg(air,lit);
+ if(stage>=0)$('#flameNote').textContent=lit?(air>=48?'青い炎になった！':'黄色い炎だよ'):'火が消えているよ';
+}
 function say(text,kind=''){const el=$('#message');el.className='message '+kind;el.textContent=text}
 function addError(text){errors.push({stage,text});score=Math.max(0,score-10);setHud();beep(false);say('ちがうよ！ '+text,'bad')}
 function correct(text){score+=100+Math.ceil(time/3);beep(true);say(text,'good');setHud()}
-function begin(){wakeSound();score=0;errors=[];stageDone=[false,false,false];stage=0;beginStage()}
-function beginStage(){clearInterval(timer);step=0;time=45;locked=false;show('game');$('#app').classList.toggle('stage2-mode',stage===1);$('#phase').textContent=`ステージ ${stage+1} / 3`;$('#tasktitle').textContent=STAGES[stage].title;$('#taskdesc').textContent=STAGES[stage].desc;air=stage===0?0:stage===1?12:70;lit=stage!==0;gas=stage!==0;cock=stage!==0;match=false;slides=0;ignitionVisual='start';ignitionBusy=false;extinguishVisual='start';stepBusy=false;renderControls();draw();setHud();say(stage===0?'まず、安全を確認しよう！':stage===1?'空気調節ねじを動かそう！':'安全な順番で消火しよう！');$('#timer').textContent=time+'秒';timer=setInterval(()=>{if(locked||ignitionBusy||stepBusy)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。正しい手順を復習しよう。');finishStage(false)}},1000)}
+function begin(){wakeSound();score=0;errors=[];stageDone=[false,false,false,false,false,false];stage=0;beginStage()}
+function beginStage(){
+ clearInterval(timer);step=0;reasonIndex=0;reasonBusy=false;
+ time=stage<3?45:(stage===5?75:60);
+ locked=false;show('game');
+ $('#app').classList.toggle('stage2-mode',stage===1);
+ $('#app').classList.toggle('reason-mode',stage>=3);
+ $('#phase').textContent=`ステージ ${stage+1} / 6`;
+ $('#tasktitle').textContent=STAGES[stage].title;
+ $('#taskdesc').textContent=STAGES[stage].desc;
+ air=stage===0?0:stage===1?12:70;lit=stage!==0;gas=stage!==0;cock=stage!==0;
+ match=false;slides=0;ignitionVisual='start';ignitionBusy=false;extinguishVisual='start';stepBusy=false;
+ renderControls();draw();setHud();
+ say(stage===0?'まず、安全を確認しよう！':stage===1?'空気調節ねじを動かそう！':stage===2?'安全な順番で消火しよう！':'「なぜ？」を考えて答えよう！');
+ $('#timer').textContent=time+'秒';
+ timer=setInterval(()=>{
+  if(locked||ignitionBusy||stepBusy||reasonBusy)return;
+  time--;$('#timer').textContent=time+'秒';
+  if(time<=0){addError('時間切れ。理由を確認しよう。');finishStage(false)}
+ },1000);
+}
 const ignition=[{id:'check',label:'① ねじを確認',explain:'ガス・空気のねじが閉じているか確認。'},{id:'match',label:'② マッチを点火',explain:'マッチに火をつけ、バーナーの口へ近づける。'},{id:'cock',label:'③ コックを開く',explain:'マッチの火を近づけたまま、コックを開く。'},{id:'gas',label:'④ ガスを少し出す',explain:'ガス調節ねじを少し開き、点火する。'}];
 const extinguish=[{id:'air',label:'① 空気を閉じる',explain:'空気調節ねじを閉じる。'},{id:'gas',label:'② ガスを閉じる',explain:'ガス調節ねじを閉じて炎を消す。'},{id:'cock',label:'③ コックを閉じる',explain:'コックと元栓を閉じる。'}];
-function renderControls(){let box=$('#controls');if(stage===1){
+
+const REASON_QUESTIONS=[
+[
+ {q:'空気調節ねじを開くと、炎が青くなった。いちばん大きな理由は？',correct:0,options:[
+  {t:'ガスに空気がよく混ざり、燃焼がより完全に近づく',why:'その通り。空気中の酸素がガスによく混ざることで、より完全に燃焼しやすくなる。'},
+  {t:'ガスの量だけが急に増える',why:'空気調節ねじが主に変えるのは空気の取り込み量。ガス量を調節するねじとは役割が違う。'},
+  {t:'バーナーの金属が冷える',why:'炎の色を変える中心的な原因は金属の温度ではなく、ガスと空気の混ざり方。'},
+  {t:'炎の中に水が増える',why:'空気調節ねじは水を加える器具ではない。注目するのは空気中の酸素。'}]},
+ {q:'空気が少ないと、炎が黄色っぽく明るく見えることがある。主な理由は？',correct:1,options:[
+  {t:'酸素そのものが黄色く光るから',why:'酸素そのものが黄色く光っているわけではない。'},
+  {t:'不完全燃焼で生じた炭素の微粒子が高温で光るから',why:'正解。空気が少ない炎では不完全燃焼になりやすく、炭素の微粒子が高温で光って黄色っぽく見える。'},
+  {t:'金属の筒が溶けて光るから',why:'通常の炎の色は、筒が溶けたためではない。'},
+  {t:'ガスが液体になって光るから',why:'燃えているガスが液体になったことが原因ではない。'}]},
+ {q:'空気の量だけが炎の色に与える影響を調べたい。そろえる条件として最も適切なのは？',correct:2,options:[
+  {t:'空気の量も毎回変える',why:'調べたい条件そのものを毎回ばらばらにすると比較できない。'},
+  {t:'炎を当てる位置だけ毎回変える',why:'位置まで変えると、空気量だけの影響を比べにくい。'},
+  {t:'ガスの量や観察する位置・時間を同じにする',why:'正解。空気量以外の条件をそろえると、空気量による違いを比べやすい。'},
+  {t:'毎回ちがうバーナーを使う',why:'器具まで変えると条件が増えてしまう。'}]}
+],
+[
+ {q:'点火前に、空気調節ねじとガス調節ねじを閉じて確認するのはなぜ？',correct:1,options:[
+  {t:'炎を青くするためだけ',why:'青い炎への調節は点火後に行う。点火前の確認は安全にガスを出し始めるため。'},
+  {t:'急にガスが多く出たり、予想外の状態で点火したりするのを防ぐため',why:'正解。閉じた状態を確認してから、必要な量を少しずつ調節する。'},
+  {t:'ねじを熱くするため',why:'点火前にねじを熱くする必要はない。'},
+  {t:'ガスの種類を変えるため',why:'調節ねじを閉じても、燃料の種類は変わらない。'}]},
+ {q:'マッチの火をバーナーの口に近づけてから、ガスを少しずつ出すのはなぜ？',correct:0,options:[
+  {t:'未燃焼のガスが周囲にたまるのを避けて点火するため',why:'正解。先に火を用意し、ガスを少しずつ出すことで、未燃焼のガスがたまるのを避けやすい。'},
+  {t:'炎を必ず緑色にするため',why:'この順番の目的は炎の色ではなく、安全に点火すること。'},
+  {t:'マッチを長持ちさせるためだけ',why:'マッチの寿命が主な理由ではない。'},
+  {t:'空気調節ねじを自動で開くため',why:'マッチを近づけても空気調節ねじは自動では開かない。'}]},
+ {q:'炎を小さくするとき、空気を先に減らしてからガスを減らすのはなぜ？',correct:3,options:[
+  {t:'バーナーを重くするため',why:'器具の重さは変わらない。'},
+  {t:'ガスを増やすため',why:'炎を小さくするので、ガスを増やす操作ではない。'},
+  {t:'炎を白くするため',why:'目的は色を白くすることではない。'},
+  {t:'逆の順だと途中で炎が消え、ガスだけが出る状態になるおそれを減らすため',why:'正解。標準手順では空気を先に減らし、その後ガスを減らす。途中で火が消えたらすぐガスを止める。'}]}
+],
+[
+ {q:'炎が黄色っぽい。最も考えやすい原因と対応は？',correct:2,icon:'🟡',options:[
+  {t:'空気が多すぎるので、さらに空気を増やす',why:'黄色っぽい炎は空気不足が考えやすい。さらに増やすのではなく、状態を見ながら空気を増やす。'},
+  {t:'ガスがないので、元栓を何度も開閉する',why:'黄色い炎が燃えているなら、少なくともガスは供給されている。'},
+  {t:'空気が少ない可能性。空気調節ねじを少しずつ開く',why:'正解。ガス調節ねじを押さえながら、空気を少しずつ増やして青い炎に調節する。'},
+  {t:'バーナーを手で持って振る',why:'加熱中の器具に触れるのは危険。'}]},
+ {q:'空気を開きすぎたら、炎が不安定になり筒の方で燃えるような異常が起きた。どうする？',correct:1,icon:'⚠️',options:[
+  {t:'手で筒を触って確かめる',why:'異常燃焼時は本体が非常に熱くなることがある。触らない。'},
+  {t:'ガスの元栓を閉じ、先生に知らせ、冷えるまで触らない',why:'正解。異常燃焼ではガスを止め、無理に再点火せず、先生に知らせる。'},
+  {t:'水をかけて急に冷やす',why:'急に水をかける対応は適切ではない。ガスを止めて冷えるのを待つ。'},
+  {t:'空気をもっと開いて続ける',why:'異常が起きているのに実験を続けない。'}]},
+ {q:'点火しようとしたとき、ガスのにおいに気づいた。どうする？',correct:0,icon:'👃',options:[
+  {t:'点火せず、火気を使わずに先生へ知らせる',why:'正解。ガス漏れが疑われるときは点火しない。火気を避け、先生に知らせる。'},
+  {t:'においを確かめるためにマッチをつける',why:'ガス漏れが疑われる場所で火気を使うのは危険。'},
+  {t:'そのまま実験を続ける',why:'異常を感じたら実験を止めて安全確認が必要。'},
+  {t:'電気のスイッチを何度も入切する',why:'ガス漏れ時は電気スイッチの火花も避ける。先生の指示に従う。'}]}
+]
+];
+function reasonScene(st,idx){
+ const q=REASON_QUESTIONS[st-3]?.[idx];
+ if(st===3)return `<div class="reasonScene"><div class="compareFlames"><div><i class="miniFlame yellow"></i><b>空気 少</b><small>黄色っぽい</small></div><div class="arrowWhy">空気 →</div><div><i class="miniFlame blue"></i><b>空気 適量</b><small>青い炎</small></div></div><div class="reasonFormula">ガス ＋ 空気中の酸素 → 燃え方が変わる</div></div>`;
+ if(st===4)return `<div class="reasonScene"><div class="whySequence"><span>🔍 確認</span><b>→</b><span>🔥 点火</span><b>→</b><span>🔧 調節</span><b>→</b><span>⏹ 消火</span></div><div class="reasonFormula">「順番」は暗記ではなく、安全のため</div></div>`;
+ return `<div class="reasonScene scenario"><div class="scenarioIcon">${q?.icon||'🔎'}</div><strong>状況から原因を見抜こう</strong><small>炎・音・においは大事な手がかり</small></div>`;
+}
+function renderReasonControls(box){
+ const qs=REASON_QUESTIONS[stage-3],q=qs[reasonIndex];
+ box.innerHTML=`<div class="reasonProgress">Q ${reasonIndex+1} / ${qs.length}</div><p class="reasonQuestion">${q.q}</p><div class="reasonChoices">${q.options.map((o,i)=>`<button class="action reasonChoice" data-answer="${i}">${o.t}</button>`).join('')}</div>`;
+ box.querySelectorAll('.reasonChoice').forEach(btn=>btn.addEventListener('pointerup',()=>answerReason(+btn.dataset.answer)));
+}
+function answerReason(i){
+ if(locked||reasonBusy)return;
+ const qs=REASON_QUESTIONS[stage-3],q=qs[reasonIndex],buttons=[...document.querySelectorAll('.reasonChoice')];
+ if(i!==q.correct){
+  buttons[i]?.classList.add('wrongPick');
+  addError(q.options[i].why);reasonBusy=true;
+  setTimeout(()=>{reasonBusy=false;buttons[i]?.classList.remove('wrongPick')},650);
+  return;
+ }
+ reasonBusy=true;buttons[i]?.classList.add('rightPick');
+ score+=120+Math.ceil(time/4);setHud();beep(true);say('正解！ '+q.options[i].why,'good');
+ setTimeout(()=>{
+  if(stage<3||locked)return;
+  reasonIndex++;
+  if(reasonIndex>=qs.length){reasonBusy=false;finishStage(true);return}
+  reasonBusy=false;renderControls();draw();say('次の「なぜ？」も考えてみよう。');
+ },900);
+}
+function renderControls(){let box=$('#controls');if(stage>=3){renderReasonControls(box);return}if(stage===1){
  box.innerHTML=`<p class="question">🌀 空気調節ねじを回して、炎の色を変えよう！</p>
  <div class="airControl">
  <div class="airHelp"><span>🔧 ねじを操作</span><strong id="airState">空気：少ない</strong></div>
@@ -498,10 +653,10 @@ function choose(id){if(locked||ignitionBusy||stepBusy)return;let list=stage===0?
 }
 draw();score+=35;setHud();say(need.explain,'good');
 if(step===list.length){score+=Math.ceil(time/2);setHud();finishStage(true)}}
-function finishStage(success){if(locked)return;locked=true;clearInterval(timer);stageDone[stage]=success;$('#overlayIcon').textContent=success?'✨':'📖';$('#overlayTitle').textContent=success?'ステージクリア！':'ここで復習！';$('#overlayTitle').style.color=success?'#167d66':'#b94737';$('#overlayText').textContent=STAGES[stage].why;$('#continue').textContent=stage===2?'結果を見る ▶':'つぎへ ▶';$('#overlay').classList.add('show');if(success)beep(true)}
-function next(){if(!locked)return;$('#overlay').classList.remove('show');if(stage<2){stage++;beginStage()}else finishGame()}
-function finishGame(){clearInterval(timer);$('#app').classList.remove('stage2-mode');show('end');let best=storageGet();if(score>best){best=score;storageSet(score)}$('#finalScore').textContent=score;$('#finalBest').textContent=best;$('#ending').textContent=errors.length?'間違えた理由を確認して、もう一度挑戦！':'全ステージ完了！ 実験の安全名人だね！';$('#review').innerHTML='<strong>📘 きょうの復習</strong>'+STAGES.map((x,i)=>`<p><b>${i+1}. ${x.title}</b>　${stageDone[i]?'✓':'要復習'}<br>${x.why}</p>`).join('')+(errors.length?`<strong>見直しポイント（${errors.length}件）</strong>`+errors.slice(0,8).map(x=>`<p>・${x.text}</p>`).join(''):'<p>ノーミス！ 手順の理由も言葉で説明できるかな？</p>');setHud()}
-$('#start').addEventListener('pointerup',begin);$('#again').addEventListener('pointerup',begin);$('#home').addEventListener('pointerup',()=>{clearInterval(timer);stage=-1;$('#app').classList.remove('stage2-mode');ignitionVisual='start';lit=true;air=70;draw();show('title');setHud()});$('#continue').addEventListener('pointerup',next);$('#sound').addEventListener('pointerup',()=>{sound=!sound;$('#sound').textContent=sound?'♪ おと ON':'♪ おと OFF';if(sound)beep(true)});document.addEventListener('visibilitychange',()=>{if(document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);say('画面を戻したら、操作を続けよう。');}else if(!document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);timer=setInterval(()=>{time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。正しい手順を復習しよう。');finishStage(false)}},1000)}});
+function finishStage(success){if(locked)return;locked=true;clearInterval(timer);stageDone[stage]=success;$('#overlayIcon').textContent=success?'✨':'📖';$('#overlayTitle').textContent=success?'ステージクリア！':'ここで復習！';$('#overlayTitle').style.color=success?'#167d66':'#b94737';$('#overlayText').textContent=STAGES[stage].why;$('#continue').textContent=stage===5?'結果を見る ▶':'つぎへ ▶';$('#overlay').classList.add('show');if(success)beep(true)}
+function next(){if(!locked)return;$('#overlay').classList.remove('show');if(stage<5){stage++;beginStage()}else finishGame()}
+function finishGame(){clearInterval(timer);$('#app').classList.remove('stage2-mode','reason-mode');show('end');let best=storageGet();if(score>best){best=score;storageSet(score)}$('#finalScore').textContent=score;$('#finalBest').textContent=best;$('#ending').textContent=errors.length?'間違えた理由を確認して、もう一度挑戦！':'全6ステージ完了！ 操作も理由も説明できるね！';$('#review').innerHTML='<strong>📘 きょうの復習</strong>'+STAGES.map((x,i)=>`<p><b>${i+1}. ${x.title}</b>　${stageDone[i]?'✓':'要復習'}<br>${x.why}</p>`).join('')+(errors.length?`<strong>見直しポイント（${errors.length}件）</strong>`+errors.slice(0,8).map(x=>`<p>・${x.text}</p>`).join(''):'<p>ノーミス！ 手順の理由も言葉で説明できるかな？</p>');setHud()}
+$('#start').addEventListener('pointerup',begin);$('#again').addEventListener('pointerup',begin);$('#home').addEventListener('pointerup',()=>{clearInterval(timer);stage=-1;$('#app').classList.remove('stage2-mode','reason-mode');ignitionVisual='start';lit=true;air=70;draw();show('title');setHud()});$('#continue').addEventListener('pointerup',next);$('#sound').addEventListener('pointerup',()=>{sound=!sound;$('#sound').textContent=sound?'♪ おと ON':'♪ おと OFF';if(sound)beep(true)});document.addEventListener('visibilitychange',()=>{if(document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);say('画面を戻したら、操作を続けよう。');}else if(!document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);timer=setInterval(()=>{if(locked||ignitionBusy||stepBusy||reasonBusy)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。理由を確認しよう。');finishStage(false)}},1000)}});
 lit=true;air=70;draw();setHud();
 })();
 </script></body></html>
