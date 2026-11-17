@@ -188,9 +188,71 @@ header{position:absolute;z-index:5;top:7px;left:0;right:0;height:122px;backgroun
  #app.stage2-mode .labArea{flex-basis:155px}
  #app.stage2-mode .message{min-height:29px}
 }
+
+/* Title-screen mobile-first viewport redesign: preserve the start button */
+#app.title-mode>header{
+ top:0;height:calc(84px + var(--ui-safe-top));
+ padding:calc(6px + var(--ui-safe-top)) 12px 5px;
+ box-shadow:0 3px 0 #a83a32;
+}
+#app.title-mode>header .hudrow{min-height:38px;align-items:center;gap:6px}
+#app.title-mode>header .little{font-size:9px;letter-spacing:0;line-height:1.1}
+#app.title-mode>header #best{display:none}
+#app.title-mode>header .score{font-size:25px;line-height:1}
+#app.title-mode>header .mute{min-height:29px;min-width:66px;padding:3px 8px;font-size:12px}
+#app.title-mode>header .pills{margin-top:1px;min-height:27px;gap:5px}
+#app.title-mode>header .pill{min-height:27px;padding:4px 3px;font-size:11px}
+#app.title-mode>.titleScreen.active{
+ display:flex;flex-direction:column;align-items:center;
+ padding:calc(97px + var(--ui-safe-top)) 14px calc(10px + env(safe-area-inset-bottom));
+ gap:0;overflow-y:auto;overflow-x:hidden;
+ height:100%;max-height:100%;min-height:0;
+}
+#app.title-mode .titleScreen .tag{flex:0 0 auto;padding:5px 12px;font-size:11px}
+#app.title-mode .titleScreen h1{
+ flex:0 0 auto;
+ font-size:clamp(27px,8vw,37px);line-height:1.08;
+ margin:6px 0 2px;text-shadow:2px 3px 0 #026a9b;
+}
+#app.title-mode .titleScreen .subtitle{flex:0 0 auto;margin:3px 0;font-size:12px;line-height:1.3}
+#app.title-mode .titleScreen .hero{
+ flex:1 1 100px;min-height:74px;max-height:170px;
+ height:auto;width:100%;max-width:310px;
+ margin:0 auto;overflow:visible;
+}
+#app.title-mode .titleScreen .hero .labsvg{
+ width:100%;height:100%;max-height:100%;object-fit:contain;
+}
+#app.title-mode .titleScreen .startBtn{
+ flex:0 0 auto;align-self:center;
+ min-height:56px;width:min(100%,300px);
+ margin:6px auto 5px;padding:11px 10px;
+ font-size:19px;line-height:1.25;
+ animation:none;
+}
+#app.title-mode .titleScreen .caption{flex:0 0 auto;margin:3px auto;font-size:10px}
+#app.title-mode .titleScreen .safety{flex:0 0 auto;margin:4px auto 0;font-size:9px;line-height:1.25}
+@media(max-height:650px){
+ #app.title-mode>header{height:calc(75px + var(--ui-safe-top))}
+ #app.title-mode>header .hudrow{min-height:34px}
+ #app.title-mode>header .score{font-size:22px}
+ #app.title-mode>header .pills{min-height:25px}
+ #app.title-mode>header .pill{min-height:25px;padding:2px 3px}
+ #app.title-mode>.titleScreen.active{padding-top:calc(87px + var(--ui-safe-top));padding-bottom:calc(6px + env(safe-area-inset-bottom))}
+ #app.title-mode .titleScreen h1{font-size:30px;margin:4px 0 1px}
+ #app.title-mode .titleScreen .hero{min-height:65px;max-height:135px}
+ #app.title-mode .titleScreen .startBtn{min-height:51px;margin:4px auto;padding:9px;font-size:17px}
+ #app.title-mode .titleScreen .safety{display:none}
+}
+@media(max-height:510px){
+ #app.title-mode .titleScreen .caption{display:none}
+ #app.title-mode .titleScreen .hero{min-height:55px}
+ #app.title-mode .titleScreen .tag{font-size:10px}
+ #app.title-mode .titleScreen h1{font-size:27px}
+}
 </style>
 </head>
-<body><div id="app">
+<body><div id="app" class="title-mode">
 <div class="decor" aria-hidden="true"><div class="sun"></div><div class="cloud"></div><div class="cloud c2"></div><div class="wave"></div><div class="wave w2"></div><div class="bubbles"><span style="--x:13%;--t:9s;--d:-2s"></span><span style="--x:70%;--t:7s;--d:-4s"></span><span style="--x:35%;--t:11s;--d:-6s"></span><span style="--x:82%;--t:8s;--d:-1s"></span></div></div>
 <header><div class="hudrow"><div><div class="little">おきなわ理科チャレンジ</div><div class="score" id="score">0000</div><div class="little" id="best">ベスト 0000</div></div><button class="mute" id="sound" aria-label="おとの切り替え">♪ おと ON</button></div><div class="pills" id="pills"><span class="pill on">① 点火</span><span class="pill">② 調節</span><span class="pill">③ 消火</span></div></header>
 <section id="title" class="screen titleScreen active"><span class="tag">⚗ さわって学ぶ実験ゲーム</span><h1>ガスバーナー<br><em>名人！</em></h1><p class="subtitle">ねじをまわして、青い炎をつくろう！</p><div class="hero" id="hero"></div><button class="startBtn" id="start">▶ じっけん開始！</button><p class="caption">3ステージ ・ 約2分 ・ 何度でも挑戦！</p><p class="safety">※これは学習用シミュレーションです。実物の操作は必ず先生の指導で行いましょう。</p></section>
@@ -288,7 +350,7 @@ function ignitionArt(){const state=ignitionVisual;return `<g aria-hidden="true">
 ${state==='match'||state==='cock'||state==='gas'?'<g class="match-enter"><path d="M250 120L177 87" stroke="#ab6239" stroke-width="8" stroke-linecap="round"/><path d="M176 85Q166 73 172 67Q183 70 184 83Q180 90 176 85Z" fill="#ffb52d"/><path d="M176 83Q173 77 178 72Q181 78 178 83Z" fill="#fff2a2"/></g>':''}
 ${state==='gas'?'<g class="spark-pop" fill="#ffe66d"><circle cx="161" cy="83" r="5"/><path d="M139 73l-12 -8m56 6l12 -9m-35 -13v-13" stroke="#fff9cb" stroke-width="5" stroke-linecap="round"/></g>':''}</g>`}
 
-function show(name){for(const s of ['title','game','end'])$('#'+s).classList.toggle('active',s===name)}function setHud(){ $('#score').textContent=String(score).padStart(4,'0');$('#best').textContent='ベスト '+String(Math.max(storageGet(),score)).padStart(4,'0');$('#pills').innerHTML=['① 点火','② 調節','③ 消火'].map((s,i)=>`<span class="pill ${stageDone[i]?'done':i===stage?'on':''}">${s}</span>`).join('')}
+function show(name){$('#app').classList.toggle('title-mode',name==='title');for(const s of ['title','game','end'])$('#'+s).classList.toggle('active',s===name)}function setHud(){ $('#score').textContent=String(score).padStart(4,'0');$('#best').textContent='ベスト '+String(Math.max(storageGet(),score)).padStart(4,'0');$('#pills').innerHTML=['① 点火','② 調節','③ 消火'].map((s,i)=>`<span class="pill ${stageDone[i]?'done':i===stage?'on':''}">${s}</span>`).join('')}
 function draw(){const el=stage===-1?$('#hero'):$('#labImage');el.innerHTML=svg(air,lit);if(stage>=0){$('#flameNote').textContent=lit?(air>=48?'青い炎になった！':'黄色い炎だよ'):'火が消えているよ'}}
 function say(text,kind=''){const el=$('#message');el.className='message '+kind;el.textContent=text}
 function addError(text){errors.push({stage,text});score=Math.max(0,score-10);setHud();beep(false);say('ちがうよ！ '+text,'bad')}
