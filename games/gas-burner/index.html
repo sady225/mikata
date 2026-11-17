@@ -414,6 +414,38 @@ const STAGES=[
 function storageGet(){try{return +(localStorage.getItem('burner-v2-best')||0)}catch(e){return 0}}function storageSet(v){try{localStorage.setItem('burner-v2-best',String(v))}catch(e){}}
 function wakeSound(){if(!actx)try{actx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}if(actx?.state==='suspended')actx.resume().catch(()=>{})}
 function beep(good=true){if(!sound)return;wakeSound();if(!actx)return;try{let o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime;o.type='sine';o.frequency.setValueAtTime(good?570:220,t);o.frequency.exponentialRampToValueAtTime(good?800:170,t+.1);g.gain.setValueAtTime(.045,t);g.gain.exponentialRampToValueAtTime(.0001,t+.15);o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+.17)}catch(e){}}
+function clearSound(){
+ if(!sound)return;wakeSound();if(!actx)return;
+ try{
+  const now=actx.currentTime;
+  const notes=[
+   {f:523.25,t:0,d:.15,g:.055},
+   {f:659.25,t:.12,d:.16,g:.06},
+   {f:783.99,t:.24,d:.18,g:.065},
+   {f:1046.5,t:.39,d:.34,g:.075}
+  ];
+  notes.forEach(n=>{
+   const o=actx.createOscillator(),g=actx.createGain();
+   o.type='triangle';
+   o.frequency.setValueAtTime(n.f,now+n.t);
+   g.gain.setValueAtTime(.0001,now+n.t);
+   g.gain.exponentialRampToValueAtTime(n.g,now+n.t+.02);
+   g.gain.exponentialRampToValueAtTime(.0001,now+n.t+n.d);
+   o.connect(g);g.connect(actx.destination);
+   o.start(now+n.t);o.stop(now+n.t+n.d+.03);
+  });
+  [0,.08,.16,.24,.32].forEach((d,i)=>{
+   const o=actx.createOscillator(),g=actx.createGain();
+   o.type='sine';
+   o.frequency.setValueAtTime(1500+i*180,now+.43+d);
+   g.gain.setValueAtTime(.0001,now+.43+d);
+   g.gain.exponentialRampToValueAtTime(.025,now+.445+d);
+   g.gain.exponentialRampToValueAtTime(.0001,now+.49+d);
+   o.connect(g);g.connect(actx.destination);
+   o.start(now+.43+d);o.stop(now+.51+d);
+  });
+ }catch(e){}
+}
 function ignitionSound(){
  if(!sound)return;
  wakeSound();if(!actx)return;
@@ -737,7 +769,7 @@ function choose(id){if(locked||ignitionBusy||stepBusy)return;let list=stage===0?
 }
 draw();score+=35;setHud();say(need.explain,'good');
 if(step===list.length){score+=Math.ceil(time/2);setHud();finishStage(true)}}
-function finishStage(success){if(locked)return;locked=true;clearInterval(timer);stageDone[stage]=success;$('#overlayIcon').textContent=success?'✨':'📖';$('#overlayTitle').textContent=success?'ステージクリア！':'ここで復習！';$('#overlayTitle').style.color=success?'#167d66':'#b94737';$('#overlayText').textContent=STAGES[stage].why;$('#continue').textContent=stage===5?'結果を見る ▶':'つぎへ ▶';$('#overlay').classList.add('show');if(success)beep(true)}
+function finishStage(success){if(locked)return;locked=true;clearInterval(timer);stageDone[stage]=success;$('#overlayIcon').textContent=success?'✨':'📖';$('#overlayTitle').textContent=success?'ステージクリア！':'ここで復習！';$('#overlayTitle').style.color=success?'#167d66':'#b94737';$('#overlayText').textContent=STAGES[stage].why;$('#continue').textContent=stage===5?'結果を見る ▶':'つぎへ ▶';$('#overlay').classList.add('show');if(success)clearSound()}
 function next(){if(!locked)return;$('#overlay').classList.remove('show');if(stage<5){stage++;beginStage()}else finishGame()}
 function finishGame(){clearInterval(timer);$('#app').classList.remove('stage2-mode','reason-mode','stage4-mode');show('end');let best=storageGet();if(score>best){best=score;storageSet(score)}$('#finalScore').textContent=score;$('#finalBest').textContent=best;$('#ending').textContent=errors.length?'間違えた理由を確認して、もう一度挑戦！':'全6ステージ完了！ 操作も理由も説明できるね！';$('#review').innerHTML='<strong>📘 きょうの復習</strong>'+STAGES.map((x,i)=>`<p><b>${i+1}. ${x.title}</b>　${stageDone[i]?'✓':'要復習'}<br>${x.why}</p>`).join('')+(errors.length?`<strong>見直しポイント（${errors.length}件）</strong>`+errors.slice(0,8).map(x=>`<p>・${x.text}</p>`).join(''):'<p>ノーミス！ 手順の理由も言葉で説明できるかな？</p>');setHud()}
 $('#start').addEventListener('pointerup',begin);$('#again').addEventListener('pointerup',begin);$('#home').addEventListener('pointerup',()=>{clearInterval(timer);stage=-1;$('#app').classList.remove('stage2-mode','reason-mode','stage4-mode');ignitionVisual='start';lit=true;air=70;draw();show('title');setHud()});$('#continue').addEventListener('pointerup',next);$('#sound').addEventListener('pointerup',()=>{sound=!sound;$('#sound').textContent=sound?'♪ おと ON':'♪ おと OFF';if(sound)beep(true)});document.addEventListener('visibilitychange',()=>{if(document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);say('画面を戻したら、操作を続けよう。');}else if(!document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);timer=setInterval(()=>{if(locked||ignitionBusy||stepBusy||reasonBusy)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。理由を確認しよう。');finishStage(false)}},1000)}});
