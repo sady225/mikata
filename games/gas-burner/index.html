@@ -121,6 +121,73 @@ header{position:absolute;z-index:5;top:7px;left:0;right:0;height:122px;backgroun
 @keyframes airPuff{from{opacity:.35}to{opacity:1}}
 @media(max-height:750px){.airControl{padding:6px 8px}.airNudge{height:40px;width:43px;min-width:43px}.airHelpSmall{display:none}}
 @media(prefers-reduced-motion:reduce){.air-flow{animation:none}}
+
+/* iPhone compact laboratory: preserve burner illustration instead of shrinking to thumbnail */
+#app.stage2-mode>header{
+ height:calc(98px + var(--ui-safe-top));
+ padding:calc(7px + var(--ui-safe-top)) 12px 6px;
+ box-shadow:0 3px 0 #a83a32;
+}
+#app.stage2-mode>header .hudrow{min-height:42px;align-items:center;gap:6px}
+#app.stage2-mode>header .little{font-size:9px;line-height:1.1}
+#app.stage2-mode>header #best{display:none}
+#app.stage2-mode>header .score{font-size:26px;line-height:1.05}
+#app.stage2-mode>header .mute{min-height:32px;padding:2px 9px;font-size:12px;min-width:72px}
+#app.stage2-mode>header .pills{margin-top:3px;gap:5px;min-height:27px}
+#app.stage2-mode>header .pill{min-height:27px;padding:4px 2px;font-size:11px}
+#app.stage2-mode>.screen.active.game{
+ padding-top:calc(108px + var(--ui-safe-top));
+ min-height:0;
+}
+#app.stage2-mode .task{
+ padding:6px 11px;margin:0 10px 2px;border-radius:15px;
+ box-shadow:0 2px #0087ae66;
+}
+#app.stage2-mode .task .kicker{font-size:10px}
+#app.stage2-mode .task h2{font-size:17px;margin:0;line-height:1.3}
+#app.stage2-mode .task p{font-size:11px;line-height:1.25;margin-top:2px}
+#app.stage2-mode .task .timer{font-size:12px;padding:3px 8px}
+#app.stage2-mode .labArea{
+ min-height:170px;flex:1 0 170px;
+ height:auto;max-height:none;overflow:visible;
+ margin:0 2px;isolation:isolate;
+}
+#app.stage2-mode .labArea #labImage{height:100%!important;min-height:170px;overflow:visible}
+#app.stage2-mode .labArea svg{max-width:none;width:100%;height:100%;max-height:100%;overflow:visible}
+#app.stage2-mode .labArea .note{top:3px;right:6px;font-size:10px;padding:4px 7px;z-index:2}
+#app.stage2-mode .message{
+ min-height:32px;font-size:11px;line-height:1.22;
+ padding:5px 9px;margin:2px 10px 3px;border-radius:10px;
+}
+#app.stage2-mode .controls{
+ position:sticky;bottom:0;z-index:6;
+ min-height:0;flex:0 0 auto;
+ padding:6px 10px calc(6px + env(safe-area-inset-bottom));
+ border-top-width:2px;
+}
+#app.stage2-mode .controls>.question{display:none}
+#app.stage2-mode .controls .airControl{padding:5px 7px 6px;border-radius:12px;border-width:1px}
+#app.stage2-mode .controls .airHelp{font-size:11px;margin-bottom:3px}
+#app.stage2-mode .controls .airAdjust{gap:7px}
+#app.stage2-mode .controls .airNudge{
+ height:39px;min-height:39px;width:43px;min-width:43px;
+ font-size:23px;border-radius:10px;
+}
+#app.stage2-mode .controls .airRange{height:28px}
+#app.stage2-mode .controls .airScale{font-size:9px;margin-top:0}
+#app.stage2-mode .controls .airScale strong{font-size:13px}
+#app.stage2-mode .controls .airHelpSmall{display:none}
+#app.stage2-mode .controls .miniActions{margin-top:6px;gap:7px}
+#app.stage2-mode .controls .miniActions .action{min-height:43px;padding:8px 5px;font-size:14px}
+@media(max-height:650px){
+ #app.stage2-mode>header{height:calc(90px + var(--ui-safe-top))}
+ #app.stage2-mode>header .hudrow{min-height:38px}
+ #app.stage2-mode>header .pills{margin-top:2px}
+ #app.stage2-mode>.screen.active.game{padding-top:calc(100px + var(--ui-safe-top))}
+ #app.stage2-mode .labArea,#app.stage2-mode .labArea #labImage{min-height:155px}
+ #app.stage2-mode .labArea{flex-basis:155px}
+ #app.stage2-mode .message{min-height:29px}
+}
 </style>
 </head>
 <body><div id="app">
@@ -227,7 +294,7 @@ function say(text,kind=''){const el=$('#message');el.className='message '+kind;e
 function addError(text){errors.push({stage,text});score=Math.max(0,score-10);setHud();beep(false);say('ちがうよ！ '+text,'bad')}
 function correct(text){score+=100+Math.ceil(time/3);beep(true);say(text,'good');setHud()}
 function begin(){wakeSound();score=0;errors=[];stageDone=[false,false,false];stage=0;beginStage()}
-function beginStage(){clearInterval(timer);step=0;time=45;locked=false;show('game');$('#phase').textContent=`ステージ ${stage+1} / 3`;$('#tasktitle').textContent=STAGES[stage].title;$('#taskdesc').textContent=STAGES[stage].desc;air=stage===0?0:stage===1?12:70;lit=stage!==0;gas=stage!==0;cock=stage!==0;match=false;slides=0;ignitionVisual='start';ignitionBusy=false;extinguishVisual='start';stepBusy=false;renderControls();draw();setHud();say(stage===0?'まず、安全を確認しよう！':stage===1?'空気調節ねじを動かそう！':'安全な順番で消火しよう！');$('#timer').textContent=time+'秒';timer=setInterval(()=>{if(locked||ignitionBusy||stepBusy)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。正しい手順を復習しよう。');finishStage(false)}},1000)}
+function beginStage(){clearInterval(timer);step=0;time=45;locked=false;show('game');$('#app').classList.toggle('stage2-mode',stage===1);$('#phase').textContent=`ステージ ${stage+1} / 3`;$('#tasktitle').textContent=STAGES[stage].title;$('#taskdesc').textContent=STAGES[stage].desc;air=stage===0?0:stage===1?12:70;lit=stage!==0;gas=stage!==0;cock=stage!==0;match=false;slides=0;ignitionVisual='start';ignitionBusy=false;extinguishVisual='start';stepBusy=false;renderControls();draw();setHud();say(stage===0?'まず、安全を確認しよう！':stage===1?'空気調節ねじを動かそう！':'安全な順番で消火しよう！');$('#timer').textContent=time+'秒';timer=setInterval(()=>{if(locked||ignitionBusy||stepBusy)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。正しい手順を復習しよう。');finishStage(false)}},1000)}
 const ignition=[{id:'check',label:'① ねじを確認',explain:'ガス・空気のねじが閉じているか確認。'},{id:'match',label:'② マッチを点火',explain:'マッチに火をつけ、バーナーの口へ近づける。'},{id:'cock',label:'③ コックを開く',explain:'マッチの火を近づけたまま、コックを開く。'},{id:'gas',label:'④ ガスを少し出す',explain:'ガス調節ねじを少し開き、点火する。'}];
 const extinguish=[{id:'air',label:'① 空気を閉じる',explain:'空気調節ねじを閉じる。'},{id:'gas',label:'② ガスを閉じる',explain:'ガス調節ねじを閉じて炎を消す。'},{id:'cock',label:'③ コックを閉じる',explain:'コックと元栓を閉じる。'}];
 function renderControls(){let box=$('#controls');if(stage===1){
@@ -301,8 +368,8 @@ draw();score+=35;setHud();say(need.explain,'good');
 if(step===list.length){score+=Math.ceil(time/2);setHud();finishStage(true)}}
 function finishStage(success){if(locked)return;locked=true;clearInterval(timer);stageDone[stage]=success;$('#overlayIcon').textContent=success?'✨':'📖';$('#overlayTitle').textContent=success?'ステージクリア！':'ここで復習！';$('#overlayTitle').style.color=success?'#167d66':'#b94737';$('#overlayText').textContent=STAGES[stage].why;$('#continue').textContent=stage===2?'結果を見る ▶':'つぎへ ▶';$('#overlay').classList.add('show');if(success)beep(true)}
 function next(){if(!locked)return;$('#overlay').classList.remove('show');if(stage<2){stage++;beginStage()}else finishGame()}
-function finishGame(){clearInterval(timer);show('end');let best=storageGet();if(score>best){best=score;storageSet(score)}$('#finalScore').textContent=score;$('#finalBest').textContent=best;$('#ending').textContent=errors.length?'間違えた理由を確認して、もう一度挑戦！':'全ステージ完了！ 実験の安全名人だね！';$('#review').innerHTML='<strong>📘 きょうの復習</strong>'+STAGES.map((x,i)=>`<p><b>${i+1}. ${x.title}</b>　${stageDone[i]?'✓':'要復習'}<br>${x.why}</p>`).join('')+(errors.length?`<strong>見直しポイント（${errors.length}件）</strong>`+errors.slice(0,8).map(x=>`<p>・${x.text}</p>`).join(''):'<p>ノーミス！ 手順の理由も言葉で説明できるかな？</p>');setHud()}
-$('#start').addEventListener('pointerup',begin);$('#again').addEventListener('pointerup',begin);$('#home').addEventListener('pointerup',()=>{clearInterval(timer);stage=-1;ignitionVisual='start';lit=true;air=70;draw();show('title');setHud()});$('#continue').addEventListener('pointerup',next);$('#sound').addEventListener('pointerup',()=>{sound=!sound;$('#sound').textContent=sound?'♪ おと ON':'♪ おと OFF';if(sound)beep(true)});document.addEventListener('visibilitychange',()=>{if(document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);say('画面を戻したら、操作を続けよう。');}else if(!document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);timer=setInterval(()=>{time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。正しい手順を復習しよう。');finishStage(false)}},1000)}});
+function finishGame(){clearInterval(timer);$('#app').classList.remove('stage2-mode');show('end');let best=storageGet();if(score>best){best=score;storageSet(score)}$('#finalScore').textContent=score;$('#finalBest').textContent=best;$('#ending').textContent=errors.length?'間違えた理由を確認して、もう一度挑戦！':'全ステージ完了！ 実験の安全名人だね！';$('#review').innerHTML='<strong>📘 きょうの復習</strong>'+STAGES.map((x,i)=>`<p><b>${i+1}. ${x.title}</b>　${stageDone[i]?'✓':'要復習'}<br>${x.why}</p>`).join('')+(errors.length?`<strong>見直しポイント（${errors.length}件）</strong>`+errors.slice(0,8).map(x=>`<p>・${x.text}</p>`).join(''):'<p>ノーミス！ 手順の理由も言葉で説明できるかな？</p>');setHud()}
+$('#start').addEventListener('pointerup',begin);$('#again').addEventListener('pointerup',begin);$('#home').addEventListener('pointerup',()=>{clearInterval(timer);stage=-1;$('#app').classList.remove('stage2-mode');ignitionVisual='start';lit=true;air=70;draw();show('title');setHud()});$('#continue').addEventListener('pointerup',next);$('#sound').addEventListener('pointerup',()=>{sound=!sound;$('#sound').textContent=sound?'♪ おと ON':'♪ おと OFF';if(sound)beep(true)});document.addEventListener('visibilitychange',()=>{if(document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);say('画面を戻したら、操作を続けよう。');}else if(!document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);timer=setInterval(()=>{time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。正しい手順を復習しよう。');finishStage(false)}},1000)}});
 lit=true;air=70;draw();setHud();
 })();
 </script></body></html>
