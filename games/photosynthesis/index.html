@@ -97,7 +97,7 @@ const $=s=>document.querySelector(s);
 const state={stage:0,light:.2,co2:.65,water:1,rate:0,muted:false,experiments:[],discoveries:new Set(),whyCount:0,comparisons:0,freeRecords:0,trouble:null,transitioning:false};
 const defs=[
  {label:'☀️ 光 1 / 6',mission:'MISSION 01',title:'光を変えると、気泡はどうなる？',text:'光を弱く・強くして、最低2条件を記録して比べよう。'},
- {label:'📈 限界 2 / 6',mission:'MISSION 02',title:'光を強くすれば、ずっと増える？',text:'光をどんどん強くして、変化が小さくなるところを探そう。'},
+ {label:'↩️ もう一度 2 / 6',mission:'MISSION 02',title:'光を強くして、また弱く戻したら？',text:'強くしたときと、元の弱い光へ戻したときの気泡を比べよう。'},
  {label:'☁️ CO₂ 3 / 6',mission:'MISSION 03',title:'光は十分。でも気泡が少ない。なぜ？',text:'二酸化炭素と光を試し、足りない条件を見つけよう。'},
  {label:'💧 水 4 / 6',mission:'MISSION 04',title:'光もCO₂も十分。それでも少ない？',text:'水の状態を変えて、気泡の変化を観察しよう。'},
  {label:'🧪 自由研究 5 / 6',mission:'MISSION 05',title:'条件ぐちゃぐちゃ研究所',text:'光・CO₂・水を自由に変え、3種類以上の実験を記録しよう。'},
@@ -106,6 +106,7 @@ const defs=[
 const discoveryDefs=[
  ['low-light','光が弱い → 気泡が少ない'],
  ['more-light','光を強くすると → 気泡が増える'],
+ ['light-return','光を弱く戻すと → 気泡も少ない状態へ戻る'],
  ['light-saturation','光を強くしても → 増え方が小さくなることがある'],
  ['co2-limit','CO₂が少ない → 光が強くても増えにくい'],
  ['water-limit','水の条件が不足 → 光合成が進みにくい'],
@@ -175,8 +176,9 @@ function stageObservation(){
   else setMsg('気泡が出ている。光を変えて違いを観察しよう。','');
  }
  if(state.stage===1){
-  if(state.light>.9){setMsg('かなり強い光。でも増え方が頭打ち気味だ。','warn');unlock('light-saturation')}
-  else setMsg('もっと光を強くしたら、同じ割合で増え続けるかな？','');
+  if(state.light>.78){setMsg('光を強くすると気泡が増えた。次は「元の弱い光」に戻してみよう。','good');unlock('more-light')}
+  else if(state.light<.3){setMsg('弱い光に戻った。気泡も少ない状態へ戻ったかな？','warn')}
+  else setMsg('強い光と弱い光を往復して、気泡の変化が戻るか確かめよう。','');
  }
  if(state.stage===2){
   if(state.co2<.3&&state.light>.75){setMsg('光は十分なのに気泡が少ない。別の条件が足りないようだ。','warn');unlock('co2-limit');unlock('one-limit')}
@@ -199,9 +201,22 @@ function renderStage(){
   $('#lightRange').oninput=e=>{state.light=+e.target.value/100;updateExperiment();stageObservation()};$('#recordBtn').onclick=recordExperiment;$('#compareBtn').onclick=showCompare;$('#judge1').onclick=()=>{if(recordsThisStage.length>=2){const rates=recordsThisStage.map(x=>x.rate);if(Math.max(...rates)-Math.min(...rates)>.18)clearStage('光で変わった！','光の条件を変えると、気泡の発生のしかたが変化した。','☀️');else setMsg('違いの大きい2条件を記録して比べてみよう。','warn')}else setMsg('まず2条件を記録して比べよう。','warn')};
  }
  if(state.stage===1){
-  state.light=.25;state.co2=.62;state.water=1;$('#controlTitle').textContent='光をさらに強くする';
-  area.innerHTML='<div class="controlbox"><input id="lightRange" class="range" type="range" min="20" max="100" value="25"><div class="scale"><span>弱</span><span>光を増やす</span><span>MAX</span></div><div class="miniRow"><button id="whyBtn" class="mini">💡 なぜ？</button><button id="stage2Clear" class="mini">📌 発見をまとめる</button></div></div>';
-  $('#lightRange').oninput=e=>{state.light=+e.target.value/100;updateExperiment();stageObservation()};$('#whyBtn').onclick=()=>showWhy('光を強くしても、ほかの条件が足りなければ光合成の速さは上がりにくくなる。このゲームでは、最も不足している条件が全体を制限する教育モデルを使っている。');$('#stage2Clear').onclick=()=>state.light>.88?clearStage('「もっと光」だけではない！','光だけを強くしても増え方が小さくなる状態を観察できた。','📈'):setMsg('まず光をかなり強くして、気泡の変化を観察しよう。','warn');
+  state.light=.22;state.co2=.9;state.water=1;
+  let sawStrong=false,returnedWeak=false;
+  $('#controlTitle').textContent='弱い → 強い → もう一度弱い、を試す';
+  area.innerHTML='<div class="controlbox"><div class="choices"><button id="lightWeak" class="choice active">🌥️ 弱い光</button><button id="lightMid" class="choice">🌤️ 中くらい</button><button id="lightStrong" class="choice">☀️ 強い光</button></div><div class="miniRow"><button id="whyBtn" class="mini">💡 なぜ戻る？</button><button id="stage2Clear" class="mini">🔬 比較できた</button></div><div class="hintline">まず強い光にして気泡を見たあと、弱い光へ戻してみよう。</div></div>';
+  const setLight=(v,id)=>{
+    state.light=v;
+    ['lightWeak','lightMid','lightStrong'].forEach(x=>$('#'+x).classList.toggle('active',x===id));
+    if(v>.78)sawStrong=true;
+    if(v<.3&&sawStrong){returnedWeak=true;unlock('light-return')}
+    updateExperiment();stageObservation();
+  };
+  $('#lightWeak').onclick=()=>setLight(.22,'lightWeak');
+  $('#lightMid').onclick=()=>setLight(.55,'lightMid');
+  $('#lightStrong').onclick=()=>setLight(.9,'lightStrong');
+  $('#whyBtn').onclick=()=>showWhy('光の条件を元に戻すと、光合成の速さもその条件に応じた状態へ近づく。この往復で「たまたま気泡が変わった」のではなく、光の条件と関係していることを確かめやすくなる。');
+  $('#stage2Clear').onclick=()=>returnedWeak?clearStage('戻して確かめた！','強い光で気泡が増え、弱い光へ戻すと気泡も少ない状態へ戻った。条件を往復すると関係を確かめやすい。','↩️'):setMsg('強い光を観察したあと、弱い光へ戻して気泡が戻るか確かめよう。','warn');
  }
  if(state.stage===2){
   state.light=.9;state.co2=.2;state.water=1;$('#controlTitle').textContent='CO₂と光を試す';
