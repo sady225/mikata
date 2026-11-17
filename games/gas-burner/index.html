@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#087eaa">
+<title>ガスバーナー名人｜沖縄理科チャレンジ</title>
+<style>
+:root{--sea:#0789ac;--deep:#075575;--red:#ce654b;--yellow:#ffe195;--ink:#173d50}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;overscroll-behavior:none}
+body{font-family:system-ui,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;background:#b6e9f1;color:var(--ink);user-select:none;-webkit-user-select:none;touch-action:manipulation}
+button{font:inherit;cursor:pointer;touch-action:manipulation}
+button:focus-visible,.card:focus-visible{outline:3px solid #e8a522;outline-offset:2px}
+#app{width:min(100%,430px);min-height:100dvh;margin:auto;background:linear-gradient(#a1e3f2,#ebfcff 48%,#f9fff4);overflow:hidden;box-shadow:0 0 24px #07557525;position:relative}
+#app:before{content:"";position:absolute;top:0;left:0;right:0;height:11px;background:repeating-linear-gradient(115deg,#c96048 0 24px,#eea18b 24px 29px)}
+header{height:58px;padding:19px 17px 4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+header strong{font-size:13px;color:var(--deep)}
+#sound{font-size:12px;background:white;color:var(--deep);border:1px solid #78bcca;border-radius:24px;padding:7px 12px;font-weight:800}
+main{padding:7px 17px 25px}h1{font-size:36px;line-height:1.25;color:var(--deep);margin:10px 0}h2{font-size:22px;color:var(--deep);margin:5px 0 9px}p{line-height:1.5;margin:8px 0}.center{text-align:center}.small{font-size:12px;color:#507387}.tag{display:inline-block;background:white;border:1px solid #9cd9df;border-radius:22px;padding:6px 12px;font-size:12px;font-weight:800;color:var(--deep)}
+.primary,.secondary{border:0;border-radius:16px;font-weight:900;padding:13px 12px}.primary{background:var(--red);color:white;box-shadow:0 4px 0 #a64b36;font-size:18px}.secondary{background:white;border:2px solid var(--sea);color:var(--deep);font-size:14px}.wide{width:100%}
+.scene{width:100%;max-width:265px;height:224px;margin:4px auto;display:block}.flame{transform-origin:50% 100%;animation:flicker 1.4s ease-in-out infinite alternate}.lit .flame{fill:#2fa8f7}.off .flame{opacity:0}@keyframes flicker{to{transform:scale(.94,1.07) rotate(2deg)}}
+.demo{border:2px dashed #8cccd8;border-radius:16px;background:#ffffffbd;padding:11px;margin:13px 0}.demoRow{display:flex;gap:6px;margin-top:9px}.demoRow span{flex:1;background:white;border:1px solid #bbdfe3;border-radius:10px;padding:8px 2px;font-size:11px;font-weight:800;animation:lift 3.6s infinite}.demoRow span:nth-child(2){animation-delay:1.2s}.demoRow span:nth-child(3){animation-delay:2.4s}@keyframes lift{20%{transform:translateY(-6px);background:#fff0bb}40%,100%{transform:none}}
+.status{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.status div{background:#ffffffcf;text-align:center;border-radius:11px;font-size:11px;padding:6px}.status b{display:block;color:var(--deep);font-size:18px}.bar{background:#c5e5e8;height:7px;border-radius:12px;margin:9px 0 13px;overflow:hidden}.bar i{display:block;background:var(--sea);height:100%;transition:width .25s}
+.panel{background:white;border:2px solid #9bd6e1;border-radius:18px;padding:13px;box-shadow:0 4px 0 #0789ac12}.guide{font-size:12px;color:#4b6a79;margin:6px 0 9px}.cards{display:grid;gap:8px}.card{min-height:66px;display:flex;align-items:center;gap:9px;border:2px solid #b9dbe1;border-radius:13px;background:white;padding:8px;touch-action:none;cursor:grab;font-size:14px;line-height:1.4;font-weight:750}.card .number{flex:0 0 29px;height:29px;display:grid;place-items:center;background:#e3f6fa;border-radius:9px;color:var(--deep)}.card .grip{margin-left:auto;color:#82aeb6}.card.chosen{background:#fff5d5;border-color:#dfa424}.card.drag{opacity:.5}.card.target{border-color:#168d79;background:#eafff1}.card.error{border-color:var(--red);background:#fff0eb;animation:shake .3s 2}@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.actions{display:flex;gap:8px;margin-top:12px}.actions .primary{flex:1;font-size:16px}.message{font-size:13px;line-height:1.5;background:#e5f5f9;border-radius:11px;padding:9px;margin-top:10px;min-height:42px}.message.bad{background:#fff0e5;color:#963d2b}.success{padding:12px;border-radius:12px;background:#e8fff4;text-align:center;margin-top:10px}.success p{font-size:12px}.review{background:#fff;border-radius:14px;padding:13px;margin:12px 0;text-align:left}.review li{margin:5px 0;font-size:13px}.review p{font-size:13px}.score{font-size:47px;font-weight:900;color:var(--deep)}
+@media(max-height:760px){.scene{height:174px}.card{min-height:58px}.panel{padding:10px}main{padding-top:0}}
+@media(prefers-reduced-motion:reduce){*,*:before{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"><header><strong>🌊 おきなわ理科チャレンジ</strong><button id="sound" type="button">♪ おと：オン</button></header><main id="view"></main></div>
+<script>
+(()=>{'use strict';
+const $=s=>document.querySelector(s),view=$('#view');
+// 学校の標準的なガスバーナーを想定。実物は教員の指導を優先する。
+const levels=[
+{title:'点火の準備と点火',label:'やさしい',steps:[
+'周囲を片づけ、ねじやホースを確認する',
+'ガス調節ねじと空気調節ねじを閉じる',
+'元栓とコックを開き、点火したマッチを火口に近づける',
+'ガス調節ねじを少しずつ開き、点火する'],
+reasons:['可燃物やホースの異常を先に確かめます。','急にガスが出るのを防ぐため、両方のねじを閉じます。','先に火を近づけると、未燃焼のガスがたまりにくくなります。','火がつくまでガスを少しずつ出します。'],explain:'先に火を準備し、ガスを少しずつ出すのが大切。ガスのにおいがするときは点火せず、先生に知らせよう。'},
+{title:'炎を青く調節',label:'ふつう',steps:[
+'安定して点火していることを確かめる',
+'ガス調節ねじで炎の大きさを調節する',
+'ガス調節ねじを押さえながら、空気調節ねじを少しずつ開く',
+'青い炎になるよう空気の量を調節する'],
+reasons:['まず点火状態が安定しているか確認します。','炎の大きさはガスの量で調節します。','ガス調節ねじが一緒に動かないようにします。','空気の量を調節すると炎の色が変わります。'],explain:'空気が不足すると黄色っぽい炎になりやすい。空気を適切に混ぜると青い炎になる。空気を開きすぎて火が消えたら、ガスを止めて先生に知らせよう。'},
+{title:'安全に消火',label:'むずかしい',steps:[
+'加熱を終え、器具を安全な位置に置く',
+'空気調節ねじを閉じる',
+'ガス調節ねじを閉じて炎を消す',
+'ガスのコックと元栓を閉じ、消火を確認する'],
+reasons:['熱い器具を倒したり触れたりしないようにします。','まず空気の供給を減らしてからガスを止めます。','ガスの供給を止めると火が消えます。','最後に供給元も閉じ、消火を確かめます。'],explain:'学校で使う一般的なガスバーナーの消火手順。消火後も器具は熱いので、素手で触らない。'}
+];
+let screen='title',stage=0,order=[],chosen=null,secs=40,score=0,misses=[0,0,0],timer=null,locked=false,sound=true,audio=null;
+const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const best=()=>{try{return Number(localStorage.getItem('burner-best'))||0}catch{return 0}};
+const save=n=>{try{localStorage.setItem('burner-best',String(n))}catch{}};
+function tone(good=false){if(!sound)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();let o=audio.createOscillator(),v=audio.createGain(),t=audio.currentTime;o.frequency.setValueAtTime(good?700:350,t);o.frequency.exponentialRampToValueAtTime(good?970:220,t+.13);v.gain.setValueAtTime(.06,t);v.gain.exponentialRampToValueAtTime(.0001,t+.17);o.connect(v);v.connect(audio.destination);o.start();o.stop(t+.18)}catch{}}
+$('#sound').addEventListener('pointerup',e=>{e.preventDefault();sound=!sound;$('#sound').textContent=sound?'♪ おと：オン':'♪ おと：オフ';if(sound)tone(true)});
+function burner(mode='off'){return `<svg class="scene ${mode}" viewBox="0 0 270 230" role="img" aria-label="ガスバーナーの図"><ellipse cx="135" cy="209" rx="90" ry="11" fill="#b2dfe9"/><path d="M135 183V95" stroke="#17637d" stroke-width="27" stroke-linecap="round"/><path d="M120 96H150" stroke="#86b6c6" stroke-width="8"/><path d="M87 203H182L155 183H116Z" fill="#17637d"/><rect x="110" y="145" width="50" height="13" rx="6" fill="#c9624b"/><path d="M148 177H187Q212 177 226 190" fill="none" stroke="#ce654b" stroke-width="9" stroke-linecap="round"/><circle cx="226" cy="190" r="7" fill="#17637d"/><path class="flame" d="M135 25C101 71 115 94 135 95C159 94 164 67 135 25Z" fill="#ffd066"/><path class="flame" d="M135 51C122 73 126 91 135 94C146 91 150 73 135 51Z" fill="#fff6be"/><text x="135" y="225" text-anchor="middle" font-size="11" fill="#386c7c">ガスバーナー（模式図）</text></svg>`}
+function title(){clearInterval(timer);screen='title';view.innerHTML=`<section class="center"><span class="tag">中学理科｜実験を安全に学ぶ</span><h1>ガスバーナー<br>名人</h1><p>手順カードを正しく並べて<br>点火・炎の調節・消火をマスター！</p>${burner('lit')}<div class="demo"><b class="small">▶ 自動デモ：３つのステップ</b><div class="demoRow"><span>① 点火</span><span>② 炎の調節</span><span>③ 消火</span></div></div><button class="primary wide" id="start">ゲームスタート ▶</button><p class="small">ベストスコア：${best()}点｜3ステージ・約2〜3分</p><p class="small">カードはタップ2枚かドラッグで交換できるよ。<br>実際の火の操作は必ず先生の指導のもとで。</p></section>`;$('#start').addEventListener('pointerup',()=>{tone(true);stage=0;score=0;misses=[0,0,0];next()})}
+function shuffle(){order=[0,1,2,3];for(let i=3;i>0;i--){let j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}if(order.every((n,i)=>n===i))[order[0],order[1]]=[order[1],order[0]]}
+function next(){if(stage===3)return results();screen='play';locked=false;chosen=null;secs=40;shuffle();render();tick()}
+function tick(){clearInterval(timer);timer=setInterval(()=>{if(screen!=='play'||locked)return;secs--;const c=$('#clock');if(c)c.textContent=secs+'秒';if(secs<=0){misses[stage]++;feedback('時間切れ。正しい順番を復習しよう。',true);finish(false)}},1000)}
+function render(message='カードを2枚タップ、またはドラッグで交換！'){const l=levels[stage];view.innerHTML=`<div class="status"><div>ステージ<b>${stage+1}/3</b></div><div>のこり<b id="clock">${secs}秒</b></div><div>スコア<b>${score}</b></div></div><div class="bar"><i style="width:${stage/3*100}%"></i></div><section class="panel"><span class="tag">${l.label}</span><h2>${l.title}</h2><p class="guide">上から正しい順に並べよう</p><div class="cards" id="cards">${order.map((n,i)=>`<div class="card ${chosen===i?'chosen':''}" tabindex="0" role="button" data-i="${i}"><span class="number">${i+1}</span><span>${escape(l.steps[n])}</span><span class="grip">⠿</span></div>`).join('')}</div><div class="actions"><button class="secondary" id="hint">💡 ヒント</button><button class="primary" id="check">これで判定！</button></div><div class="message" id="msg" role="status">${escape(message)}</div><div id="done"></div></section><p class="small center">※ 実物の操作は先生の指導が最優先です。</p>`;cards();$('#hint').addEventListener('pointerup',()=>{tone();let i=order.findIndex((n,j)=>n!==j);feedback(i<0?'順番は完成しているよ！':`ヒント：${i+1}番目は「${l.steps[i]}」だよ。`)});$('#check').addEventListener('pointerup',check)}
+function feedback(s,bad=false){let m=$('#msg');if(m){m.textContent=s;m.className='message'+(bad?' bad':'')}}
+function swap(a,b){if(locked||a===b)return;[order[a],order[b]]=[order[b],order[a]];chosen=null;tone();render()}
+function choose(i){if(chosen===null){chosen=i;tone();render('もう1枚選ぶと交換できるよ。')}else if(chosen===i){chosen=null;render()}else swap(chosen,i)}
+function cards(){const parent=$('#cards');parent.querySelectorAll('.card').forEach(el=>{let drag=null;el.addEventListener('pointerdown',e=>{if(locked||e.button!==0)return;e.preventDefault();drag={id:e.pointerId,at:+el.dataset.i,x:e.clientX,y:e.clientY,moved:false};el.setPointerCapture(e.pointerId)});el.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>12){drag.moved=true;el.classList.add('drag');parent.querySelectorAll('.card').forEach(x=>x.classList.remove('target'));const to=document.elementFromPoint(e.clientX,e.clientY)?.closest('.card');if(to&&to!==el)to.classList.add('target')}});el.addEventListener('pointerup',e=>{if(!drag||e.pointerId!==drag.id)return;const d=drag;drag=null;const to=document.elementFromPoint(e.clientX,e.clientY)?.closest('.card');if(d.moved&&to&&to!==el)swap(d.at,+to.dataset.i);else if(!d.moved)choose(d.at);else{el.classList.remove('drag');parent.querySelectorAll('.card').forEach(x=>x.classList.remove('target'))}});el.addEventListener('pointercancel',()=>{drag=null;el.classList.remove('drag')});el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(+el.dataset.i)}})})}
+function check(){if(locked)return;const l=levels[stage],i=order.findIndex((n,j)=>n!==j);if(i<0){finish(true);return}misses[stage]++;tone();feedback(`${i+1}番目がちがうよ。${l.reasons[i]}`,true);$('#cards').querySelector(`[data-i="${i}"]`)?.classList.add('error')}
+function finish(ok){if(locked)return;locked=true;clearInterval(timer);chosen=null;const l=levels[stage];const added=ok?100+secs*2:0;score+=added;tone(ok);$('#clock').textContent=secs+'秒';$('#cards').style.pointerEvents='none';$('#hint').disabled=true;$('#check').disabled=true;$('#done').innerHTML=`<div class="success">${burner(stage===2?'off':'lit')}<strong>${ok?'🌟 正しい手順！':'📚 手順を復習しよう'}</strong><p>${escape(l.explain)}</p>${!ok?`<ol style="text-align:left">${l.steps.map(s=>`<li>${escape(s)}</li>`).join('')}</ol>`:`<p>＋${added}点</p>`}<button class="secondary wide" id="forward">${stage===2?'結果を見る':'次のステージへ'} ▶</button></div>`;$('#forward').addEventListener('pointerup',()=>{stage++;tone(true);next()})}
+function results(){clearInterval(timer);screen='result';const prev=best();if(score>prev)save(score);view.innerHTML=`<section class="center"><span class="tag">3ステージ終了！</span><h1>実験レポート</h1>${burner('off')}<div class="score">${score}点</div><p>ベスト：${Math.max(score,prev)}点</p><div class="review"><strong>📖 間違えた手順の復習</strong>${levels.map((l,i)=>misses[i]?`<div><h3>${l.title}（ミス${misses[i]}回）</h3><ol>${l.steps.map(s=>`<li>${escape(s)}</li>`).join('')}</ol><p>💡 ${escape(l.explain)}</p></div>`:'').join('')||'<p>ノーミス！ 理由も説明できるか挑戦しよう。</p>'}</div><button class="primary wide" id="again">もう一度チャレンジ ▶</button><p><button class="secondary wide" id="home">タイトルへもどる</button></p><p class="small">実験は先生の指導に従い、安全に行ってください。</p></section>`;$('#again').addEventListener('pointerup',()=>{tone(true);stage=0;score=0;misses=[0,0,0];next()});$('#home').addEventListener('pointerup',()=>{tone();title()})}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&screen==='play'){clearInterval(timer);feedback('一時停止中。再開ボタンを押してね。');const b=document.createElement('button');b.className='secondary';b.textContent='▶ 再開';b.addEventListener('pointerup',()=>{b.remove();tick();feedback('ゲーム再開！')});$('#msg')?.appendChild(b)}});
+title();
+})();
+</script>
+</body>
+</html>
