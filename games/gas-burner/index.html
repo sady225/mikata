@@ -402,7 +402,7 @@ header{position:absolute;z-index:5;top:7px;left:0;right:0;height:122px;backgroun
 </div>
 <script>
 (()=>{'use strict';
-const $=q=>document.querySelector(q);let stage=-1,step=0,score=0,time=45,timer=null,locked=false,sound=true,actx=null,errors=[],stageDone=[false,false,false,false,false,false],air=0,lit=false,gas=false,cock=false,match=false,slides=0,ignitionVisual='start',ignitionBusy=false,extinguishVisual='start',stepBusy=false,reasonIndex=0,reasonBusy=false,stage4State='ready',stage4WrongSeen=false;
+const $=q=>document.querySelector(q);let stage=-1,step=0,score=0,time=45,timer=null,locked=false,sound=true,actx=null,clearAudio=null,clearAudioUrl=null,audioPrimed=false,errors=[],stageDone=[false,false,false,false,false,false],air=0,lit=false,gas=false,cock=false,match=false,slides=0,ignitionVisual='start',ignitionBusy=false,extinguishVisual='start',stepBusy=false,reasonIndex=0,reasonBusy=false,stage4State='ready',stage4WrongSeen=false;
 const STAGES=[
 {title:'点火しよう！',desc:'安全な手順を選んで、炎をつけよう。',why:'調節ねじが閉じていることを確認し、火を近づけてからガスを少しずつ出す。'},
 {title:'青い炎をつくろう！',desc:'空気調節ねじを動かして、適切な炎に。',why:'空気を取り込む量を増やすと、ガスに酸素を含む空気がよく混ざり、より完全に燃焼しやすくなる。'},
@@ -412,58 +412,89 @@ const STAGES=[
 {title:'原因を見抜け！',desc:'炎やにおいの変化から、安全な判断をしよう。',why:'炎の色・大きさ・音・においは状態を判断する手がかり。異常時は無理に操作を続けず、ガスを止めて先生に知らせる。'}
 ]
 function storageGet(){try{return +(localStorage.getItem('burner-v2-best')||0)}catch(e){return 0}}function storageSet(v){try{localStorage.setItem('burner-v2-best',String(v))}catch(e){}}
-function wakeSound(){if(!actx)try{actx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}if(actx?.state==='suspended')actx.resume().catch(()=>{})}
+function wakeSound(){
+ if(!actx)try{actx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}
+ if(actx?.state==='suspended')actx.resume().catch(()=>{});
+}
+function buildCelebrationAudio(){
+ if(clearAudio)return clearAudio;
+ try{
+  const sr=22050,dur=1.75,n=Math.floor(sr*dur),samples=new Float32Array(n);
+  const notes=[
+   {f:392.00,t:0.00,d:.26,a:.30},
+   {f:523.25,t:.18,d:.28,a:.33},
+   {f:659.25,t:.38,d:.30,a:.36},
+   {f:783.99,t:.60,d:.48,a:.42},
+   {f:1046.50,t:.92,d:.34,a:.28},
+   {f:1318.51,t:1.08,d:.32,a:.25},
+   {f:1567.98,t:1.24,d:.40,a:.22}
+  ];
+  for(const note of notes){
+   const start=Math.floor(note.t*sr),len=Math.floor(note.d*sr);
+   for(let i=0;i<len&&start+i<n;i++){
+    const x=i/len,env=Math.sin(Math.PI*Math.min(1,x/.18))*Math.exp(-3.4*x);
+    const t=i/sr;
+    samples[start+i]+=note.a*env*(Math.sin(2*Math.PI*note.f*t)+.30*Math.sin(2*Math.PI*note.f*2*t));
+   }
+  }
+  for(let i=0;i<n;i++)samples[i]=Math.max(-.92,Math.min(.92,samples[i]));
+  const buf=new ArrayBuffer(44+n*2),v=new DataView(buf);
+  const w=(o,str)=>{for(let i=0;i<str.length;i++)v.setUint8(o+i,str.charCodeAt(i))};
+  w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');
+  v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);
+  w(36,'data');v.setUint32(40,n*2,true);
+  for(let i=0;i<n;i++)v.setInt16(44+i*2,Math.round(samples[i]*32767),true);
+  clearAudioUrl=URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
+  clearAudio=new Audio(clearAudioUrl);
+  clearAudio.preload='auto';clearAudio.playsInline=true;clearAudio.volume=.95;
+  return clearAudio;
+ }catch(e){return null}
+}
+function primeCelebrationAudio(){
+ if(!sound)return;
+ const a=buildCelebrationAudio();if(!a)return;
+ try{
+  a.pause();a.currentTime=0;a.volume=.001;
+  const p=a.play();
+  if(p&&p.then)p.then(()=>{a.pause();a.currentTime=0;a.volume=.95;audioPrimed=true}).catch(()=>{a.volume=.95});
+  else{a.pause();a.currentTime=0;a.volume=.95;audioPrimed=true}
+ }catch(e){}
+}
+
 function beep(good=true){if(!sound)return;wakeSound();if(!actx)return;try{let o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime;o.type='sine';o.frequency.setValueAtTime(good?570:220,t);o.frequency.exponentialRampToValueAtTime(good?800:170,t+.1);g.gain.setValueAtTime(.045,t);g.gain.exponentialRampToValueAtTime(.0001,t+.15);o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+.17)}catch(e){}}
-function clearSound(){
+function clearSoundFallback(){
  if(!sound)return;wakeSound();if(!actx)return;
  try{
   const now=actx.currentTime;
   const notes=[
-   {f:392.00,t:0,d:.18,g:.07},
-   {f:523.25,t:.13,d:.20,g:.075},
-   {f:659.25,t:.27,d:.22,g:.08},
-   {f:783.99,t:.42,d:.38,g:.09}
+   {f:392.00,t:0,d:.22,g:.10},
+   {f:523.25,t:.16,d:.24,g:.11},
+   {f:659.25,t:.34,d:.26,g:.12},
+   {f:783.99,t:.55,d:.42,g:.14}
   ];
   notes.forEach(n=>{
    const o=actx.createOscillator(),g=actx.createGain();
-   o.type='triangle';
-   o.frequency.setValueAtTime(n.f,now+n.t);
+   o.type='triangle';o.frequency.setValueAtTime(n.f,now+n.t);
    g.gain.setValueAtTime(.0001,now+n.t);
-   g.gain.exponentialRampToValueAtTime(n.g,now+n.t+.018);
+   g.gain.exponentialRampToValueAtTime(n.g,now+n.t+.015);
    g.gain.exponentialRampToValueAtTime(.0001,now+n.t+n.d);
-   o.connect(g);g.connect(actx.destination);
-   o.start(now+n.t);o.stop(now+n.t+n.d+.04);
-  });
-
-  const sparkle=[
-   {f:784.00,t:.50,d:.28,g:.065},
-   {f:987.77,t:.62,d:.30,g:.07},
-   {f:1174.66,t:.74,d:.32,g:.075},
-   {f:1318.51,t:.88,d:.45,g:.085}
-  ];
-  sparkle.forEach(n=>{
-   const o=actx.createOscillator(),g=actx.createGain();
-   o.type='sine';
-   o.frequency.setValueAtTime(n.f,now+n.t);
-   o.frequency.exponentialRampToValueAtTime(n.f*1.015,now+n.t+n.d);
-   g.gain.setValueAtTime(.0001,now+n.t);
-   g.gain.exponentialRampToValueAtTime(n.g,now+n.t+.02);
-   g.gain.exponentialRampToValueAtTime(.0001,now+n.t+n.d);
-   o.connect(g);g.connect(actx.destination);
-   o.start(now+n.t);o.stop(now+n.t+n.d+.05);
-  });
-
-  const chord=[523.25,659.25,783.99];
-  chord.forEach((f,i)=>{
-   const o=actx.createOscillator(),g=actx.createGain();
-   o.type='sine';o.frequency.setValueAtTime(f,now+1.02);
-   g.gain.setValueAtTime(.0001,now+1.02);
-   g.gain.exponentialRampToValueAtTime(.035,now+1.05);
-   g.gain.exponentialRampToValueAtTime(.0001,now+1.42);
-   o.connect(g);g.connect(actx.destination);
-   o.start(now+1.02);o.stop(now+1.45);
+   o.connect(g);g.connect(actx.destination);o.start(now+n.t);o.stop(now+n.t+n.d+.04);
   });
  }catch(e){}
+}
+function clearSound(){
+ if(!sound)return;
+ const a=buildCelebrationAudio();
+ if(a){
+  try{
+   a.pause();a.currentTime=0;a.volume=.95;
+   const p=a.play();
+   if(p&&p.catch)p.catch(()=>clearSoundFallback());
+   return;
+  }catch(e){}
+ }
+ clearSoundFallback();
 }
 function ignitionSound(){
  if(!sound)return;
@@ -571,7 +602,7 @@ function draw(){
 function say(text,kind=''){const el=$('#message');el.className='message '+kind;el.textContent=text}
 function addError(text){errors.push({stage,text});score=Math.max(0,score-10);setHud();beep(false);say('ちがうよ！ '+text,'bad')}
 function correct(text){score+=100+Math.ceil(time/3);beep(true);say(text,'good');setHud()}
-function begin(){wakeSound();score=0;errors=[];stageDone=[false,false,false,false,false,false];stage=0;beginStage()}
+function begin(){wakeSound();primeCelebrationAudio();score=0;errors=[];stageDone=[false,false,false,false,false,false];stage=0;beginStage()}
 function beginStage(){
  clearInterval(timer);step=0;reasonIndex=0;reasonBusy=false;
  time=stage<3?45:(stage===5?75:60);
@@ -791,7 +822,7 @@ if(step===list.length){score+=Math.ceil(time/2);setHud();finishStage(true)}}
 function finishStage(success){if(locked)return;locked=true;clearInterval(timer);stageDone[stage]=success;$('#overlayIcon').textContent=success?'✨':'📖';$('#overlayTitle').textContent=success?'ステージクリア！':'ここで復習！';$('#overlayTitle').style.color=success?'#167d66':'#b94737';$('#overlayText').textContent=STAGES[stage].why;$('#continue').textContent=stage===5?'結果を見る ▶':'つぎへ ▶';$('#overlay').classList.add('show');if(success)clearSound()}
 function next(){if(!locked)return;$('#overlay').classList.remove('show');if(stage<5){stage++;beginStage()}else finishGame()}
 function finishGame(){clearInterval(timer);$('#app').classList.remove('stage2-mode','reason-mode','stage4-mode');show('end');let best=storageGet();if(score>best){best=score;storageSet(score)}$('#finalScore').textContent=score;$('#finalBest').textContent=best;$('#ending').textContent=errors.length?'間違えた理由を確認して、もう一度挑戦！':'全6ステージ完了！ 操作も理由も説明できるね！';$('#review').innerHTML='<strong>📘 きょうの復習</strong>'+STAGES.map((x,i)=>`<p><b>${i+1}. ${x.title}</b>　${stageDone[i]?'✓':'要復習'}<br>${x.why}</p>`).join('')+(errors.length?`<strong>見直しポイント（${errors.length}件）</strong>`+errors.slice(0,8).map(x=>`<p>・${x.text}</p>`).join(''):'<p>ノーミス！ 手順の理由も言葉で説明できるかな？</p>');setHud()}
-$('#start').addEventListener('pointerup',begin);$('#again').addEventListener('pointerup',begin);$('#home').addEventListener('pointerup',()=>{clearInterval(timer);stage=-1;$('#app').classList.remove('stage2-mode','reason-mode','stage4-mode');ignitionVisual='start';lit=true;air=70;draw();show('title');setHud()});$('#continue').addEventListener('pointerup',next);$('#sound').addEventListener('pointerup',()=>{sound=!sound;$('#sound').textContent=sound?'♪ おと ON':'♪ おと OFF';if(sound)beep(true)});document.addEventListener('visibilitychange',()=>{if(document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);say('画面を戻したら、操作を続けよう。');}else if(!document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);timer=setInterval(()=>{if(locked||ignitionBusy||stepBusy||reasonBusy)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。理由を確認しよう。');finishStage(false)}},1000)}});
+$('#start').addEventListener('pointerup',begin);$('#again').addEventListener('pointerup',begin);$('#home').addEventListener('pointerup',()=>{clearInterval(timer);stage=-1;$('#app').classList.remove('stage2-mode','reason-mode','stage4-mode');ignitionVisual='start';lit=true;air=70;draw();show('title');setHud()});$('#continue').addEventListener('pointerup',next);$('#sound').addEventListener('pointerup',()=>{sound=!sound;$('#sound').textContent=sound?'♪ おと ON':'♪ おと OFF';if(sound){wakeSound();primeCelebrationAudio();beep(true)}else if(clearAudio){clearAudio.pause();clearAudio.currentTime=0}});document.addEventListener('visibilitychange',()=>{if(document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);say('画面を戻したら、操作を続けよう。');}else if(!document.hidden&&stage>=0&&!locked&&$('#game').classList.contains('active')){clearInterval(timer);timer=setInterval(()=>{if(locked||ignitionBusy||stepBusy||reasonBusy)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。理由を確認しよう。');finishStage(false)}},1000)}});
 lit=true;air=70;draw();setHud();
 })();
 </script></body></html>
