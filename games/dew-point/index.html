@@ -7,14 +7,33 @@
 <title>露点マスター！〜水滴が現れる温度のひみつ〜</title>
 <style>
 :root{--navy:#0a4058;--blue:#17799c;--cyan:#79d7e5;--ice:#e8fbff;--yellow:#ffdc65;--orange:#f59c52;--green:#40a874;--red:#db6259;--ink:#173f4b;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#062f42}body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}button,input{font:inherit}button:focus-visible,input:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#062f42}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}
+button,input{font:inherit}button:focus-visible,input:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
 #app{width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(180deg,#54bdd2,#a9e1e8 45%,#eaf6df);user-select:none}
-header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + var(--safe-top));padding:calc(8px + var(--safe-top)) 11px 8px;background:linear-gradient(#156b8b,#0b506d);color:white;border-bottom:3px solid #ffffff8a}.headrow{display:flex;align-items:center;justify-content:space-between;gap:8px}.brand{font-size:10px;font-weight:1000}.stage{font-size:12px;font-weight:1000;background:#ffffff24;padding:5px 9px;border-radius:999px}.hud{display:flex;gap:6px}.discover,.mute{border:0;border-radius:999px;min-height:32px;background:white;color:#07506a;font-weight:1000;font-size:11px;padding:0 9px}.progress{height:7px;margin-top:7px;border-radius:999px;background:#ffffff25;overflow:hidden}.progress span{display:block;height:100%;width:16.6%;background:var(--yellow);transition:width .25s}
-.screen{position:absolute;inset:0;display:none}.screen.active{display:flex}.title{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(100px + var(--safe-top)) 18px calc(16px + var(--safe-bottom))}.badge{background:white;color:#0b6787;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:1000;box-shadow:0 4px #07506a30}.title h1{font-size:clamp(32px,9vw,44px);line-height:1.08;margin:12px 0 6px;color:white;text-shadow:0 4px #07516d}.title h1 em{font-style:normal;color:var(--yellow)}.subtitle{font-size:13px;font-weight:900;color:#0a4d63;margin:0 0 6px;max-width:360px}.hero{width:min(74vw,280px);height:min(28dvh,210px);min-height:145px;position:relative}.start,.check,.next,.retry,.smallBtn{border:0;border-radius:999px;background:var(--yellow);color:#794c17;font-weight:1000;box-shadow:0 5px #c59531,0 0 0 3px white inset}.start{width:min(86vw,320px);min-height:56px;font-size:19px}.start:active,.check:active,.next:active,.retry:active,.smallBtn:active{transform:translateY(3px);box-shadow:0 2px #c59531,0 0 0 3px white inset}.title small{max-width:340px;font-size:10px;line-height:1.45;color:#0a536b;font-weight:800;margin-top:10px}
-.game{flex-direction:column;padding-top:calc(96px + var(--safe-top));min-height:0}.task{flex:0 0 auto;margin:6px 10px 4px;background:#fff;border-radius:17px;padding:7px 10px;box-shadow:0 4px #0a728c30}.task b{display:block;color:var(--orange);font-size:10px}.task h2{font-size:16px;margin:2px 0}.task p{font-size:10px;margin:0;color:#5e7a84;font-weight:800;line-height:1.32}
-.lab{position:relative;flex:1 1 auto;min-height:172px;margin:0 8px 4px;border:3px solid #ffffffb5;border-radius:22px;background:linear-gradient(#f9feffdd,#e9f7f4e9);overflow:hidden}.room{position:absolute;left:10px;top:8px;font-size:10px;font-weight:1000;background:#ffffffdc;padding:5px 8px;border-radius:99px}.cupWrap{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);width:180px;height:200px}.cup{position:absolute;left:32px;bottom:12px;width:116px;height:130px;border-radius:8px 8px 30px 30px;background:linear-gradient(90deg,#a9bbc2,#f1f7f8 38%,#96aeb8 72%,#dbe8eb);border:5px solid #526e79;overflow:visible;box-shadow:0 9px 14px #183d4930}.water{position:absolute;left:5px;right:5px;bottom:5px;height:74%;border-radius:0 0 24px 24px;background:linear-gradient(#b8eff7,#5fc8df);transition:height .2s}.ice{position:absolute;width:20px;height:16px;border-radius:5px;background:#e9fcff;border:2px solid #9edbe6;opacity:0;transition:.2s}.ice.i1{left:16px;top:25px}.ice.i2{left:52px;top:40px}.ice.i3{right:10px;top:18px}.drops{position:absolute;inset:-4px;pointer-events:none;opacity:0;transition:opacity .25s}.drop{position:absolute;width:7px;height:11px;border-radius:60% 40% 55% 45%;background:#8fe7f4;border:1px solid #54bbd0;box-shadow:0 1px 2px #0a526966}.d1{left:6px;top:32px}.d2{right:7px;top:54px}.d3{left:20px;top:80px}.d4{right:24px;top:92px}.thermo{position:absolute;right:3px;top:4px;width:42px;height:150px}.stem{position:absolute;left:18px;top:6px;width:9px;height:118px;border-radius:7px;background:#f7fbfb;border:2px solid #536c76}.mercury{position:absolute;left:21px;bottom:26px;width:3px;height:var(--mercury,75px);background:#e85e56;border-radius:3px;transition:height .2s}.bulb{position:absolute;left:13px;bottom:10px;width:20px;height:20px;border-radius:50%;background:#e85e56;border:2px solid #b4433d}.tempRead{position:absolute;right:-10px;top:42px;background:#fff;border-radius:10px;padding:6px 8px;font-weight:1000;color:#bd453f;box-shadow:0 3px #173f4b22;min-width:58px;text-align:center}.airDots{position:absolute;inset:0;pointer-events:none}.vapor{position:absolute;width:7px;height:7px;border-radius:50%;background:#ffffffaa;box-shadow:0 0 0 2px #73bfd055;transition:transform .5s,opacity .5s}.v1{left:12%;top:30%}.v2{left:28%;top:18%}.v3{right:20%;top:24%}.v4{right:10%;top:54%}.v5{left:17%;top:65%}.v6{right:28%;top:68%}.condense .vapor{transform:translate(80px,70px);opacity:.15}.noteTag{position:absolute;right:10px;bottom:8px;background:#ffffffdd;border-radius:12px;padding:6px 8px;font-size:9px;font-weight:900;color:#44636d;max-width:120px;text-align:center}
+header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + var(--safe-top));padding:calc(8px + var(--safe-top)) 11px 8px;background:linear-gradient(#156b8b,#0b506d);color:white;border-bottom:3px solid #ffffff8a}
+.headrow{display:flex;align-items:center;justify-content:space-between;gap:8px}.brand{font-size:10px;font-weight:1000}.stage{font-size:12px;font-weight:1000;background:#ffffff24;padding:5px 9px;border-radius:999px}.hud{display:flex;gap:6px}.discover,.mute{border:0;border-radius:999px;min-height:32px;background:white;color:#07506a;font-weight:1000;font-size:11px;padding:0 9px}.progress{height:7px;margin-top:7px;border-radius:999px;background:#ffffff25;overflow:hidden}.progress span{display:block;height:100%;width:14.28%;background:var(--yellow);transition:width .25s}
+.screen{position:absolute;inset:0;display:none}.screen.active{display:flex}
+.title{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(100px + var(--safe-top)) 18px calc(16px + var(--safe-bottom))}
+.badge{background:white;color:#0b6787;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:1000;box-shadow:0 4px #07506a30}
+.title h1{font-size:clamp(32px,9vw,44px);line-height:1.08;margin:12px 0 6px;color:white;text-shadow:0 4px #07516d}.title h1 em{font-style:normal;color:var(--yellow)}
+.subtitle{font-size:13px;font-weight:900;color:#0a4d63;margin:0 0 6px;max-width:360px}.hero{width:min(74vw,280px);height:min(28dvh,210px);min-height:145px}
+.start,.check,.next,.retry,.smallBtn{border:0;border-radius:999px;background:var(--yellow);color:#794c17;font-weight:1000;box-shadow:0 5px #c59531,0 0 0 3px white inset}
+.start{width:min(86vw,320px);min-height:56px;font-size:19px}.start:active,.check:active,.next:active,.retry:active,.smallBtn:active{transform:translateY(3px);box-shadow:0 2px #c59531,0 0 0 3px white inset}
+.title small{max-width:340px;font-size:10px;line-height:1.45;color:#0a536b;font-weight:800;margin-top:10px}
+.game{flex-direction:column;padding-top:calc(96px + var(--safe-top));min-height:0}.task{flex:0 0 auto;margin:6px 10px 4px;background:#fff;border-radius:17px;padding:7px 10px;box-shadow:0 4px #0a728c30}
+.task b{display:block;color:var(--orange);font-size:10px}.task h2{font-size:16px;margin:2px 0}.task p{font-size:10px;margin:0;color:#5e7a84;font-weight:800;line-height:1.32}
+.lab{position:relative;flex:1 1 auto;min-height:172px;margin:0 8px 4px;border:3px solid #ffffffb5;border-radius:22px;background:linear-gradient(#f9feffdd,#e9f7f4e9);overflow:hidden}
+.room{position:absolute;left:10px;top:8px;font-size:10px;font-weight:1000;background:#ffffffdc;padding:5px 8px;border-radius:99px;z-index:4}
+.cupWrap{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);width:180px;height:200px}.cup{position:absolute;left:32px;bottom:12px;width:116px;height:130px;border-radius:8px 8px 30px 30px;background:linear-gradient(90deg,#a9bbc2,#f1f7f8 38%,#96aeb8 72%,#dbe8eb);border:5px solid #526e79;overflow:visible;box-shadow:0 9px 14px #183d4930}
+.water{position:absolute;left:5px;right:5px;bottom:5px;height:74%;border-radius:0 0 24px 24px;background:linear-gradient(#b8eff7,#5fc8df)}.ice{position:absolute;width:20px;height:16px;border-radius:5px;background:#e9fcff;border:2px solid #9edbe6;opacity:0}.ice.i1{left:16px;top:25px}.ice.i2{left:52px;top:40px}.ice.i3{right:10px;top:18px}
+.drops{position:absolute;inset:-4px;pointer-events:none;opacity:0;transition:opacity .22s}.drop{position:absolute;width:7px;height:11px;border-radius:60% 40% 55% 45%;background:#8fe7f4;border:1px solid #54bbd0}.d1{left:6px;top:32px}.d2{right:7px;top:54px}.d3{left:20px;top:80px}.d4{right:24px;top:92px}
+.thermo{position:absolute;right:3px;top:4px;width:42px;height:150px}.stem{position:absolute;left:18px;top:6px;width:9px;height:118px;border-radius:7px;background:#f7fbfb;border:2px solid #536c76}.mercury{position:absolute;left:21px;bottom:26px;width:3px;height:var(--mercury,75px);background:#e85e56;border-radius:3px;transition:height .15s}.bulb{position:absolute;left:13px;bottom:10px;width:20px;height:20px;border-radius:50%;background:#e85e56;border:2px solid #b4433d}.tempRead{position:absolute;right:-10px;top:42px;background:#fff;border-radius:10px;padding:6px 8px;font-weight:1000;color:#bd453f;min-width:58px;text-align:center}
+.airDots{position:absolute;inset:0;pointer-events:none}.vapor{position:absolute;width:7px;height:7px;border-radius:50%;background:#ffffffaa;box-shadow:0 0 0 2px #73bfd055;transition:transform .45s,opacity .45s}.v1{left:12%;top:30%}.v2{left:28%;top:18%}.v3{right:20%;top:24%}.v4{right:10%;top:54%}.v5{left:17%;top:65%}.v6{right:28%;top:68%}.condense .vapor{transform:translate(80px,70px);opacity:.15}.noteTag{position:absolute;right:10px;bottom:8px;background:#ffffffdd;border-radius:12px;padding:6px 8px;font-size:9px;font-weight:900;color:#44636d;max-width:125px;text-align:center}
+.graphWrap{position:absolute;inset:7px 7px 6px 7px;background:#fff;border-radius:16px;padding:4px}.graphWrap svg{width:100%;height:100%;display:block}.graphText{font-size:9px;font-weight:900;fill:#36515a}.axis{stroke:#647981;stroke-width:1.5}.grid{stroke:#dce8eb;stroke-width:1}.curve{fill:none;stroke:#19779b;stroke-width:4;stroke-linecap:round}.actualLine{stroke:#e68b42;stroke-width:3;stroke-dasharray:6 4}.currentLine{stroke:#6b5c9b;stroke-width:2;stroke-dasharray:3 3}.point{fill:#6b5c9b;stroke:white;stroke-width:2}.dewPoint{fill:#e68b42;stroke:white;stroke-width:2}.graphBadge{font-size:10px;font-weight:1000;fill:#173f4b}.capacityCard{position:absolute;right:10px;top:10px;background:#ffffffee;border-radius:11px;padding:6px 7px;font-size:9px;font-weight:900;line-height:1.45;z-index:3}.overflowDrops{position:absolute;right:11px;bottom:9px;background:#dff7fb;border-radius:11px;padding:6px 8px;font-size:9px;font-weight:900;z-index:3}
 .message{flex:0 0 auto;margin:0 10px 4px;min-height:39px;border-radius:14px;padding:6px 9px;background:#fffffff2;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:900;box-shadow:0 3px #0a718a25}.message.good{background:#e6f8df;color:#2e684a}.message.warn{background:#fff0d7;color:#8a5c20}.message.bad{background:#ffe3df;color:#9b403b}.dot{width:9px;height:9px;border-radius:50%;background:var(--blue);flex:0 0 auto}.good .dot{background:var(--green)}.warn .dot{background:var(--orange)}.bad .dot{background:var(--red)}
-.controls{flex:0 0 auto;background:#07516de8;color:white;border-top:3px solid #ffffff72;padding:7px 9px calc(8px + var(--safe-bottom))}.ctitle{text-align:center;font-size:10px;font-weight:1000;color:#dff8ff;margin:0 0 5px}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.actions.two{grid-template-columns:1fr 1fr}.action{min-height:47px;border:0;border-radius:13px;background:white;color:#07516d;font-weight:1000;font-size:11px;box-shadow:0 4px #003e54}.action.active{background:var(--yellow);color:#704718}.action:active{transform:translateY(2px);box-shadow:0 2px #003e54}.check{width:100%;min-height:44px;margin-top:7px;font-size:14px}.slider{width:100%;accent-color:var(--yellow)}.controlbox{background:#ffffff12;border:1px solid #ffffff32;border-radius:15px;padding:7px}.scale{display:flex;justify-content:space-between;font-size:9px;color:#d8f4fa;font-weight:900}.recordBox{display:flex;gap:6px;align-items:center}.recordBox input{width:92px;min-height:42px;border:0;border-radius:12px;padding:0 8px;text-align:center;font-weight:1000}.hintline{font-size:9px;color:#d8f4fa;text-align:center;margin-top:5px;font-weight:800}
+.controls{flex:0 0 auto;background:#07516de8;color:white;border-top:3px solid #ffffff72;padding:7px 9px calc(8px + var(--safe-bottom))}.ctitle{text-align:center;font-size:10px;font-weight:1000;color:#dff8ff;margin:0 0 5px}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.actions.two{grid-template-columns:1fr 1fr}.action{min-height:47px;border:0;border-radius:13px;background:white;color:#07516d;font-weight:1000;font-size:11px;box-shadow:0 4px #003e54}.action.active{background:var(--yellow);color:#704718}.action:active{transform:translateY(2px);box-shadow:0 2px #003e54}.check{width:100%;min-height:44px;margin-top:7px;font-size:14px}.slider{width:100%;accent-color:var(--yellow)}.controlbox{background:#ffffff12;border:1px solid #ffffff32;border-radius:15px;padding:7px}.scale{display:flex;justify-content:space-between;font-size:9px;color:#d8f4fa;font-weight:900}.quickrow{display:grid;grid-template-columns:44px 1fr 44px;gap:6px;align-items:center}.quick{min-height:42px;border:0;border-radius:12px;background:#fff;color:#07516d;font-weight:1000;font-size:18px}.hintline{font-size:9px;color:#d8f4fa;text-align:center;margin-top:5px;font-weight:800}
 .overlay{position:absolute;z-index:50;inset:0;display:none;place-items:center;padding:18px;background:#052f42dd}.overlay.show{display:grid}.card{width:100%;max-width:350px;background:white;border-radius:24px;padding:19px;text-align:center;box-shadow:0 10px #052938}.card .emoji{font-size:42px}.card h2{margin:2px 0 6px;color:var(--green);font-size:25px}.card p{font-size:12px;line-height:1.55;font-weight:800;color:#49656e}.next,.retry{width:100%;min-height:49px;font-size:16px;margin-top:8px}.discoverList{text-align:left;max-height:45dvh;overflow:auto;margin:10px 0;padding:0;list-style:none}.discoverList li{background:#eff8f3;margin:6px 0;padding:8px 10px;border-radius:12px;font-size:11px;font-weight:800}.discoverList li.locked{background:#f2f2f2;color:#9aa5a8}.close{border:0;background:#07516d;color:white;border-radius:999px;padding:10px 18px;font-weight:1000}.sources{text-align:left;font-size:10px;line-height:1.5;margin-top:10px}.sources a{color:#0b6f91;font-weight:900}
 @media(max-height:650px){header{min-height:calc(78px + var(--safe-top));padding-top:calc(5px + var(--safe-top))}.game{padding-top:calc(85px + var(--safe-top))}.task{padding:5px 8px;margin-top:3px}.task h2{font-size:14px}.task p{display:none}.lab{min-height:142px}.cupWrap{height:165px;transform:translateX(-50%) scale(.84);transform-origin:bottom}.message{min-height:32px;font-size:10px}.controls{padding-top:5px}.action{min-height:42px}.check{min-height:40px;margin-top:5px}}
 @media(max-height:570px){.brand{display:none}.game{padding-top:calc(75px + var(--safe-top))}.lab{min-height:118px}.cupWrap{height:145px;transform:translateX(-50%) scale(.72)}.message{min-height:29px}.ctitle{display:none}}
@@ -22,106 +41,133 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 </head>
 <body>
 <div id="app">
-<header><div class="headrow"><div><div class="brand">子どものMIKATA｜理科体験ゲーム</div><div id="stageLabel" class="stage">🌡️ 準備 1 / 6</div></div><div class="hud"><button id="discoverBtn" class="discover">💧 発見 0</button><button id="mute" class="mute">🔊</button></div></div><div class="progress"><span id="progress"></span></div></header>
+<header><div class="headrow"><div><div class="brand">子どものMIKATA｜理科体験ゲーム</div><div id="stageLabel" class="stage">🌡️ 準備 1 / 7</div></div><div class="hud"><button id="discoverBtn" class="discover">💧 発見 0</button><button id="mute" class="mute">🔊</button></div></div><div class="progress"><span id="progress"></span></div></header>
 
 <main id="title" class="screen title active">
-<div class="badge">失敗すると発見が増える</div>
-<h1>露点マスター！<br><em>水滴が現れる温度のひみつ</em></h1>
-<p class="subtitle">コップを冷やす → 水滴が現れる → 温度を記録 → 空気中の水蒸気の正体を見つけよう。</p>
-<div class="hero">
-<svg viewBox="0 0 280 210" aria-hidden="true"><ellipse cx="140" cy="192" rx="90" ry="12" fill="#0b547028"/><path d="M82 52 H184 L174 172 Q133 190 92 172 Z" fill="#c8d8dc" stroke="#526e79" stroke-width="7"/><path d="M91 96 H176 L170 168 Q133 182 96 168 Z" fill="#6fd1e4"/><circle cx="82" cy="88" r="7" fill="#8ee7f3"/><circle cx="184" cy="110" r="6" fill="#8ee7f3"/><circle cx="90" cy="134" r="5" fill="#8ee7f3"/><rect x="197" y="32" width="12" height="120" rx="6" fill="#f8fbfb" stroke="#536c76" stroke-width="3"/><rect x="201" y="72" width="4" height="67" rx="2" fill="#e85e56"/><circle cx="203" cy="150" r="13" fill="#e85e56" stroke="#b4433d" stroke-width="3"/><path d="M42 55 C54 39 68 39 78 55" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".7"/></svg>
-</div>
-<button id="start" class="start">露点実験を始める</button>
-<small>失敗してもゲームオーバーなし。冷やしすぎたり、記録を間違えたりすると「なぜ？」の発見が増える。</small>
+<div class="badge">グラフを触って「満タン」を理解</div>
+<h1>露点マスター！<br><em>水蒸気の定員を見つけよう</em></h1>
+<p class="subtitle">温度が下がると、空気が入れておける水蒸気の「定員」が小さくなる。あふれた分が水滴になる！</p>
+<div class="hero"><svg viewBox="0 0 280 210" aria-hidden="true"><path d="M30 174 H255 M45 188 V22" stroke="#516b75" stroke-width="4"/><path d="M48 166 C82 158 111 145 139 124 C174 98 203 65 242 28" fill="none" stroke="#18799d" stroke-width="8" stroke-linecap="round"/><circle cx="139" cy="124" r="8" fill="#f09a4d"/><path d="M45 124 H139" stroke="#f09a4d" stroke-width="4" stroke-dasharray="7 5"/><text x="79" y="112" fill="#17465a" font-size="14" font-weight="900">水蒸気10.7g</text><text x="144" y="145" fill="#17465a" font-size="13" font-weight="900">12℃＝露点</text></svg></div>
+<button id="start" class="start">実験を始める</button>
+<small>失敗しても止まらない。大事な操作だけで次へ進めるようにしたよ。</small>
 </main>
 
 <main id="game" class="screen game">
 <section class="task"><b id="mission"></b><h2 id="taskTitle"></h2><p id="taskText"></p></section>
 <section id="lab" class="lab">
-<div id="room" class="room">気温 24℃｜湿度 60%</div>
+<div id="room" class="room">気温 24℃｜湿度 約49%</div>
+<div id="normalLab">
 <div id="airDots" class="airDots"><i class="vapor v1"></i><i class="vapor v2"></i><i class="vapor v3"></i><i class="vapor v4"></i><i class="vapor v5"></i><i class="vapor v6"></i></div>
-<div class="cupWrap">
-<div class="cup"><div id="water" class="water"></div><i class="ice i1"></i><i class="ice i2"></i><i class="ice i3"></i><div id="drops" class="drops"><i class="drop d1"></i><i class="drop d2"></i><i class="drop d3"></i><i class="drop d4"></i></div></div>
-<div class="thermo"><div class="stem"></div><div id="mercury" class="mercury"></div><div class="bulb"></div><div id="tempRead" class="tempRead">24.0℃</div></div>
-</div>
+<div class="cupWrap"><div class="cup"><div class="water"></div><i class="ice i1"></i><i class="ice i2"></i><i class="ice i3"></i><div id="drops" class="drops"><i class="drop d1"></i><i class="drop d2"></i><i class="drop d3"></i><i class="drop d4"></i></div></div><div class="thermo"><div class="stem"></div><div id="mercury" class="mercury"></div><div class="bulb"></div><div id="tempRead" class="tempRead">24.0℃</div></div></div>
 <div id="noteTag" class="noteTag">コップの外側を観察</div>
+</div>
+<div id="graphLab" class="graphWrap" hidden>
+<svg id="satGraph" viewBox="0 0 360 210" role="img" aria-label="気温と飽和水蒸気量のグラフ">
+<g id="grid"></g>
+<line class="axis" x1="42" y1="174" x2="336" y2="174"></line><line class="axis" x1="42" y1="174" x2="42" y2="18"></line>
+<path id="satCurve" class="curve"></path>
+<line id="actualLine" class="actualLine" x1="42" x2="336"></line>
+<line id="currentLine" class="currentLine" y1="18" y2="174"></line>
+<circle id="currentPoint" class="point" r="6"></circle><circle id="dewPoint" class="dewPoint" r="6"></circle>
+<text x="172" y="203" class="graphText">気温［℃］</text><text x="5" y="16" class="graphText">g/m³</text>
+<text id="actualLabel" class="graphBadge">実際の水蒸気量 10.7</text>
+<text id="currentLabel" class="graphBadge"></text>
+</svg>
+<div id="capacityCard" class="capacityCard"></div><div id="overflowDrops" class="overflowDrops"></div>
+</div>
 </section>
 <div id="message" class="message warn"><span class="dot"></span><span></span></div>
 <section class="controls"><p id="ctitle" class="ctitle"></p><div id="controlArea"></div></section>
 </main>
 
-<div id="clear" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">発見！</h2><p id="clearText"></p><button id="next" class="next">次の実験へ</button></div></div>
+<div id="clear" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">発見！</h2><p id="clearText"></p><button id="next" class="next">次へ</button></div></div>
 <div id="discoverOverlay" class="overlay"><div class="card"><div class="emoji">💧</div><h2>今日の発見</h2><ul id="discoverList" class="discoverList"></ul><button id="closeDiscover" class="close">戻る</button></div></div>
-<div id="finish" class="overlay"><div class="card"><div class="emoji">🌡️💧</div><h2>露点研究員！</h2><p id="finishText"></p><div class="sources"><b>📚 出典・参考文献</b><br><a href="https://www.mext.go.jp/content/20250331-mxt_tokubetu01-000040846_15.pdf" target="_blank" rel="noopener noreferrer">文部科学省「中学部理科 参考資料（2年）露点の測定」</a><br><a href="https://forecast.weather.gov/glossary.php?word=Dew+Point" target="_blank" rel="noopener noreferrer">NOAA/NWS Glossary: Dew Point</a></div><button id="showCollection" class="smallBtn">発見コレクションを見る</button><button id="retry" class="retry">最初からもう一度</button></div></div>
+<div id="finish" class="overlay"><div class="card"><div class="emoji">📈💧</div><h2>露点・グラフマスター！</h2><p id="finishText"></p><div class="sources"><b>📚 出典・参考文献</b><br><a href="https://www.mext.go.jp/content/20220331-mxt_syogai02-mext_1422378_00001_4rika.pdf" target="_blank" rel="noopener noreferrer">文部科学省「令和2年 中学校卒業程度認定試験 理科」</a><br><a href="https://www.mext.go.jp/content/20230427-mxt_syogai02-mext_1422378_04rika.pdf" target="_blank" rel="noopener noreferrer">文部科学省「令和3年 中学校卒業程度認定試験 理科」</a></div><button id="showCollection" class="smallBtn">発見を見る</button><button id="retry" class="retry">最初からもう一度</button></div></div>
 </div>
 
 <script>
 (()=>{
-let stage=0,muted=false,audio=null,cleared=false,temp=24,roomTemp=24,rh=60,dew=15.8,stepSize=.5,stirred=false,firstDropSeen=false,overshot=false,recorded=null;
+let stage=0,muted=false,audio=null,cleared=false,temp=24,dew=12,actual=10.7,graphTemp=24,compareSeen=new Set();
+const satData=[[0,4.8],[4,6.4],[8,8.3],[12,10.7],[16,13.6],[20,17.3],[24,21.8],[28,27.2]];
 const discoveries=new Set();
 const all=[
-['room-water','最初は室温に近い水を使う → 露点を探し始める条件をそろえやすい'],
-['slow-cool','氷水を少しずつ加えてかき混ぜる → くもり始めを見つけやすい'],
-['overshoot','一気に冷やす → 露点を通り過ぎ、測定値を取り逃がしやすい'],
-['first-drop','くもり・水滴が現れ始める温度 → 露点'],
-['outside','外側の水滴 → コップの中の水が漏れたのではない'],
-['air-vapor','周囲の空気中の水蒸気 → 冷やされて液体の水になる'],
-['humid-high-dew','湿った空気 → 露点が高く、あまり冷やさなくても水滴が出る'],
-['dry-low-dew','乾いた空気 → 露点が低く、より冷やしてから水滴が出る'],
-['dew-not-rh','露点と湿度は同じ数字ではない'],
-['trouble-wipe','水滴を拭くだけでは原因は消えない → 冷たい表面でまた結露する'],
-['trouble-warm','表面温度を露点より高くすると → 結露しにくくなる'],
-['saturation','露点まで冷える → 空気が飽和し、水蒸気が凝結し始める']
+['room','室温に近い水から始める → 露点を見つけやすい'],
+['slow','少しずつ冷やす → 水滴が現れ始める瞬間を見つけやすい'],
+['overshoot','一気に冷やす → 露点を通り過ぎることがある'],
+['dew','水滴が現れ始めた温度 → 露点'],
+['air','外側の水滴 → 周囲の空気中の水蒸気が凝結したもの'],
+['capacity','飽和水蒸気量 → その温度で空気1m³に入れておける水蒸気の限界量'],
+['curve','気温が高いほど → 飽和水蒸気量は大きい'],
+['intersection','実際の水蒸気量と飽和水蒸気量が同じになる温度 → 露点'],
+['overflow','露点より冷える → 入りきらない水蒸気が水滴になる'],
+['dry','水蒸気量が少ない空気 → 露点は低い'],
+['humid','水蒸気量が多い空気 → 露点は高い'],
+['trouble','結露を防ぐには → 表面温度を露点より高くする方法がある']
 ];
 const defs=[
-{label:'🌡️ 準備 1 / 6',mission:'MISSION 01',title:'実験のスタート条件を選ぼう',text:'どの水から始めると「水滴が現れ始める瞬間」を測りやすい？'},
-{label:'🧊 冷却 2 / 6',mission:'MISSION 02',title:'コップを冷やして、最初の水滴を見つけよう',text:'少しずつ冷やす？ 一気に冷やす？ 失敗しても結果を観察しよう。'},
-{label:'📝 記録 3 / 6',mission:'MISSION 03',title:'露点を記録しよう',text:'水滴がたくさん付いた温度ではなく「現れ始めた温度」を記録する。'},
-{label:'💧 正体 4 / 6',mission:'MISSION 04',title:'コップの外側の水滴は、どこから来た？',text:'3つの仮説を試して、アニメーションで確かめよう。'},
-{label:'☁️ 湿度 5 / 6',mission:'MISSION 05',title:'湿った空気と乾いた空気で露点を比べよう',text:'同じ気温でも、水蒸気の量が違うと水滴が出る温度はどう変わる？'},
-{label:'🧪 トラブル 6 / 6',mission:'MISSION 06',title:'結露トラブル研究所',text:'「水滴を拭けば解決？」など、間違った対処も試して理由を発見しよう。'}
+{label:'🌡️ 準備 1 / 7',mission:'MISSION 01',title:'どの水から始める？',text:'まず実験のスタート条件を選ぼう。'},
+{label:'🧊 冷却 2 / 7',mission:'MISSION 02',title:'水滴が現れるまで冷やそう',text:'今回は難しいタイミング判定なし。水滴が出たら自動で止まる。'},
+{label:'📝 露点 3 / 7',mission:'MISSION 03',title:'どの温度が露点？',text:'観察した温度から選ぼう。'},
+{label:'💧 正体 4 / 7',mission:'MISSION 04',title:'外側の水滴はどこから来た？',text:'間違った仮説を選んでも、理由を見てすぐやり直せる。'},
+{label:'📈 グラフ 5 / 7',mission:'MISSION 05',title:'飽和水蒸気量の曲線を動かして理解しよう',text:'横線＝今ある水蒸気、曲線＝温度ごとの「定員」。交点を探そう。'},
+{label:'☁️ 比較 6 / 7',mission:'MISSION 06',title:'水蒸気量が変わると露点はどうなる？',text:'乾いた空気と湿った空気を同じグラフで比べよう。'},
+{label:'🧪 応用 7 / 7',mission:'MISSION 07',title:'結露を止めるには？',text:'グラフで考えたことを生活の結露へつなげよう。'}
 ];
 const $=s=>document.querySelector(s),control=$('#controlArea'),msg=$('#message'),lab=$('#lab');
 function ensureAudio(){if(muted)return null;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}if(audio&&audio.state==='suspended')audio.resume();return audio}
 function tone(f=430,d=.06,g=.025){const c=ensureAudio();if(!c)return;const o=c.createOscillator(),a=c.createGain(),t=c.currentTime;o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(c.destination);o.start();o.stop(t+d+.03)}
 function setMsg(t,c=''){msg.className='message '+c;msg.querySelector('span:last-child').textContent=t}
 function add(id){if(!discoveries.has(id)){discoveries.add(id);$('#discoverBtn').textContent='💧 発見 '+discoveries.size;tone(720,.05,.02)}}
-function setTemp(v){temp=Math.round(v*10)/10;$('#tempRead').textContent=temp.toFixed(1)+'℃';const h=Math.max(8,Math.min(102,(temp/30)*100));$('#mercury').style.setProperty('--mercury',h+'px');const cond=temp<=dew;$('#drops').style.opacity=cond?Math.min(1,(dew-temp+1)*.38):0;lab.classList.toggle('condense',cond);document.querySelectorAll('.ice').forEach((x,i)=>x.style.opacity=temp<22?(i+1)*.25:0)}
-function resetVisual(){lab.classList.remove('condense');$('#drops').style.opacity=0;document.querySelectorAll('.ice').forEach(x=>x.style.opacity=0);$('#room').textContent='気温 '+roomTemp+'℃｜湿度 '+rh+'%';$('#noteTag').textContent='コップの外側を観察';setTemp(temp)}
+function setTemp(v){temp=Math.round(v*10)/10;$('#tempRead').textContent=temp.toFixed(1)+'℃';$('#mercury').style.setProperty('--mercury',Math.max(8,Math.min(102,(temp/30)*100))+'px');const cond=temp<=dew;$('#drops').style.opacity=cond?Math.min(1,(dew-temp+1)*.42):0;lab.classList.toggle('condense',cond);document.querySelectorAll('.ice').forEach((x,i)=>x.style.opacity=temp<22?(i+1)*.25:0)}
+function showNormal(){document.querySelector('#normalLab').hidden=false;document.querySelector('#graphLab').hidden=true;$('#room').hidden=false}
+function showGraph(){document.querySelector('#normalLab').hidden=true;document.querySelector('#graphLab').hidden=false;$('#room').hidden=true;drawBaseGraph()}
 function clearStage(title,body,emoji='✨'){if(cleared)return;cleared=true;tone(650,.07,.03);setTimeout(()=>tone(820,.1,.03),80);$('#clearEmoji').textContent=emoji;$('#clearTitle').textContent=title;$('#clearText').textContent=body;$('#clear').classList.add('show')}
+function sat(t){if(t<=0)return 4.8;if(t>=28)return 27.2;for(let i=0;i<satData.length-1;i++){const [t1,v1]=satData[i],[t2,v2]=satData[i+1];if(t>=t1&&t<=t2)return v1+(v2-v1)*(t-t1)/(t2-t1)}return 10.7}
+function invSat(v){if(v<=4.8)return 0;if(v>=27.2)return 28;for(let i=0;i<satData.length-1;i++){const [t1,v1]=satData[i],[t2,v2]=satData[i+1];if(v>=v1&&v<=v2)return t1+(t2-t1)*(v-v1)/(v2-v1)}return 12}
+const gx=t=>42+(t/28)*294, gy=v=>174-(v/30)*156;
+function drawBaseGraph(){
+ const grid=$('#grid');grid.innerHTML='';
+ [0,4,8,12,16,20,24,28].forEach(t=>{grid.insertAdjacentHTML('beforeend','<line class="grid" x1="'+gx(t)+'" y1="18" x2="'+gx(t)+'" y2="174"></line><text class="graphText" x="'+(gx(t)-6)+'" y="188">'+t+'</text>')});
+ [0,5,10,15,20,25,30].forEach(v=>{grid.insertAdjacentHTML('beforeend','<line class="grid" x1="42" y1="'+gy(v)+'" x2="336" y2="'+gy(v)+'"></line><text class="graphText" x="18" y="'+(gy(v)+3)+'">'+v+'</text>')});
+ $('#satCurve').setAttribute('d',satData.map((p,i)=>(i?'L':'M')+gx(p[0])+' '+gy(p[1])).join(' '));
+ updateGraph(graphTemp,actual);
+}
+function updateGraph(t,a){
+ graphTemp=Math.max(0,Math.min(28,Math.round(t*10)/10));actual=a;const cap=sat(graphTemp),excess=Math.max(0,actual-cap),dp=invSat(actual);
+ $('#actualLine').setAttribute('y1',gy(actual));$('#actualLine').setAttribute('y2',gy(actual));
+ $('#currentLine').setAttribute('x1',gx(graphTemp));$('#currentLine').setAttribute('x2',gx(graphTemp));
+ $('#currentPoint').setAttribute('cx',gx(graphTemp));$('#currentPoint').setAttribute('cy',gy(cap));
+ $('#dewPoint').setAttribute('cx',gx(dp));$('#dewPoint').setAttribute('cy',gy(actual));
+ $('#actualLabel').setAttribute('x',48);$('#actualLabel').setAttribute('y',Math.max(14,gy(actual)-6));$('#actualLabel').textContent='実際 '+actual.toFixed(1)+' g/m³';
+ $('#currentLabel').setAttribute('x',Math.min(250,gx(graphTemp)+7));$('#currentLabel').setAttribute('y',Math.max(20,gy(cap)-7));$('#currentLabel').textContent=graphTemp.toFixed(0)+'℃ 定員 '+cap.toFixed(1);
+ $('#capacityCard').innerHTML='今の温度 <b>'+graphTemp.toFixed(0)+'℃</b><br>定員 <b>'+cap.toFixed(1)+' g/m³</b><br>実際 <b>'+actual.toFixed(1)+' g/m³</b>';
+ $('#overflowDrops').textContent=excess>.05?'💧 あふれ '+excess.toFixed(1)+' g/m³':'☁️ まだ入る';
+}
 function render(){
- cleared=false;$('#stageLabel').textContent=defs[stage].label;$('#mission').textContent=defs[stage].mission;$('#taskTitle').textContent=defs[stage].title;$('#taskText').textContent=defs[stage].text;$('#progress').style.width=((stage+1)/6*100)+'%';$('#room').textContent='気温 '+roomTemp+'℃｜湿度 '+rh+'%';
- if(stage===0){temp=24;rh=60;dew=15.8;resetVisual();$('#ctitle').textContent='スタートに使う水を選ぶ';control.innerHTML='<div class="actions"><button class="action" data-s="cold">冷蔵庫の冷たい水<br>8℃</button><button class="action" data-s="room">室温に近い水<br>24℃</button><button class="action" data-s="hot">温かい水<br>40℃</button></div>';control.querySelectorAll('.action').forEach(b=>b.onclick=()=>setupChoice(b.dataset.s));setMsg('どれでも押せる。結果を見て考えよう。','warn')}
- if(stage===1){temp=24;stirred=false;firstDropSeen=false;overshot=false;resetVisual();$('#ctitle').textContent='氷水を加える量とかき混ぜ方を選ぶ';control.innerHTML='<div class="actions"><button id="little" class="action">氷水を<br>少し入れる</button><button id="lot" class="action">氷水を<br>一気に入れる</button><button id="stir" class="action">🥢<br>かき混ぜる</button></div><button id="spot" class="check">👁️ 水滴が現れた！</button>';$('#little').onclick=()=>cool(.7);$('#lot').onclick=()=>cool(4.5);$('#stir').onclick=()=>{stirred=true;tone(350,.04,.018);setMsg('水をかき混ぜて、コップ全体の温度をそろえた。','good');add('slow-cool')};$('#spot').onclick=spotDrop;setMsg('少しずつ冷やしながら、表面を観察しよう。','warn')}
- if(stage===2){resetVisual();$('#ctitle').textContent='観察した露点を入力';control.innerHTML='<div class="controlbox recordBox"><span>露点</span><input id="record" type="number" step="0.1" placeholder="℃"><button id="save" class="action">記録する</button></div><div class="hintline">水滴が「現れ始めた」ときの温度を思い出そう。</div>';$('#save').onclick=recordDew;setMsg('水滴がたくさん増えた後の温度ではないよ。','warn')}
- if(stage===3){temp=dew-1;resetVisual();$('#drops').style.opacity=.8;lab.classList.add('condense');$('#ctitle').textContent='水滴の出どころを仮説実験';control.innerHTML='<div class="actions"><button class="action" data-h="inside">中の水が<br>しみ出した</button><button class="action" data-h="air">空気中の<br>水蒸気</button><button class="action" data-h="metal">金属が水を<br>作った</button></div>';control.querySelectorAll('.action').forEach(b=>b.onclick=()=>hypothesis(b.dataset.h));setMsg('わざと違う仮説も押して、結果を比べよう。','warn')}
- if(stage===4){temp=24;rh=60;dew=15.8;resetVisual();$('#ctitle').textContent='空気の湿り具合を変えて露点を予想';control.innerHTML='<div class="actions"><button class="action" data-r="35">乾いた空気<br>35%</button><button class="action" data-r="60">ふつう<br>60%</button><button class="action" data-r="85">湿った空気<br>85%</button></div><button id="compare" class="check">📊 3つを比べた</button>';control.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>humidityTrial(+b.dataset.r));$('#compare').onclick=()=>{if(discoveries.has('humid-high-dew')&&discoveries.has('dry-low-dew'))clearStage('湿度と露点の関係を発見！','湿った空気ほど露点が高く、少し冷やしただけで結露しやすい。乾いた空気は、もっと低い温度まで冷やす必要がある。','☁️');else setMsg('乾いた空気と湿った空気の両方を試してから比べよう。','bad')};setMsg('3つとも試せる。水滴が現れ始める温度に注目。','warn')}
- if(stage===5){temp=12;rh=70;dew=18;resetVisual();$('#drops').style.opacity=1;lab.classList.add('condense');$('#room').textContent='気温 24℃｜湿度 70%';$('#ctitle').textContent='結露したコップをどうする？';control.innerHTML='<div class="actions"><button class="action" data-t="wipe">水滴を<br>拭くだけ</button><button class="action" data-t="colder">もっと<br>冷やす</button><button class="action" data-t="warm">表面を<br>露点より暖かく</button></div>';control.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>trouble(b.dataset.t));setMsg('どれも試せる。水滴がどう変わるか見よう。','warn')}
+ cleared=false;$('#stageLabel').textContent=defs[stage].label;$('#mission').textContent=defs[stage].mission;$('#taskTitle').textContent=defs[stage].title;$('#taskText').textContent=defs[stage].text;$('#progress').style.width=((stage+1)/7*100)+'%';
+ if(stage<4||stage===6)showNormal();else showGraph();
+ if(stage===0){dew=12;temp=24;setTemp(24);$('#room').textContent='室温 24℃';$('#ctitle').textContent='おすすめを選べばすぐ進める';control.innerHTML='<div class="actions"><button class="action" data-s="cold">冷たい水<br>8℃</button><button class="action" data-s="room">室温に近い水<br>24℃</button><button class="action" data-s="hot">温かい水<br>40℃</button></div>';control.querySelectorAll('.action').forEach(b=>b.onclick=()=>setup(b.dataset.s));setMsg('間違えても止まらない。室温に近い水が測りやすいよ。','warn')}
+ if(stage===1){temp=24;setTemp(24);$('#room').textContent='室温 24℃｜露点は約12℃';$('#ctitle').textContent='「少しずつ」で水滴まで自動停止';control.innerHTML='<div class="actions two"><button id="little" class="action">🧊 少しずつ冷やす</button><button id="lot" class="action">🧊🧊 一気に冷やす</button></div>';$('#little').onclick=coolSlow;$('#lot').onclick=coolFast;setMsg('今回は何度も押さなくてOK。1回で結果まで進む。','good')}
+ if(stage===2){setTemp(12);$('#drops').style.opacity=.5;$('#ctitle').textContent='露点を1つ選ぶだけ';control.innerHTML='<div class="actions"><button class="action" data-d="24">24℃</button><button class="action" data-d="12">12℃</button><button class="action" data-d="6">6℃</button></div>';control.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>chooseDew(+b.dataset.d));setMsg('最初に水滴が現れたのは12℃だった。','good')}
+ if(stage===3){setTemp(11);$('#drops').style.opacity=.8;$('#ctitle').textContent='水滴の出どころを選ぶ';control.innerHTML='<div class="actions"><button class="action" data-h="inside">中の水が<br>しみ出す</button><button class="action" data-h="air">空気中の<br>水蒸気</button><button class="action" data-h="metal">金属が<br>水を作る</button></div>';control.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>sourceChoice(b.dataset.h));setMsg('違っても理由が出る。正解を選べばすぐ次へ。','warn')}
+ if(stage===4){actual=10.7;graphTemp=24;drawBaseGraph();$('#ctitle').textContent='温度を下げて「横線と曲線の交点」を探す';control.innerHTML='<div class="controlbox"><div class="quickrow"><button id="minus" class="quick">−</button><input id="gslider" class="slider" type="range" min="0" max="28" step="1" value="24"><button id="plus" class="quick">＋</button></div><div class="scale"><span>0℃</span><span id="gtemp">24℃</span><span>28℃</span></div><button id="dewCheck" class="check">📍 この温度が露点！</button></div>';const sl=$('#gslider');const set=v=>{sl.value=v;$('#gtemp').textContent=v+'℃';updateGraph(+v,actual);graphMessage()};sl.oninput=e=>set(e.target.value);$('#minus').onclick=()=>set(Math.max(0,+sl.value-1));$('#plus').onclick=()=>set(Math.min(28,+sl.value+1));$('#dewCheck').onclick=checkGraphDew;add('capacity');add('curve');graphMessage()}
+ if(stage===5){actual=10.7;graphTemp=24;compareSeen=new Set();drawBaseGraph();$('#ctitle').textContent='水蒸気量を変えて、交点（露点）を見る';control.innerHTML='<div class="actions"><button class="action" data-a="6.4">乾いた空気<br>6.4 g/m³</button><button class="action" data-a="10.7">中くらい<br>10.7 g/m³</button><button class="action" data-a="17.3">湿った空気<br>17.3 g/m³</button></div><button id="compareDone" class="check">📊 比べた！</button>';control.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>compareAir(+b.dataset.a));$('#compareDone').onclick=finishCompare;setMsg('3つ全部でなくてもOK。乾いた空気と湿った空気を比べれば進める。','good')}
+ if(stage===6){dew=12;temp=8;setTemp(8);$('#drops').style.opacity=1;$('#room').textContent='室温24℃｜表面8℃｜露点12℃';$('#ctitle').textContent='結露を減らす操作を選ぶ';control.innerHTML='<div class="actions"><button class="action" data-t="wipe">水滴を<br>拭くだけ</button><button class="action" data-t="cold">もっと<br>冷やす</button><button class="action" data-t="warm">表面を<br>12℃より高く</button></div>';control.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>trouble(b.dataset.t));setMsg('正解は1つ。間違えてもすぐ試し直せる。','warn')}
 }
-function setupChoice(x){
- if(x==='room'){temp=24;setTemp(temp);add('room-water');setMsg('室温に近い水。ここから少しずつ冷やせる。','good');clearStage('実験準備OK！','最初から冷えすぎていないので、くもりが現れ始める瞬間を追いやすい。','🌡️')}
- if(x==='cold'){temp=8;setTemp(temp);$('#drops').style.opacity=1;lab.classList.add('condense');add('overshoot');setMsg('もう水滴だらけ！ 露点を通り過ぎていて「現れ始め」を測れない。','bad')}
- if(x==='hot'){temp=40;setTemp(30);setMsg('温かすぎる。露点まで冷やす距離が長く、実験に時間がかかる。','warn')}
-}
-function cool(amount){if(amount>2){overshot=true;add('overshoot')}temp-=amount;setTemp(temp);if(temp<=dew&&!firstDropSeen){firstDropSeen=true;add('first-drop')}if(temp>dew)setMsg('まだ水滴はない。現在 '+temp.toFixed(1)+'℃。','warn');else if(temp>=dew-1.2)setMsg('表面にかすかな水滴！ 今が大事。','good');else setMsg('水滴がはっきり増えた。露点をかなり通り過ぎたかも。','bad')}
-function spotDrop(){if(temp<=dew&&temp>=dew-1.2&&stirred){recorded=temp;add('slow-cool');clearStage('くもり始めを見つけた！','一気に冷やさず、かき混ぜながら「最初の水滴」が現れる温度を観察できた。','💧')}else if(temp>dew)setMsg('まだ水滴は現れていない。もう少し冷やそう。','bad');else if(!stirred)setMsg('温度が均一とは限らない。かき混ぜてから記録しよう。','bad');else setMsg('冷やしすぎた。水滴が増えた後では、露点を正確に読み取りにくい。','bad')}
-function recordDew(){const v=parseFloat($('#record').value);if(!Number.isFinite(v)){setMsg('温度を入力しよう。','bad');return}if(Math.abs(v-dew)<=1.2){add('first-drop');clearStage('露点を記録！','この実験では、コップ表面に水滴が現れ始めた温度を露点として記録する。','📝')}else if(v<dew-2){setMsg('それは冷やしすぎた後の温度かも。「現れ始め」を思い出そう。','bad');add('overshoot')}else setMsg('水滴が出る前の温度になっている。観察結果を見直そう。','bad')}
-function hypothesis(x){
- if(x==='inside'){setMsg('もし中の水がしみ出したなら、冷やす前から外へ出るはず。でも実際は露点付近で急に現れる。','bad');add('outside')}
- if(x==='metal'){setMsg('金属そのものが水を作ったわけではない。冷たい金属は「水蒸気が液体になる場所」になった。','bad');add('outside')}
- if(x==='air'){add('air-vapor');add('saturation');setMsg('空気中の水蒸気が、冷たい表面付近で凝結して水滴になった！','good');clearStage('水滴の正体を発見！','コップの内側の水が外へ出たのではない。周囲の空気にあった水蒸気が冷やされ、液体の水になった。','💧')}
-}
-function dewApprox(r){const map={35:7.8,60:15.8,85:21.4};return map[r]}
-function humidityTrial(r){rh=r;dew=dewApprox(r);$('#room').textContent='気温 24℃｜湿度 '+r+'%';temp=dew;setTemp(temp);$('#drops').style.opacity=.55;lab.classList.add('condense');if(r===35){add('dry-low-dew');setMsg('乾いた空気：露点は約 '+dew+'℃。かなり冷やしてから水滴が出た。','warn')}if(r===60){setMsg('湿度60%：露点は約 '+dew+'℃。','warn')}if(r===85){add('humid-high-dew');setMsg('湿った空気：露点は約 '+dew+'℃。少し冷やすだけで水滴が出た。','good')}add('dew-not-rh')}
-function trouble(x){
- if(x==='wipe'){add('trouble-wipe');$('#drops').style.opacity=0;setMsg('拭いて一度消えた。でも表面は露点より冷たいまま…','warn');setTimeout(()=>{$('#drops').style.opacity=1;setMsg('また水滴が現れた！ 原因は表面温度と空気中の水蒸気。','bad')},650)}
- if(x==='colder'){temp=6;setTemp(temp);$('#drops').style.opacity=1;setMsg('さらに冷やすと水滴がもっと増えた！','bad');add('saturation')}
- if(x==='warm'){temp=20;setTemp(temp);$('#drops').style.opacity=0;lab.classList.remove('condense');add('trouble-warm');setMsg('表面温度が露点より高くなり、水滴ができにくくなった。','good');setTimeout(()=>clearStage('結露の条件がわかった！','結露は「空気中に水蒸気がある」だけでなく、表面が露点以下まで冷えることで起こる。','🧪'),450)}
-}
+function setup(x){if(x==='room'){add('room');setTemp(24);clearStage('準備OK！','室温に近い水から始めると、水滴が現れ始める温度までの変化を追いやすい。','🌡️')}else if(x==='cold'){add('overshoot');setTemp(8);setMsg('もう露点より低い。最初から水滴が出ていて「始まり」が分かりにくい。次は24℃を押してみよう。','bad')}else{setTemp(30);setMsg('温かすぎると露点まで遠い。24℃くらいから始めると楽。','warn')}}
+function coolSlow(){add('slow');add('dew');setTemp(12);$('#drops').style.opacity=.45;setMsg('12℃で最初の水滴が現れた！ 自動でここで停止。','good');setTimeout(()=>clearStage('水滴の始まりを発見！','少しずつ冷やすと、「現れ始め」を見つけやすい。今回は12℃が露点。','💧'),450)}
+function coolFast(){add('overshoot');setTemp(6);$('#drops').style.opacity=1;setMsg('6℃まで一気に下がって水滴だらけ。露点12℃を通り過ぎた！','bad');setTimeout(()=>{setMsg('失敗も発見。次へ進めるよう12℃の露点を確認しよう。','warn');clearStage('冷やしすぎを体験！','一気に冷やすと、最初の水滴が出る温度を取り逃がしやすい。露点は約12℃だった。','🧊')},650)}
+function chooseDew(v){if(v===12){add('dew');clearStage('正解！ 12℃が露点','水滴が「最初に現れた温度」を露点として記録する。','📝')}else setMsg(v>12?'24℃ではまだ水滴がなかった。':'6℃は水滴が増えた後。最初に出た12℃を選ぼう。','bad')}
+function sourceChoice(x){if(x==='air'){add('air');clearStage('水滴の正体を発見！','周囲の空気中の水蒸気が冷たい表面付近で液体の水になった。','💧')}else setMsg(x==='inside'?'中の水が漏れたなら、冷やす前から外側がぬれるはず。':'金属が水を作るのではなく、冷たい表面で水蒸気が水になる。','bad')}
+function graphMessage(){const cap=sat(graphTemp),dp=invSat(actual);if(Math.abs(graphTemp-dp)<=1){setMsg('横線と曲線がぶつかった！ ここが「満タン」になる境目。','good')}else if(graphTemp>dp){setMsg('定員 '+cap.toFixed(1)+' > 実際 '+actual.toFixed(1)+'。まだ水蒸気を入れておける。','warn')}else{add('overflow');setMsg('定員 '+cap.toFixed(1)+' < 実際 '+actual.toFixed(1)+'。入りきらない分が水滴になる！','bad')}}
+function checkGraphDew(){const dp=invSat(actual);if(Math.abs(graphTemp-dp)<=1){add('intersection');clearStage('グラフで露点を発見！','横線「実際の水蒸気量 10.7 g/m³」と飽和水蒸気量の曲線が交わる12℃が露点。','📈')}else{setMsg('交点を探そう。紫の縦線を、オレンジ横線と青い曲線が出会う場所へ。','warn')}}
+function compareAir(a){actual=a;graphTemp=24;updateGraph(graphTemp,a);compareSeen.add(a);const dp=invSat(a);if(a===6.4){add('dry');setMsg('6.4 g/m³ → 露点は約4℃。水蒸気が少ないと、かなり冷やすまで満タンにならない。','warn')}else if(a===17.3){add('humid');setMsg('17.3 g/m³ → 露点は約20℃。水蒸気が多いと、少し冷やすだけで満タンになる。','good')}else setMsg('10.7 g/m³ → 露点は約12℃。','warn');$('#dewPoint').setAttribute('cx',gx(dp));$('#dewPoint').setAttribute('cy',gy(a))}
+function finishCompare(){if(compareSeen.has(6.4)&&compareSeen.has(17.3)){clearStage('露点が動いた！','水蒸気が多いほど横線が高くなり、曲線との交点は右へ移動する。つまり露点が高くなる。','☁️')}else setMsg('「乾いた空気」と「湿った空気」の2つだけ試せばOK！','warn')}
+function trouble(x){if(x==='warm'){setTemp(15);$('#drops').style.opacity=0;lab.classList.remove('condense');add('trouble');clearStage('結露を止められた！','表面温度が露点12℃より高くなると、この条件では結露しにくくなる。','🧪')}else if(x==='wipe'){ $('#drops').style.opacity=0;setMsg('一度消えた。でも表面8℃は露点12℃より低いまま…また水滴が出る。','bad');setTimeout(()=>$('#drops').style.opacity=1,550)}else{setTemp(4);$('#drops').style.opacity=1;setMsg('もっと冷やすと、飽和水蒸気量の「定員」がさらに小さくなって水滴が増える。','bad')}}
 function showDiscoveries(){const ul=$('#discoverList');ul.innerHTML='';all.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#discoverOverlay').classList.add('show')}
 $('#start').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');stage=0;render()};
 $('#mute').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
-$('#next').onclick=()=>{$('#clear').classList.remove('show');if(stage<5){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+all.length+'。正解だけでなく、冷やしすぎ・誤った仮説・結露トラブルまで観察できた。';$('#finish').classList.add('show')}};
+$('#next').onclick=()=>{$('#clear').classList.remove('show');if(stage<6){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+all.length+'。特に「曲線＝温度ごとの定員」「横線＝実際にある水蒸気」「交点＝露点」がつながれば大成功！';$('#finish').classList.add('show')}};
 $('#retry').onclick=()=>{$('#finish').classList.remove('show');discoveries.clear();$('#discoverBtn').textContent='💧 発見 0';stage=0;render()};
 $('#discoverBtn').onclick=showDiscoveries;$('#showCollection').onclick=showDiscoveries;$('#closeDiscover').onclick=()=>$('#discoverOverlay').classList.remove('show');
 })();
