@@ -3,463 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b5470">
-<title>顕微鏡ピント名人 — 子どものMIKATA</title>
+<meta name="theme-color" content="#0a5872">
+<title>顕微鏡名人 — 子どものMIKATA</title>
 <style>
-:root{
-  --navy:#07384d;--blue:#0b6f91;--cyan:#65c9d5;--sky:#dff7fb;
-  --paper:#fffdf6;--yellow:#ffd95a;--orange:#ef8a45;--green:#3da36f;
-  --ink:#163f4d;--muted:#5d7a84;--red:#dc5d55;--safe-top:env(safe-area-inset-top,0px);
-  --safe-bottom:env(safe-area-inset-bottom,0px);
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#052d3f}
-body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}
-button{font:inherit}
-button:focus-visible,[role="slider"]:focus-visible{outline:4px solid var(--yellow);outline-offset:3px}
-#app{
-  width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;overflow:hidden;
-  position:relative;background:linear-gradient(180deg,#42b7cd 0%,#91dfe5 42%,#e4f6dd 100%);
-  user-select:none;-webkit-user-select:none;
-}
-.topbar{
-  position:absolute;z-index:10;left:0;right:0;top:0;
-  min-height:calc(82px + var(--safe-top));
-  padding:calc(10px + var(--safe-top)) 13px 10px;
-  background:linear-gradient(180deg,#0a6586,#07516d);
-  color:white;border-bottom:4px solid #ffffffa8;
-}
-.toprow{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.brand{font-size:11px;font-weight:900;letter-spacing:.08em;opacity:.92}
-.stagepill{font-size:12px;font-weight:1000;background:#ffffff20;border:1px solid #ffffff55;border-radius:99px;padding:6px 10px}
-.mute{border:0;border-radius:99px;background:white;color:#07516d;font-weight:1000;min-width:70px;min-height:36px}
-.progress{height:8px;background:#ffffff2b;border-radius:99px;margin-top:8px;overflow:hidden}
-.progress span{display:block;height:100%;width:33%;background:var(--yellow);border-radius:99px}
-
-.screen{position:absolute;inset:0;display:none}
-.screen.active{display:flex}
-.title{
-  flex-direction:column;align-items:center;justify-content:center;text-align:center;
-  padding:calc(98px + var(--safe-top)) 18px calc(18px + var(--safe-bottom));
-}
-.badge{background:white;color:#0b6787;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:1000;box-shadow:0 4px #0b6b8633}
-.title h1{font-size:clamp(34px,10vw,48px);line-height:1.05;margin:13px 0 6px;color:white;text-shadow:0 4px #07516d;letter-spacing:-.05em}
-.title h1 em{font-style:normal;color:var(--yellow)}
-.subtitle{font-size:14px;font-weight:900;color:#0a4e67;margin:0 0 10px}
-.hero{
-  width:min(78vw,300px);height:min(34dvh,260px);min-height:160px;margin:2px auto 8px;
-  display:grid;place-items:center;
-}
-.startbtn,.primary{
-  border:0;border-radius:999px;background:var(--yellow);color:#7b4a17;font-weight:1000;
-  box-shadow:0 6px #c9942f,0 0 0 3px #fff inset;touch-action:manipulation
-}
-.startbtn{width:min(86vw,320px);min-height:58px;font-size:21px}
-.startbtn:active,.primary:active{transform:translateY(4px);box-shadow:0 2px #c9942f,0 0 0 3px #fff inset}
-.title small{max-width:330px;font-size:11px;line-height:1.5;color:#0a516b;font-weight:800;margin-top:11px}
-
-.game{
-  flex-direction:column;padding-top:calc(92px + var(--safe-top));min-height:0;
-  overflow:hidden;
-}
-.task{
-  margin:8px 12px 6px;background:#fff;border-radius:18px;padding:9px 12px;box-shadow:0 4px #0c7d9633;flex:0 0 auto;
-}
-.task strong{display:block;color:var(--orange);font-size:11px}
-.task h2{font-size:18px;margin:2px 0 2px}
-.task p{font-size:11px;color:var(--muted);font-weight:800;margin:0;line-height:1.35}
-
-.lab{
-  position:relative;flex:1 1 auto;min-height:180px;margin:0 10px 5px;
-  background:linear-gradient(180deg,#f7fcffdd,#eaf7f7e8);border-radius:24px;border:3px solid #ffffffb8;
-  overflow:hidden;box-shadow:0 5px #0a718d25 inset;
-}
-.scopewrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.scope{
-  position:relative;width:min(58%,235px);height:100%;max-height:330px;min-height:178px;
-  filter:drop-shadow(0 10px 10px #07384d33);
-}
-.scope svg{width:100%;height:100%;display:block}
-.stageMove{transform:translateY(var(--stage-y,0px));transition:transform .16s ease-out}
-.coarseVisual,.fineVisual{transform-box:fill-box;transform-origin:center;transition:transform .1s linear}
-.coarseVisual{transform:rotate(var(--coarse-rot,0deg))}
-.fineVisual{transform:rotate(var(--fine-rot,0deg))}
-
-.viewport{
-  position:absolute;right:10px;top:12px;width:clamp(118px,35vw,160px);aspect-ratio:1;
-  border-radius:50%;background:#f3f1df;border:8px solid #173b47;box-shadow:0 0 0 4px #fff,0 8px 18px #082f3d4d;
-  overflow:hidden;
-}
-.specimen{
-  position:absolute;inset:-12%;transform:scale(1.12);
-  filter:blur(var(--blur,10px));transition:filter .14s linear,transform .14s linear;
-  background:
-    radial-gradient(circle at 30% 28%,#627b65 0 3%,transparent 3.6%),
-    radial-gradient(circle at 68% 55%,#607661 0 3%,transparent 3.6%),
-    radial-gradient(circle at 48% 78%,#6a8067 0 3%,transparent 3.6%),
-    repeating-linear-gradient(25deg,#a8c58f00 0 14px,#678a6547 15px 17px,#a8c58f00 18px 31px),
-    repeating-linear-gradient(115deg,#a8c58f00 0 17px,#678a6547 18px 20px,#a8c58f00 21px 34px),
-    #d8e7b8;
-}
-.specimen:after{
-  content:"";position:absolute;inset:0;opacity:var(--detail,.15);
-  background:
-    radial-gradient(circle at 22% 34%,#5b6d57 0 2.2%,transparent 2.8%),
-    radial-gradient(circle at 77% 25%,#5b6d57 0 2.2%,transparent 2.8%),
-    radial-gradient(circle at 59% 67%,#5b6d57 0 2.2%,transparent 2.8%),
-    radial-gradient(circle at 36% 72%,#5b6d57 0 2.2%,transparent 2.8%);
-  transition:opacity .16s linear;
-}
-.crosshair{position:absolute;inset:50% auto auto 50%;width:8px;height:8px;border:2px solid #ffffffbb;border-radius:50%;transform:translate(-50%,-50%)}
-.viewlabel{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);font-size:9px;font-weight:1000;color:#36515a;background:#ffffffd8;padding:3px 6px;border-radius:99px;white-space:nowrap}
-
-.message{
-  flex:0 0 auto;margin:0 12px 6px;min-height:42px;border-radius:15px;background:#fffffff0;
-  padding:7px 10px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#24515e;
-  box-shadow:0 3px #0a708b30;
-}
-.message.good{background:#e4f8df;color:#256447}.message.hot{background:#fff0d5;color:#8a5b19}
-.dot{width:10px;height:10px;border-radius:50%;background:var(--blue);flex:0 0 auto}
-.message.good .dot{background:var(--green)}.message.hot .dot{background:var(--orange)}
-
-.controls{
-  flex:0 0 auto;background:#07516de8;border-top:3px solid #ffffff80;color:white;
-  padding:8px 11px calc(10px + var(--safe-bottom));
-}
-.controlTitle{font-size:11px;font-weight:1000;color:#dff8ff;margin:0 0 6px;text-align:center}
-.knobgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.knobcard{
-  background:#ffffff13;border:1px solid #ffffff39;border-radius:16px;padding:7px 7px 8px;text-align:center;
-}
-.knobname{font-size:11px;font-weight:1000;margin-bottom:5px}
-.knobrow{display:grid;grid-template-columns:40px 1fr 40px;gap:5px;align-items:center}
-.adjust{
-  min-width:40px;min-height:44px;border:0;border-radius:13px;background:#fff;color:#07516d;font-size:22px;font-weight:1000;
-  box-shadow:0 3px #003d53;touch-action:manipulation
-}
-.adjust:active{transform:translateY(2px);box-shadow:0 1px #003d53}
-.knob{
-  width:58px;height:58px;margin:auto;border-radius:50%;position:relative;touch-action:none;cursor:grab;
-  background:repeating-conic-gradient(#dbe2e4 0 8deg,#8ca0a7 8deg 13deg);
-  border:5px solid #ecf1f2;box-shadow:0 4px #263e47,0 0 0 2px #ffffff7a;
-  transform:rotate(var(--rot,0deg));
-}
-.knob:after{content:"";position:absolute;left:50%;top:5px;width:4px;height:18px;background:var(--yellow);border-radius:4px;transform:translateX(-50%)}
-.knobhint{font-size:9px;color:#cceef6;margin-top:4px;font-weight:800}
-.meter{height:8px;background:#ffffff25;border-radius:99px;margin-top:7px;overflow:hidden}
-.meter span{display:block;height:100%;width:var(--meter,0%);background:linear-gradient(90deg,#ef8a45,#ffd95a,#4ac18a);transition:width .15s}
-
-.overlay{position:absolute;z-index:30;inset:0;display:none;place-items:center;padding:20px;background:#052f42d9}
-.overlay.show{display:grid}
-.card{width:100%;max-width:340px;background:white;border-radius:25px;padding:20px;text-align:center;box-shadow:0 10px #062a39}
-.card .spark{font-size:45px}.card h2{font-size:28px;color:var(--green);margin:2px 0 6px}.card p{font-size:13px;line-height:1.6;font-weight:800;color:#45636c}
-.primary{width:100%;min-height:52px;font-size:17px;margin-top:8px}
-
-@media(max-height:650px){
-  .topbar{min-height:calc(76px + var(--safe-top));padding-top:calc(7px + var(--safe-top))}
-  .game{padding-top:calc(84px + var(--safe-top))}
-  .task{padding:7px 10px;margin-top:5px}.task h2{font-size:16px}.task p{font-size:10px}
-  .lab{min-height:155px}.message{min-height:36px;font-size:11px;margin-bottom:4px}
-  .controls{padding-top:6px}.knob{width:52px;height:52px}.knobrow{grid-template-columns:38px 1fr 38px}.adjust{min-width:38px;min-height:40px}
-}
-@media(max-height:570px){
-  .brand{display:none}.topbar{min-height:calc(68px + var(--safe-top))}
-  .game{padding-top:calc(76px + var(--safe-top))}
-  .task p{display:none}.task{margin-bottom:4px}.lab{min-height:132px}
-  .viewport{width:112px;border-width:6px}.scope{min-height:145px}
-  .knobhint,.meter{display:none}.knobcard{padding:5px}.message{min-height:32px;padding:5px 8px}
-}
+:root{--navy:#06384b;--blue:#0a6687;--cyan:#71cfda;--yellow:#ffdd62;--orange:#f49a4c;--green:#42a875;--red:#d85c55;--ink:#173f4b;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#052f40}body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}button{font:inherit}
+button:focus-visible,input:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
+#app{width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(180deg,#45b8cd,#9de0e4 46%,#e9f4d8);user-select:none}
+header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(83px + var(--safe-top));padding:calc(9px + var(--safe-top)) 12px 9px;background:linear-gradient(#0b6888,#07506a);color:white;border-bottom:3px solid #ffffff8a}
+.headrow{display:flex;align-items:center;justify-content:space-between;gap:8px}.brand{font-size:10px;font-weight:1000;letter-spacing:.06em}.stage{font-size:12px;font-weight:1000;background:#ffffff24;padding:6px 10px;border-radius:999px}.mute{border:0;border-radius:999px;min-height:34px;background:white;color:#07506a;font-weight:1000}.progress{height:7px;margin-top:7px;border-radius:999px;background:#ffffff25;overflow:hidden}.progress span{display:block;height:100%;width:33%;background:var(--yellow);transition:width .25s}
+.screen{position:absolute;inset:0;display:none}.screen.active{display:flex}
+.title{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(96px + var(--safe-top)) 18px calc(16px + var(--safe-bottom))}
+.badge{background:white;color:#0b6787;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:1000;box-shadow:0 4px #07506a30}.title h1{font-size:clamp(35px,10vw,48px);line-height:1.05;margin:12px 0 5px;color:white;text-shadow:0 4px #07516d}.title h1 em{font-style:normal;color:var(--yellow)}.subtitle{font-size:14px;font-weight:900;color:#0a4d63;margin:0 0 8px}.hero{width:min(75vw,290px);height:min(32dvh,235px);min-height:150px;display:grid;place-items:center}.start,.next,.retry{border:0;border-radius:999px;background:var(--yellow);color:#7b4c17;font-weight:1000;box-shadow:0 5px #c59531,0 0 0 3px white inset}.start{width:min(86vw,320px);min-height:56px;font-size:20px}.start:active,.next:active,.retry:active{transform:translateY(3px);box-shadow:0 2px #c59531,0 0 0 3px white inset}.title small{max-width:340px;font-size:11px;line-height:1.45;color:#0a536b;font-weight:800;margin-top:10px}
+.game{flex-direction:column;padding-top:calc(92px + var(--safe-top));min-height:0}.task{flex:0 0 auto;margin:7px 11px 5px;background:#fff;border-radius:18px;padding:8px 11px;box-shadow:0 4px #0a728c30}.task b{display:block;color:var(--orange);font-size:10px}.task h2{font-size:17px;margin:2px 0}.task p{font-size:10px;margin:0;color:#5e7a84;font-weight:800;line-height:1.35}
+.lab{position:relative;flex:1 1 auto;min-height:170px;margin:0 9px 5px;border:3px solid #ffffffb5;border-radius:23px;background:linear-gradient(#f9feffdd,#e9f7f4e9);overflow:hidden}.scope{position:absolute;left:8px;bottom:0;width:62%;height:96%;filter:drop-shadow(0 9px 9px #07384d30)}.scope svg{width:100%;height:100%}.viewport{position:absolute;right:9px;top:10px;width:clamp(116px,34vw,154px);aspect-ratio:1;border-radius:50%;overflow:hidden;background:#263e49;border:7px solid #163c49;box-shadow:0 0 0 4px white,0 8px 16px #07384d45}.view{position:absolute;inset:0;background:#d9e8b9;filter:brightness(var(--brightness,1)) blur(var(--blur,7px));transition:filter .16s,background .16s}.view:before{content:"";position:absolute;inset:-8%;background:radial-gradient(circle at 30% 25%,#5b6f55 0 3%,transparent 3.6%),radial-gradient(circle at 70% 58%,#5b6f55 0 3%,transparent 3.6%),repeating-linear-gradient(25deg,transparent 0 15px,#6b8e674d 16px 18px,transparent 19px 31px),repeating-linear-gradient(115deg,transparent 0 17px,#6b8e674d 18px 20px,transparent 21px 34px)}.shade{position:absolute;inset:0;background:radial-gradient(circle at var(--lightx,50%) var(--lighty,50%),transparent 0 44%,rgba(0,0,0,var(--edge,.45)) 73%);transition:.15s}.viewlabel{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:1000;background:#ffffffd7;padding:3px 6px;border-radius:99px;white-space:nowrap;color:#36515a}
+.message{flex:0 0 auto;margin:0 11px 5px;min-height:40px;border-radius:14px;padding:7px 9px;background:#fffffff2;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:900;box-shadow:0 3px #0a718a25}.message.good{background:#e6f8df;color:#2e684a}.message.warn{background:#fff0d7;color:#8a5c20}.message.bad{background:#ffe3df;color:#9b403b}.dot{width:9px;height:9px;border-radius:50%;background:var(--blue);flex:0 0 auto}.good .dot{background:var(--green)}.warn .dot{background:var(--orange)}.bad .dot{background:var(--red)}
+.controls{flex:0 0 auto;background:#07516de8;color:white;border-top:3px solid #ffffff72;padding:8px 10px calc(9px + var(--safe-bottom))}.ctitle{text-align:center;font-size:10px;font-weight:1000;color:#dff8ff;margin:0 0 6px}.controlbox{background:#ffffff12;border:1px solid #ffffff32;border-radius:16px;padding:8px}.slider{width:100%;accent-color:var(--yellow)}.scale{display:flex;justify-content:space-between;font-size:9px;color:#d8f4fa;font-weight:900}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.action{min-height:52px;border:0;border-radius:14px;background:white;color:#07516d;font-weight:1000;font-size:12px;box-shadow:0 4px #003e54}.action.active{background:var(--yellow);color:#704718}.action:active{transform:translateY(2px);box-shadow:0 2px #003e54}.knobs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.knobbox{text-align:center;background:#ffffff12;border-radius:14px;padding:6px}.knobrow{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;gap:4px}.adj{min-height:42px;border:0;border-radius:12px;background:#fff;color:#07516d;font-size:21px;font-weight:1000}.knob{width:54px;height:54px;margin:auto;border-radius:50%;background:repeating-conic-gradient(#dbe2e4 0 8deg,#8ca0a7 8deg 13deg);border:5px solid #eef3f3;box-shadow:0 4px #263f48;position:relative;transform:rotate(var(--rot,0deg))}.knob:after{content:"";position:absolute;left:50%;top:4px;width:4px;height:16px;background:var(--yellow);border-radius:3px;transform:translateX(-50%)}.kname{font-size:10px;font-weight:1000;margin-bottom:4px}
+.mirrorArm{transform-origin:127px 247px;transform:rotate(var(--mirror-rot,0deg));transition:transform .12s}.revolver{transform-origin:135px 119px;transform:rotate(var(--rev-rot,0deg));transition:transform .2s}.stageMove{transform:translateY(var(--stage-y,0px));transition:transform .14s}.coarse{transform-origin:73px 164px;transform:rotate(var(--coarse-rot,0deg))}.fine{transform-origin:106px 171px;transform:rotate(var(--fine-rot,0deg))}
+.overlay{position:absolute;z-index:50;inset:0;display:none;place-items:center;padding:18px;background:#052f42dd}.overlay.show{display:grid}.card{width:100%;max-width:340px;background:white;border-radius:24px;padding:19px;text-align:center;box-shadow:0 10px #052938}.card .emoji{font-size:42px}.card h2{margin:2px 0 6px;color:var(--green);font-size:26px}.card p{font-size:12px;line-height:1.55;font-weight:800;color:#49656e}.next,.retry{width:100%;min-height:50px;font-size:16px;margin-top:8px}
+@media(max-height:650px){header{min-height:calc(76px + var(--safe-top));padding-top:calc(6px + var(--safe-top))}.game{padding-top:calc(84px + var(--safe-top))}.task{padding:6px 9px;margin-top:4px}.task h2{font-size:15px}.task p{display:none}.lab{min-height:145px}.message{min-height:34px;font-size:10px}.controls{padding-top:6px}.action{min-height:45px}.knob{width:48px;height:48px}.adj{min-height:38px}}
+@media(max-height:570px){.brand{display:none}.game{padding-top:calc(76px + var(--safe-top))}.lab{min-height:126px}.viewport{width:108px;border-width:5px}.message{min-height:31px}.ctitle{display:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <div id="app">
-  <header class="topbar">
-    <div class="toprow">
-      <div>
-        <div class="brand">子どものMIKATA｜理科体験ゲーム</div>
-        <div class="stagepill">🔬 ピント調節 1 / 3</div>
-      </div>
-      <button id="muteBtn" class="mute" aria-pressed="false">🔊 音あり</button>
-    </div>
-    <div class="progress" aria-label="ゲーム進行"><span></span></div>
-  </header>
+<header>
+  <div class="headrow"><div><div class="brand">子どものMIKATA｜理科体験ゲーム</div><div id="stageLabel" class="stage">☀️ 反射鏡 1 / 3</div></div><button id="mute" class="mute">🔊 音あり</button></div>
+  <div class="progress"><span id="progress"></span></div>
+</header>
 
-  <main id="titleScreen" class="screen title active">
-    <div class="badge">触ってわかる 顕微鏡</div>
-    <h1>顕微鏡<br><em>ピント名人</em></h1>
-    <p class="subtitle">ねじを回して、見えなかった世界を発見しよう。</p>
-    <div class="hero" aria-hidden="true">
-      <svg viewBox="0 0 260 260">
-        <ellipse cx="131" cy="234" rx="92" ry="15" fill="#0b54702b"/>
-        <rect x="96" y="206" width="105" height="18" rx="9" fill="#315762"/>
-        <path d="M96 210 C70 190,73 150,92 121" fill="none" stroke="#355a63" stroke-width="18" stroke-linecap="round"/>
-        <g transform="rotate(25 125 90)">
-          <rect x="105" y="40" width="42" height="88" rx="14" fill="#eef3f0" stroke="#355a63" stroke-width="7"/>
-          <rect x="112" y="24" width="28" height="28" rx="8" fill="#263f48"/>
-          <rect x="113" y="116" width="26" height="33" rx="6" fill="#203e49"/>
-        </g>
-        <rect x="74" y="145" width="110" height="13" rx="5" fill="#324f58"/>
-        <rect x="85" y="157" width="88" height="5" rx="2" fill="#fff8cf"/>
-        <circle cx="89" cy="129" r="22" fill="#a8b7bb" stroke="#31515c" stroke-width="6"/>
-        <circle cx="89" cy="129" r="8" fill="#5b7077"/>
-        <circle cx="118" cy="136" r="12" fill="#c4cfd2" stroke="#31515c" stroke-width="5"/>
-        <circle cx="118" cy="136" r="4" fill="#5b7077"/>
-        <path d="M129 175 L100 208 H166 Z" fill="#e8efec" stroke="#355a63" stroke-width="7"/>
-        <circle cx="131" cy="178" r="12" fill="#ffd95a" opacity=".8"/>
-      </svg>
-    </div>
-    <button id="startBtn" class="startbtn">ピント合わせを始める</button>
-    <small>学習用シミュレーションです。実際の顕微鏡では、学校や先生の指示に従って安全に操作してください。</small>
-  </main>
-
-  <main id="gameScreen" class="screen game">
-    <section class="task">
-      <strong>MISSION 01</strong>
-      <h2>ぼやけた像を、くっきり見えるようにしよう</h2>
-      <p>粗動ねじで大きく近づけ、微動ねじで最後のピントを合わせよう。</p>
-    </section>
-
-    <section class="lab" aria-label="顕微鏡の操作画面">
-      <div class="scopewrap">
-        <div class="scope" id="scope">
-          <svg viewBox="0 0 240 330" aria-hidden="true">
-            <ellipse cx="124" cy="308" rx="90" ry="14" fill="#0b547029"/>
-            <rect x="91" y="281" width="118" height="18" rx="9" fill="#315762"/>
-            <path d="M92 287 C51 255,54 189,80 146" fill="none" stroke="#355a63" stroke-width="18" stroke-linecap="round"/>
-            <g transform="rotate(25 126 95)">
-              <rect x="106" y="40" width="45" height="103" rx="14" fill="#eef3f0" stroke="#355a63" stroke-width="7"/>
-              <rect x="113" y="23" width="30" height="29" rx="8" fill="#263f48"/>
-              <rect x="113" y="132" width="28" height="36" rx="6" fill="#203e49"/>
-            </g>
-            <g class="stageMove" id="stageGraphic">
-              <rect x="61" y="181" width="128" height="14" rx="5" fill="#324f58"/>
-              <rect x="72" y="195" width="105" height="5" rx="2" fill="#fff8cf"/>
-              <rect x="94" y="202" width="61" height="5" rx="2" fill="#b4d7da"/>
-            </g>
-            <g class="coarseVisual" id="coarseGraphic">
-              <circle cx="75" cy="157" r="24" fill="#a8b7bb" stroke="#31515c" stroke-width="6"/>
-              <path d="M75 137 V149" stroke="#ffd95a" stroke-width="5" stroke-linecap="round"/>
-              <circle cx="75" cy="157" r="8" fill="#5b7077"/>
-            </g>
-            <g class="fineVisual" id="fineGraphic">
-              <circle cx="107" cy="165" r="13" fill="#c4cfd2" stroke="#31515c" stroke-width="5"/>
-              <path d="M107 155 V161" stroke="#ffd95a" stroke-width="3" stroke-linecap="round"/>
-              <circle cx="107" cy="165" r="4" fill="#5b7077"/>
-            </g>
-            <path d="M127 220 L95 281 H169 Z" fill="#e8efec" stroke="#355a63" stroke-width="7"/>
-            <circle cx="126" cy="222" r="12" fill="#ffd95a" opacity=".8"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="viewport" aria-label="顕微鏡の視野">
-        <div id="specimen" class="specimen"></div>
-        <div class="crosshair"></div>
-        <div class="viewlabel">タマネギ表皮の学習用イメージ</div>
-      </div>
-    </section>
-
-    <div id="message" class="message hot" aria-live="polite">
-      <span class="dot"></span><span>かなりぼやけているよ。まずは粗動ねじで近づけよう。</span>
-    </div>
-
-    <section class="controls">
-      <p class="controlTitle">ねじを左右にドラッグ、または − / ＋ で回せるよ</p>
-      <div class="knobgrid">
-        <div class="knobcard">
-          <div class="knobname">大きく動かす｜粗動ねじ</div>
-          <div class="knobrow">
-            <button class="adjust" data-kind="coarse" data-dir="-1" aria-label="粗動ねじを戻す">−</button>
-            <div id="coarseKnob" class="knob" role="slider" tabindex="0" aria-label="粗動ねじ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="18"></div>
-            <button class="adjust" data-kind="coarse" data-dir="1" aria-label="粗動ねじを進める">＋</button>
-          </div>
-          <div class="knobhint">まずはこちらで近づける</div>
-        </div>
-        <div class="knobcard">
-          <div class="knobname">細かく合わせる｜微動ねじ</div>
-          <div class="knobrow">
-            <button class="adjust" data-kind="fine" data-dir="-1" aria-label="微動ねじを戻す">−</button>
-            <div id="fineKnob" class="knob" role="slider" tabindex="0" aria-label="微動ねじ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="18"></div>
-            <button class="adjust" data-kind="fine" data-dir="1" aria-label="微動ねじを進める">＋</button>
-          </div>
-          <div class="knobhint">仕上げはこちらで微調整</div>
-        </div>
-      </div>
-      <div class="meter" aria-hidden="true"><span id="meterFill"></span></div>
-    </section>
-  </main>
-
-  <div id="successOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle">
-    <div class="card">
-      <div class="spark">✨</div>
-      <h2 id="successTitle">発見！</h2>
-      <p>ピントが合って、細胞の形がくっきり見えた。<br>粗動ねじで大きく近づけ、微動ねじで仕上げるのがコツだよ。</p>
-      <button id="retryBtn" class="primary">もう一度ピントを合わせる</button>
-    </div>
+<main id="title" class="screen title active">
+  <div class="badge">失敗して覚える 顕微鏡</div>
+  <h1>顕微鏡<br><em>操作名人</em></h1>
+  <p class="subtitle">暗い？ 見えない？ ぶつかりそう？ 自分で調節して発見しよう。</p>
+  <div class="hero" aria-hidden="true">
+    <svg viewBox="0 0 260 240"><ellipse cx="132" cy="220" rx="92" ry="14" fill="#0b54702b"/><rect x="94" y="195" width="110" height="18" rx="9" fill="#315762"/><path d="M94 201 C67 180,69 139,91 112" fill="none" stroke="#355a63" stroke-width="18" stroke-linecap="round"/><g transform="rotate(25 127 80)"><rect x="107" y="31" width="43" height="88" rx="14" fill="#eef3f0" stroke="#355a63" stroke-width="7"/><rect x="114" y="17" width="29" height="27" rx="8" fill="#263f48"/></g><rect x="72" y="137" width="114" height="13" rx="5" fill="#324f58"/><circle cx="88" cy="121" r="22" fill="#a8b7bb" stroke="#31515c" stroke-width="6"/><path d="M129 162 L99 198 H167 Z" fill="#e8efec" stroke="#355a63" stroke-width="7"/><ellipse cx="128" cy="174" rx="22" ry="9" fill="#bcd3d8" stroke="#355a63" stroke-width="5"/></svg>
   </div>
+  <button id="start" class="start">操作を始める</button>
+  <small>正しい操作だけでなく、うまくいかない状態も体験する学習用シミュレーションです。</small>
+</main>
+
+<main id="game" class="screen game">
+  <section class="task"><b id="mission">MISSION 01</b><h2 id="taskTitle"></h2><p id="taskText"></p></section>
+  <section class="lab">
+    <div class="scope"><svg viewBox="0 0 240 320" aria-hidden="true">
+      <ellipse cx="124" cy="302" rx="88" ry="13" fill="#0b547029"/><rect x="91" y="276" width="118" height="18" rx="9" fill="#315762"/><path d="M92 282 C51 252,54 187,80 143" fill="none" stroke="#355a63" stroke-width="18" stroke-linecap="round"/>
+      <g transform="rotate(25 126 91)"><rect x="106" y="38" width="45" height="101" rx="14" fill="#eef3f0" stroke="#355a63" stroke-width="7"/><rect x="113" y="21" width="30" height="29" rx="8" fill="#263f48"/></g>
+      <g class="revolver" id="revolverGraphic"><path d="M108 119 Q135 105 163 121 L158 137 Q135 128 113 137 Z" fill="#364f59" stroke="#203d47" stroke-width="4"/><rect x="118" y="132" width="12" height="36" rx="4" fill="#263f48"/><rect x="141" y="129" width="12" height="43" rx="4" fill="#263f48"/></g>
+      <g class="stageMove" id="stageGraphic"><rect x="59" y="181" width="131" height="14" rx="5" fill="#324f58"/><rect x="72" y="195" width="105" height="5" rx="2" fill="#fff8cf"/></g>
+      <g class="coarse"><circle cx="73" cy="159" r="24" fill="#a8b7bb" stroke="#31515c" stroke-width="6"/><path d="M73 139 V151" stroke="#ffd95a" stroke-width="5" stroke-linecap="round"/><circle cx="73" cy="159" r="8" fill="#5b7077"/></g>
+      <g class="fine"><circle cx="106" cy="167" r="13" fill="#c4cfd2" stroke="#31515c" stroke-width="5"/><path d="M106 157 V163" stroke="#ffd95a" stroke-width="3" stroke-linecap="round"/></g>
+      <path d="M127 216 L96 276 H169 Z" fill="#e8efec" stroke="#355a63" stroke-width="7"/>
+      <g class="mirrorArm" id="mirrorGraphic"><path d="M127 236 V255" stroke="#355a63" stroke-width="7"/><ellipse cx="127" cy="263" rx="25" ry="10" fill="#c4d7dc" stroke="#355a63" stroke-width="5"/><path d="M108 261 Q127 249 147 261" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/></g>
+    </svg></div>
+    <div class="viewport"><div id="view" class="view"></div><div id="shade" class="shade"></div><div id="viewLabel" class="viewlabel">視野</div></div>
+  </section>
+  <div id="message" class="message warn"><span class="dot"></span><span></span></div>
+  <section class="controls"><p id="ctitle" class="ctitle"></p><div id="controlArea"></div></section>
+</main>
+
+<div id="stageClear" class="overlay"><div class="card"><div class="emoji" id="clearEmoji">✨</div><h2 id="clearTitle">できた！</h2><p id="clearText"></p><button id="next" class="next">次の操作へ</button></div></div>
+<div id="finish" class="overlay"><div class="card"><div class="emoji">🔬✨</div><h2>顕微鏡名人！</h2><p>反射鏡・レボルバー・ピント調節を、自分で試しながら使えたね。失敗したときに「何が見え方を変えたか」を思い出そう。</p><button id="retry" class="retry">最初からもう一度</button></div></div>
 </div>
-
 <script>
-(() => {
-  const TARGET = 62;
-  let focus = 18;
-  let coarseRot = 0;
-  let fineRot = 0;
-  let muted = false;
-  let audioCtx = null;
-  let successTimer = null;
-  let solved = false;
-
-  const $ = s => document.querySelector(s);
-  const titleScreen = $('#titleScreen');
-  const gameScreen = $('#gameScreen');
-  const specimen = $('#specimen');
-  const message = $('#message');
-  const meterFill = $('#meterFill');
-  const coarseKnob = $('#coarseKnob');
-  const fineKnob = $('#fineKnob');
-  const successOverlay = $('#successOverlay');
-  const scope = $('#scope');
-
-  function ensureAudio(){
-    if(muted) return null;
-    if(!audioCtx){
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if(Ctx) audioCtx = new Ctx();
-    }
-    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    return audioCtx;
-  }
-
-  function tone(freq=440,dur=.07,type='sine',gain=.035,delay=0){
-    const ctx = ensureAudio(); if(!ctx) return;
-    const t = ctx.currentTime + delay;
-    const o = ctx.createOscillator(), g = ctx.createGain();
-    o.type = type; o.frequency.setValueAtTime(freq,t);
-    g.gain.setValueAtTime(0.0001,t);
-    g.gain.exponentialRampToValueAtTime(gain,t+.01);
-    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-    o.connect(g).connect(ctx.destination); o.start(t); o.stop(t+dur+.03);
-  }
-
-  function clickSound(kind){
-    if(kind === 'fine') tone(510,.045,'triangle',.026);
-    else tone(280,.055,'triangle',.03);
-  }
-  function successSound(){
-    tone(523,.16,'sine',.04,0);
-    tone(659,.18,'sine',.04,.12);
-    tone(784,.25,'sine',.045,.25);
-  }
-
-  function setMessage(html, cls=''){
-    message.className = 'message' + (cls ? ' '+cls : '');
-    message.innerHTML = '<span class="dot"></span><span>'+html+'</span>';
-  }
-
-  function update(){
-    const dist = Math.abs(focus - TARGET);
-    const blur = Math.min(11.5, Math.max(0, dist * .19));
-    const detail = Math.max(.12, 1 - dist / 22);
-    specimen.style.setProperty('--blur', blur.toFixed(2)+'px');
-    specimen.style.setProperty('--detail', detail.toFixed(2));
-    specimen.style.transform = 'scale(' + (1.12 + Math.min(dist,40)*.0015).toFixed(3) + ')';
-
-    const closeness = Math.max(0, 100 - dist * 2.1);
-    meterFill.style.setProperty('width', closeness.toFixed(0)+'%');
-
-    const stageY = (focus - 18) * -0.20;
-    scope.style.setProperty('--stage-y', stageY.toFixed(1)+'px');
-    scope.style.setProperty('--coarse-rot', coarseRot+'deg');
-    scope.style.setProperty('--fine-rot', fineRot+'deg');
-    coarseKnob.style.setProperty('--rot', coarseRot+'deg');
-    fineKnob.style.setProperty('--rot', fineRot+'deg');
-    coarseKnob.setAttribute('aria-valuenow', Math.round(focus));
-    fineKnob.setAttribute('aria-valuenow', Math.round(focus));
-
-    if(dist <= 1){
-      setMessage('くっきり見えた！ その位置だよ。','good');
-      if(!solved && !successTimer){
-        successTimer = setTimeout(() => {
-          solved = true; successTimer = null; successSound();
-          successOverlay.classList.add('show');
-          $('#retryBtn').focus();
-        }, 520);
-      }
-    } else {
-      if(successTimer){ clearTimeout(successTimer); successTimer = null; }
-      if(dist <= 5) setMessage('かなり近い！ 微動ねじで、いちばん鮮明な位置を探そう。','good');
-      else if(dist <= 13) setMessage('輪郭が見えてきた。ここからは微動ねじが使いやすいよ。','');
-      else if(focus > TARGET) setMessage('通り過ぎて、またぼやけてきた。少し戻してみよう。','hot');
-      else setMessage('まだぼやけている。粗動ねじで大きく近づけよう。','hot');
-    }
-  }
-
-  function adjust(kind, dir, multiplier=1){
-    if(solved) return;
-    const step = kind === 'coarse' ? 6 : 1;
-    focus = Math.max(0, Math.min(100, focus + dir * step * multiplier));
-    if(kind === 'coarse') coarseRot += dir * 28 * multiplier;
-    else fineRot += dir * 18 * multiplier;
-    clickSound(kind);
-    update();
-  }
-
-  function bindKnob(el, kind){
-    let active=false,lastX=0,acc=0;
-    el.addEventListener('pointerdown', e => {
-      active=true;lastX=e.clientX;acc=0;el.setPointerCapture(e.pointerId);ensureAudio();
-    });
-    el.addEventListener('pointermove', e => {
-      if(!active) return;
-      const dx=e.clientX-lastX;lastX=e.clientX;acc+=dx;
-      const threshold = kind==='coarse' ? 15 : 10;
-      while(Math.abs(acc)>=threshold){
-        const dir=acc>0?1:-1;adjust(kind,dir);
-        acc-=dir*threshold;
-      }
-    });
-    const end=()=>{active=false;acc=0};
-    el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
-    el.addEventListener('keydown', e => {
-      if(e.key==='ArrowRight'||e.key==='ArrowUp'){e.preventDefault();adjust(kind,1)}
-      if(e.key==='ArrowLeft'||e.key==='ArrowDown'){e.preventDefault();adjust(kind,-1)}
-    });
-  }
-
-  document.querySelectorAll('.adjust').forEach(btn => {
-    btn.addEventListener('click', () => adjust(btn.dataset.kind, Number(btn.dataset.dir)));
-  });
-  bindKnob(coarseKnob,'coarse'); bindKnob(fineKnob,'fine');
-
-  $('#startBtn').addEventListener('click', () => {
-    ensureAudio(); tone(390,.08,'triangle',.03);
-    titleScreen.classList.remove('active');
-    gameScreen.classList.add('active');
-    reset();
-  });
-
-  $('#muteBtn').addEventListener('click', e => {
-    muted=!muted;
-    e.currentTarget.setAttribute('aria-pressed', muted ? 'true':'false');
-    e.currentTarget.textContent = muted ? '🔇 音なし':'🔊 音あり';
-    if(!muted) tone(520,.06,'triangle',.03);
-  });
-
-  $('#retryBtn').addEventListener('click', () => {
-    successOverlay.classList.remove('show');
-    reset();
-    coarseKnob.focus();
-  });
-
-  function reset(){
-    focus=18;coarseRot=0;fineRot=0;solved=false;
-    if(successTimer){clearTimeout(successTimer);successTimer=null}
-    update();
-  }
-
-  update();
+(()=>{
+const TARGET=62; let stage=0,mirror=25,objective=40,focus=20,coarseRot=0,fineRot=0,muted=false,audio=null,cleared=false;
+const $=s=>document.querySelector(s), game=$('#game'), title=$('#title'), view=$('#view'), shade=$('#shade'), msg=$('#message'), control=$('#controlArea');
+const stages=[
+ {label:'☀️ 反射鏡 1 / 3',title:'反射鏡を動かして、視野全体を明るくしよう',text:'暗すぎても、光が片寄っても見にくい。ちょうどよい向きを探そう。',mission:'MISSION 01'},
+ {label:'🔄 レボルバー 2 / 3',title:'観察を始める対物レンズを選ぼう',text:'高倍率から始めると、視野がせまく暗くなって観察物を探しにくい。',mission:'MISSION 02'},
+ {label:'🎯 ピント 3 / 3',title:'ねじを回して、像をくっきりさせよう',text:'近づけすぎ・通り過ぎも失敗。粗動ねじと微動ねじを使い分けよう。',mission:'MISSION 03'}
+];
+function ensureAudio(){if(muted)return null;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}if(audio&&audio.state==='suspended')audio.resume();return audio}
+function tone(f=420,d=.06,g=.025){const c=ensureAudio();if(!c)return;const o=c.createOscillator(),a=c.createGain(),t=c.currentTime;o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(c.destination);o.start();o.stop(t+d+.03)}
+function setMsg(text,cls=''){msg.className='message '+cls;msg.querySelector('span:last-child').textContent=text}
+function renderStage(){
+ cleared=false; $('#stageLabel').textContent=stages[stage].label;$('#taskTitle').textContent=stages[stage].title;$('#taskText').textContent=stages[stage].text;$('#mission').textContent=stages[stage].mission;$('#progress').style.width=((stage+1)/3*100)+'%';
+ if(stage===0){$('#ctitle').textContent='反射鏡の向きを調節';control.innerHTML='<div class="controlbox"><input id="mirrorSlider" class="slider" type="range" min="0" max="100" value="'+mirror+'"><div class="scale"><span>暗い</span><span>均一で明るい</span><span>光が片寄る</span></div></div>';$('#mirrorSlider').addEventListener('input',e=>{mirror=+e.target.value;tone(270,.035,.018);updateMirror()});updateMirror()}
+ if(stage===1){$('#ctitle').textContent='レボルバーを回して対物レンズを切り替える';control.innerHTML='<div class="actions"><button class="action" data-obj="10">低倍率<br>10×</button><button class="action" data-obj="40">高倍率<br>40×</button><button class="action" data-obj="100">さらに高倍率<br>100×</button></div>';control.querySelectorAll('.action').forEach(b=>b.addEventListener('click',()=>{objective=+b.dataset.obj;tone(340,.055,.025);updateObjective()}));updateObjective()}
+ if(stage===2){$('#ctitle').textContent='粗動ねじで大きく、微動ねじで細かく調節';control.innerHTML='<div class="knobs"><div class="knobbox"><div class="kname">粗動ねじ</div><div class="knobrow"><button class="adj" data-k="c" data-d="-1">−</button><div class="knob" id="coarseKnob"></div><button class="adj" data-k="c" data-d="1">＋</button></div></div><div class="knobbox"><div class="kname">微動ねじ</div><div class="knobrow"><button class="adj" data-k="f" data-d="-1">−</button><div class="knob" id="fineKnob"></div><button class="adj" data-k="f" data-d="1">＋</button></div></div></div>';control.querySelectorAll('.adj').forEach(b=>b.addEventListener('click',()=>adjustFocus(b.dataset.k,+b.dataset.d)));updateFocus()}
+}
+function maybeClear(titleText,body,emoji='✨'){if(cleared)return;cleared=true;setTimeout(()=>{tone(650,.08,.035);setTimeout(()=>tone(820,.12,.035),90);$('#clearEmoji').textContent=emoji;$('#clearTitle').textContent=titleText;$('#clearText').textContent=body;$('#stageClear').classList.add('show')},350)}
+function updateMirror(){
+ const dist=Math.abs(mirror-62);const bright=Math.max(.18,1.5-dist*.018);const edge=Math.min(.78,.12+dist*.013);view.style.setProperty('--brightness',bright.toFixed(2));view.style.setProperty('--blur','3px');shade.style.setProperty('--edge',edge.toFixed(2));shade.style.setProperty('--lightx',(35+mirror*.3)+'%');shade.style.setProperty('--lighty',(42+Math.abs(mirror-62)*.18)+'%');$('#mirrorGraphic').style.setProperty('--mirror-rot',((mirror-50)*.75)+'deg');$('#viewLabel').textContent='視野の明るさ';
+ if(dist<=5){setMsg('視野全体が均一に明るい！ この向きだ。','good');maybeClear('光を整えた！','反射鏡は「明るければ何でもよい」ではなく、視野全体が均一に見える位置へ調節しよう。','☀️')}
+ else if(mirror<30)setMsg('暗くてよく見えない。反射鏡の向きを変えてみよう。','bad');
+ else if(mirror>82)setMsg('光が片寄って、まぶしく見える。少し戻してみよう。','warn');
+ else setMsg('少し明るくなった。でもまだ視野にむらがある。','warn')
+}
+function updateObjective(){
+ document.querySelectorAll('.action').forEach(b=>b.classList.toggle('active',+b.dataset.obj===objective));const rot=objective===10?0:objective===40?120:240;$('#revolverGraphic').style.setProperty('--rev-rot',rot+'deg');
+ shade.style.setProperty('--lightx','50%');shade.style.setProperty('--lighty','50%');view.style.setProperty('--blur','4px');
+ if(objective===10){view.style.setProperty('--brightness','1.05');shade.style.setProperty('--edge','.18');view.style.transform='scale(1)';$('#viewLabel').textContent='低倍率：広い視野';setMsg('広く明るく見える。観察物を探しやすい！','good');maybeClear('低倍率から開始！','最初は低倍率で広い範囲を見て、観察したいものを見つけやすくする。','🔄')}
+ else if(objective===40){view.style.setProperty('--brightness','.62');shade.style.setProperty('--edge','.48');view.style.transform='scale(1.45)';$('#viewLabel').textContent='高倍率：狭く暗い';setMsg('高倍率からだと視野が狭く暗い。観察物を見失いやすい。','bad')}
+ else{view.style.setProperty('--brightness','.38');shade.style.setProperty('--edge','.66');view.style.transform='scale(2)';$('#viewLabel').textContent='さらに狭く暗い';setMsg('さらに高倍率。最初の観察には向かないよ。','bad')}
+}
+function adjustFocus(kind,dir){
+ const step=kind==='c'?7:1;focus=Math.max(0,Math.min(100,focus+dir*step));if(kind==='c')coarseRot+=dir*28;else fineRot+=dir*18;tone(kind==='c'?285:500,.04,.02);updateFocus()
+}
+function updateFocus(){
+ const dist=Math.abs(focus-TARGET);const blur=Math.min(12,dist*.2);view.style.transform='scale(1)';view.style.setProperty('--brightness','1.05');view.style.setProperty('--blur',blur+'px');shade.style.setProperty('--edge','.18');shade.style.setProperty('--lightx','50%');shade.style.setProperty('--lighty','50%');$('#viewLabel').textContent='ピント';
+ $('#stageGraphic').style.setProperty('--stage-y',((focus-20)*-.18)+'px');document.querySelector('.coarse').style.setProperty('--coarse-rot',coarseRot+'deg');document.querySelector('.fine').style.setProperty('--fine-rot',fineRot+'deg');const ck=$('#coarseKnob'),fk=$('#fineKnob');if(ck)ck.style.setProperty('--rot',coarseRot+'deg');if(fk)fk.style.setProperty('--rot',fineRot+'deg');
+ if(focus>=90){setMsg('近づけすぎ！ 対物レンズがプレパラートにぶつかりそう。戻そう。','bad')}
+ else if(dist<=1){setMsg('くっきり見えた！ ここがピント位置。','good');maybeClear('発見！','粗動ねじで大きく近づき、微動ねじで最後を合わせると像が鮮明になる。','✨')}
+ else if(dist<=6)setMsg('かなり近い。微動ねじで少しずつ合わせよう。','good')
+ else if(focus>TARGET)setMsg('通り過ぎて、またぼやけた。少し戻そう。','warn')
+ else if(dist<18)setMsg('輪郭が見えてきた。ここから微動ねじが使いやすい。','warn')
+ else setMsg('まだぼやけている。粗動ねじで大きく動かしてみよう。','warn')
+}
+$('#start').addEventListener('click',()=>{ensureAudio();title.classList.remove('active');game.classList.add('active');stage=0;renderStage()});
+$('#mute').addEventListener('click',e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇 音なし':'🔊 音あり';if(!muted)tone(520)});
+$('#next').addEventListener('click',()=>{$('#stageClear').classList.remove('show');if(stage<2){stage++;renderStage()}else $('#finish').classList.add('show')});
+$('#retry').addEventListener('click',()=>{$('#finish').classList.remove('show');mirror=25;objective=40;focus=20;coarseRot=0;fineRot=0;stage=0;renderStage()});
 })();
 </script>
 </body>
