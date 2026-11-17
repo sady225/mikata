@@ -75,6 +75,9 @@ header{position:absolute;z-index:5;top:7px;left:0;right:0;height:122px;backgroun
 
 
 /* Stage 1: step-linked equipment motion */
+@keyframes flameLight{0%{opacity:0;transform:scale(.3,.08)}45%{opacity:1;transform:scale(.65,.6)}100%{opacity:1;transform:scale(1)}}
+.ignite-rise{transform-origin:160px 85px;animation:flameLight .65s cubic-bezier(.2,.85,.3,1.1) both}
+
 @keyframes matchApproach{from{transform:translate(115px,48px);opacity:0}to{transform:translate(0,0);opacity:1}}
 @keyframes knobTurn{from{transform:rotate(0deg)}to{transform:rotate(80deg)}}
 @keyframes cockTurn{from{transform:rotate(0deg)}to{transform:rotate(75deg)}}
@@ -98,16 +101,38 @@ header{position:absolute;z-index:5;top:7px;left:0;right:0;height:122px;backgroun
 </div>
 <script>
 (()=>{'use strict';
-const $=q=>document.querySelector(q);let stage=-1,step=0,score=0,time=45,timer=null,locked=false,sound=true,actx=null,errors=[],stageDone=[false,false,false],air=0,lit=false,gas=false,cock=false,match=false,slides=0,ignitionVisual='start';
+const $=q=>document.querySelector(q);let stage=-1,step=0,score=0,time=45,timer=null,locked=false,sound=true,actx=null,errors=[],stageDone=[false,false,false],air=0,lit=false,gas=false,cock=false,match=false,slides=0,ignitionVisual='start',ignitionBusy=false;
 const STAGES=[{title:'点火しよう！',desc:'安全な手順を選んで、炎をつけよう。',why:'調節ねじが閉じていることを確認し、火のついたマッチを先に近づけてから、ガスを少しずつ出す。'},{title:'青い炎をつくろう！',desc:'空気調節ねじを動かして、適切な炎に。',why:'空気を取り込む量を増やすと、燃焼がより完全になり、青い炎になる。空気の入れすぎにも注意。'},{title:'安全に消火しよう！',desc:'閉める順番を守って、実験を終了。',why:'空気調節ねじ、ガス調節ねじ、ガスの元栓・コックを安全な順で閉める。学校の器具や先生の指示を優先する。'}];
 function storageGet(){try{return +(localStorage.getItem('burner-v2-best')||0)}catch(e){return 0}}function storageSet(v){try{localStorage.setItem('burner-v2-best',String(v))}catch(e){}}
 function wakeSound(){if(!actx)try{actx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}if(actx?.state==='suspended')actx.resume().catch(()=>{})}
 function beep(good=true){if(!sound)return;wakeSound();if(!actx)return;try{let o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime;o.type='sine';o.frequency.setValueAtTime(good?570:220,t);o.frequency.exponentialRampToValueAtTime(good?800:170,t+.1);g.gain.setValueAtTime(.045,t);g.gain.exponentialRampToValueAtTime(.0001,t+.15);o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+.17)}catch(e){}}
-function svg(airVal=0,on=false){let blue=airVal>=48, color=blue?'#33aaff':'#ffbc42',inner=blue?'#8ce9ff':'#fff0a0',h=on?(blue?100:136):0;return `<svg class="labsvg" viewBox="0 0 320 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ガスバーナーの模式図"><ellipse cx="160" cy="284" rx="116" ry="15" fill="#08536b" opacity=".23"/><path d="M50 266h220l-27 20H77z" fill="#325f77" stroke="#19475e" stroke-width="5"/><path d="M134 262h52v-163h-52z" fill="#dfeff4" stroke="#225e80" stroke-width="5"/><rect x="129" y="175" width="62" height="45" rx="8" fill="#79abb9" stroke="#22637e" stroke-width="5"/><path d="M129 181h62m-62 25h62" stroke="#306b82" stroke-width="4"/><path d="M139 95h42v-12h-42z" fill="#255773"/><path d="M160 261v-46" stroke="#4e8799" stroke-width="7"/><path d="M191 234h44q10 0 10 10v9" fill="none" stroke="#f7cb55" stroke-width="10"/><path d="M245 252q25 0 44 18" stroke="#f5cd59" stroke-width="10" fill="none"/><rect x="111" y="229" width="94" height="20" rx="10" fill="#b3e3e8" stroke="#28627a" stroke-width="4"/><circle cx="208" cy="239" r="14" fill="#f7d96b" stroke="#145579" stroke-width="4"/><circle cx="108" cy="193" r="13" fill="#f7d96b" stroke="#145579" stroke-width="4"/><path d="M108 184v9m100 38v10" stroke="#1a6c88" stroke-width="4" stroke-linecap="round"/>${h?`<g class="flameY" style="transform-origin:160px 91px"><path d="M160 ${94-h}Q${119+(blue?12:0)} ${54-h/3} 139 95 Q151 118 160 115 Q181 113 182 88 Q207 58 160 ${94-h}Z" fill="${color}"/><path d="M160 ${116-h*.6}Q146 80 148 100Q153 115 160 115Q173 115 173 102Q175 87 160 ${116-h*.6}Z" fill="${inner}" opacity=".92"/></g>`:''}<g fill="#fff" stroke="#0b658a" stroke-width="3"><circle cx="66" cy="242" r="25"/><circle cx="262" cy="242" r="25"/></g><g fill="#08536b" font-size="10" text-anchor="middle" font-weight="bold"><text x="66" y="238">空気</text><text x="66" y="251">ねじ</text><text x="262" y="238">ガス</text><text x="262" y="251">ねじ</text></g>${stage===0?ignitionArt():''}</svg>`}
+function ignitionSound(){
+ if(!sound)return;
+ wakeSound();if(!actx)return;
+ try{
+  const t=actx.currentTime,osc=actx.createOscillator(),gain=actx.createGain();
+  osc.type='triangle';osc.frequency.setValueAtTime(165,t);
+  osc.frequency.exponentialRampToValueAtTime(72,t+.42);
+  gain.gain.setValueAtTime(.0001,t);
+  gain.gain.exponentialRampToValueAtTime(.055,t+.07);
+  gain.gain.exponentialRampToValueAtTime(.0001,t+.48);
+  osc.connect(gain);gain.connect(actx.destination);osc.start(t);osc.stop(t+.5);
+  const len=Math.floor(actx.sampleRate*.65),buffer=actx.createBuffer(1,len,actx.sampleRate),data=buffer.getChannelData(0);
+  for(let i=0;i<len;i++)data[i]=Math.random()*2-1;
+  const noise=actx.createBufferSource(),filter=actx.createBiquadFilter(),ng=actx.createGain();
+  noise.buffer=buffer;filter.type='lowpass';filter.frequency.value=650;
+  ng.gain.setValueAtTime(.0001,t);
+  ng.gain.exponentialRampToValueAtTime(.12,t+.09);
+  ng.gain.exponentialRampToValueAtTime(.0001,t+.6);
+  noise.connect(filter);filter.connect(ng);ng.connect(actx.destination);
+  noise.start(t);noise.stop(t+.65);
+ }catch(e){}
+}
+function svg(airVal=0,on=false){let blue=airVal>=48, color=blue?'#33aaff':'#ffbc42',inner=blue?'#8ce9ff':'#fff0a0',h=on?(blue?100:136):0;return `<svg class="labsvg" viewBox="0 0 320 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ガスバーナーの模式図"><ellipse cx="160" cy="284" rx="116" ry="15" fill="#08536b" opacity=".23"/><path d="M50 266h220l-27 20H77z" fill="#325f77" stroke="#19475e" stroke-width="5"/><path d="M134 262h52v-163h-52z" fill="#dfeff4" stroke="#225e80" stroke-width="5"/><rect x="129" y="175" width="62" height="45" rx="8" fill="#79abb9" stroke="#22637e" stroke-width="5"/><path d="M129 181h62m-62 25h62" stroke="#306b82" stroke-width="4"/><path d="M139 95h42v-12h-42z" fill="#255773"/><path d="M160 261v-46" stroke="#4e8799" stroke-width="7"/><path d="M191 234h44q10 0 10 10v9" fill="none" stroke="#f7cb55" stroke-width="10"/><path d="M245 252q25 0 44 18" stroke="#f5cd59" stroke-width="10" fill="none"/><rect x="111" y="229" width="94" height="20" rx="10" fill="#b3e3e8" stroke="#28627a" stroke-width="4"/><circle cx="208" cy="239" r="14" fill="#f7d96b" stroke="#145579" stroke-width="4"/><circle cx="108" cy="193" r="13" fill="#f7d96b" stroke="#145579" stroke-width="4"/><path d="M108 184v9m100 38v10" stroke="#1a6c88" stroke-width="4" stroke-linecap="round"/>${h?`<g class="ignite-rise"><g class="flameY" style="transform-origin:160px 85px"><path d="M160 86 C134 83 126 65 146 35 C145 57 158 57 160 13 C192 42 200 68 160 86 Z" fill="${color}"/><path d="M160 86 C147 82 146 70 155 52 C155 68 164 67 165 40 C179 63 181 78 160 86 Z" fill="${inner}" opacity=".95"/></g></g>`:'' }<g fill="#fff" stroke="#0b658a" stroke-width="3"><circle cx="66" cy="242" r="25"/><circle cx="262" cy="242" r="25"/></g><g fill="#08536b" font-size="10" text-anchor="middle" font-weight="bold"><text x="66" y="238">空気</text><text x="66" y="251">ねじ</text><text x="262" y="238">ガス</text><text x="262" y="251">ねじ</text></g>${stage===0?ignitionArt():''}</svg>`}
 function ignitionArt(){const state=ignitionVisual;return `<g aria-hidden="true">${state==='check'?'<g class="check-pop" fill="none" stroke="#ffe66d" stroke-width="5"><circle cx="108" cy="193" r="21"/><circle cx="208" cy="239" r="22"/></g><g fill="#167d66" font-size="25" font-weight="900"><text x="86" y="163">✓</text><text x="222" y="220">✓</text></g>':''}
 <g transform="translate(260 266)"><circle r="10" fill="#fff" stroke="#124963" stroke-width="4"/><g class="${state==='cock'||state==='gas'?'cock-turn':''}"><path d="M0 0 L26 -19" stroke="#ffdf65" stroke-width="8" stroke-linecap="round"/></g></g>
 <g class="${state==='gas'?'gas-turn':''}" style="transform-origin:208px 239px"><path d="M208 227 V251 M196 239 H220" stroke="#db552f" stroke-width="3.5" stroke-linecap="round"/></g>
-${state==='match'||state==='cock'?'<g class="match-enter"><path d="M250 120L177 87" stroke="#ab6239" stroke-width="8" stroke-linecap="round"/><path d="M176 85Q166 73 172 67Q183 70 184 83Q180 90 176 85Z" fill="#ffb52d"/><path d="M176 83Q173 77 178 72Q181 78 178 83Z" fill="#fff2a2"/></g>':''}
+${state==='match'||state==='cock'||state==='gas'?'<g class="match-enter"><path d="M250 120L177 87" stroke="#ab6239" stroke-width="8" stroke-linecap="round"/><path d="M176 85Q166 73 172 67Q183 70 184 83Q180 90 176 85Z" fill="#ffb52d"/><path d="M176 83Q173 77 178 72Q181 78 178 83Z" fill="#fff2a2"/></g>':''}
 ${state==='gas'?'<g class="spark-pop" fill="#ffe66d"><circle cx="161" cy="83" r="5"/><path d="M139 73l-12 -8m56 6l12 -9m-35 -13v-13" stroke="#fff9cb" stroke-width="5" stroke-linecap="round"/></g>':''}</g>`}
 
 function show(name){for(const s of ['title','game','end'])$('#'+s).classList.toggle('active',s===name)}function setHud(){ $('#score').textContent=String(score).padStart(4,'0');$('#best').textContent='ベスト '+String(Math.max(storageGet(),score)).padStart(4,'0');$('#pills').innerHTML=['① 点火','② 調節','③ 消火'].map((s,i)=>`<span class="pill ${stageDone[i]?'done':i===stage?'on':''}">${s}</span>`).join('')}
@@ -116,13 +141,34 @@ function say(text,kind=''){const el=$('#message');el.className='message '+kind;e
 function addError(text){errors.push({stage,text});score=Math.max(0,score-10);setHud();beep(false);say('ちがうよ！ '+text,'bad')}
 function correct(text){score+=100+Math.ceil(time/3);beep(true);say(text,'good');setHud()}
 function begin(){wakeSound();score=0;errors=[];stageDone=[false,false,false];stage=0;beginStage()}
-function beginStage(){clearInterval(timer);step=0;time=45;locked=false;show('game');$('#phase').textContent=`ステージ ${stage+1} / 3`;$('#tasktitle').textContent=STAGES[stage].title;$('#taskdesc').textContent=STAGES[stage].desc;air=stage===0?0:stage===1?12:70;lit=stage!==0;gas=stage!==0;cock=stage!==0;match=false;slides=0;ignitionVisual='start';renderControls();draw();setHud();say(stage===0?'まず、安全を確認しよう！':stage===1?'空気調節ねじを動かそう！':'安全な順番で消火しよう！');$('#timer').textContent=time+'秒';timer=setInterval(()=>{if(locked)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。正しい手順を復習しよう。');finishStage(false)}},1000)}
+function beginStage(){clearInterval(timer);step=0;time=45;locked=false;show('game');$('#phase').textContent=`ステージ ${stage+1} / 3`;$('#tasktitle').textContent=STAGES[stage].title;$('#taskdesc').textContent=STAGES[stage].desc;air=stage===0?0:stage===1?12:70;lit=stage!==0;gas=stage!==0;cock=stage!==0;match=false;slides=0;ignitionVisual='start';ignitionBusy=false;renderControls();draw();setHud();say(stage===0?'まず、安全を確認しよう！':stage===1?'空気調節ねじを動かそう！':'安全な順番で消火しよう！');$('#timer').textContent=time+'秒';timer=setInterval(()=>{if(locked||ignitionBusy)return;time--;$('#timer').textContent=time+'秒';if(time<=0){addError('時間切れ。正しい手順を復習しよう。');finishStage(false)}},1000)}
 const ignition=[{id:'check',label:'① ねじを確認',explain:'ガス・空気のねじが閉じているか確認。'},{id:'match',label:'② マッチを点火',explain:'マッチに火をつけ、バーナーの口へ近づける。'},{id:'cock',label:'③ コックを開く',explain:'マッチの火を近づけたまま、コックを開く。'},{id:'gas',label:'④ ガスを少し出す',explain:'ガス調節ねじを少し開き、点火する。'}];
 const extinguish=[{id:'air',label:'① 空気を閉じる',explain:'空気調節ねじを閉じる。'},{id:'gas',label:'② ガスを閉じる',explain:'ガス調節ねじを閉じて炎を消す。'},{id:'cock',label:'③ コックを閉じる',explain:'コックと元栓を閉じる。'}];
 function renderControls(){let box=$('#controls');if(stage===1){box.innerHTML=`<p class="question">空気ねじをドラッグ！ 青い炎の範囲をねらおう。</p><div class="sliderWrap"><div id="dial" class="dial" role="slider" tabindex="0" aria-label="空気調節ねじ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${air}" style="--angle:${air}%"><span>↻</span></div><div class="sliderinfo">空気の量：<span id="airLabel">${air}%</span><div class="gauge" id="gauge" style="--p:${air}%"><span class="pointer"></span></div><small>左：黄色い炎　→　右：青い炎</small></div></div><div class="miniActions"><button class="action" id="judge">この炎で決定！</button><button class="action alt" id="hint">ヒント</button></div>`;let dial=$('#dial');function dialChange(e){const r=dial.getBoundingClientRect();const x=e.clientX-(r.left+r.width/2),y=e.clientY-(r.top+r.height/2);let degrees=(Math.atan2(y,x)*180/Math.PI+450)%360;const value=Math.round(degrees/360*100);adjust(value)}dial.addEventListener('pointerdown',e=>{if(locked)return;dial.setPointerCapture(e.pointerId);dialChange(e);beep(true)});dial.addEventListener('pointermove',e=>{if(locked||!dial.hasPointerCapture(e.pointerId))return;dialChange(e)});dial.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowUp'){adjust(Math.min(100,air+5));e.preventDefault()}if(e.key==='ArrowLeft'||e.key==='ArrowDown'){adjust(Math.max(0,air-5));e.preventDefault()}});$('#judge').addEventListener('pointerup',()=>{if(locked)return;if(air>=60&&air<=85){correct('正解！ 空気の量を調節し、青い炎にできたね。');finishStage(true)}else addError(air<60?'空気が少なく、黄色い炎が残っているよ。':'空気の取り込みが多すぎるよ。少し戻してみよう。')});$('#hint').addEventListener('pointerup',()=>say('炎の色を見て。黄色から青色へ変わる位置を探そう。'));return}
 let list=stage===0?ignition:extinguish;box.innerHTML=`<p class="question">${stage===0?'次にする操作を選ぼう！':'次に閉じるものを選ぼう！'}</p><div class="steptext">進み具合：<span id="steplabel">${step}</span> / ${list.length}</div><div class="choices">${[...list].sort((a,b)=>({check:2,match:4,cock:1,gas:3,air:2}[a.id]||0)-({check:2,match:4,cock:1,gas:3,air:2}[b.id]||0)).map(x=>`<button class="action" data-action="${x.id}">${x.label.replace(/^\S+ /,'')}</button>`).join('')}</div>`;box.querySelectorAll('button').forEach(b=>b.addEventListener('pointerup',()=>choose(b.dataset.action)))}
 function adjust(v){air=v;$('#airLabel').textContent=v+'%';$('#gauge').style.setProperty('--p',v+'%');$('#dial').style.setProperty('--angle',v+'%');$('#dial').setAttribute('aria-valuenow',String(v));draw()}
-function choose(id){if(locked)return;let list=stage===0?ignition:extinguish,need=list[step];if(!need)return;if(id!==need.id){addError(stage===0?'順番が違うよ。'+need.explain:need.explain+' が先だよ。');return}step++;$('#steplabel').textContent=step;beep(true);if(stage===0){ignitionVisual=id;if(id==='match')match=true;if(id==='cock')cock=true;if(id==='gas'){gas=true;lit=true;air=0}}else{if(id==='air')air=0;if(id==='gas'){gas=false;lit=false}if(id==='cock')cock=false}draw();score+=35;setHud();say(need.explain,'good');if(step===list.length){score+=Math.ceil(time/2);setHud();finishStage(true)}}
+function choose(id){if(locked||ignitionBusy)return;let list=stage===0?ignition:extinguish,need=list[step];if(!need)return;if(id!==need.id){addError(stage===0?'順番が違うよ。'+need.explain:need.explain+' が先だよ。');return}step++;$('#steplabel').textContent=step;beep(true);if(stage===0){
+ ignitionVisual=id;
+ if(id==='match')match=true;
+ if(id==='cock')cock=true;
+ if(id==='gas'){
+  ignitionBusy=true;
+  gas=true;lit=false;air=0;
+  score+=35+Math.ceil(time/2);setHud();
+  say('ガス調節ねじを少し回すよ。火のついたマッチに注目！','good');
+  draw();
+  setTimeout(()=>{
+   if(stage!==0||!ignitionBusy)return;
+   lit=true;draw();ignitionSound();
+   $('#flameNote').textContent='🔥 点火成功！ 炎がついたよ';
+   say('シュッ！ ガスに火がついた！ 黄色い炎をよく見てね。','good');
+   setTimeout(()=>{if(stage===0&&ignitionBusy){ignitionBusy=false;finishStage(true)}},2100);
+  },720);
+  return;
+ }
+}else{if(id==='air')air=0;if(id==='gas'){gas=false;lit=false}if(id==='cock')cock=false}
+draw();score+=35;setHud();say(need.explain,'good');
+if(step===list.length){score+=Math.ceil(time/2);setHud();finishStage(true)}}
 function finishStage(success){if(locked)return;locked=true;clearInterval(timer);stageDone[stage]=success;$('#overlayIcon').textContent=success?'✨':'📖';$('#overlayTitle').textContent=success?'ステージクリア！':'ここで復習！';$('#overlayTitle').style.color=success?'#167d66':'#b94737';$('#overlayText').textContent=STAGES[stage].why;$('#continue').textContent=stage===2?'結果を見る ▶':'つぎへ ▶';$('#overlay').classList.add('show');if(success)beep(true)}
 function next(){if(!locked)return;$('#overlay').classList.remove('show');if(stage<2){stage++;beginStage()}else finishGame()}
 function finishGame(){clearInterval(timer);show('end');let best=storageGet();if(score>best){best=score;storageSet(score)}$('#finalScore').textContent=score;$('#finalBest').textContent=best;$('#ending').textContent=errors.length?'間違えた理由を確認して、もう一度挑戦！':'全ステージ完了！ 実験の安全名人だね！';$('#review').innerHTML='<strong>📘 きょうの復習</strong>'+STAGES.map((x,i)=>`<p><b>${i+1}. ${x.title}</b>　${stageDone[i]?'✓':'要復習'}<br>${x.why}</p>`).join('')+(errors.length?`<strong>見直しポイント（${errors.length}件）</strong>`+errors.slice(0,8).map(x=>`<p>・${x.text}</p>`).join(''):'<p>ノーミス！ 手順の理由も言葉で説明できるかな？</p>');setHud()}
