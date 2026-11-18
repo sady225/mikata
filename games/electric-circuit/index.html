@@ -2,241 +2,231 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#07516d">
-<title>11円電池でLEDを光らせよう！ — 子どものMIKATA</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0a76bd">
+<title>11円電池でLEDを光らせよう！｜子どものMIKATA</title>
 <style>
-:root{--blue:#0a6687;--navy:#06384b;--yellow:#ffdd62;--orange:#f49a4c;--green:#42a875;--red:#d85c55;--ink:#173f4b;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#052f40}body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}button,input{font:inherit}
-#app{width:min(100vw,480px);height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(180deg,#42b7cd,#93dfe6 48%,#edf5dc);user-select:none}
-header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + var(--safe-top));padding:calc(8px + var(--safe-top)) 11px 8px;background:linear-gradient(#0b6888,#07506a);color:white;border-bottom:3px solid #ffffff88}
-.headrow{display:flex;align-items:center;justify-content:space-between;gap:8px}.brand{font-size:10px;font-weight:1000}.stage{font-size:12px;font-weight:1000;background:#ffffff24;padding:5px 9px;border-radius:999px}.hud{display:flex;gap:6px}.hud button{border:0;border-radius:999px;min-height:32px;background:white;color:#07506a;font-weight:1000;font-size:11px;padding:0 10px}.progress{height:7px;margin-top:7px;background:#ffffff25;border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:var(--yellow);transition:width .2s}
-.screen{position:absolute;inset:0;display:none}.screen.active{display:flex}.title{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(100px + var(--safe-top)) 18px calc(16px + var(--safe-bottom))}
-.badge{background:#fff;color:#0b6787;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:1000}.title h1{font-size:clamp(33px,9.5vw,46px);line-height:1.05;margin:12px 0 5px;color:#fff;text-shadow:0 4px #07516d}.title h1 em{font-style:normal;color:var(--yellow)}.subtitle{font-size:14px;font-weight:900;color:#0a4d63}.hero{width:min(78vw,300px);height:min(31dvh,225px);display:grid;place-items:center}.start,.check,.next,.retry,.small{border:0;border-radius:999px;background:var(--yellow);color:#7b4c17;font-weight:1000;box-shadow:0 5px #c59531,0 0 0 3px white inset}.start{width:min(86vw,320px);min-height:56px;font-size:20px}.title small{max-width:350px;font-size:11px;line-height:1.45;color:#0a536b;font-weight:800;margin-top:10px}
-.game{flex-direction:column;padding-top:calc(96px + var(--safe-top));min-height:0}.task{flex:0 0 auto;margin:6px 10px 4px;background:#fff;border-radius:17px;padding:7px 10px;box-shadow:0 4px #0a728c30}.task b{display:block;color:var(--orange);font-size:10px}.task h2{font-size:16px;margin:2px 0}.task p{font-size:10px;margin:0;color:#5e7a84;font-weight:800;line-height:1.32}
-.lab{position:relative;flex:1 1 auto;min-height:220px;margin:0 8px 4px;border:3px solid #ffffffb5;border-radius:22px;background:linear-gradient(#f9feffdd,#edf8f5e9);overflow:hidden}.bench{position:absolute;inset:0;padding:10px}.meter{position:absolute;right:10px;top:10px;width:118px;background:#2a424d;color:#dffccf;border-radius:15px;padding:8px;text-align:center;box-shadow:0 5px #18303a}.meter .display{background:#cfe6b6;border-radius:7px;padding:7px 4px;color:#233a25;font-weight:1000;font-size:20px;font-variant-numeric:tabular-nums}.meter small{font-size:9px}.batteryStack{position:absolute;left:30px;bottom:22px;width:135px;height:175px;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start}.cell{width:92px;height:22px;position:relative;margin-top:-2px}.coin10,.coin1,.paper{position:absolute;left:50%;transform:translateX(-50%);border-radius:50%}.coin10{width:82px;height:18px;background:linear-gradient(#c87c37,#9c531f);border:3px solid #7a3d18}.paper{width:74px;height:11px;background:#f1f4f2;border:2px dashed #8fb7bb}.coin1{width:78px;height:16px;background:linear-gradient(#eef2f3,#adb8bd);border:3px solid #78878d}.cell .coin10{bottom:0}.cell .paper{bottom:7px}.cell .coin1{bottom:13px}.cell.bad .paper{display:none}.cell.rev .coin10{bottom:13px}.cell.rev .coin1{bottom:0}.polarity{position:absolute;left:18px;bottom:198px;font-size:10px;font-weight:1000;color:#375864}.led{position:absolute;right:40px;bottom:45px;width:92px;text-align:center}.ledBulb{width:50px;height:62px;margin:auto;border-radius:50% 50% 42% 42%;background:#d9e2dd;border:5px solid #4d6268;transition:.2s;position:relative}.led.on .ledBulb{background:#ff6363;box-shadow:0 0 30px 10px #ff777799}.led.dim .ledBulb{background:#ef9b9b;box-shadow:0 0 15px 4px #ff777755}.ledLegs{display:flex;justify-content:center;gap:20px;height:50px;transition:.45s}.ledLegs span{width:4px;background:#909b9e;position:relative}.ledLegs .long{height:48px}.ledLegs .short{height:34px}.ledLabel{font-size:10px;font-weight:1000}.ledStage{transition:transform .5s ease}.ledStage.flip{transform:rotate(180deg)}.legTag{position:absolute;font-size:9px;font-weight:1000;background:#fff;border-radius:8px;padding:2px 4px;white-space:nowrap;color:#324d58}.legTag.longTag{right:2px;bottom:-20px}.legTag.shortTag{left:2px;bottom:-20px}.turnCue{position:absolute;right:18px;bottom:115px;font-size:34px;animation:turncue 1.1s ease-in-out infinite alternate}@keyframes turncue{to{transform:rotate(35deg) scale(1.08)}}.lead{position:absolute;height:5px;background:#dc4e48;transform-origin:left center;border-radius:5px;z-index:2}.lead.black{background:#303a3f}.leadLabel{position:absolute;font-size:9px;font-weight:1000;background:#fff;border-radius:8px;padding:2px 5px;z-index:3}.probe{position:absolute;width:7px;height:68px;border-radius:5px;background:#d64e48;transform:rotate(18deg);z-index:4}.probe.black{background:#303a3f;transform:rotate(-18deg)}.probe:after{content:"";position:absolute;left:2px;bottom:-16px;width:3px;height:18px;background:#777}.finger{position:absolute;left:38px;bottom:122px;font-size:54px;transform:rotate(-18deg);opacity:.35;transition:.15s}.finger.down{opacity:1;transform:translateY(22px) rotate(-18deg)}.holdBtn{width:100%;min-height:56px;border:0;border-radius:18px;background:#fff;color:#07516d;font-weight:1000;font-size:14px;box-shadow:0 4px #003e54}.holdBtn.active{background:var(--yellow);transform:translateY(2px);box-shadow:0 2px #003e54}.cleanupStep{position:absolute;left:18px;right:18px;bottom:18px;background:#fff;border-radius:14px;padding:9px;text-align:center;font-size:10px;font-weight:900}.materials{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}.material{border:0;border-radius:14px;background:#fff;color:#07516d;min-height:44px;padding:7px 10px;font-weight:1000;font-size:11px;box-shadow:0 3px #003e54}.material.selected{background:var(--yellow)}.layerList{position:absolute;left:18px;top:18px;width:150px}.layerRow{display:flex;align-items:center;gap:5px;margin-bottom:5px;background:#ffffffde;border-radius:10px;padding:5px;font-size:10px;font-weight:900}.chip{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:9px}.c10{background:#b96b2e;color:white}.c1{background:#cfd7da}.cp{background:#eff5f4;border:2px dashed #91b1b6}.pressure{position:absolute;left:20px;right:20px;bottom:18px;background:#ffffffdd;border-radius:14px;padding:9px}.pressure input{width:100%;accent-color:var(--yellow)}.dataTable{position:absolute;inset:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px;align-content:center}.dataCard{background:white;border-radius:14px;padding:10px;text-align:center;font-weight:900}.dataCard strong{display:block;font-size:22px;color:#0a6687}.cleanup{position:absolute;inset:16px;display:flex;gap:10px;align-items:center;justify-content:center}.coinBig{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;font-weight:1000;font-size:20px}.coinBig.ten{background:#a85f29;color:white}.coinBig.one{background:#d7dfe2}.coinBig.dirty{filter:brightness(.6) saturate(.5);box-shadow:inset 0 0 0 12px #473d38aa}
-.message{flex:0 0 auto;margin:0 10px 4px;min-height:40px;border-radius:14px;padding:6px 9px;background:#fffffff2;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:900}.message.good{background:#e6f8df;color:#2e684a}.message.warn{background:#fff0d7;color:#8a5c20}.message.bad{background:#ffe3df;color:#9b403b}.dot{width:9px;height:9px;border-radius:50%;background:var(--blue);flex:0 0 auto}.good .dot{background:var(--green)}.warn .dot{background:var(--orange)}.bad .dot{background:var(--red)}
-.controls{flex:0 0 auto;background:#07516de8;color:white;border-top:3px solid #ffffff72;padding:8px 10px calc(10px + var(--safe-bottom))}.controlTitle{text-align:center;font-size:10px;font-weight:1000;color:#dff8ff;margin:0 0 6px}.check{width:100%;min-height:44px;font-size:14px}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.choice{border:0;border-radius:13px;background:#fff;color:#07516d;min-height:46px;font-weight:1000;font-size:11px;box-shadow:0 4px #003e54}.choice.active{background:var(--yellow)}.hint{text-align:center;font-size:9px;font-weight:800;color:#d8f4fa;margin-top:6px}
-.overlay{position:absolute;z-index:60;inset:0;display:none;place-items:center;padding:18px;background:#052f42dd}.overlay.show{display:grid}.card{width:100%;max-width:350px;background:white;border-radius:24px;padding:19px;text-align:center;box-shadow:0 10px #052938}.card .emoji{font-size:42px}.card h2{margin:2px 0 6px;color:var(--green);font-size:26px}.card p{font-size:12px;line-height:1.55;font-weight:800;color:#49656e}.next,.retry,.small{width:100%;min-height:48px;font-size:16px;margin-top:8px}.discList{text-align:left;max-height:48dvh;overflow:auto;padding:0;list-style:none}.discList li{background:#eff8f3;margin:6px 0;padding:8px 10px;border-radius:12px;font-size:11px;font-weight:800}.discList li.locked{background:#f1f2f2;color:#9aa5a8}.source{font-size:9px;color:#688089;text-align:left;margin-top:10px;border-top:1px solid #dce7e9;padding-top:8px}
-@media(max-height:650px){header{min-height:calc(78px + var(--safe-top));padding-top:calc(5px + var(--safe-top))}.game{padding-top:calc(85px + var(--safe-top))}.task{padding:5px 8px}.task p{display:none}.lab{min-height:185px}.message{min-height:32px;font-size:10px}.choice{min-height:40px}.batteryStack{height:145px;bottom:13px}.led{bottom:28px}}
-@media(max-height:570px){.brand{display:none}.game{padding-top:calc(75px + var(--safe-top))}.lab{min-height:160px}.meter{width:105px}.cell{height:18px}.batteryStack{transform:scale(.85);transform-origin:left bottom}}
+:root{
+ --blue:#2eb4ec;--deep:#0d4f9c;--red:#e93536;--yellow:#ffe45c;--ink:#123f61;
+ --green:#4fbe78;--paper:#f7fbfb;--safeT:env(safe-area-inset-top,0px);--safeB:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:#0a2d52}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:#fff}
+button{font:inherit;border:0}
+#app{position:relative;width:min(100vw,480px);height:100dvh;margin:auto;overflow:hidden;background:linear-gradient(#36b9ef 0 64%,#0e7cc0 64% 100%);touch-action:none;user-select:none}
+.skyDots{position:absolute;inset:0;background-image:radial-gradient(#ffffff55 1.5px,transparent 1.5px);background-size:28px 28px;opacity:.3;pointer-events:none}
+.topbar{position:absolute;z-index:20;left:0;right:0;top:0;padding:calc(9px + var(--safeT)) 12px 7px;background:var(--red);box-shadow:0 5px 0 #b51f25}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{font-size:10px;font-weight:1000;letter-spacing:.05em}.stage{font-size:13px;font-weight:1000}.discover{background:#fff;color:var(--deep);font-size:11px;font-weight:1000;border-radius:20px;padding:7px 10px}
+.progress{margin-top:7px;height:7px;background:#9d1720;border-radius:99px;overflow:hidden}.progress>i{display:block;height:100%;width:33%;background:var(--yellow);transition:.35s}
+.screen{position:absolute;inset:0;display:none}.screen.active{display:block}
+.title{z-index:10;background:linear-gradient(#2eb4ec,#158bc8 68%,#0b5795)}
+.titleTop{text-align:center;padding:calc(105px + var(--safeT)) 15px 0}
+.chip{display:inline-block;background:#fff;color:var(--red);padding:6px 14px;border-radius:18px;font-weight:1000;font-size:12px;box-shadow:0 3px 0 #c7e7f3}
+.title h1{margin:14px 0 5px;font-size:clamp(36px,10vw,52px);line-height:1.04;font-weight:1000;color:var(--yellow);text-shadow:0 5px 0 var(--deep)}
+.title h1 small{display:block;color:#fff;font-size:.55em;margin-bottom:3px}
+.titleSub{font-weight:900;font-size:14px}
+.titleScene{position:absolute;left:0;right:0;top:42%;height:32%;display:flex;justify-content:center;align-items:center}
+.miniStack{position:relative;width:125px;height:150px}
+.miniCoin{position:absolute;left:50%;transform:translateX(-50%);border-radius:50%;box-shadow:0 4px 0 #0002}
+.miniCoin.ten{width:102px;height:26px;background:#b96b2e;bottom:28px}.miniCoin.paper{width:92px;height:20px;background:#eef7f4;bottom:51px;border:3px dashed #7eb4b9}.miniCoin.one{width:98px;height:24px;background:#d6e0e4;bottom:69px}
+.miniLed{font-size:72px;filter:drop-shadow(0 0 14px #fff17a);animation:bob 1.3s ease-in-out infinite}
+.playWrap{position:absolute;left:18px;right:18px;bottom:calc(26px + var(--safeB));text-align:center}
+.play{width:86%;max-width:340px;height:66px;border-radius:35px;background:var(--red);color:#fff;font-size:24px;font-weight:1000;box-shadow:0 6px 0 #a81620,0 0 0 5px var(--yellow);animation:pulse 1.5s ease-in-out infinite}
+.playNote{margin-top:12px;font-size:11px;font-weight:800}
+.game{padding-top:calc(83px + var(--safeT))}
+.mission{position:absolute;z-index:12;left:12px;right:12px;top:calc(88px + var(--safeT));display:flex;justify-content:center;pointer-events:none}
+.speech{background:#fff;color:var(--deep);font-weight:1000;font-size:13px;line-height:1.35;padding:9px 15px;border-radius:20px;box-shadow:0 4px 0 #0b5c9d44;text-align:center;max-width:95%}.speech b{color:var(--red)}
+.lab{position:absolute;left:0;right:0;top:calc(133px + var(--safeT));bottom:calc(102px + var(--safeB));overflow:hidden}
+.table{position:absolute;left:0;right:0;bottom:0;height:34%;background:#f3dfae;border-top:8px solid #d5b476}
+.workarea{position:absolute;inset:0 0 25%;0}
+.tool{position:absolute;display:grid;place-items:center;font-weight:1000;touch-action:none}
+.drag{cursor:grab}.drag:active{cursor:grabbing}
+.coin10{width:92px;height:92px;border-radius:50%;background:radial-gradient(circle at 38% 30%,#e2a160,#b66428 67%);border:6px solid #8e461d;color:#7b3517;font-size:25px;box-shadow:0 7px 0 #7e3d1c}
+.coin1{width:88px;height:88px;border-radius:50%;background:radial-gradient(circle at 38% 30%,#fff,#c5d0d5 70%);border:6px solid #8d9aa0;color:#6e7a7f;font-size:25px;box-shadow:0 7px 0 #77858b}
+.paperDisk{width:84px;height:84px;border-radius:50%;background:#f8fcfb;border:5px dashed #76b5bb;color:#4f858a;font-size:12px;box-shadow:0 6px 0 #b5d9dc}
+.slot{position:absolute;left:50%;transform:translateX(-50%);width:128px;height:44px;border:4px dashed #ffffffbb;border-radius:50%;bottom:72px;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:1000}
+.stack{position:absolute;left:50%;transform:translateX(-50%);bottom:57px;width:150px;height:255px;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start;pointer-events:none}
+.cell{width:118px;height:36px;position:relative;margin-top:-5px;animation:drop .34s cubic-bezier(.2,1.4,.4,1)}
+.cell i{position:absolute;left:50%;transform:translateX(-50%);border-radius:50%;display:block}
+.cell .ten{bottom:0;width:106px;height:22px;background:#b96b2e;border:4px solid #8e461d}.cell .paper{bottom:13px;width:96px;height:16px;background:#f3faf8;border:3px dashed #75abb1}.cell .one{bottom:25px;width:100px;height:20px;background:#d8e0e3;border:4px solid #8b999f}
+.cell.missing .paper{opacity:.08}.cell.loose{transform:translateX(11px)}
+.stackCount{position:absolute;left:50%;transform:translateX(-50%);bottom:22px;background:#fff;color:var(--deep);padding:5px 10px;border-radius:15px;font-size:11px;font-weight:1000}
+.meter{position:absolute;right:14px;top:20px;width:126px;background:#263f4d;border-radius:18px;padding:8px;color:#d9f5d0;text-align:center;box-shadow:0 6px 0 #17303d}.meter small{font-size:9px}.display{margin-top:4px;background:#cde5b8;color:#203a28;border-radius:8px;padding:8px 3px;font-size:22px;font-weight:1000;font-variant-numeric:tabular-nums}
+.probe{position:absolute;right:88px;top:94px;width:7px;height:74px;background:#d74641;border-radius:4px;transform:rotate(18deg);opacity:.3;transition:.25s}.probe.black{right:52px;background:#30383e;transform:rotate(-18deg)}.probe.touch{opacity:1;transform:translateY(38px) rotate(18deg)}.probe.black.touch{transform:translateY(38px) rotate(-18deg)}
+.ledBox{position:absolute;left:16px;top:20px;width:120px;height:180px;text-align:center}
+.ledStage{position:relative;width:100%;height:135px;transition:transform .5s cubic-bezier(.2,1.4,.4,1)}
+.ledStage.flip{transform:rotate(180deg)}.ledHead{position:absolute;left:35px;top:2px;width:52px;height:64px;border-radius:50% 50% 42% 42%;background:#dde4e1;border:6px solid #405964;transition:.25s}.ledStage.on .ledHead{background:#ff6060;box-shadow:0 0 32px 12px #ff6a6aaa}
+.leg{position:absolute;top:62px;width:5px;background:#8d9a9f}.leg.long{left:45px;height:66px}.leg.short{left:76px;height:47px}.leg em{position:absolute;top:36px;font-style:normal;font-size:9px;background:#fff;color:var(--deep);border-radius:8px;padding:2px 4px;white-space:nowrap}.leg.long em{right:7px}.leg.short em{left:7px}
+.turn{position:absolute;left:84px;top:68px;font-size:36px;color:var(--yellow);animation:spinCue 1s ease-in-out infinite alternate}
+.wire{position:absolute;height:6px;border-radius:6px;transform-origin:left center;opacity:.95}.wire.red{background:#e23d39;left:126px;bottom:109px;width:132px;transform:rotate(-12deg)}.wire.black{background:#27343a;left:125px;bottom:76px;width:138px;transform:rotate(11deg)}
+.spark{position:absolute;width:13px;height:13px;border-radius:50%;background:#fff58a;box-shadow:0 0 14px #fff58a;opacity:0;pointer-events:none}.spark.go{animation:flow .8s linear 1}
+.finger{position:absolute;left:calc(50% - 55px);bottom:157px;font-size:60px;opacity:.3;transform:rotate(-16deg);transition:.14s}.finger.down{opacity:1;transform:translateY(27px) rotate(-16deg)}
+.bottom{position:absolute;z-index:18;left:0;right:0;bottom:0;height:calc(94px + var(--safeB));padding:8px 11px calc(9px + var(--safeB));display:flex;gap:8px;align-items:center;background:#0a6fb6}
+.bigBtn{flex:1;height:58px;border-radius:30px;background:#fff;color:var(--red);font-weight:1000;font-size:15px;box-shadow:0 4px 0 #07548d,0 0 0 3px var(--yellow) inset;transition:.08s;min-width:0}.bigBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #07548d,0 0 0 3px var(--yellow) inset}.bigBtn.active{background:var(--yellow)}.bigBtn:disabled{opacity:.45}
+.toast{position:absolute;z-index:25;left:50%;transform:translateX(-50%);bottom:calc(105px + var(--safeB));background:#fff;color:var(--deep);border-radius:20px;padding:9px 14px;font-size:11px;font-weight:1000;box-shadow:0 4px 0 #084d7f44;max-width:90%;text-align:center;opacity:0;pointer-events:none}.toast.show{animation:toast 1.7s ease both}
+.modal{position:absolute;z-index:60;inset:0;display:none;place-items:center;padding:20px;background:#063b6dbb}.modal.show{display:grid}.card{width:100%;max-width:350px;background:#fff;color:var(--deep);border-radius:30px;padding:22px;text-align:center;box-shadow:0 8px 0 #042c50,0 0 0 6px var(--red);animation:pop .4s cubic-bezier(.2,1.4,.4,1)}.card h2{margin:4px 0 6px;color:var(--red);font-size:25px}.card p{font-size:12px;line-height:1.55;font-weight:800}.next{width:100%;height:54px;border-radius:28px;background:var(--yellow);color:#934516;font-weight:1000;font-size:17px;box-shadow:0 4px 0 #d2a631}
+.disc{list-style:none;padding:0;text-align:left;max-height:45dvh;overflow:auto}.disc li{margin:6px 0;padding:8px 10px;border-radius:12px;background:#eaf7ee;font-size:11px;font-weight:800}.disc li.lock{background:#edf0f1;color:#9aa4a8}
+@keyframes bob{50%{transform:translateY(-8px) rotate(5deg)}}@keyframes pulse{50%{transform:scale(1.04)}}@keyframes drop{from{transform:translateY(-100px) scale(.6);opacity:0}to{transform:none;opacity:1}}@keyframes spinCue{to{transform:rotate(38deg)}}@keyframes flow{0%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(135px,-30px)}}@keyframes pop{from{transform:scale(.6);opacity:0}}@keyframes toast{0%{opacity:0;transform:translate(-50%,8px)}15%,75%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+@media(max-height:650px){.mission{top:calc(82px + var(--safeT))}.lab{top:calc(122px + var(--safeT))}.speech{font-size:11px;padding:7px 12px}.meter{transform:scale(.88);transform-origin:right top}.ledBox{transform:scale(.88);transform-origin:left top}.stack{transform:translateX(-50%) scale(.88);transform-origin:center bottom}}
+@media(max-height:570px){.brand{display:none}.mission{top:calc(72px + var(--safeT))}.lab{top:calc(110px + var(--safeT));bottom:calc(88px + var(--safeB))}.bottom{height:calc(82px + var(--safeB))}.bigBtn{height:50px;font-size:13px}}
 </style>
 </head>
 <body>
 <div id="app">
-<header><div class="headrow"><div><div class="brand">子どものMIKATA｜那覇工業高校 課題研究から</div><div id="stageLabel" class="stage">🪙 1 / 7</div></div><div class="hud"><button id="discoverBtn">🔬 発見 0</button><button id="muteBtn">🔊</button></div></div><div class="progress"><span id="progress"></span></div></header>
+<div class="skyDots"></div>
+<header class="topbar">
+ <div class="toprow"><div><div class="brand">子どものMIKATA｜那覇工業高校 課題研究から</div><div id="stage" class="stage">STAGE 1 / 3</div></div><button id="discBtn" class="discover">🔬 発見 0</button></div>
+ <div class="progress"><i id="prog"></i></div>
+</header>
 
-<main id="title" class="screen title active">
-<div class="badge">10円＋1円＝11円電池</div><h1>11円電池で<br><em>LEDを光らせよう！</em></h1>
-<p class="subtitle">重ねる・測る・つなぐ。光らない理由まで実験しよう。</p>
-<div class="hero" aria-hidden="true"><svg viewBox="0 0 300 230"><ellipse cx="95" cy="170" rx="65" ry="18" fill="#a95d26"/><ellipse cx="95" cy="155" rx="60" ry="16" fill="#eff4f2"/><ellipse cx="95" cy="140" rx="62" ry="17" fill="#cfd8db"/><ellipse cx="95" cy="125" rx="65" ry="18" fill="#a95d26"/><ellipse cx="95" cy="110" rx="60" ry="16" fill="#eff4f2"/><ellipse cx="95" cy="95" rx="62" ry="17" fill="#cfd8db"/><path d="M155 100 C205 75 225 75 245 98" fill="none" stroke="#d64c45" stroke-width="7"/><path d="M155 168 C205 195 225 190 245 162" fill="none" stroke="#303a3f" stroke-width="7"/><path d="M247 98 V145" stroke="#8d999d" stroke-width="5"/><path d="M265 112 V145" stroke="#8d999d" stroke-width="5"/><path d="M238 86 Q256 62 274 86 V108 H238 Z" fill="#ff6f6f" stroke="#435a62" stroke-width="5"/></svg></div>
-<button id="startBtn" class="start">11円電池の実験開始</button><small>那覇工業高校の課題研究で確認した実測結果をもとにした学習ゲームです。実物実験は先生・大人の管理下で行ってください。</small>
-</main>
+<section id="title" class="screen title active">
+ <div class="titleTop"><div class="chip">10円＋1円＝11円電池</div><h1><small>11円電池で</small>LEDを光らせよう！</h1><div class="titleSub">触ると動く、小さな電気実験室</div></div>
+ <div class="titleScene"><div class="miniStack"><div class="miniCoin ten"></div><div class="miniCoin paper"></div><div class="miniCoin one"></div></div><div class="miniLed">💡</div></div>
+ <div class="playWrap"><button id="play" class="play">実験スタート</button><div class="playNote">コインを重ねて、測って、LEDを光らせよう</div></div>
+</section>
 
-<main id="game" class="screen game">
-<section class="task"><b id="mission"></b><h2 id="taskTitle"></h2><p id="taskText"></p></section>
-<section id="lab" class="lab"></section>
-<div id="message" class="message warn"><span class="dot"></span><span></span></div>
-<section class="controls"><p id="controlTitle" class="controlTitle"></p><div id="controls"></div></section>
-</main>
+<section id="game" class="screen game">
+ <div class="mission"><div id="speech" class="speech"></div></div>
+ <div id="lab" class="lab"></div>
+ <div id="toast" class="toast"></div>
+ <div id="bottom" class="bottom"></div>
+</section>
 
-<div id="stageOverlay" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">できた！</h2><p id="clearText"></p><button id="nextBtn" class="next">次の実験へ</button></div></div>
-<div id="whyOverlay" class="overlay"><div class="card"><div class="emoji">🤔</div><h2>なぜ？</h2><p id="whyText"></p><button id="whyClose" class="small">実験へ戻る</button></div></div>
-<div id="discoverOverlay" class="overlay"><div class="card"><div class="emoji">🔬</div><h2>今日の発見</h2><ul id="discList" class="discList"></ul><button id="closeDisc" class="small">戻る</button></div></div>
-<div id="finishOverlay" class="overlay"><div class="card"><div class="emoji">🪙💡</div><h2>11円電池研究員！</h2><p id="finishText"></p><div class="source">参考：那覇工業高校 課題研究「11円電池を作ってみよう！」、2026年5月28日課題研究メモ、2026年11月12日「11円電池の電流測定と電池ケース改良」。外部参考：Science Buddies “Charge from Change: Make a Coin Battery”。</div><button id="showDisc" class="small">発見を見る</button><button id="retryBtn" class="retry">最初からもう一度</button></div></div>
+<div id="clearModal" class="modal"><div class="card"><div style="font-size:50px" id="clearEmoji">✨</div><h2 id="clearTitle">できた！</h2><p id="clearText"></p><button id="next" class="next">次へ</button></div></div>
+<div id="discModal" class="modal"><div class="card"><div style="font-size:42px">🔬</div><h2>今日の発見</h2><ul id="discList" class="disc"></ul><button id="discClose" class="next">戻る</button></div></div>
+<div id="finishModal" class="modal"><div class="card"><div style="font-size:50px">🪙💡</div><h2>11円電池研究員！</h2><p>作る→測る→光らない原因を直す、まで自分の指で実験できた。</p><button id="again" class="next">もう一度</button></div></div>
 </div>
-
 <script>
 (()=>{
-let stage=0,muted=false,audio=null,stack=[],cells=1,ledReverse=false,wet=true,pressure=70,measured=false,cleaned=false;
-const discoveries=new Set();
+const $=s=>document.querySelector(s);
+let stage=0,audio=null,muted=false;
+let discoveries=new Set();
 const all=[
-['layers','10円玉と1円玉の間に食塩水を含んだ紙をはさむ'],
-['polarity','10円側が＋、1円側が−になる'],
-['one','11円電池1組は授業実測で約0.5V'],
-['three','3組では約1.5VでもLEDは点灯しなかった'],
-['six','6組でLED1個の点灯を確認した'],
-['ledpolarity','LEDには向きがあり、長い足を＋側につなぐ'],
-['contact','接触が不安定だと点灯しにくい'],
-['electrolyte','食塩水を含んだ紙が電解質の役割をする'],
-['cleanup','実験後はコインを洗って乾かして保管する'],
-['research','実測して「なぜ光らない？」を1つずつ確かめる']
+ ['layer','10円玉と1円玉の間に食塩水ペーパーをはさむ'],
+ ['polarity','10円側が＋、1円側が−'],
+ ['v05','1組で約0.5Vを実測した記録がある'],
+ ['v15','3組で約1.5VでもLEDは点灯しなかった'],
+ ['v24','6組で2.4Vを測定し、LED1個の点灯を確認した'],
+ ['led','LEDは長い足を＋側、短い足を−側へ'],
+ ['contact','コインの接触を安定させることが大切'],
+ ['paper','食塩水を含んだ紙がないと電池として働きにくい'],
+ ['research','光らない原因を1つずつ変えて確かめる']
 ];
-const defs=[
-['🪙 1 / 7','MISSION 01','11円電池1組を作ろう','10円玉・食塩水ペーパー・1円玉を正しく重ねる。'],
-['📟 2 / 7','MISSION 02','何組で何V？','那覇工業高校の実測値をテスターで確かめよう。'],
-['💡 3 / 7','MISSION 03','LEDの向きを合わせよう','長い足と短い足。どちらを＋側につなぐ？'],
-['❓ 4 / 7','MISSION 04','3組では光らない。どうする？','まず電圧を確認して、11円電池の組数を増やして比べよう。'],
-['🤏 5 / 7','MISSION 05','指で押さえて接触させよう','6組あっても接触が弱いと不安定。電池の重なりを指でしっかり押さえよう。'],
-['🧪 6 / 7','MISSION 06','条件を比べて研究しよう','組数・極性・食塩水を変えて、LEDが光る条件を探そう。'],
-['🧼 7 / 7','MISSION 07','塩分を落として片づけよう','実験後は食塩水を残さない。水で洗い、布で水分をふき取ろう。']
-];
-const $=s=>document.querySelector(s),lab=$('#lab'),controls=$('#controls'),msg=$('#message');
-function setMsg(t,c='warn'){msg.className='message '+c;msg.querySelector('span:last-child').textContent=t}
-function add(id){if(!discoveries.has(id)){discoveries.add(id);$('#discoverBtn').textContent='🔬 発見 '+discoveries.size;tone(720,.05,.018)}}
+let s1={placed:[]},s2={count:1,measured:false},s3={count:6,reverse:true,paper:true,contact:false,scenario:0};
+
 function tone(f=440,d=.06,g=.02){if(muted)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!audio)audio=new C();if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),a=audio.createGain(),t=audio.currentTime;o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(audio.destination);o.start();o.stop(t+d+.03)}
-function clear(t,x,e='✨'){$('#clearTitle').textContent=t;$('#clearText').textContent=x;$('#clearEmoji').textContent=e;$('#stageOverlay').classList.add('show');tone(660,.08,.025)}
-function why(t){$('#whyText').textContent=t;$('#whyOverlay').classList.add('show')}
-function voltageFor(n){if(n===1)return .5;if(n===2)return 1.0;if(n===3)return 1.5;if(n===6)return 2.4;return null}
-function stackHtml(n,{bad=false,reverse=false}={}){let s='';for(let i=0;i<n;i++)s+='<div class="cell '+(bad?'bad ':'')+(reverse?'rev':'')+'"><div class="coin10"></div><div class="paper"></div><div class="coin1"></div></div>';return s}
-function baseBench(n=cells,opts={}){
- lab.innerHTML='<div class="bench">'+
- '<div class="meter"><small>テスター</small><div id="meterDisplay" class="display">-- V</div></div>'+
- '<div class="polarity">上：1円側 − ／ 下：10円側 ＋</div>'+
- '<div id="stack" class="batteryStack">'+stackHtml(n,opts)+'</div>'+
- '<div id="led" class="led"><div class="ledBulb"></div><div class="ledLegs"><span class="long"></span><span class="short"></span></div><div class="ledLabel">赤色LED</div></div>'+
- '<div class="lead" style="left:142px;bottom:78px;width:145px;transform:rotate(-7deg)"></div>'+
- '<div class="lead black" style="left:138px;bottom:43px;width:150px;transform:rotate(8deg)"></div>'+
- '<div class="leadLabel" style="left:150px;bottom:88px;color:#b43e38">赤線：10円側＋ → LEDの長い足</div>'+
- '<div class="leadLabel" style="left:146px;bottom:17px;color:#303a3f">黒線：1円側− → LEDの短い足</div>'+
- '</div>'
-}
-function updateLed(){
- const led=$('#led');if(!led)return false;
- led.classList.remove('on','dim');
- const goodVoltage=cells>=6,goodPolarity=!ledReverse,goodWet=wet,goodContact=pressure>=65;
- const on=goodVoltage&&goodPolarity&&goodWet&&goodContact;
- if(on)led.classList.add('on');else if(cells>=4&&goodPolarity&&goodWet&&goodContact)led.classList.add('dim');
- return on
-}
+function add(id){if(!discoveries.has(id)){discoveries.add(id);$('#discBtn').textContent='🔬 発見 '+discoveries.size;tone(760,.05,.018)}}
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.remove('show');void el.offsetWidth;el.classList.add('show')}
+function speech(t){$('#speech').innerHTML=t}
+function clear(title,text,emoji='✨'){$('#clearTitle').textContent=title;$('#clearText').textContent=text;$('#clearEmoji').textContent=emoji;setTimeout(()=>$('#clearModal').classList.add('show'),420);tone(660,.1,.025)}
+function voltage(n){return n===1?.5:n===2?1:n===3?1.5:n===6?2.4:null}
+function cellHTML(cls=''){return '<div class="cell '+cls+'"><i class="ten"></i><i class="paper"></i><i class="one"></i></div>'}
+function stackHTML(n,opt={}){let h='';for(let i=0;i<n;i++)h+=cellHTML(opt.missing&&i===n-1?'missing':opt.loose&&i===n-1?'loose':'');return h}
+
 function render(){
- const d=defs[stage];$('#stageLabel').textContent=d[0];$('#mission').textContent=d[1];$('#taskTitle').textContent=d[2];$('#taskText').textContent=d[3];$('#progress').style.width=((stage+1)/7*100)+'%';controls.innerHTML='';
- [r1,r2,r3,r4,r5,r6,r7][stage]()
+ $('#stage').textContent='STAGE '+(stage+1)+' / 3';
+ $('#prog').style.width=((stage+1)/3*100)+'%';
+ [render1,render2,render3][stage]()
 }
-function r1(){
- stack=[];$('#controlTitle').textContent='材料を順番に重ねる';lab.innerHTML='<div class="bench"><div class="layerList" id="layerList"></div></div>';
- controls.innerHTML='<div class="materials"><button class="material" data-x="10">10円玉</button><button class="material" data-x="paper">食塩水ペーパー</button><button class="material" data-x="1">1円玉</button></div><button id="reset" class="small">やり直す</button><button id="check" class="check">🪙 11円電池完成！</button>';
- const draw=()=>{const l=$('#layerList');l.innerHTML=stack.map(x=>'<div class="layerRow"><span class="chip '+(x==='10'?'c10':x==='1'?'c1':'cp')+'">'+(x==='10'?'10円':x==='1'?'1円':'塩水')+'</span><span>'+(x==='10'?'10円玉（銅系）':x==='1'?'1円玉（アルミ）':'食塩水を含んだ紙')+'</span></div>').join('')};
- controls.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{if(stack.length<3){stack.push(b.dataset.x);draw();tone(350,.03,.015)}});
- $('#reset').onclick=()=>{stack=[];draw();setMsg('10円玉・紙・1円玉の3層を作ろう。','warn')};
- $('#check').onclick=()=>{
-   if(stack.join(',')==='10,paper,1'){add('layers');add('polarity');clear('11円電池1組完成！','10円玉と1円玉の間に、食塩水を含んだ紙をはさんだ。10円側が＋、1円側が−。','🪙')}
-   else if(stack.includes('10')&&stack.includes('1')&&!stack.includes('paper')){add('electrolyte');setMsg('10円玉と1円玉が直接触れている。間に食塩水ペーパーが必要だよ。','bad')}
-   else if(stack.join(',')==='1,paper,10'){add('layers');add('polarity');setMsg('電池にはなっているけれど、上下の極性が逆。今回は10円側を＋として作ろう。','warn')}
-   else setMsg('3つの材料の役割を考えて、もう一度重ねよう。','bad')
- };
- setMsg('まず1組。10円玉と1円玉の間に何を入れる？','warn')
+
+function makeDrag(el,type){
+ let dragging=false,dx=0,dy=0;
+ el.addEventListener('pointerdown',e=>{dragging=true;el.setPointerCapture?.(e.pointerId);const r=el.getBoundingClientRect();dx=e.clientX-r.left;dy=e.clientY-r.top;el.style.zIndex=9;tone(320,.03,.012)});
+ el.addEventListener('pointermove',e=>{if(!dragging)return;const lab=$('#lab').getBoundingClientRect();el.style.left=(e.clientX-lab.left-dx)+'px';el.style.top=(e.clientY-lab.top-dy)+'px'});
+ el.addEventListener('pointerup',e=>{if(!dragging)return;dragging=false;dropPiece(el,type)});
 }
-function r2(){
- cells=1;measured=false;baseBench(cells);$('#controlTitle').textContent='組数を選び、赤黒プローブを当てて測る';
- controls.innerHTML='<div class="choices"><button class="choice" data-n="1">1組</button><button class="choice" data-n="2">2組</button><button class="choice" data-n="3">3組</button><button class="choice" data-n="6">6組</button></div><button id="measure" class="check">📟 赤黒プローブを当てて測る</button><button id="confirm6" class="small" disabled style="opacity:.45">✅ 2.4Vを確認した</button>';
- const redraw=()=>{
-   baseBench(cells);
-   measured=false;
-   const b=lab.querySelector('.bench');
-   b.insertAdjacentHTML('beforeend','<div class="probe" style="left:128px;bottom:116px"></div><div class="probe black" style="left:112px;bottom:78px"></div>');
-   $('#confirm6').disabled=true;
-   $('#confirm6').style.opacity='.45';
+function dropPiece(el,type){
+ const slot=$('#slot').getBoundingClientRect(),r=el.getBoundingClientRect();
+ const hit=!(r.right<slot.left||r.left>slot.right||r.bottom<slot.top||r.top>slot.bottom);
+ if(!hit){el.animate([{transform:'translateX(0)'},{transform:'translateX(-8px)'},{transform:'translateX(8px)'},{transform:'translateX(0)'}],{duration:240});toast('点線の場所へ運んでみよう');return}
+ const expected=['10','paper','1'][s1.placed.length];
+ if(type!==expected){tone(170,.09,.03);toast(type==='1'&&expected==='paper'?'10円玉と1円玉の間には何が必要？':'順番をもう一度見てみよう');el.animate([{transform:'scale(1)'},{transform:'scale(.8)'},{transform:'scale(1)'}],{duration:260});return}
+ s1.placed.push(type);tone(480+s1.placed.length*80,.05,.02);el.remove();
+ $('#built').innerHTML=stackHTML(s1.placed.length===3?1:0);
+ if(s1.placed.length===1)toast('10円玉を置いた！');
+ if(s1.placed.length===2){add('layer');toast('食塩水ペーパーをはさんだ！')}
+ if(s1.placed.length===3){add('polarity');speech('<b>完成！</b> 10円側が＋、1円側が−。');setTimeout(()=>clear('11円電池ができた！','3つの材料を自分で重ねて、11円電池1組を作った。','🪙'),550)}
+}
+
+function render1(){
+ s1={placed:[]};
+ speech('3つを<b>指で運んで</b>、11円電池を1組つくろう');
+ $('#lab').innerHTML='<div class="workarea">'+
+ '<div id="p10" class="tool drag coin10" style="left:22px;top:48px">10</div>'+
+ '<div id="pp" class="tool drag paperDisk" style="left:calc(50% - 42px);top:25px">塩水<br>ペーパー</div>'+
+ '<div id="p1" class="tool drag coin1" style="right:22px;top:48px">1</div>'+
+ '<div id="slot" class="slot">ここに重ねる</div><div id="built" class="stack"></div></div><div class="table"></div>';
+ $('#bottom').innerHTML='<button id="hint1" class="bigBtn">💡 ヒント</button><button id="reset1" class="bigBtn">↺ やり直す</button>';
+ makeDrag($('#p10'),'10');makeDrag($('#pp'),'paper');makeDrag($('#p1'),'1');
+ $('#hint1').onclick=()=>toast('10円 → 食塩水ペーパー → 1円 の順に重ねよう');
+ $('#reset1').onclick=render1
+}
+
+function render2(){
+ s2={count:1,measured:false};
+ speech('11円電池を<b>積むたびに</b>、電圧はどう変わる？');
+ $('#lab').innerHTML='<div class="workarea"><div class="meter"><small>テスター</small><div id="display" class="display">-- V</div></div><div id="pr" class="probe"></div><div id="pb" class="probe black"></div><div id="stack" class="stack">'+stackHTML(1)+'</div><div id="count" class="stackCount">1組</div></div><div class="table"></div>';
+ $('#bottom').innerHTML='<button id="addCell" class="bigBtn">🪙 1組追加</button><button id="measure" class="bigBtn">📟 測る</button>';
+ const update=()=>{$('#stack').innerHTML=stackHTML(s2.count);$('#count').textContent=s2.count+'組';$('#display').textContent='-- V';s2.measured=false};
+ $('#addCell').onclick=()=>{
+   if(s2.count<3)s2.count++;
+   else if(s2.count===3)s2.count=6;
+   else{toast('6組まで積んだよ');return}
+   update();tone(430+s2.count*35,.04,.02);
+   toast(s2.count+'組になった！ まず測ってみよう');
  };
- controls.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{
-   cells=+b.dataset.n;
-   redraw();
-   setMsg(cells+'組をセット。赤を10円側＋、黒を1円側−に当てて測ろう。','warn')
- });
  $('#measure').onclick=()=>{
-   const v=voltageFor(cells);
-   if(v===null){setMsg('この組数は授業の実測記録がないため表示しない。','warn');return}
-   $('#meterDisplay').textContent=v.toFixed(1)+' V';
-   measured=true;
-   if(cells===1)add('one');
-   if(cells===3)add('three');
-   if(cells===6){
-     add('six');
-     $('#confirm6').disabled=false;
-     $('#confirm6').style.opacity='1';
-     setMsg('6組で 2.4 V。表示を確認してから次へ進もう。','good');
-   }else{
-     $('#confirm6').disabled=true;
-     $('#confirm6').style.opacity='.45';
-     setMsg(cells+'組の実測記録：'+v.toFixed(1)+' V。次は組数を変えて測ってみよう。','good');
-   }
- };
- $('#confirm6').onclick=()=>{
-   if(!(cells===6&&measured&&$('#meterDisplay').textContent.trim()==='2.4 V')){
-     setMsg('先に6組を選び、テスターで2.4Vを表示させよう。','warn');return
-   }
-   clear('6組を測定できた！','那覇工業高校の2026年11月12日の記録では、11円電池6組で2.4Vを測定し、LED1個の点灯を確認した。','📟')
- };
- redraw();
- setMsg('1組→2組→3組→6組と変えて、電圧を測ってみよう。','warn')
-}
-function r3(){
- cells=6;ledReverse=true;wet=true;pressure=80;baseBench(6);
- const oldLed=$('#led');
- oldLed.classList.add('ledStage','flip');
- oldLed.querySelector('.long').insertAdjacentHTML('beforeend','<span class="legTag longTag">長い足 ＋へ</span>');
- oldLed.querySelector('.short').insertAdjacentHTML('beforeend','<span class="legTag shortTag">短い足 −へ</span>');
- lab.querySelector('.bench').insertAdjacentHTML('beforeend','<div id="turnCue" class="turnCue">↻</div>');
- updateLed();
- $('#controlTitle').textContent='LEDを指で回して、足の向きを入れ替える';
- controls.innerHTML='<button id="turnLed" class="holdBtn">↻ LEDを180°回す</button><button id="check" class="check">💡 この向きでつないでみる</button>';
- let turned=false;
- $('#turnLed').onclick=()=>{
-   ledReverse=!ledReverse;
-   turned=true;
-   const led=$('#led');
-   led.classList.toggle('flip',ledReverse);
-   $('#turnCue').style.transform=ledReverse?'rotate(0deg)':'rotate(180deg)';
-   updateLed();
-   tone(420,.06,.02);
-   if(ledReverse){
-     setMsg('長い足が黒線（−）側。LEDは光らない。もう一度回してみよう。','warn');
-   }else{
-     setMsg('長い足が赤線（＋）側になった！ LEDが光った。','good');
-   }
- };
- $('#check').onclick=()=>{
-   if(!turned){setMsg('まずLEDを実際に回して、足の位置が変わる様子を見よう。','warn');return}
-   if(updateLed()){
-     add('ledpolarity');
-     clear('LEDの向きを体で覚えた！','LEDを180°回すと長い足と短い足の接続先が入れ替わる。長い足を10円側＋、短い足を1円側−につなぐと点灯した。','💡')
-   }else{
-     setMsg('今は長い足が−側。LEDをもう一度180°回してみよう。','bad')
-   }
+   const v=voltage(s2.count);if(v==null)return;
+   $('#pr').classList.add('touch');$('#pb').classList.add('touch');tone(560,.04,.018);
+   setTimeout(()=>{
+     $('#display').textContent=v.toFixed(1)+' V';s2.measured=true;$('#pr').classList.remove('touch');$('#pb').classList.remove('touch');
+     if(s2.count===1){add('v05');toast('1組で約0.5V')}
+     if(s2.count===3){add('v15');toast('3組で約1.5V。でもLEDはまだ光らなかった')}
+     if(s2.count===6){add('v24');speech('<b>6組で2.4V！</b> 那覇工業高校ではLED1個が点灯。');setTimeout(()=>clear('積むと電圧が上がった！','3組1.5Vでは光らず、6組2.4VでLED1個の点灯を確認した。','📟'),700)}
+   },430)
  }
 }
-function r4(){
- cells=3;ledReverse=false;wet=true;pressure=80;baseBench(3);updateLed();$('#meterDisplay').textContent='1.5 V';$('#controlTitle').textContent='3組と6組を比べて、もう一度測る';
- controls.innerHTML='<div class="choices"><button id="measure3" class="choice">📟 3組を測る</button><button id="addCells" class="choice">🪙 6組に増やす</button></div><button id="measure6" class="small">📟 6組を測る</button><button id="check" class="check">💡 LEDの様子を確認</button>';
- $('#measure3').onclick=()=>{$('#meterDisplay').textContent='1.5 V';setMsg('3組は約1.5V。課題研究では、この条件ではLEDは点灯しなかった。','warn');add('three')};
- $('#addCells').onclick=()=>{cells=6;baseBench(6);updateLed();setMsg('6組に増やした。まず電圧を測ろう。','warn')};
- $('#measure6').onclick=()=>{if(cells!==6){setMsg('先に11円電池を6組に増やそう。','warn');return}$('#meterDisplay').textContent='2.4 V';setMsg('6組で2.4V。LEDが点灯する条件に近づいた。','good');add('six')};
- $('#check').onclick=()=>{if(cells===6&&updateLed()){add('research');clear('組数を増やして比較できた！','3組・約1.5Vでは点灯せず、6組・2.4VではLED1個の点灯を確認した課題研究の流れを再現した。','❓')}else setMsg('3組と6組を測って、LEDの変化を比べよう。','bad')}
+
+function render3(){
+ s3={count:6,reverse:true,paper:true,contact:false,scenario:0};
+ speech('LEDが光らない！ <b>触って原因を直そう</b>');
+ $('#lab').innerHTML='<div class="workarea">'+
+ '<div class="ledBox"><div id="ledStage" class="ledStage flip"><div class="ledHead"></div><div class="leg long"><em>長い足</em></div><div class="leg short"><em>短い足</em></div></div><div class="turn">↻</div></div>'+
+ '<div class="wire red"></div><div class="wire black"></div><div id="spark" class="spark" style="left:132px;bottom:106px"></div>'+
+ '<div id="stack3" class="stack">'+stackHTML(6)+'</div><div class="stackCount">6組</div><div id="finger" class="finger">☝️</div>'+
+ '</div><div class="table"></div>';
+ $('#bottom').innerHTML='<button id="turnLed" class="bigBtn">↻ LEDを回す</button><button id="hold" class="bigBtn">🤏 押さえる</button><button id="paper" class="bigBtn">🧻 ペーパー</button>';
+ update3();
+ $('#turnLed').onclick=()=>{s3.reverse=!s3.reverse;$('#ledStage').classList.toggle('flip',s3.reverse);tone(420,.05,.02);toast(s3.reverse?'長い足が−側。まだ光らない':'長い足が＋側になった！');add('led');update3()};
+ let timer=null;
+ const pressStart=e=>{e.preventDefault();s3.contact=true;$('#hold').classList.add('active');$('#finger').classList.add('down');tone(330,.04,.015);toast('ぎゅっ…接触が安定してきた');timer=setTimeout(()=>{add('contact');update3()},450)};
+ const pressEnd=()=>{clearTimeout(timer);$('#hold').classList.remove('active');$('#finger').classList.remove('down');if(!isReady())s3.contact=false;update3()};
+ $('#hold').addEventListener('pointerdown',pressStart);['pointerup','pointercancel','pointerleave'].forEach(x=>$('#hold').addEventListener(x,pressEnd));
+ $('#paper').onclick=()=>{s3.paper=!s3.paper;$('#paper').classList.toggle('active',s3.paper);$('#stack3').innerHTML=stackHTML(6,{missing:!s3.paper});tone(390,.04,.015);if(!s3.paper){add('paper');toast('食塩水ペーパーを外すと電池として働きにくい')}else toast('食塩水ペーパーを戻した');update3()}
 }
-function r5(){
- cells=6;ledReverse=false;wet=true;pressure=20;baseBench(6);updateLed();$('#controlTitle').textContent='画面の電池を「押さえる」つもりで長押し';
- lab.querySelector('.bench').insertAdjacentHTML('beforeend','<div id="finger" class="finger">☝️</div>');
- controls.innerHTML='<button id="hold" class="holdBtn">🤏 ここを指で押さえ続ける</button><button id="check" class="check">💡 安定して点灯した</button>';
- let timer=null,held=0;
- const stop=()=>{clearInterval(timer);timer=null;$('#hold').classList.remove('active');$('#finger').classList.remove('down');if(held<8){pressure=20;updateLed();setMsg('指を離すと接触が弱くなった。もう少し長く押さえてみよう。','warn')}};
- $('#hold').addEventListener('pointerdown',e=>{e.preventDefault();held=0;$('#hold').classList.add('active');$('#finger').classList.add('down');setMsg('そのまま押さえて…コイン同士をしっかり接触させよう。','warn');timer=setInterval(()=>{held++;pressure=Math.min(100,20+held*10);const on=updateLed();if(on)setMsg('接触が安定してLEDが光った！','good')},120)});
- ['pointerup','pointercancel','pointerleave'].forEach(ev=>$('#hold').addEventListener(ev,stop));
- $('#check').onclick=()=>{if(pressure>=65&&updateLed()){add('contact');clear('指で押さえる意味がわかった！','課題研究でも、6組をセットして通電するまで時間がかかり、電極同士の接触を安定させる仕組みが課題になった。','🤏')}else setMsg('「押さえ続ける」を長押しして、LEDが光るところまで接触させよう。','bad')}
+function isReady(){return !s3.reverse&&s3.paper&&s3.contact}
+function update3(){
+ const led=$('#ledStage');
+ led.classList.toggle('on',isReady());
+ $('#paper')?.classList.toggle('active',s3.paper);
+ if(isReady()){
+   $('#spark').classList.remove('go');void $('#spark').offsetWidth;$('#spark').classList.add('go');
+   add('research');tone(760,.13,.03);
+   speech('<b>光った！</b> 極性・ペーパー・接触、3つを直せた。');
+   setTimeout(()=>clear('原因を自分で直した！','LEDの向き、食塩水ペーパー、コインの接触を1つずつ確かめた。','💡'),900)
+ }
 }
-function r6(){
- cells=1;ledReverse=false;wet=true;pressure=80;baseBench(1);$('#controlTitle').textContent='組数・LEDの向き・食塩水ペーパーを比べる';
- controls.innerHTML='<div class="choices"><button class="choice" data-n="1">1組</button><button class="choice" data-n="3">3組</button><button class="choice" data-n="6">6組</button><button id="flip" class="choice">LED向き反転</button></div><div class="choices" style="margin-top:7px"><button id="wet" class="choice active">塩水ペーパーあり</button><button id="nopaper" class="choice">塩水ペーパーなし</button></div><button id="check" class="check">🧪 点灯条件を見つけた</button>';
- const redraw=()=>{baseBench(cells,{bad:!wet});updateLed();const v=voltageFor(cells);if(v!==null)$('#meterDisplay').textContent=v.toFixed(1)+' V'};
- controls.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{cells=+b.dataset.n;redraw();setMsg(cells+'組に変更。電圧とLEDの様子を比べよう。','warn')});
- $('#flip').onclick=()=>{ledReverse=!ledReverse;redraw();setMsg(ledReverse?'LEDを逆向きにした。光る？':'LEDを正しい向きに戻した。','warn')};
- $('#wet').onclick=()=>{wet=true;redraw();$('#wet').classList.add('active');$('#nopaper').classList.remove('active');setMsg('10円玉と1円玉の間に、食塩水を含んだ紙が入っている。','good')};
- $('#nopaper').onclick=()=>{wet=false;redraw();$('#nopaper').classList.add('active');$('#wet').classList.remove('active');add('electrolyte');setMsg('塩水ペーパーを外した。電解質がないと電池として働きにくい。','bad')};
- $('#check').onclick=()=>{if(updateLed()){add('research');clear('条件を切り分けた！','6組・正しいLEDの向き・食塩水ペーパー・安定した接触。この4つを確かめると「なぜ光らない？」を調べられる。','🧪')}else setMsg('6組・正しいLEDの向き・塩水ペーパーありに戻してみよう。','bad')}
+
+function showDisc(){
+ $('#discList').innerHTML=all.map(([id,t])=>'<li class="'+(discoveries.has(id)?'':'lock')+'">'+(discoveries.has(id)?'✅ ':'🔒 ')+t+'</li>').join('');
+ $('#discModal').classList.add('show')
 }
-function r7(){
- cleaned=false;let washed=false,wiped=false;
- lab.innerHTML='<div class="cleanup"><div id="ten" class="coinBig ten dirty">10円</div><div id="one" class="coinBig one dirty">1円</div></div><div id="cleanupText" class="cleanupStep">① まず水で食塩水を流そう</div>';
- $('#controlTitle').textContent='「洗う」→「ふき取る」の順で片づける';
- controls.innerHTML='<div class="choices"><button id="wash" class="choice">💧 水で塩分を流す</button><button id="wipe" class="choice">🧻 布で水分をふく</button></div><button id="check" class="check">🧼 片づけ完了</button>';
- $('#wash').onclick=()=>{washed=true;$('#cleanupText').textContent='② 次に布で水分をふき取って乾いた状態にしよう';setMsg('食塩水を水で流した。次は水分をふき取ろう。','good')};
- $('#wipe').onclick=()=>{if(!washed){setMsg('先に水で食塩水を流そう。','warn');return}wiped=true;cleaned=true;$('#ten').classList.remove('dirty');$('#one').classList.remove('dirty');$('#cleanupText').textContent='塩分を流し、水分もふき取った';add('cleanup');setMsg('洗浄とふき取りが完了。','good')};
- $('#check').onclick=()=>{if(washed&&wiped)clear('実験終了！','課題研究では、洗わず保管したコインに変色や表面変化が見られた。実験後は塩分を落とし、水分をふき取って保管しよう。','🧼');else setMsg('「水で流す」→「布でふく」の2段階を終えよう。','warn')}
-}
-function showDisc(){const ul=$('#discList');ul.innerHTML='';all.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#discoverOverlay').classList.add('show')}
-$('#startBtn').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');stage=0;render()};
-$('#nextBtn').onclick=()=>{$('#stageOverlay').classList.remove('show');if(stage<6){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+all.length+'。11円電池を作り、測り、LEDが光る条件を実験で確かめた。';$('#finishOverlay').classList.add('show')}};
-$('#retryBtn').onclick=()=>{$('#finishOverlay').classList.remove('show');discoveries.clear();$('#discoverBtn').textContent='🔬 発見 0';stage=0;render()};
-$('#discoverBtn').onclick=showDisc;$('#showDisc').onclick=showDisc;$('#closeDisc').onclick=()=>$('#discoverOverlay').classList.remove('show');$('#whyClose').onclick=()=>$('#whyOverlay').classList.remove('show');$('#muteBtn').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
+$('#play').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');stage=0;render()};
+$('#next').onclick=()=>{$('#clearModal').classList.remove('show');if(stage<2){stage++;render()}else $('#finishModal').classList.add('show')};
+$('#again').onclick=()=>{$('#finishModal').classList.remove('show');discoveries.clear();$('#discBtn').textContent='🔬 発見 0';stage=0;render()};
+$('#discBtn').onclick=showDisc;$('#discClose').onclick=()=>$('#discModal').classList.remove('show');
 })();
 </script>
 </body>
