@@ -3,291 +3,208 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0a6787">
-<title>光合成ラボ！〜光と水と空気のひみつ〜</title>
+<meta name="theme-color" content="#075d78">
+<title>光合成ラボ！ O₂チャレンジ — 子どものMIKATA</title>
 <style>
 :root{
-  --navy:#07384b;--blue:#0a6787;--water:#bfeef4;--green:#43a96f;--deepgreen:#26734b;
-  --yellow:#ffdc5d;--orange:#ef9446;--red:#d95c55;--paper:#fffef8;--ink:#173f4b;
-  --muted:#607b84;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)
+ --navy:#073847;--blue:#08718f;--water:#bfeef3;--green:#42a86f;--deep:#247449;
+ --yellow:#ffdc5c;--orange:#ef9447;--red:#d95c55;--ink:#173e49;--muted:#647f87;
+ --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#052f40}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#052f40}
 body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}
 button,input{font:inherit}button{cursor:pointer}
 button:focus-visible,input:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
-#app{width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(#4eb9ce,#a5e3e7 46%,#e8f5d9);user-select:none}
-header{position:absolute;z-index:30;top:0;left:0;right:0;min-height:calc(88px + var(--safe-top));padding:calc(8px + var(--safe-top)) 11px 8px;background:linear-gradient(#0b6c8d,#07516d);color:#fff;border-bottom:3px solid #ffffff8a}
-.headrow{display:flex;align-items:center;justify-content:space-between;gap:8px}.brand{font-size:10px;font-weight:1000;letter-spacing:.04em}.stage{font-size:12px;font-weight:1000;background:#ffffff20;padding:5px 9px;border-radius:99px}.hud{display:flex;gap:6px;align-items:center}.points{background:#ffdc5d;color:#71460f;border-radius:99px;padding:6px 8px;font-size:11px;font-weight:1000;box-shadow:0 2px #b98628}.hud button{border:0;border-radius:99px;min-height:32px;padding:0 9px;background:white;color:var(--blue);font-size:11px;font-weight:1000}.progress{height:7px;margin-top:7px;border-radius:99px;background:#ffffff25;overflow:hidden}.progress span{display:block;height:100%;width:16.6%;background:var(--yellow);transition:width .25s}
-.screen{position:absolute;inset:0;display:none}.screen.active{display:flex}.title{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(101px + var(--safe-top)) 18px calc(18px + var(--safe-bottom))}
-.badge{background:#fff;color:var(--blue);padding:7px 14px;border-radius:99px;font-size:12px;font-weight:1000;box-shadow:0 4px #07516d30}.title h1{font-size:clamp(34px,9vw,46px);line-height:1.06;margin:12px 0 5px;color:#fff;text-shadow:0 4px #07516d}.title h1 em{font-style:normal;color:var(--yellow)}.subtitle{font-size:14px;font-weight:900;color:#0b526a;margin:0 0 8px}.hero{width:min(76vw,300px);height:min(31dvh,235px);min-height:150px;display:grid;place-items:center}.start,.primary,.check{border:0;border-radius:999px;background:var(--yellow);color:#784a17;font-weight:1000;box-shadow:0 5px #c3922f,0 0 0 3px #fff inset}.start{width:min(88vw,330px);min-height:56px;font-size:20px}.start:active,.primary:active,.check:active{transform:translateY(3px);box-shadow:0 2px #c3922f,0 0 0 3px #fff inset}.title small{max-width:350px;font-size:10px;line-height:1.5;color:#0b546b;font-weight:800;margin-top:10px}
-.game{flex-direction:column;padding-top:calc(96px + var(--safe-top));min-height:0}.task{flex:0 0 auto;margin:6px 10px 4px;background:#fff;border-radius:17px;padding:7px 10px;box-shadow:0 4px #0a728c30}.task b{display:block;color:var(--orange);font-size:10px}.task h2{font-size:16px;margin:2px 0}.task p{font-size:10px;margin:0;color:var(--muted);font-weight:800;line-height:1.32}
-.lab{position:relative;flex:1 1 auto;min-height:178px;margin:0 8px 4px;border:3px solid #ffffffb5;border-radius:22px;background:linear-gradient(#f9feffdd,#e9f7f4e9);overflow:hidden}.bench{position:absolute;left:4%;right:4%;bottom:5%;height:10%;background:#bc9870;border-radius:8px;box-shadow:0 5px #8d6d4e}.lamp{position:absolute;left:7%;top:10%;width:26%;height:60%}.lampHead{position:absolute;left:22%;top:4%;width:62%;height:24%;border-radius:50% 50% 35% 35%;background:#334f5c;border:5px solid #223d48;transform:rotate(18deg);transform-origin:70% 70%;box-shadow:0 0 var(--glow,8px) var(--glow2,2px) rgba(255,218,80,var(--lampAlpha,.35))}.lampBeam{position:absolute;left:47%;top:23%;width:92%;height:55%;clip-path:polygon(0 0,100% 18%,82% 100%,18% 100%);background:linear-gradient(90deg,rgba(255,237,148,var(--beamAlpha,.08)),rgba(255,229,89,var(--beamAlpha,.2)));filter:blur(2px)}.lampStand{position:absolute;left:43%;top:28%;width:12%;height:55%;background:#415c66;border-radius:8px}.lampBase{position:absolute;left:20%;bottom:0;width:62%;height:12%;border-radius:50%;background:#304b56}
-.tank{position:absolute;right:7%;bottom:12%;width:54%;height:70%;border:5px solid #6d98a6;border-top:0;border-radius:0 0 13px 13px;background:linear-gradient(rgba(216,249,253,.65),rgba(132,220,231,.68));overflow:hidden;box-shadow:inset 0 -12px 20px #2496ad22}.waterLine{position:absolute;top:7%;left:0;right:0;height:3px;background:#fff8;box-shadow:0 2px #48aac1}.plant{position:absolute;left:48%;bottom:0;width:48%;height:85%;transform:translateX(-50%)}.stem{position:absolute;left:49%;bottom:3%;width:7px;height:76%;background:#378c55;border-radius:8px;transform:rotate(-3deg);transform-origin:bottom}.leaf{position:absolute;width:34%;height:15%;background:linear-gradient(135deg,#59bd75,#2f8c54);border-radius:100% 0 100% 0;transform-origin:0 50%;box-shadow:inset 0 0 0 2px #27734a33}.l1{left:48%;bottom:23%;transform:rotate(-28deg)}.l2{left:26%;bottom:36%;transform:scaleX(-1) rotate(-22deg)}.l3{left:48%;bottom:50%;transform:rotate(-22deg)}.l4{left:26%;bottom:63%;transform:scaleX(-1) rotate(-18deg)}.l5{left:48%;bottom:75%;transform:rotate(-12deg)}.plantTip{position:absolute;left:47%;bottom:78%;width:8px;height:8px;border-radius:50%;background:#5ac579}.bubbleLayer{position:absolute;inset:0;overflow:hidden}.bubble{position:absolute;bottom:17%;width:var(--size,10px);height:var(--size,10px);border:2px solid #fff;border-radius:50%;background:#ffffff35;box-shadow:inset 2px 2px 3px #fff8,0 0 8px #fff5;animation:bubbleRise var(--dur,1.8s) linear forwards;touch-action:manipulation;cursor:pointer}.bubble.pop{animation:none;transform:scale(1.8);opacity:0;transition:.16s}.pointFly{position:absolute;z-index:20;color:#fff;font-weight:1000;font-size:12px;text-shadow:0 2px 3px #07516d;pointer-events:none;animation:pointFly .65s ease-out forwards}@keyframes pointFly{from{transform:translateY(0) scale(.8);opacity:1}to{transform:translateY(-42px) scale(1.25);opacity:0}}.rateBadge{position:absolute;right:5px;top:5px;background:#ffffffe5;border-radius:99px;padding:4px 7px;font-size:9px;font-weight:1000;color:#38616e}.conditionTag{position:absolute;left:5px;top:5px;background:#0a6787d9;color:white;border-radius:10px;padding:4px 6px;font-size:9px;font-weight:1000;line-height:1.35}
-@keyframes bubbleRise{0%{transform:translate(0,0) scale(.75);opacity:.25}20%{opacity:.95}100%{transform:translate(var(--drift,10px),-150px) scale(1.15);opacity:0}}
-.message{flex:0 0 auto;margin:0 10px 4px;min-height:39px;border-radius:14px;padding:6px 9px;background:#fffffff2;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:900;box-shadow:0 3px #0a718a25}.message.good{background:#e6f8df;color:#2e684a}.message.warn{background:#fff1d9;color:#8a5a20}.message.bad{background:#ffe4df;color:#95413c}.dot{width:9px;height:9px;border-radius:50%;background:var(--blue);flex:0 0 auto}.good .dot{background:var(--green)}.warn .dot{background:var(--orange)}.bad .dot{background:var(--red)}
-.controls{flex:0 0 auto;background:#07516de8;color:white;border-top:3px solid #ffffff72;padding:7px 9px calc(8px + var(--safe-bottom))}.ctitle{text-align:center;font-size:10px;font-weight:1000;color:#dff8ff;margin:0 0 5px}.controlbox{background:#ffffff12;border:1px solid #ffffff32;border-radius:15px;padding:7px}.range{width:100%;accent-color:var(--yellow)}.scale{display:flex;justify-content:space-between;font-size:9px;color:#d8f4fa;font-weight:900}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.choice{border:0;min-height:44px;border-radius:13px;background:#fff;color:var(--blue);font-size:11px;font-weight:1000;box-shadow:0 4px #003e54}.choice.active{background:var(--yellow);color:#704718}.choice:active{transform:translateY(2px);box-shadow:0 2px #003e54}.check{width:100%;min-height:42px;margin-top:7px;font-size:13px}.miniRow{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}.mini{border:0;min-height:38px;border-radius:12px;background:#fff;color:var(--blue);font-weight:1000;font-size:10px}.logStrip{display:flex;gap:5px;overflow-x:auto;margin-top:6px;padding-bottom:2px}.logChip{flex:0 0 auto;background:#ffffff18;border:1px solid #ffffff44;border-radius:9px;padding:4px 6px;font-size:9px;font-weight:900}.hintline{font-size:9px;color:#d8f4fa;text-align:center;margin-top:5px;font-weight:800}
-.overlay{position:absolute;z-index:60;inset:0;display:none;place-items:center;padding:18px;background:#052f42dd}.overlay.show{display:grid}.card{width:100%;max-width:356px;background:white;border-radius:24px;padding:18px;text-align:center;box-shadow:0 10px #052938;max-height:88dvh;overflow:auto}.card .emoji{font-size:40px}.card h2{margin:2px 0 6px;color:var(--green);font-size:25px}.card p{font-size:12px;line-height:1.55;font-weight:800;color:#49656e}.primary{width:100%;min-height:48px;font-size:15px;margin-top:8px}.closeBtn{border:0;border-radius:99px;background:var(--blue);color:white;padding:10px 18px;font-weight:1000}.discoverList,.compareList{list-style:none;padding:0;margin:8px 0;text-align:left}.discoverList li{margin:5px 0;padding:7px 9px;border-radius:10px;background:#eef8f1;font-size:10px;font-weight:900}.discoverList .locked{background:#f1f2f2;color:#9aa5a8}.compareCard{background:#f1f8fa;border-radius:13px;padding:9px;margin:6px 0;text-align:left;font-size:10px;font-weight:900}.bar{height:8px;background:#d8e6e9;border-radius:99px;overflow:hidden;margin-top:4px}.bar span{display:block;height:100%;background:var(--green)}.why{background:#fff5d8;border-left:5px solid var(--yellow);padding:9px;border-radius:10px;text-align:left;font-size:11px;font-weight:800;line-height:1.5}.research{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.metric{background:#eef8f1;border-radius:12px;padding:9px;font-size:11px;font-weight:900}
-.modelNote{font-size:9px;color:#718890;margin-top:7px;line-height:1.45}
-@media(max-height:650px){header{min-height:calc(78px + var(--safe-top));padding-top:calc(5px + var(--safe-top))}.game{padding-top:calc(85px + var(--safe-top))}.task{padding:5px 8px;margin-top:3px}.task h2{font-size:14px}.task p{display:none}.lab{min-height:145px}.message{min-height:32px;font-size:10px}.controls{padding-top:5px}.choice{min-height:39px}.check{min-height:38px;margin-top:5px}.tank{height:68%}}
-@media(max-height:570px){.brand{display:none}.game{padding-top:calc(75px + var(--safe-top))}.lab{min-height:122px}.message{min-height:29px}.ctitle{display:none}.rateBadge{display:none}}
+#app{width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(#45b8cf,#a6e3e8 47%,#e6f3d8);user-select:none}
+.screen{position:absolute;inset:0;display:none}.screen.active{display:flex}
+.title{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(18px + var(--safe-top)) 18px calc(18px + var(--safe-bottom))}
+.badge{font-size:12px;font-weight:1000;color:#075d78;background:#fff;padding:7px 14px;border-radius:999px;box-shadow:0 4px #07516d30}
+.title h1{font-size:clamp(38px,10vw,52px);line-height:1.02;color:white;text-shadow:0 4px #07516d;margin:12px 0 6px}.title h1 em{font-style:normal;color:var(--yellow)}
+.subtitle{font-size:14px;line-height:1.45;font-weight:900;color:#07556d;max-width:360px;margin:0}
+.hero{width:min(78vw,310px);height:min(34dvh,245px);min-height:165px;display:grid;place-items:center;position:relative}
+.start{width:min(88vw,340px);min-height:58px;border:0;border-radius:999px;background:var(--yellow);color:#774813;font-weight:1000;font-size:20px;box-shadow:0 5px #c2912e,0 0 0 3px white inset}
+.start:active{transform:translateY(3px);box-shadow:0 2px #c2912e,0 0 0 3px white inset}
+.title small{font-size:10px;line-height:1.45;font-weight:800;color:#14566b;max-width:350px;margin-top:10px}
+.how{display:flex;gap:6px;margin:8px 0 10px;max-width:360px}.how span{flex:1;background:#ffffffc9;border-radius:12px;padding:7px 5px;font-size:10px;font-weight:900;color:#315c68}
+.game{flex-direction:column;padding-top:calc(7px + var(--safe-top));min-height:0}
+.topbar{flex:0 0 auto;margin:0 8px 5px;border-radius:18px;background:linear-gradient(#086d8c,#07516d);color:#fff;padding:7px 8px;box-shadow:0 4px #06394b35}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:6px}.logo{font-size:10px;font-weight:1000}.mute{border:0;border-radius:999px;background:#fff;color:#07516d;min-width:38px;min-height:32px;font-weight:1000}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:6px}.stat{background:#ffffff17;border:1px solid #ffffff2f;border-radius:12px;padding:5px 6px;text-align:center}.stat b{display:block;font-size:17px;line-height:1.05}.stat span{font-size:8px;font-weight:900;color:#dff7fc}.timer.danger b{color:#ffd76a}
+.meter{height:8px;background:#ffffff24;border-radius:999px;overflow:hidden;margin-top:6px}.meter span{display:block;height:100%;width:0;background:var(--yellow);transition:width .18s}
+.lab{position:relative;flex:1 1 auto;min-height:225px;margin:0 8px 5px;border:3px solid #ffffffbd;border-radius:23px;background:linear-gradient(#f9feffe8,#e6f6f1e8);overflow:hidden}
+.sun{position:absolute;left:7%;top:8%;width:53px;height:53px;border-radius:50%;background:#ffe16a;box-shadow:0 0 var(--sunGlow,15px) rgba(255,218,68,.75);transition:.2s}.ray{position:absolute;left:18%;top:17%;width:36%;height:50%;background:linear-gradient(100deg,rgba(255,226,93,.25),rgba(255,226,93,0));clip-path:polygon(0 0,100% 20%,80% 100%,18% 85%);opacity:var(--rayOpacity,.4)}
+.tank{position:absolute;left:27%;right:8%;bottom:8%;height:78%;border:5px solid #709ba7;border-top:0;border-radius:0 0 14px 14px;background:linear-gradient(#d9f9fcaa,#83d9e5bb);overflow:hidden;box-shadow:inset 0 -15px 22px #147f9b18}.waterLine{position:absolute;left:0;right:0;top:6%;height:3px;background:#fff8;box-shadow:0 2px #53b1c5}
+.plant{position:absolute;left:49%;bottom:0;width:52%;height:85%;transform:translateX(-50%)}.stem{position:absolute;left:49%;bottom:2%;width:8px;height:77%;background:#378d57;border-radius:10px;transform:rotate(-3deg);transform-origin:bottom}.leaf{position:absolute;width:36%;height:15%;background:linear-gradient(135deg,#5fc27b,#2d8b53);border-radius:100% 0 100% 0;box-shadow:inset 0 0 0 2px #1d71443a}.l1{left:47%;bottom:22%;transform:rotate(-28deg)}.l2{left:25%;bottom:36%;transform:scaleX(-1) rotate(-22deg)}.l3{left:47%;bottom:50%;transform:rotate(-22deg)}.l4{left:25%;bottom:64%;transform:scaleX(-1) rotate(-17deg)}.l5{left:47%;bottom:76%;transform:rotate(-10deg)}
+.bubbles{position:absolute;inset:0;overflow:hidden}.bubble{position:absolute;bottom:16%;width:var(--s,11px);height:var(--s,11px);border:2px solid #fff;border-radius:50%;background:#ffffff35;box-shadow:inset 2px 2px 3px #fff9,0 0 7px #fff6;animation:rise var(--dur,1.7s) linear forwards;cursor:pointer;touch-action:manipulation}.bubble.gold{border-color:#ffe064;background:#fff4a780;box-shadow:0 0 11px #ffd84a}.bubble.pop{animation:none;transform:scale(1.8);opacity:0;transition:.16s}
+@keyframes rise{0%{transform:translate(0,0) scale(.7);opacity:.35}20%{opacity:1}100%{transform:translate(var(--drift,7px),-180px) scale(1.15);opacity:0}}
+.ratePanel{position:absolute;right:7px;top:7px;background:#ffffffeb;border-radius:13px;padding:6px 8px;min-width:98px;text-align:center;box-shadow:0 3px #07516d20}.ratePanel b{display:block;font-size:19px;color:var(--green)}.ratePanel span{font-size:8px;font-weight:1000;color:#57727b}
+.bottleneck{position:absolute;left:6px;bottom:6px;right:6px;border-radius:11px;background:#073847d9;color:#fff;padding:5px 7px;font-size:10px;font-weight:900;text-align:center}.bottleneck.hot{background:#2d8e5de8}.bottleneck.warn{background:#b96b2bea}
+.event{position:absolute;z-index:15;left:50%;top:44%;transform:translate(-50%,-50%) scale(.9);width:82%;background:#fff8db;border:3px solid var(--yellow);border-radius:18px;padding:10px;text-align:center;font-size:12px;font-weight:1000;color:#795019;opacity:0;pointer-events:none;transition:.18s}.event.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.super{position:absolute;z-index:14;left:50%;top:23%;transform:translate(-50%,-50%) scale(.7);font-size:18px;font-weight:1000;color:#fff;text-shadow:0 3px #08718f,0 0 10px #0a7895;opacity:0;white-space:nowrap;pointer-events:none}.super.show{animation:super .8s ease-out}@keyframes super{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-65%) scale(1)}}
+.fly{position:absolute;z-index:25;font-size:12px;font-weight:1000;color:#fff;text-shadow:0 2px 3px #07516d;pointer-events:none;animation:fly .65s ease-out forwards}@keyframes fly{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-45px) scale(1.25)}}
+.controls{flex:0 0 auto;margin:0 8px calc(7px + var(--safe-bottom));padding:8px;background:#07516de8;color:#fff;border-radius:18px}.controlHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;font-size:10px;font-weight:1000}.controlHead span:last-child{color:#d7f5fb}
+.row{display:grid;grid-template-columns:49px 1fr 44px;gap:6px;align-items:center;margin:5px 0}.row label{font-size:11px;font-weight:1000}.row input{width:100%;accent-color:var(--yellow)}.value{text-align:right;font-size:11px;font-weight:1000;color:var(--yellow)}
+.tip{font-size:9px;text-align:center;color:#d9f5fb;font-weight:800;margin-top:5px}
+.countdown{position:absolute;z-index:90;inset:0;display:none;place-items:center;background:#053247c7;color:white;font-size:78px;font-weight:1000;text-shadow:0 6px #063047}.countdown.show{display:grid}
+.overlay{position:absolute;z-index:80;inset:0;display:none;place-items:center;padding:18px;background:#052f42df}.overlay.show{display:grid}.card{width:100%;max-width:356px;background:#fff;border-radius:25px;padding:18px;text-align:center;box-shadow:0 10px #052938}.card .emoji{font-size:45px}.card h2{font-size:27px;color:var(--green);margin:3px 0 5px}.card p{font-size:12px;line-height:1.5;font-weight:800;color:#536e76}.resultGrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}.result{background:#eef8f1;border-radius:13px;padding:9px}.result b{font-size:21px;display:block}.result span{font-size:9px;font-weight:900;color:#647b82}.rank{font-size:20px;font-weight:1000;color:#dd7e2e;margin:4px 0}.primary{width:100%;min-height:50px;border:0;border-radius:999px;background:var(--yellow);color:#774813;font-weight:1000;font-size:16px;box-shadow:0 5px #c2912e,0 0 0 3px white inset}
+@media(max-height:650px){.game{padding-top:calc(4px + var(--safe-top))}.topbar{padding:5px 7px}.stats{margin-top:4px}.stat b{font-size:15px}.lab{min-height:170px}.controls{padding:6px}.row{margin:3px 0}.sun{width:45px;height:45px}.ratePanel b{font-size:16px}}
+@media(max-height:570px){.logo{display:none}.lab{min-height:145px}.tip{display:none}.ratePanel{padding:4px 6px}.bottleneck{font-size:9px}.row{grid-template-columns:44px 1fr 40px}.controls{margin-bottom:calc(3px + var(--safe-bottom))}}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div id="app">
-<header>
- <div class="headrow">
-  <div><div class="brand">子どものMIKATA｜理科体験ゲーム</div><div id="stageLabel" class="stage">☀️ 光 1 / 6</div></div>
-  <div class="hud"><div id="points" class="points">O₂ 0</div><button id="discoverBtn">🔬 発見 0</button><button id="muteBtn">🔊</button></div>
- </div>
- <div class="progress"><span id="progress"></span></div>
-</header>
-
-<main id="titleScreen" class="screen title active">
- <div class="badge">失敗すると発見が増える</div>
+<main id="title" class="screen title active">
+ <div class="badge">60秒 O₂チャレンジ</div>
  <h1>光合成<br><em>ラボ！</em></h1>
- <p class="subtitle">条件を変えて、気泡の変化から「なぜ？」を見つけよう。</p>
+ <p class="subtitle">光・CO₂・水を整えて、酸素をどこまで集められる？</p>
  <div class="hero" aria-hidden="true">
-  <svg viewBox="0 0 280 220">
-   <rect x="105" y="65" width="125" height="135" rx="10" fill="#bfeef4" stroke="#6b9aaa" stroke-width="7"/>
-   <path d="M165 192 C165 147 157 118 169 84" stroke="#388f58" stroke-width="8" fill="none"/>
-   <ellipse cx="188" cy="132" rx="33" ry="13" fill="#4eaf69" transform="rotate(-24 188 132)"/>
-   <ellipse cx="142" cy="153" rx="30" ry="12" fill="#47a866" transform="rotate(28 142 153)"/>
-   <circle cx="188" cy="102" r="8" fill="none" stroke="#fff" stroke-width="3"/>
-   <circle cx="199" cy="78" r="6" fill="none" stroke="#fff" stroke-width="3"/>
-   <circle cx="190" cy="58" r="5" fill="none" stroke="#fff" stroke-width="3"/>
-   <path d="M40 45 H100 L87 82 H53 Z" fill="#344e59"/><circle cx="70" cy="58" r="19" fill="#ffe071" opacity=".9"/>
-   <path d="M95 65 L132 83 L115 145 L78 128 Z" fill="#ffe071" opacity=".25"/>
+  <svg viewBox="0 0 300 240">
+   <circle cx="61" cy="55" r="29" fill="#ffe16a"/><path d="M82 74 L126 94 L112 159 L68 136 Z" fill="#ffe16a" opacity=".28"/>
+   <rect x="116" y="70" width="135" height="145" rx="10" fill="#bfeef4" stroke="#709ba7" stroke-width="7"/>
+   <path d="M177 207 C176 165 165 134 180 93" fill="none" stroke="#378d57" stroke-width="8"/>
+   <ellipse cx="201" cy="145" rx="34" ry="13" fill="#55b873" transform="rotate(-24 201 145)"/><ellipse cx="153" cy="169" rx="31" ry="12" fill="#49aa68" transform="rotate(26 153 169)"/>
+   <circle cx="201" cy="112" r="8" fill="none" stroke="#fff" stroke-width="3"/><circle cx="217" cy="87" r="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="204" cy="62" r="6" fill="none" stroke="#ffdb4f" stroke-width="4"/>
   </svg>
  </div>
- <button id="startBtn" class="start">研究を始める</button>
- <small>教育用の単純モデルです。実際の光合成速度は温度や植物の状態など多くの条件にも影響されます。</small>
+ <div class="how"><span>☀️<br>光</span><span>☁️<br>CO₂</span><span>💧<br>水</span><span>→ O₂<br>ぷくぷく！</span></div>
+ <button id="start" class="start">60秒チャレンジ START</button>
+ <small>条件のうち一番足りないものがボトルネック。途中で環境トラブルも起こるよ。教育用の単純モデルです。</small>
 </main>
 
-<main id="gameScreen" class="screen game">
- <section class="task"><b id="mission">MISSION 01</b><h2 id="taskTitle"></h2><p id="taskText"></p></section>
- <section class="lab">
-  <div class="lamp"><div id="lampHead" class="lampHead"></div><div id="lampBeam" class="lampBeam"></div><div class="lampStand"></div><div class="lampBase"></div></div>
-  <div class="tank">
-   <div class="waterLine"></div>
-   <div class="plant">
-    <div class="stem"></div><div class="leaf l1"></div><div class="leaf l2"></div><div class="leaf l3"></div><div class="leaf l4"></div><div class="leaf l5"></div><div class="plantTip"></div>
-   </div>
-   <div id="bubbleLayer" class="bubbleLayer"></div>
-   <div id="conditionTag" class="conditionTag"></div>
-   <div id="rateBadge" class="rateBadge">観察中</div>
+<main id="game" class="screen game">
+ <section class="topbar">
+  <div class="toprow"><div class="logo">子どものMIKATA｜光合成ラボ</div><button id="mute" class="mute" aria-label="音の切り替え">🔊</button></div>
+  <div class="stats">
+   <div id="timerBox" class="stat timer"><b id="time">60</b><span>秒</span></div>
+   <div class="stat"><b id="oxygen">0</b><span>O₂</span></div>
+   <div class="stat"><b id="combo">×1</b><span>COMBO</span></div>
   </div>
-  <div class="bench"></div>
+  <div class="meter"><span id="timeMeter"></span></div>
  </section>
- <div id="message" class="message warn" aria-live="polite"><span class="dot"></span><span></span></div>
- <section class="controls"><p id="controlTitle" class="ctitle"></p><div id="controlArea"></div></section>
+
+ <section class="lab">
+  <div id="sun" class="sun"></div><div id="ray" class="ray"></div>
+  <div class="tank"><div class="waterLine"></div><div class="plant"><div class="stem"></div><div class="leaf l1"></div><div class="leaf l2"></div><div class="leaf l3"></div><div class="leaf l4"></div><div class="leaf l5"></div></div><div id="bubbles" class="bubbles"></div></div>
+  <div class="ratePanel"><b id="rate">0%</b><span>光合成パワー</span></div>
+  <div id="bottleneck" class="bottleneck">条件を整えよう！</div>
+  <div id="event" class="event"></div>
+  <div id="super" class="super">SUPER PHOTOSYNTHESIS!</div>
+ </section>
+
+ <section class="controls">
+  <div class="controlHead"><span>環境コントロール</span><span>足りない条件を探せ！</span></div>
+  <div class="row"><label for="light">☀️ 光</label><input id="light" type="range" min="5" max="100" value="48"><span id="lightVal" class="value">48%</span></div>
+  <div class="row"><label for="co2">☁️ CO₂</label><input id="co2" type="range" min="5" max="100" value="52"><span id="co2Val" class="value">52%</span></div>
+  <div class="row"><label for="water">💧 水</label><input id="water" type="range" min="5" max="100" value="45"><span id="waterVal" class="value">45%</span></div>
+  <div class="tip">気泡は自動でO₂になる。金色の気泡をタップするとボーナス！</div>
+ </section>
 </main>
 
-<div id="clearOverlay" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle"></h2><p id="clearText"></p><button id="nextBtn" class="primary">次の実験へ</button></div></div>
-<div id="discoverOverlay" class="overlay"><div class="card"><div class="emoji">🔬</div><h2>発見コレクション</h2><ul id="discoverList" class="discoverList"></ul><button id="closeDiscover" class="closeBtn">戻る</button></div></div>
-<div id="compareOverlay" class="overlay"><div class="card"><div class="emoji">📊</div><h2>実験結果を比較</h2><div id="compareList" class="compareList"></div><button id="closeCompare" class="closeBtn">戻る</button></div></div>
-<div id="whyOverlay" class="overlay"><div class="card"><div class="emoji">💡</div><h2>なぜ？</h2><div id="whyText" class="why"></div><button id="closeWhy" class="closeBtn">実験へ戻る</button></div></div>
-<div id="finishOverlay" class="overlay"><div class="card"><div class="emoji">🌱🔬</div><h2>光合成研究員！</h2><div id="researchSummary" class="research"></div><p class="modelNote">このゲームは条件の関係を学ぶための教育用単純モデルです。実際の植物では温度、葉の状態、光の波長など他の要因も関わります。</p><button id="finishDiscover" class="primary">発見コレクションを見る</button><button id="retryBtn" class="primary">最初から再実験</button></div></div>
+<div id="countdown" class="countdown">3</div>
+<div id="finish" class="overlay"><div class="card">
+ <div class="emoji">🌿🫧</div><h2>研究終了！</h2><div id="rank" class="rank"></div>
+ <div class="resultGrid"><div class="result"><b id="finalO2">0</b><span>集めたO₂</span></div><div class="result"><b id="bestRate">0%</b><span>最高光合成</span></div><div class="result"><b id="bestCombo">×1</b><span>最高コンボ</span></div><div class="result"><b id="eventsSolved">0</b><span>立て直した回数</span></div></div>
+ <p id="resultText"></p><button id="retry" class="primary">もう一度チャレンジ</button>
+</div></div>
 </div>
 
 <script>
 (()=>{
 const $=s=>document.querySelector(s);
-const state={stage:0,light:.2,co2:.65,water:1,rate:0,muted:false,experiments:[],discoveries:new Set(),whyCount:0,comparisons:0,freeRecords:0,trouble:null,transitioning:false,points:0,hypothesis:null};
-const defs=[
- {label:'☀️ 光 1 / 6',mission:'MISSION 01',title:'光を変えると、気泡はどうなる？',text:'光を弱く・強くして、最低2条件を記録して比べよう。'},
- {label:'↩️ もう一度 2 / 6',mission:'MISSION 02',title:'光を強くして、また弱く戻したら？',text:'強くしたときと、元の弱い光へ戻したときの気泡を比べよう。'},
- {label:'☁️ CO₂ 3 / 6',mission:'MISSION 03',title:'光は十分。でも気泡が少ない。なぜ？',text:'二酸化炭素と光を試し、足りない条件を見つけよう。'},
- {label:'💧 水 4 / 6',mission:'MISSION 04',title:'光もCO₂も十分。それでも少ない？',text:'水の状態を変えて、気泡の変化を観察しよう。'},
- {label:'🧪 自由研究 5 / 6',mission:'MISSION 05',title:'条件ぐちゃぐちゃ研究所',text:'光・CO₂・水を自由に変え、3種類以上の実験を記録しよう。'},
- {label:'🚨 トラブル 6 / 6',mission:'MISSION 06',title:'気泡が増えない原因を調べよう',text:'前と同じ操作では解けない。画面の条件を観察して原因を探そう。'}
-];
-const discoveryDefs=[
- ['low-light','光が弱い → 気泡が少ない'],
- ['more-light','光を強くすると → 気泡が増える'],
- ['light-return','光を弱く戻すと → 気泡も少ない状態へ戻る'],
- ['light-saturation','光を強くしても → 増え方が小さくなることがある'],
- ['co2-limit','CO₂が少ない → 光が強くても増えにくい'],
- ['water-limit','水の条件が不足 → 光合成が進みにくい'],
- ['one-limit','足りない条件が1つあると → 他が十分でも速さが上がりにくい'],
- ['fair-test','1つだけ条件を変える → 原因を比べやすい'],
- ['mixed-test','複数条件を同時に変える → 原因を1つに決めにくい'],
- ['trouble-solve','「もっと同じ操作」ではなく → 足りない条件を探す']
-];
-let audio=null,lastBubble=0,bubbleClock=0,bubbleCountWindow=0,bubbleTimerStart=performance.now(),recordsThisStage=[];
+const G=60;
+const state={light:.48,co2:.52,water:.45,rate:0,oxygen:0,combo:1,bestCombo:1,bestRate:0,time:G,running:false,muted:false,eventCount:0,solved:0,lastEventAt:0,highSince:null,lastBubble:0,lastScoreTick:0,audio:null,master:null,soundReady:false,raf:0,startTs:0};
+function clamp(v,a=0,b=1){return Math.max(a,Math.min(b,v))}
 function lightEffect(x){return 1-Math.exp(-3*x)}
-function calcRate(){return Math.max(.015,Math.min(lightEffect(state.light),state.co2,state.water))}
-function rateLabel(r){if(r<.18)return'かなり少ない';if(r<.38)return'少ない';if(r<.62)return'中くらい';if(r<.82)return'多い';return'かなり多い'}
-let masterGain=null,soundUnlocked=false;
+function calcRate(){return clamp(Math.min(lightEffect(state.light),state.co2,state.water))}
 async function unlockAudio(){
- if(state.muted)return null;
- if(!audio){
-  const C=window.AudioContext||window.webkitAudioContext;
-  if(!C)return null;
-  audio=new C();
-  masterGain=audio.createGain();
-  masterGain.gain.value=.65;
-  masterGain.connect(audio.destination);
- }
- try{if(audio.state==='suspended')await audio.resume()}catch(e){}
- if(!soundUnlocked&&audio.state==='running'){
-  const o=audio.createOscillator(),g=audio.createGain(),t=audio.currentTime;
-  g.gain.setValueAtTime(.0001,t);o.connect(g).connect(masterGain);o.start(t);o.stop(t+.015);soundUnlocked=true;
- }
- return audio;
+ if(state.muted)return;
+ if(!state.audio){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;state.audio=new C();state.master=state.audio.createGain();state.master.gain.value=.72;state.master.connect(state.audio.destination)}
+ try{if(state.audio.state==='suspended')await state.audio.resume()}catch(e){}
+ if(!state.soundReady&&state.audio.state==='running'){const o=state.audio.createOscillator(),g=state.audio.createGain(),t=state.audio.currentTime;g.gain.value=.0001;o.connect(g).connect(state.master);o.start(t);o.stop(t+.015);state.soundReady=true}
 }
-function ensureAudio(){if(state.muted)return null;if(!audio)return null;return audio}
-function tone(f=520,d=.09,g=.06,type='sine',delay=0){
- const c=ensureAudio();if(!c||!masterGain)return;
- const o=c.createOscillator(),a=c.createGain(),t=c.currentTime+delay;
- o.type=type;o.frequency.setValueAtTime(f,t);
- a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.012);a.gain.exponentialRampToValueAtTime(.0001,t+d);
- o.connect(a).connect(masterGain);o.start(t);o.stop(t+d+.03);
+function tone(f,d=.08,g=.055,type='sine',delay=0){
+ if(state.muted||!state.audio||!state.master||state.audio.state!=='running')return;
+ const t=state.audio.currentTime+delay,o=state.audio.createOscillator(),a=state.audio.createGain();o.type=type;o.frequency.setValueAtTime(f,t);a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.012);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(state.master);o.start(t);o.stop(t+d+.025)
 }
-function sfx(kind){
- if(kind==='bubble'){tone(520+Math.random()*80,.08,.045,'sine');tone(880+Math.random()*120,.045,.018,'triangle',.015)}
- if(kind==='tap'){tone(720,.06,.055,'triangle')}
- if(kind==='good'){tone(523,.11,.055,'sine');tone(659,.13,.05,'sine',.08);tone(784,.18,.055,'sine',.17)}
- if(kind==='bad'){tone(210,.12,.05,'sawtooth');tone(165,.15,.035,'sawtooth',.08)}
+function sfx(k){
+ if(k==='bubble'){tone(540+Math.random()*80,.08,.04);tone(900+Math.random()*100,.045,.018,'triangle',.018)}
+ if(k==='gold'){tone(700,.08,.06,'triangle');tone(1020,.13,.05,'sine',.06)}
+ if(k==='good'){tone(523,.1,.055);tone(659,.12,.05,'sine',.08);tone(784,.17,.055,'sine',.16)}
+ if(k==='alarm'){tone(220,.13,.06,'square');tone(180,.14,.045,'square',.14)}
+ if(k==='end'){tone(392,.12,.05);tone(523,.13,.05,'sine',.1);tone(659,.22,.06,'sine',.2)}
 }
-function addPoints(n,x=50,y=50){state.points+=n;$('#points').textContent='O₂ '+state.points;const p=document.createElement('div');p.className='pointFly';p.textContent='+'+n+' O₂';p.style.left=x+'%';p.style.top=y+'%';$('.lab').appendChild(p);setTimeout(()=>p.remove(),700);sfx('tap')}
-function setMsg(t,cls=''){const m=$('#message');m.className='message '+cls;m.querySelector('span:last-child').textContent=t}
-function unlock(id){if(!state.discoveries.has(id)){state.discoveries.add(id);$('#discoverBtn').textContent='🔬 発見 '+state.discoveries.size;tone(760,.07,.025)}}
-function updateExperiment(){
- state.rate=calcRate();
- const lampAlpha=.15+.75*state.light;
- $('#lampHead').style.setProperty('--lampAlpha',lampAlpha);$('#lampHead').style.setProperty('--glow',(4+state.light*24)+'px');$('#lampHead').style.setProperty('--glow2',(1+state.light*7)+'px');$('#lampBeam').style.setProperty('--beamAlpha',(.04+state.light*.32));
- $('#conditionTag').innerHTML='光 '+Math.round(state.light*100)+'%<br>CO₂ '+Math.round(state.co2*100)+'%<br>水 '+Math.round(state.water*100)+'%';
- $('#rateBadge').textContent='気泡：'+rateLabel(state.rate);
- if(state.light<.25)unlock('low-light');if(state.light>.65&&state.rate>.35)unlock('more-light');
- if(state.light>.85&&state.rate<.5)unlock('one-limit');
+function setInputs(){
+ state.light=+$('#light').value/100;state.co2=+$('#co2').value/100;state.water=+$('#water').value/100;
+ $('#lightVal').textContent=Math.round(state.light*100)+'%';$('#co2Val').textContent=Math.round(state.co2*100)+'%';$('#waterVal').textContent=Math.round(state.water*100)+'%';updateView()
+}
+function updateView(){
+ state.rate=calcRate();state.bestRate=Math.max(state.bestRate,state.rate);
+ $('#rate').textContent=Math.round(state.rate*100)+'%';
+ $('#sun').style.setProperty('--sunGlow',(6+state.light*28)+'px');$('#ray').style.setProperty('--rayOpacity',(.08+state.light*.45));
+ const vals=[['☀️ 光',lightEffect(state.light)],['☁️ CO₂',state.co2],['💧 水',state.water]].sort((a,b)=>a[1]-b[1]);const low=vals[0];
+ const b=$('#bottleneck');
+ if(state.rate>=.86){b.className='bottleneck hot';b.textContent='🔥 光合成フルパワー！ O₂大量生産中'}
+ else if(state.rate>=.62){b.className='bottleneck';b.textContent='もう少し！ 一番足りないのは '+low[0]}
+ else{b.className='bottleneck warn';b.textContent='⚠ ボトルネック：'+low[0]+' が足りない！'}
+ if(state.rate>=.84){
+   if(state.highSince===null)state.highSince=performance.now();
+   const held=(performance.now()-state.highSince)/1000;
+   state.combo=held>8?3:held>3?2:1;
+ }else{state.highSince=null;state.combo=1}
+ state.bestCombo=Math.max(state.bestCombo,state.combo);$('#combo').textContent='×'+state.combo
+}
+function addO2(n,x=50,y=38){
+ state.oxygen+=n;$('#oxygen').textContent=Math.floor(state.oxygen);
+ const p=document.createElement('div');p.className='fly';p.textContent='+'+n+' O₂';p.style.left=x+'%';p.style.top=y+'%';$('.lab').appendChild(p);setTimeout(()=>p.remove(),700)
 }
 function spawnBubble(){
- const b=document.createElement('div');b.className='bubble';const size=8+Math.random()*10;b.style.setProperty('--size',size+'px');b.style.left=(42+Math.random()*16)+'%';b.style.setProperty('--dur',(1.35+Math.random()*.8)+'s');b.style.setProperty('--drift',(-14+Math.random()*28)+'px');$('#bubbleLayer').appendChild(b);
- b.addEventListener('pointerdown',async e=>{e.preventDefault();await unlockAudio();if(b.dataset.hit)return;b.dataset.hit='1';const r=b.getBoundingClientRect(),lr=$('.lab').getBoundingClientRect();addPoints(1,((r.left-lr.left)/lr.width)*100,((r.top-lr.top)/lr.height)*100);b.classList.add('pop');setTimeout(()=>b.remove(),180)});
- b.addEventListener('animationend',()=>b.remove());sfx('bubble');bubbleCountWindow++
+ const b=document.createElement('div');const gold=Math.random()<(.06+.06*state.rate);b.className='bubble'+(gold?' gold':'');const size=(gold?14:8)+Math.random()*(gold?8:9);b.style.setProperty('--s',size+'px');b.style.left=(43+Math.random()*18)+'%';b.style.setProperty('--dur',(1.15+Math.random()*.9)+'s');b.style.setProperty('--drift',(-13+Math.random()*26)+'px');$('#bubbles').appendChild(b);
+ b.addEventListener('pointerdown',async e=>{e.preventDefault();await unlockAudio();if(b.dataset.hit)return;b.dataset.hit='1';const bonus=gold?5:1;addO2(bonus,55,45);sfx(gold?'gold':'bubble');b.classList.add('pop');setTimeout(()=>b.remove(),170)});
+ b.addEventListener('animationend',()=>{if(!b.dataset.hit){addO2(gold?2:1,56,33);if(gold)sfx('gold');else if(Math.random()<.25)sfx('bubble')}b.remove()})
 }
-function loop(ts){
- const interval=2600-state.rate*2250;
- if(ts-lastBubble>interval){spawnBubble();lastBubble=ts}
- requestAnimationFrame(loop)
+function showSuper(){
+ const el=$('#super');el.classList.remove('show');void el.offsetWidth;el.classList.add('show')
 }
-function snapshot(){return{light:+state.light.toFixed(2),co2:+state.co2.toFixed(2),water:+state.water.toFixed(2),rate:+state.rate.toFixed(3),label:rateLabel(state.rate)}}
-function sameExperiment(a,b){return Math.abs(a.light-b.light)<.02&&Math.abs(a.co2-b.co2)<.02&&Math.abs(a.water-b.water)<.02}
-function recordExperiment(){
- const s=snapshot();if(state.experiments.some(e=>sameExperiment(e,s))){setMsg('同じ条件はすでに記録済み。条件を変えて比べよう。','warn');return false}
- state.experiments.push(s);recordsThisStage.push(s);if(state.stage===4)state.freeRecords++;
- setMsg('実験を記録した！ 条件を変えてもう1つ記録すると比較できる。','good');renderLog();tone(590,.06,.02);return true
+function triggerEvent(){
+ if(!state.running)return;
+ const options=[
+  {k:'light',icon:'☁️',msg:'雲が出た！ 光が弱くなった',drop:Math.floor(18+Math.random()*22)},
+  {k:'co2',icon:'💨',msg:'CO₂が減った！',drop:Math.floor(18+Math.random()*24)},
+  {k:'water',icon:'💧',msg:'水不足！',drop:Math.floor(18+Math.random()*24)}
+ ];
+ const ev=options[Math.floor(Math.random()*options.length)],input=$('#'+ev.k);input.value=Math.max(8,+input.value-ev.drop);state.eventCount++;setInputs();
+ const box=$('#event');box.textContent=ev.icon+' '+ev.msg+'　→ すぐ立て直せ！';box.classList.add('show');sfx('alarm');setTimeout(()=>box.classList.remove('show'),1800);
+ const before=state.rate;const watch=setInterval(()=>{if(!state.running){clearInterval(watch);return}if(state.rate>=.78&&state.rate>before+.18){state.solved++;clearInterval(watch);showSuper();sfx('good')}},250);setTimeout(()=>clearInterval(watch),6500)
 }
-function renderLog(){
- const host=$('#logStrip');if(!host)return;host.innerHTML='';recordsThisStage.slice(-5).forEach((e,i)=>{const d=document.createElement('div');d.className='logChip';d.textContent=(i+1)+': 光'+Math.round(e.light*100)+' CO₂'+Math.round(e.co2*100)+' 水'+Math.round(e.water*100);host.appendChild(d)})
+function updateGame(ts){
+ if(!state.running)return;
+ const elapsed=(ts-state.startTs)/1000;state.time=Math.max(0,G-elapsed);$('#time').textContent=Math.ceil(state.time);$('#timeMeter').style.width=(state.time/G*100)+'%';$('#timerBox').classList.toggle('danger',state.time<=10);
+ updateView();
+ const bubbleInterval=1250-state.rate*1040;
+ if(ts-state.lastBubble>bubbleInterval){spawnBubble();state.lastBubble=ts}
+ if(ts-state.lastScoreTick>1000){const gain=Math.max(0,Math.round(state.rate*state.combo*2));if(gain>0)addO2(gain,76,18);state.lastScoreTick=ts;if(state.rate>=.9&&Math.random()<.35)showSuper()}
+ if(elapsed-state.lastEventAt>9+Math.random()*4&&elapsed>7&&state.time>7){state.lastEventAt=elapsed;triggerEvent()}
+ if(state.time<=0){finishGame();return}
+ state.raf=requestAnimationFrame(updateGame)
 }
-function showCompare(){
- if(recordsThisStage.length<2){setMsg('比較には2つ以上の実験記録が必要だよ。','warn');return}
- state.comparisons++;const list=$('#compareList');list.innerHTML='';
- recordsThisStage.slice(-4).forEach((e,i)=>{const d=document.createElement('div');d.className='compareCard';d.innerHTML='<b>実験 '+String.fromCharCode(65+i)+'</b><br>光 '+Math.round(e.light*100)+'% / CO₂ '+Math.round(e.co2*100)+'% / 水 '+Math.round(e.water*100)+'%<br>気泡：'+e.label+'<div class="bar"><span style="width:'+Math.round(e.rate*100)+'%"></span></div>';list.appendChild(d)});
- if(recordsThisStage.length>=2){const a=recordsThisStage[recordsThisStage.length-2],b=recordsThisStage[recordsThisStage.length-1];const diffs=['light','co2','water'].filter(k=>Math.abs(a[k]-b[k])>.05);if(diffs.length===1)unlock('fair-test');if(diffs.length>=2)unlock('mixed-test')}
- $('#compareOverlay').classList.add('show')
+function rank(){
+ const s=state.oxygen;if(s>=180)return['👑 O₂マスター','条件をすばやく整えて、大量の酸素を生産した！'];if(s>=120)return['🌟 光合成エース','ボトルネックを見つけるのがかなり上手！'];if(s>=75)return['🌿 光合成研究員','条件のバランスが分かってきた！'];return['🧪 研究スタート','一番足りない条件を先に上げると、もっとO₂を増やせるよ。']
 }
-function showWhy(text){state.whyCount++;$('#whyText').textContent=text;$('#whyOverlay').classList.add('show')}
-function clearStage(title,text,emoji='✨'){if(state.transitioning)return;state.transitioning=true;$('#clearEmoji').textContent=emoji;$('#clearTitle').textContent=title;$('#clearText').textContent=text;$('#clearOverlay').classList.add('show');sfx('good')}
-function choiceButtons(kind,vals,labels){
- return '<div class="choices">'+vals.map((v,i)=>'<button class="choice" data-kind="'+kind+'" data-v="'+v+'">'+labels[i]+'</button>').join('')+'</div>'
+async function startGame(){
+ await unlockAudio();state.light=.38+Math.random()*.18;state.co2=.38+Math.random()*.18;state.water=.38+Math.random()*.18;state.oxygen=0;state.combo=1;state.bestCombo=1;state.bestRate=0;state.eventCount=0;state.solved=0;state.lastEventAt=0;state.highSince=null;state.lastBubble=0;state.lastScoreTick=0;state.running=false;
+ $('#light').value=Math.round(state.light*100);$('#co2').value=Math.round(state.co2*100);$('#water').value=Math.round(state.water*100);$('#oxygen').textContent='0';$('#combo').textContent='×1';$('#time').textContent=G;$('#timeMeter').style.width='100%';setInputs();$('#finish').classList.remove('show');$('#title').classList.remove('active');$('#game').classList.add('active');
+ const cd=$('#countdown');cd.classList.add('show');for(const n of ['3','2','1','GO!']){cd.textContent=n;if(n==='GO!')sfx('good');else tone(360+Number(n||0)*70,.08,.05,'triangle');await new Promise(r=>setTimeout(r,n==='GO!'?500:650))}cd.classList.remove('show');state.running=true;state.startTs=performance.now();state.lastBubble=state.startTs;state.lastScoreTick=state.startTs;requestAnimationFrame(updateGame)
 }
-function bindChoices(){
- document.querySelectorAll('.choice[data-kind]').forEach(b=>b.onclick=()=>{const k=b.dataset.kind,v=+b.dataset.v;state[k]=v;document.querySelectorAll('.choice[data-kind="'+k+'"]').forEach(x=>x.classList.toggle('active',+x.dataset.v===v));updateExperiment();stageObservation()})
+function finishGame(){
+ state.running=false;cancelAnimationFrame(state.raf);sfx('end');const [r,t]=rank();$('#rank').textContent=r;$('#finalO2').textContent=Math.floor(state.oxygen);$('#bestRate').textContent=Math.round(state.bestRate*100)+'%';$('#bestCombo').textContent='×'+state.bestCombo;$('#eventsSolved').textContent=state.solved;$('#resultText').textContent=t+'　光・CO₂・水のうち、一番不足した条件が光合成パワーを下げるのがポイント。';$('#finish').classList.add('show')
 }
-function standardLogControls(){
- return '<div class="miniRow"><button id="recordBtn" class="mini">📝 この条件を記録</button><button id="compareBtn" class="mini">📊 比較する</button></div><div id="logStrip" class="logStrip"></div>'
-}
-function stageObservation(){
- const r=state.rate;
- if(state.stage===0){
-  if(state.light<.25)setMsg('光が弱い。気泡の間隔がかなり長くなった。','warn');
-  else if(state.light>.75)setMsg('光を強くすると気泡が増えた。弱い条件と比べてみよう。','good');
-  else setMsg('気泡が出ている。光を変えて違いを観察しよう。','');
- }
- if(state.stage===1){
-  if(state.light>.78){setMsg('光を強くすると気泡が増えた。次は「元の弱い光」に戻してみよう。','good');unlock('more-light')}
-  else if(state.light<.3){setMsg('弱い光に戻った。気泡も少ない状態へ戻ったかな？','warn')}
-  else setMsg('強い光と弱い光を往復して、気泡の変化が戻るか確かめよう。','');
- }
- if(state.stage===2){
-  if(state.co2<.3&&state.light>.75){setMsg('光は十分なのに気泡が少ない。別の条件が足りないようだ。','warn');unlock('co2-limit');unlock('one-limit')}
-  else if(state.co2>.75){setMsg('CO₂を増やすと気泡が増えた。原因が見えてきた。','good')}
-  else setMsg('光とCO₂を変えて、どちらが足りないか調べよう。','')
- }
- if(state.stage===3){
-  if(state.water<.3){setMsg('光もCO₂も十分。でも気泡はかなり少ない。','warn');unlock('water-limit');unlock('one-limit')}
-  else if(state.water>.75)setMsg('水の条件を戻すと気泡が増えた。','good');
-  else setMsg('水の状態を変えて観察しよう。','')
- }
- if(state.stage===4)setMsg('自由研究中。思い切って極端な条件も試してみよう。','');
-}
-function renderStage(){
- state.transitioning=false;recordsThisStage=[];$('#stageLabel').textContent=defs[state.stage].label;$('#mission').textContent=defs[state.stage].mission;$('#taskTitle').textContent=defs[state.stage].title;$('#taskText').textContent=defs[state.stage].text;$('#progress').style.width=((state.stage+1)/6*100)+'%';
- const area=$('#controlArea');
- if(state.stage===0){
-  state.light=.2;state.co2=.85;state.water=1;state.hypothesis=null;$('#controlTitle').textContent='まず予想 → 実験 → 気泡をタップしてO₂を集める';
-  area.innerHTML='<div class="controlbox"><div class="choices"><button class="choice" data-h="more">☀️ 光を強くすると<br>気泡が増える</button><button class="choice" data-h="same">🤔 変わらない</button><button class="choice" data-h="less">🌥️ 減る</button></div><input id="lightRange" class="range" type="range" min="5" max="100" value="20"><div class="scale"><span>弱い</span><span>光</span><span>強い</span></div>'+standardLogControls()+'<button id="judge1" class="check">🔬 実験結果を判定する</button><div class="hintline">浮いてくる気泡をタップするとO₂ポイント！</div></div>';
-  area.querySelectorAll('[data-h]').forEach(b=>b.onclick=async()=>{await unlockAudio();state.hypothesis=b.dataset.h;area.querySelectorAll('[data-h]').forEach(x=>x.classList.toggle('active',x===b));sfx('tap');setMsg('予想を決めた！ 光を変えて確かめよう。','')});
-  $('#lightRange').oninput=e=>{state.light=+e.target.value/100;updateExperiment();stageObservation()};$('#recordBtn').onclick=recordExperiment;$('#compareBtn').onclick=showCompare;$('#judge1').onclick=()=>{if(!state.hypothesis){setMsg('先に予想を1つ選んでから実験しよう。','warn');return}if(recordsThisStage.length>=2){const rates=recordsThisStage.map(x=>x.rate);if(Math.max(...rates)-Math.min(...rates)>.18){if(state.hypothesis==='more'){addPoints(5);setMsg('予想的中！ +5 O₂','good')}else{setMsg('予想は外れた。でもその違いが発見だ！','warn')}clearStage('実験で確かめた！','予想してから試すと、結果の違いがもっとはっきり見える。','☀️')}else setMsg('もっと差のある2条件を記録してみよう。','warn')}else setMsg('まず2条件を記録して比べよう。','warn')};
- }
- if(state.stage===1){
-  state.light=.22;state.co2=.9;state.water=1;
-  let sawStrong=false,returnedWeak=false;
-  $('#controlTitle').textContent='弱い → 強い → もう一度弱い、を試す';
-  area.innerHTML='<div class="controlbox"><div class="choices"><button id="lightWeak" class="choice active">🌥️ 弱い光</button><button id="lightMid" class="choice">🌤️ 中くらい</button><button id="lightStrong" class="choice">☀️ 強い光</button></div><div class="miniRow"><button id="whyBtn" class="mini">💡 なぜ戻る？</button><button id="stage2Clear" class="mini">🔬 比較できた</button></div><div class="hintline">まず強い光にして気泡を見たあと、弱い光へ戻してみよう。</div></div>';
-  const setLight=(v,id)=>{
-    state.light=v;
-    ['lightWeak','lightMid','lightStrong'].forEach(x=>$('#'+x).classList.toggle('active',x===id));
-    if(v>.78)sawStrong=true;
-    if(v<.3&&sawStrong){returnedWeak=true;unlock('light-return')}
-    updateExperiment();stageObservation();
-  };
-  $('#lightWeak').onclick=()=>setLight(.22,'lightWeak');
-  $('#lightMid').onclick=()=>setLight(.55,'lightMid');
-  $('#lightStrong').onclick=()=>setLight(.9,'lightStrong');
-  $('#whyBtn').onclick=()=>showWhy('光の条件を元に戻すと、光合成の速さもその条件に応じた状態へ近づく。この往復で「たまたま気泡が変わった」のではなく、光の条件と関係していることを確かめやすくなる。');
-  $('#stage2Clear').onclick=()=>returnedWeak?clearStage('戻して確かめた！','強い光で気泡が増え、弱い光へ戻すと気泡も少ない状態へ戻った。条件を往復すると関係を確かめやすい。','↩️'):setMsg('強い光を観察したあと、弱い光へ戻して気泡が戻るか確かめよう。','warn');
- }
- if(state.stage===2){
-  state.light=.9;state.co2=.2;state.water=1;$('#controlTitle').textContent='CO₂と光を試す';
-  area.innerHTML='<div class="controlbox">'+choiceButtons('co2',[.2,.6,1],['CO₂ 少','CO₂ 中','CO₂ 多'])+'<div style="height:6px"></div>'+choiceButtons('light',[.45,.75,1],['光 中','光 強','光 MAX'])+'<div class="miniRow"><button id="whyBtn" class="mini">💡 なぜ？</button><button id="stage3Clear" class="mini">🔬 原因を決める</button></div></div>';bindChoices();$('#whyBtn').onclick=()=>showWhy('光が十分でもCO₂が少なければ、光だけを増やしても気泡は増えにくい。原因を探すときは、別の条件も確認しよう。');$('#stage3Clear').onclick=()=>state.co2>.75?clearStage('原因はCO₂だった！','光を増やすだけでは変わらず、CO₂を増やすと気泡が増えた。','☁️'):setMsg('CO₂を変えたときの気泡をまだ十分観察できていない。','warn');
- }
- if(state.stage===3){
-  state.light=.9;state.co2=.9;state.water=.2;$('#controlTitle').textContent='水の状態だけを変える';
-  area.innerHTML='<div class="controlbox">'+choiceButtons('water',[.2,.55,1],['水 少','水 中','水 十分'])+'<div class="miniRow"><button id="whyBtn" class="mini">💡 なぜ？</button><button id="stage4Clear" class="mini">🌱 発見をまとめる</button></div></div>';bindChoices();$('#whyBtn').onclick=()=>showWhy('光合成には水も必要。このゲームでは「植物が利用できる水の条件」として単純化している。実際の植物では水不足は気孔や葉の状態などを通して複雑に影響する。');$('#stage4Clear').onclick=()=>state.water>.75?clearStage('水も条件の1つ！','光とCO₂が十分でも、水の条件が不足すると光合成は進みにくくなる。','💧'):setMsg('水を十分な状態へ戻したときの気泡も見てみよう。','warn');
- }
- if(state.stage===4){
-  state.light=.4;state.co2=.4;state.water=.4;state.freeRecords=0;$('#controlTitle').textContent='3条件を自由に変えて、3実験以上記録';
-  area.innerHTML='<div class="controlbox">'+choiceButtons('light',[.2,.6,1],['光 弱','光 中','光 強'])+'<div style="height:5px"></div>'+choiceButtons('co2',[.2,.6,1],['CO₂ 少','CO₂ 中','CO₂ 多'])+'<div style="height:5px"></div>'+choiceButtons('water',[.2,.6,1],['水 少','水 中','水 十分'])+standardLogControls()+'<button id="stage5Clear" class="check">🧪 研究結果をまとめる</button></div>';bindChoices();$('#recordBtn').onclick=recordExperiment;$('#compareBtn').onclick=showCompare;$('#stage5Clear').onclick=()=>{if(recordsThisStage.length>=3){const a=recordsThisStage[recordsThisStage.length-2],b=recordsThisStage[recordsThisStage.length-1];const diffs=['light','co2','water'].filter(k=>Math.abs(a[k]-b[k])>.05);if(diffs.length>=2)unlock('mixed-test');clearStage('自由研究クリア！','3つ以上の条件を記録した。1つずつ変えた比較と、複数変えた比較の違いも確認しよう。','🧪')}else setMsg('3種類以上の実験を記録しよう。','warn')};
- }
- if(state.stage===5){setupTrouble(area)}
- updateExperiment();stageObservation()
-}
-function setupTrouble(area){
- const causes=['light','co2','water'];state.trouble=causes[Math.floor(Math.random()*causes.length)];
- state.light=.95;state.co2=.95;state.water=.95;state[state.trouble]=.18;
- $('#controlTitle').textContent='原因を調べる。毎回原因は変わる';
- area.innerHTML='<div class="controlbox"><div class="choices"><button class="choice" data-test="light">☀️ 光をもっと強く</button><button class="choice" data-test="co2">☁️ CO₂を確認</button><button class="choice" data-test="water">💧 水を確認</button></div><div class="miniRow"><button id="whyBtn" class="mini">💡 なぜ？</button><button id="troubleClear" class="mini">✅ 原因を直した</button></div></div>';
- area.querySelectorAll('[data-test]').forEach(b=>b.onclick=()=>runTroubleTest(b.dataset.test));$('#whyBtn').onclick=()=>showWhy('気泡が少ないとき、同じ操作を繰り返すより「何が足りないか」を切り分けると原因に近づける。');$('#troubleClear').onclick=()=>{if(state[state.trouble]>.75){unlock('trouble-solve');clearStage('トラブル解決！','気泡が少ない原因を観察して、足りない条件を直せた。','🚨')}else setMsg('原因の条件はまだ不足したまま。別の条件も確認しよう。','warn')};
-}
-function runTroubleTest(k){
- if(k==='light'&&state.trouble!=='light'){state.light=1;updateExperiment();setMsg('さらに光を強くした。でもほとんど改善しない。原因は別にありそう。','warn');unlock('one-limit');return}
- if(k===state.trouble){state[k]=.95;updateExperiment();setMsg((k==='light'?'光':k==='co2'?'CO₂':'水')+'を整えると、気泡が増えた！','good');if(k==='co2')unlock('co2-limit');if(k==='water')unlock('water-limit');return}
- setMsg((k==='co2'?'CO₂':'水')+'は十分だった。別の条件を調べよう。','')
-}
-function showDiscoveries(){const ul=$('#discoverList');ul.innerHTML='';discoveryDefs.forEach(([id,t])=>{const li=document.createElement('li');li.className=state.discoveries.has(id)?'':'locked';li.textContent=(state.discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#discoverOverlay').classList.add('show')}
-function finishGame(){const box=$('#researchSummary');box.innerHTML='<div class="metric">🔬 発見<br>'+state.discoveries.size+' / '+discoveryDefs.length+'</div><div class="metric">🧪 実験記録<br>'+state.experiments.length+'回</div><div class="metric">📊 比較<br>'+state.comparisons+'回</div><div class="metric">💡 なぜ？<br>'+state.whyCount+'回</div>';$('#finishOverlay').classList.add('show')}
-document.addEventListener('pointerdown',()=>{unlockAudio()},{once:true,capture:true});
-$('#startBtn').onclick=async()=>{await unlockAudio();sfx('good');$('#titleScreen').classList.remove('active');$('#gameScreen').classList.add('active');state.stage=0;state.experiments=[];state.discoveries.clear();state.whyCount=0;state.comparisons=0;state.points=0;$('#points').textContent='O₂ 0';$('#discoverBtn').textContent='🔬 発見 0';renderStage()};
-$('#muteBtn').onclick=async e=>{state.muted=!state.muted;e.currentTarget.textContent=state.muted?'🔇':'🔊';if(!state.muted){await unlockAudio();sfx('good')}};
-$('#discoverBtn').onclick=showDiscoveries;$('#closeDiscover').onclick=()=>$('#discoverOverlay').classList.remove('show');$('#closeCompare').onclick=()=>$('#compareOverlay').classList.remove('show');$('#closeWhy').onclick=()=>$('#whyOverlay').classList.remove('show');
-$('#nextBtn').onclick=()=>{$('#clearOverlay').classList.remove('show');state.transitioning=false;if(state.stage<5){state.stage++;renderStage()}else finishGame()};
-$('#finishDiscover').onclick=showDiscoveries;$('#retryBtn').onclick=()=>{$('#finishOverlay').classList.remove('show');state.stage=0;state.experiments=[];state.discoveries.clear();state.whyCount=0;state.comparisons=0;$('#discoverBtn').textContent='🔬 発見 0';renderStage()};
-updateExperiment();requestAnimationFrame(loop);
+['light','co2','water'].forEach(id=>$('#'+id).addEventListener('input',setInputs));
+document.addEventListener('pointerdown',()=>unlockAudio(),{once:true,capture:true});
+$('#start').addEventListener('click',startGame);$('#retry').addEventListener('click',startGame);
+$('#mute').addEventListener('click',async e=>{state.muted=!state.muted;e.currentTarget.textContent=state.muted?'🔇':'🔊';if(!state.muted){await unlockAudio();sfx('good')}});
+setInputs();
 })();
 </script>
 </body>
