@@ -469,7 +469,10 @@ function bgmStep(){
 function startBgm(){if(S.muted||S.bgmTimer)return;S.bgmStep=0;bgmStep();S.bgmTimer=setInterval(bgmStep,540)}
 function stopBgm(){if(S.bgmTimer){clearInterval(S.bgmTimer);S.bgmTimer=null}}
 async function startGame(){
- await unlockAudio(true);sfx('discover');$('#titleScreen').classList.remove('active');$('#gameScreen').classList.add('active');renderSelection();renderFound();clearVisual();startBgm();
+ await unlockAudio(true);sfx('discover');
+ $('#titleScreen').classList.remove('active');$('#gameScreen').classList.add('active');
+ S.mode='cong';S.selected.clear();renderSelection();renderFound();clearVisual();startBgm();
+ tutorialReset();$('#tutorialModal').classList.add('show');
 }
 ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
 document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
@@ -480,7 +483,13 @@ window.addEventListener('pageshow',()=>{S.audioReset=true;setSession()});
 document.querySelectorAll('#gameScreen [data-k]').forEach(el=>el.addEventListener('click',()=>toggle(el.dataset.k)));
 $('#tSideAB').addEventListener('click',()=>tutorialTap('side'));
 $('#tAngleA').addEventListener('click',()=>tutorialTap('angle'));
-$('#tutorialDone').addEventListener('click',()=>{$('#tutorialModal').classList.remove('show');S.selected.clear();renderSelection();clearVisual();});
+$('#tutorialDone').addEventListener('click',()=>{
+ $('#tutorialModal').classList.remove('show');S.selected.clear();renderSelection();clearVisual();
+ $('#modeBadge').textContent='合同ラボ';
+ $('#missionText').innerHTML='👆 青い三角形の<b>辺や角を直接タップ</b>して、三角形が1つに決まる条件を探そう！';
+ message('辺や角をタップすると黄色くなるよ。2〜3個選んでTEST！');
+ sfx('good');
+});
 $('#startBtn').addEventListener('click',startGame);
 $('#testBtn').addEventListener('click',test);
 $('#resetBtn').addEventListener('click',resetSelection);
