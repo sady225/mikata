@@ -102,6 +102,19 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 .fogHint{height:8px;border-radius:999px;background:#ffffff25;overflow:hidden;margin-top:6px}.fogHint span{display:block;height:100%;width:var(--fog,0%);background:#dffbff;transition:width .18s}
 .coolScale{display:flex;justify-content:space-between;font-size:9px;color:#d9f3f8;font-weight:900}
 
+
+.storyOverlay{position:absolute;z-index:70;inset:0;display:none;place-items:center;padding:18px;background:linear-gradient(180deg,#0b506dec,#083448ee)}
+.storyOverlay.show{display:grid}
+.storyCard{width:100%;max-width:360px;background:white;border-radius:24px;padding:18px;text-align:center;box-shadow:0 10px #052938}
+.storyScene{font-size:54px;line-height:1;margin-bottom:6px}
+.storyCard h2{margin:4px 0 8px;color:#0b6f91;font-size:23px}
+.storyCard p{font-size:13px;line-height:1.55;font-weight:900;color:#405d66;margin:0 0 10px}
+.storyMission{background:#e9f8fb;border:2px solid #9edbe6;border-radius:15px;padding:10px;font-size:13px;font-weight:1000;color:#18495a;margin:8px 0}
+.storyActions{display:grid;gap:8px}
+.storyBtn{min-height:50px;border:0;border-radius:999px;background:var(--yellow);color:#744814;font-weight:1000;font-size:16px;box-shadow:0 4px #c09233}
+.storyGhost{min-height:44px;border:0;border-radius:999px;background:#edf5f6;color:#35535e;font-weight:1000}
+.tutorialBadge{display:inline-block;background:#fff2ba;color:#75531a;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:1000;margin-bottom:6px}
+
 @media(max-height:650px){header{min-height:calc(78px + var(--safe-top));padding-top:calc(5px + var(--safe-top))}.game{padding-top:calc(85px + var(--safe-top))}.task{padding:5px 8px;margin-top:3px}.task h2{font-size:14px}.task p{display:none}.lab{min-height:142px}.cupWrap{height:165px;transform:translateX(-50%) scale(.84);transform-origin:bottom}.message{min-height:32px;font-size:10px}.controls{padding-top:5px}.action{min-height:42px}.check{min-height:40px;margin-top:5px}}
 @media(max-height:570px){.brand{display:none}.game{padding-top:calc(75px + var(--safe-top))}.lab{min-height:118px}.cupWrap{height:145px;transform:translateX(-50%) scale(.72)}.message{min-height:29px}.ctitle{display:none}}
 </style>
@@ -165,6 +178,20 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 <section class="controls"><p id="ctitle" class="ctitle"></p><div id="controlArea"></div></section>
 </main>
 
+<div id="storyOverlay" class="storyOverlay">
+  <div class="storyCard">
+    <div class="tutorialBadge">はじめの30秒</div>
+    <div id="storyScene" class="storyScene">🥤💧</div>
+    <h2 id="storyTitle">この水、どこから来たの？</h2>
+    <p id="storyText">冷たいジュースを置いていたら、コップの外に水滴がついてきた。</p>
+    <div id="storyMission" class="storyMission">ミッション：最初の1滴が出る瞬間を見つけよう！</div>
+    <div class="storyActions">
+      <button id="storyNext" class="storyBtn">つぎへ</button>
+      <button id="storySkip" class="storyGhost">すぐ遊ぶ</button>
+    </div>
+  </div>
+</div>
+
 <div id="clear" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">発見！</h2><p id="clearText"></p><button id="next" class="next">次へ</button></div></div>
 <div id="discoverOverlay" class="overlay"><div class="card"><div class="emoji">💧</div><h2>今日の発見</h2><ul id="discoverList" class="discoverList"></ul><button id="closeDiscover" class="close">戻る</button></div></div>
 <div id="finish" class="overlay"><div class="card"><div class="emoji">📈💧</div><h2>露点・グラフマスター！</h2><p id="finishText"></p><div class="sources"><b>📚 出典・参考文献</b><br><a href="https://www.mext.go.jp/content/20220331-mxt_syogai02-mext_1422378_00001_4rika.pdf" target="_blank" rel="noopener noreferrer">文部科学省「令和2年 中学校卒業程度認定試験 理科」</a><br><a href="https://www.mext.go.jp/content/20230427-mxt_syogai02-mext_1422378_04rika.pdf" target="_blank" rel="noopener noreferrer">文部科学省「令和3年 中学校卒業程度認定試験 理科」</a></div><button id="showCollection" class="smallBtn">発見を見る</button><button id="retry" class="retry">最初からもう一度</button></div></div>
@@ -172,9 +199,38 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 
 <script>
 (()=>{
-let stage=0,muted=false,audio=null,cleared=false,temp=24,dew=12,actual=10.7,graphTemp=24,compareSeen=new Set(),viewMode='intuition',coolPower=18,dropScore=0,challengeTurns=0,stars=0,lastDewTemp=24,dewMeterTimer=null,coolingLoop=null,coolingPower=0,coolingVelocity=0,coolingStopped=false,coolingHint=false;
+let stage=0,muted=false,audio=null,cleared=false,temp=24,dew=12,actual=10.7,graphTemp=24,compareSeen=new Set(),viewMode='intuition',coolPower=18,dropScore=0,challengeTurns=0,stars=0,lastDewTemp=24,dewMeterTimer=null,coolingLoop=null,coolingPower=0,coolingVelocity=0,coolingStopped=false,coolingHint=false,storyStep=0;
 const satData=[[0,4.8],[4,6.4],[8,8.3],[12,10.7],[16,13.6],[20,17.3],[24,21.8],[28,27.2]];
 const discoveries=new Set();
+
+const storySteps=[
+ {scene:'🥤💧',title:'この水、どこから来たの？',text:'冷たいジュースを置いていたら、コップの外に水滴がついてきた。',mission:'まずは「最初の1滴」が出る瞬間を見つけよう！'},
+ {scene:'🌡️🎛️',title:'温度そのものは動かせない！',text:'動かせるのは「冷やす強さ」だけ。強くすると早いけど、止めても少し冷え続ける。',mission:'強く→弱く→止める。コップの変化をよく見よう。'},
+ {scene:'👀💧',title:'勝ち方はこれ！',text:'水滴がいっぱい出てからでは遅い。うっすらくもって、最初の1滴が出る境目で止めたら勝ち！',mission:'最初の1滴の温度＝露点。ピタリなら⭐ボーナス！'}
+];
+function showStory(){
+ storyStep=0;
+ $('#storyOverlay').classList.add('show');
+ renderStory();
+}
+function renderStory(){
+ const st=storySteps[storyStep];
+ $('#storyScene').textContent=st.scene;
+ $('#storyTitle').textContent=st.title;
+ $('#storyText').textContent=st.text;
+ $('#storyMission').textContent=st.mission;
+ $('#storyNext').textContent=storyStep===storySteps.length-1?'練習してみる！':'つぎへ';
+}
+function closeStoryAndStart(){
+ $('#storyOverlay').classList.remove('show');
+ $('#title').classList.remove('active');
+ $('#game').classList.add('active');
+ stage=2;stars=0;$('#starHud').textContent='⭐ 0';
+ render();
+ setMsg('これは練習。失敗してOK！ 冷やしすぎる感覚を一度つかもう。','good');
+ mascotSay('まずは練習！ 強く冷やしてみてもいいよ','😄');
+}
+
 const all=[
 ['room','室温に近い水から始める → 露点を見つけやすい'],
 ['slow','少しずつ冷やす → 水滴が現れ始める瞬間を見つけやすい'],
@@ -430,7 +486,9 @@ function finishCompare(){if(compareSeen.has(6.4)&&compareSeen.has(17.3)){clearSt
 function bonusPredict(q){if(q==='up'){add('predict');setMsg('ボーナス正解！ 水蒸気量が増えると横線が上がり、交点は高温側へ移動する。','good')}else setMsg('惜しい。横線が上がったとき、青い曲線との交点がどちらへ動くか見てみよう。','warn')}
 function trouble(x){if(x==='warm'){setTemp(15);$('#drops').style.opacity=0;lab.classList.remove('condense');add('trouble');clearStage('結露を止められた！','表面温度が露点12℃より高くなると、この条件では結露しにくくなる。','🧪')}else if(x==='wipe'){ $('#drops').style.opacity=0;setMsg('一度消えた。でも表面8℃は露点12℃より低いまま…また水滴が出る。','bad');setTimeout(()=>$('#drops').style.opacity=1,550)}else{setTemp(4);$('#drops').style.opacity=1;setMsg('もっと冷やすと、飽和水蒸気量の「定員」がさらに小さくなって水滴が増える。','bad')}}
 function showDiscoveries(){const ul=$('#discoverList');ul.innerHTML='';all.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#discoverOverlay').classList.add('show')}
-$('#start').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');stage=0;stars=0;$('#starHud').textContent='⭐ 0';render();mascotSay('いっしょに水滴をさがそう！','💧')};
+$('#start').onclick=showStory;
+$('#storyNext').onclick=()=>{if(storyStep<storySteps.length-1){storyStep++;renderStory()}else closeStoryAndStart()};
+$('#storySkip').onclick=closeStoryAndStart;
 $('#mute').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
 $('#next').onclick=()=>{stopCoolingLoop();$('#clear').classList.remove('show');if(stage<7){stage++;render()}else{$('#finishText').textContent='⭐ '+stars+'こ、発見 '+discoveries.size+' / '+all.length+'。「交点＝最初の1滴が出る露点」と、「さらに冷やすほど水滴量が増える」が区別できれば大成功！';$('#finish').classList.add('show')}};
 $('#retry').onclick=()=>{stopCoolingLoop();$('#finish').classList.remove('show');discoveries.clear();stars=0;$('#starHud').textContent='⭐ 0';$('#discoverBtn').textContent='💧 0';stage=0;render()};
