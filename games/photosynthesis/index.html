@@ -154,14 +154,26 @@ button{font:inherit;border:0;cursor:pointer}
 (()=>{
 const $=s=>document.querySelector(s);
 const thresholds=[0,30,80,150,260],icons=['🌱','🌿','🍃','🍠','🍠🍠'];
-const S={light:.45,water:.45,co2:.45,score:0,best:0,level:1,running:false,time:60,last:0,lastBubble:0,lastTick:0,lastRush:0,highSince:null,muted:false,audio:null,master:null,soundReady:false,raf:0};
+const S={light:.45,water:.45,co2:.45,score:0,best:0,level:1,running:false,time:60,last:0,lastBubble:0,lastTick:0,lastRush:0,highSince:null,muted:false,audio:null,master:null,bgmGain:null,bgmTimer:null,bgmStep:0,soundReady:false,raf:0};
 try{S.best=+localStorage.getItem('photosynthesis_best')||0}catch(e){}
 function clamp(v){return Math.max(0,Math.min(1,v))}
 function lightEff(v){return 1-Math.exp(-3*v)}
 function power(){return Math.min(lightEff(S.light),S.water,S.co2)}
-async function unlockAudio(){if(S.muted)return;if(!S.audio){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;S.audio=new C();S.master=S.audio.createGain();S.master.gain.value=.75;S.master.connect(S.audio.destination)}try{if(S.audio.state==='suspended')await S.audio.resume()}catch(e){}if(!S.soundReady&&S.audio.state==='running'){const o=S.audio.createOscillator(),g=S.audio.createGain(),t=S.audio.currentTime;g.gain.value=.0001;o.connect(g).connect(S.master);o.start(t);o.stop(t+.015);S.soundReady=true}}
-function tone(f,d=.08,g=.055,type='sine',delay=0){if(S.muted||!S.audio||!S.master||S.audio.state!=='running')return;const t=S.audio.currentTime+delay,o=S.audio.createOscillator(),a=S.audio.createGain();o.type=type;o.frequency.setValueAtTime(f,t);a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(S.master);o.start(t);o.stop(t+d+.02)}
-function sfx(k){if(k==='tap'){tone(320,.05,.045,'triangle');tone(620,.05,.02,'sine',.02)}if(k==='bubble'){tone(560+Math.random()*90,.07,.03);tone(920,.04,.015,'triangle',.015)}if(k==='bonus'){tone(720,.08,.065,'triangle');tone(1080,.14,.055,'sine',.06)}if(k==='level'){[523,659,784,1047].forEach((f,i)=>tone(f,.16,.055,'triangle',i*.075))}if(k==='end'){[440,392,330,262].forEach((f,i)=>tone(f,.18,.045,'sine',i*.11))}}
+async function unlockAudio(){if(S.muted)return;if(!S.audio){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;S.audio=new C();S.master=S.audio.createGain();S.master.gain.value=.72;S.master.connect(S.audio.destination);S.bgmGain=S.audio.createGain();S.bgmGain.gain.value=.55;S.bgmGain.connect(S.master)}try{if(S.audio.state==='suspended')await S.audio.resume()}catch(e){}if(!S.soundReady&&S.audio.state==='running'){const o=S.audio.createOscillator(),g=S.audio.createGain(),t=S.audio.currentTime;g.gain.value=.0001;o.connect(g).connect(S.master);o.start(t);o.stop(t+.015);S.soundReady=true}}
+function tone(f,d=.08,g=.055,type='sine',delay=0,target=null){if(S.muted||!S.audio||!S.master||S.audio.state!=='running')return;const t=S.audio.currentTime+delay,o=S.audio.createOscillator(),a=S.audio.createGain();o.type=type;o.frequency.setValueAtTime(f,t);a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(target||S.master);o.start(t);o.stop(t+d+.03)}
+function bgmNote(f){if(!S.bgmGain)return;tone(f,.34,.022,'triangle',0,S.bgmGain);tone(f/2,.38,.009,'sine',.015,S.bgmGain)}
+function playBgmStep(){if(!S.running||S.muted||!S.soundReady)return;const melody=[523,659,784,659,587,698,880,698];bgmNote(melody[S.bgmStep%melody.length]);if(S.bgmStep%4===0)tone(S.bgmStep%8===0?262:294,.7,.009,'sine',0,S.bgmGain);S.bgmStep++}
+function startBgm(){if(S.muted||!S.running||!S.soundReady||S.bgmTimer)return;S.bgmStep=0;playBgmStep();S.bgmTimer=setInterval(playBgmStep,480)}
+function stopBgm(){if(S.bgmTimer){clearInterval(S.bgmTimer);S.bgmTimer=null}}
+function sfx(k){
+ if(k==='light'){tone(620,.07,.045,'triangle');tone(930,.11,.025,'sine',.035)}
+ if(k==='water'){tone(520,.05,.03,'sine');tone(390,.12,.04,'sine',.035);tone(780,.05,.012,'triangle',.08)}
+ if(k==='co2'){tone(300,.08,.035,'sine');tone(420,.16,.022,'triangle',.05)}
+ if(k==='bubble'){tone(560+Math.random()*90,.07,.03);tone(920,.04,.015,'triangle',.015)}
+ if(k==='bonus'){tone(720,.08,.065,'triangle');tone(1080,.14,.055,'sine',.06);tone(1440,.12,.026,'sine',.12)}
+ if(k==='level'){[523,659,784,1047].forEach((f,i)=>tone(f,.16,.055,'triangle',i*.075))}
+ if(k==='clear'){[659,784,988,1175,1568].forEach((f,i)=>tone(f,.38,.05,'triangle',i*.085));[523,659,784,1047].forEach((f,i)=>tone(f,.75,.026,'sine',.48+i*.025))}
+}
 function fmt(n){return String(Math.floor(n)).padStart(4,'0')}
 function calcLevel(score){let l=1;for(let i=1;i<thresholds.length;i++)if(score>=thresholds[i])l=i+1;return l}
 function nextTarget(){return thresholds[Math.min(S.level,thresholds.length-1)]}
@@ -249,7 +261,7 @@ function triggerRush(){
  spawnWildlife();sfx('bonus');
  const st=$('#statusPill');st.innerHTML='🌿 <b>げんきな畑！</b> ちょうちょがやってきた！';
 }
-function feed(k,btn){S[k]=clamp(S[k]+.115);sfx('tap');animateSupply(k);btn.style.transform='translateY(3px) scale(1.03)';setTimeout(()=>btn.style.transform='',90);updateNeed();if(power()>.85&&Math.random()<.25)triggerRush()}
+function feed(k,btn){S[k]=clamp(S[k]+.115);sfx(k);animateSupply(k);btn.style.transform='translateY(3px) scale(1.03)';setTimeout(()=>btn.style.transform='',90);updateNeed();if(power()>.85&&Math.random()<.25)triggerRush()}
 function decay(dt){S.light=clamp(S.light-dt*.021);S.water=clamp(S.water-dt*.018);S.co2=clamp(S.co2-dt*.023)}
 function loop(ts){
  if(!S.running)return;const dt=Math.min(.05,(ts-S.last)/1000||0);S.last=ts;S.time-=dt;decay(dt);updateNeed();
@@ -263,11 +275,11 @@ function tryFullscreen(){
  const el=document.documentElement;
  if(el.requestFullscreen){try{const p=el.requestFullscreen({navigationUI:'hide'});if(p?.catch)p.catch(()=>{})}catch(e){}}
 }
-async function start(){await unlockAudio();S.light=.44;S.water=.44;S.co2=.44;S.score=0;S.level=1;S.time=60;S.running=true;S.last=performance.now();S.lastBubble=S.last;S.lastTick=S.last;S.lastRush=0;$('#wildlife').innerHTML='';$('#title').style.display='none';$('#finish').classList.remove('show');updateHUD();updateNeed();requestAnimationFrame(loop)}
-function finish(){S.running=false;cancelAnimationFrame(S.raf);sfx('end');$('#finalScore').textContent=Math.floor(S.score);let r='🌱 けんきゅういん',t='3つをバランスよく届けると、もっとO₂が増えるよ！';if(S.score>=260){r='👑 べにいもマスター';t='光・水・CO₂をそろえて、読谷の紅芋を大きく育てた！'}else if(S.score>=150){r='🍠 べにいもエース';t='足りない材料をすばやく見つけて、土の中の紅芋を育てた！'}else if(S.score>=80){r='🪴 O₂名人';t='光合成のコツがわかってきた！'}$('#rank').textContent=r;$('#resultText').textContent=t;$('#finish').classList.add('show')}
+async function start(){await unlockAudio();stopBgm();S.light=.44;S.water=.44;S.co2=.44;S.score=0;S.level=1;S.time=60;S.running=true;S.last=performance.now();S.lastBubble=S.last;S.lastTick=S.last;S.lastRush=0;$('#wildlife').innerHTML='';$('#title').style.display='none';$('#finish').classList.remove('show');updateHUD();updateNeed();startBgm();requestAnimationFrame(loop)}
+function finish(){S.running=false;cancelAnimationFrame(S.raf);stopBgm();sfx('clear');$('#finalScore').textContent=Math.floor(S.score);let r='🌱 けんきゅういん',t='3つをバランスよく届けると、もっとO₂が増えるよ！';if(S.score>=260){r='👑 べにいもマスター';t='光・水・CO₂をそろえて、読谷の紅芋を大きく育てた！'}else if(S.score>=150){r='🍠 べにいもエース';t='足りない材料をすばやく見つけて、土の中の紅芋を育てた！'}else if(S.score>=80){r='🪴 O₂名人';t='光合成のコツがわかってきた！'}$('#rank').textContent=r;$('#resultText').textContent=t;$('#finish').classList.add('show')}
 document.querySelectorAll('.btn').forEach(btn=>btn.addEventListener('pointerdown',async e=>{e.preventDefault();if(!S.running)return;await unlockAudio();feed(btn.dataset.k,btn)}));
 document.addEventListener('pointerdown',()=>unlockAudio(),{once:true,capture:true});
-$('#play').addEventListener('click',()=>{tryFullscreen();start()});$('#retry').addEventListener('click',start);$('#mute').addEventListener('click',async e=>{S.muted=!S.muted;e.currentTarget.textContent=S.muted?'🔇':'🔊';if(!S.muted){await unlockAudio();sfx('level')}});
+$('#play').addEventListener('click',()=>{tryFullscreen();start()});$('#retry').addEventListener('click',start);$('#mute').addEventListener('click',async e=>{S.muted=!S.muted;e.currentTarget.textContent=S.muted?'🔇':'🔊';if(S.muted){stopBgm()}else{await unlockAudio();sfx('level');if(S.running)startBgm()}});
 updateHUD();updateNeed();
 })();
 </script>
