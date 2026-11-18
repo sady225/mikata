@@ -100,6 +100,11 @@ button{font:inherit;border:0;cursor:pointer}
 .releaseCue.now{background:#ffdf67;color:#774a12;font-size:17px}
 @keyframes ringPulse{from{transform:translate(-50%,-52%) scale(1)}to{transform:translate(-50%,-52%) scale(1.05)}}
 
+
+.iceCounter{position:absolute;left:12px;top:50px;background:#fff;color:#28546d;border-radius:12px;padding:6px 9px;font-size:12px;font-weight:1000;z-index:4}
+.iceFly{position:absolute;z-index:15;font-size:28px;pointer-events:none;animation:iceDrop .55s ease-in forwards}
+@keyframes iceDrop{0%{transform:translateY(-30px) rotate(-20deg);opacity:0}35%{opacity:1}100%{transform:translateY(110px) rotate(15deg);opacity:0}}
+.timingRing,.releaseCue{display:none!important}
 @media(max-height:640px){.hud{height:103px}.playfield{inset:103px 0 90px}.controls{height:90px}.cupArea{transform:translate(-50%,-50%) scale(.85)}.title{padding-top:18px}.demo{height:205px}.demoCup{font-size:90px}.logo{font-size:42px}}
 </style>
 </head>
@@ -131,8 +136,8 @@ button{font:inherit;border:0;cursor:pointer}
 
   <div id="playfield" class="playfield hide">
     <i class="skyBubble b1"></i><i class="skyBubble b2"></i><i class="skyBubble b3"></i>
-    <div id="airTag" class="airTag">☁️ ふつうの空気</div><div id="releaseCue" class="releaseCue">まだ！</div><div id="timingRing" class="timingRing"></div>
-    <div id="tempBadge" class="tempBadge">24.0℃</div>
+    <div id="airTag" class="airTag">☁️ ふつうの空気</div>
+    <div id="tempBadge" class="tempBadge">24.0℃</div><div id="iceCounter" class="iceCounter">🧊 0こ</div>
     <div class="cupArea">
       <div class="cupShadow"></div>
       <div class="cup">
@@ -150,15 +155,15 @@ button{font:inherit;border:0;cursor:pointer}
   </div>
 
   <div id="controls" class="controls hide">
-    <button id="brake" class="brake" disabled><b>🛑</b>ブレーキ <span id="brakeCount">0</span></button>
-    <button id="coolBtn" class="coolBtn"><strong>❄️ おして冷やす</strong>はなすとストップ</button>
+    <button id="iceBtn" class="coolBtn"><strong>🧊 氷を1こ入れる</strong>温度が少し下がる</button>
+    <button id="foundBtn" class="brake" style="width:88px;height:68px;border-radius:22px"><b>💧</b>見つけた！</button>
     <button id="infoBtn" class="infoBtn" aria-label="理科メモ">?</button>
   </div>
 
   <div id="title" class="title">
     <div>
-      <span class="titleChip">冷やして止める しずくアクション</span>
-      <h1 class="logo">しずく<br>ハンター<small>ひえひえピタリ！</small></h1>
+      <span class="titleChip">氷を入れて見つける しずくゲーム</span>
+      <h1 class="logo">しずく<br>ハンター<small>最初の1滴を見つけろ！</small></h1>
     </div>
     <div class="demo">
       <div class="demoCup">🥤</div>
@@ -166,7 +171,7 @@ button{font:inherit;border:0;cursor:pointer}
     </div>
     <div>
       <button id="playBtn" class="playBtn">あそぶ</button>
-      <div class="howto">① <b>おして</b> 冷やす　② リングが <b>赤</b> で <b>はなす</b><br>なれたらガイドなしでピタリをねらえ！</div>
+      <div class="howto">① <b>氷を1こ入れる</b>　② コップを見る<br>③ 水が出はじめたら <b>見つけた！</b></div>
       <div id="titleBest" class="titleBest"></div>
     </div>
   </div>
@@ -199,7 +204,7 @@ button{font:inherit;border:0;cursor:pointer}
     <div class="card">
       <div style="font-size:42px">🧪💧</div>
       <h2>ひみつメモ</h2>
-      <p>空気がむしむししている日は、水滴が出はじめる温度が高くなりやすい。次の空気マークを見れば、ちょっとだけ予想できるよ。</p>
+      <p>氷を入れると水の温度が下がる。コップの外に最初の水滴が出たときの温度を見つけるのが、このゲームのねらいだよ。</p>
       <button id="memoClose" class="again">ゲームにもどる</button>
     </div>
   </div>
@@ -213,9 +218,9 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 let best=0;
 try{best=Number(localStorage.getItem("dewHunterBest")||0)}catch(e){}
 let muted=false,audio=null;
-let playing=false,roundActive=false,holding=false,released=false,paused=false,startBest=best;
-let score=0,combo=0,lives=3,round=0,successes=0,perfects=0,brakes=0,guideRounds=4;
-let temp=24,velocity=0,dew=12,nextDew=14,releaseAt=0,roundStart=0,raf=0,last=performance.now();
+let playing=false,roundActive=false,paused=false,startBest=best;
+let score=0,combo=0,lives=3,round=0,successes=0,perfects=0,iceCount=0;
+let temp=24,dew=12,nextDew=14,roundStart=0,raf=0,last=performance.now(),coolingTarget=24;
 
 function ctx(){
   if(muted)return null;
@@ -250,28 +255,10 @@ function updateHud(){
   $("#best").textContent="BEST "+best.toLocaleString();
   $("#combo").textContent="🔥 x"+combo;
   $("#hearts").textContent="❤️".repeat(lives)+"🖤".repeat(3-lives);
-  $("#brakeCount").textContent=brakes;
-  $("#brake").disabled=!roundActive||brakes<=0;
-  const n=airInfo(nextDew);
+    const n=airInfo(nextDew);
   $("#nextAir").innerHTML="<b>"+n.icon+"</b><small>"+n.label+"</small>";
   const thresholds=[1,3,6,10,15,22];
   $$("#collection span").forEach((el,i)=>el.classList.toggle("on",successes>=thresholds[i]));
-}
-function updateTimingGuide(){
-  const gap=temp-dew;
-  const ring=$("#timingRing"),cue=$("#releaseCue");
-  ring.classList.remove("soon","now");
-  cue.classList.remove("show","now");
-  if(!roundActive||released)return;
-  if(gap>3.0){
-    if(round<=guideRounds){cue.textContent="まだ！";cue.classList.add("show")}
-  }else if(gap>1.25){
-    ring.classList.add("soon");
-    if(round<=guideRounds){cue.textContent="そろそろ…";cue.classList.add("show")}
-  }else{
-    ring.classList.add("now");
-    if(round<=guideRounds){cue.textContent="いま はなす！";cue.classList.add("show","now")}
-  }
 }
 function updateVisual(){
   $("#tempBadge").textContent=temp.toFixed(1)+"℃";
@@ -281,7 +268,6 @@ function updateVisual(){
   const fog=gap>2?0:gap>0?(.08+(2-gap)*.16):.42;
   $("#fog").style.opacity=clamp(fog,0,.65);
   const amount=gap>0?0:clamp((-gap+0.35)/4,0,1);
-  updateTimingGuide();
   $(".drop").forEach((el,i)=>{
     const on=amount>(i*.13);
     el.style.opacity=on?1:0;
@@ -308,43 +294,43 @@ function burst(symbol="💧",count=9){
   }
 }
 function startGame(){
-  score=0;combo=0;lives=3;round=0;successes=0;perfects=0;brakes=0;paused=false;startBest=best;
+  score=0;combo=0;lives=3;round=0;successes=0;perfects=0;paused=false;startBest=best;
   playing=true;nextDew=chooseDew();setScreen(true);updateHud();startRound(true);
 }
 function startRound(first=false){
   round++;
   dew=nextDew;nextDew=chooseDew();
-  temp=24;velocity=0;holding=false;released=false;roundActive=true;releaseAt=0;roundStart=performance.now();
-  $("#coolBtn").disabled=false;$("#coolBtn").classList.remove("pressed");
+  temp=24;coolingTarget=24;iceCount=0;roundActive=true;roundStart=performance.now();
+  $("#iceBtn").disabled=false;$("#foundBtn").disabled=false;
   const a=airInfo(dew);$("#airTag").textContent=a.full;
   $("#mascot").textContent="💧";
+  $("#iceCounter").textContent="🧊 0こ";
   updateHud();updateVisual();
-  if(first)say("リングが赤くなったら<br>はなしてみよう！",1600);
-  else if(round%5===0)say("だんだん冷えやすく<br>なってきたぞ！",1100);
+  if(first)say("氷を1こずつ入れて<br>コップを見てね！",1600);
+  else if(round%5===0)say("空気が変わると<br>水の出る温度も変わるよ",1100);
 }
-function difficulty(){
-  return 1+Math.min(.55,(round-1)*.025);
+function addIce(){
+  if(!roundActive)return;
+  iceCount++;
+  $("#iceCounter").textContent="🧊 "+iceCount+"こ";
+  const fall=document.createElement("span");
+  fall.className="iceFly";fall.textContent="🧊";
+  fall.style.left=(42+Math.random()*16)+"%";fall.style.top="24%";
+  $("#playfield").appendChild(fall);setTimeout(()=>fall.remove(),650);
+
+  const drop=1.4+Math.random()*.9;
+  coolingTarget=Math.max(4,coolingTarget-drop);
+  tone(300,.05,.02);
+
+  const gap=coolingTarget-dew;
+  if(gap>4) say("まだ水はないよ<br>もう1こ入れる？",700);
+  else if(gap>1.2) say("コップをよく見て！<br>そろそろかも…",850);
+  else if(gap>=-.4) say("ポツ…？<br>水が出はじめた？",900);
+  else say("水がいっぱい！<br>ちょっと冷やしすぎかも",900);
 }
-function pressCool(e){
-  if(!roundActive||released)return;
-  if(e)e.preventDefault();
-  holding=true;$("#coolBtn").classList.add("pressed");$("#coolBtn").innerHTML="<strong>🧊 ひえひえ中！</strong>はなして止める";
-  tone(260,.04,.015);
-}
-function releaseCool(e){
-  if(!roundActive||released||!holding)return;
-  if(e)e.preventDefault();
-  holding=false;released=true;releaseAt=performance.now();
-  $("#coolBtn").classList.remove("pressed");$("#coolBtn").disabled=true;$("#coolBtn").innerHTML="<strong>✋ ストップ！</strong>まだ少し冷える…";
-  say("まだ少しだけ<br>冷えるよ！",650);
-  tone(390,.05,.02);
-}
-function useBrake(){
-  if(!roundActive||brakes<=0)return;
-  brakes--;holding=false;released=true;velocity=0;releaseAt=performance.now()-900;
-  $("#coolBtn").classList.remove("pressed");$("#coolBtn").disabled=true;
-  $("#coolBtn").innerHTML="<strong>🛑 ピタッ！</strong>ブレーキ成功";
-  updateHud();tone(700,.08,.025);evaluate();
+function foundDrop(){
+  if(!roundActive)return;
+  evaluate();
 }
 function evaluate(){
   if(!roundActive)return;
@@ -354,10 +340,10 @@ function evaluate(){
   if(err<=.3){combo++;perfects++;successes++;if(successes>=3)guideRounds=Math.min(guideRounds,round);pts=300+combo*60;label="PERFECT!";burst("✨",12);tone(880,.09,.03);setTimeout(()=>tone(1170,.1,.025),70)}
   else if(err<=.75){combo++;successes++;if(successes>=3)guideRounds=Math.min(guideRounds,round);pts=170+combo*35;label="GREAT!";burst("💧",9);tone(740,.09,.025)}
   else if(err<=1.3){combo++;successes++;if(successes>=3)guideRounds=Math.min(guideRounds,round);pts=90+combo*20;label="GOOD!";burst("💧",6);tone(620,.08,.02)}
-  else{ok=false;combo=0;lives--;label=temp>dew?"はやい！":"冷やしすぎ！";tone(170,.14,.025,"sawtooth")}
+  else{ok=false;combo=0;lives--;label=temp>dew?"まだ早い！":"冷やしすぎ！";tone(170,.14,.025,"sawtooth")}
   if(ok){
     score+=pts;
-    if(combo>0&&combo%3===0){brakes++;say("3れんぞく！<br>ブレーキ +1",1000)}
+    if(combo>0&&combo%3===0){say("3れんぞく！<br>コンボボーナス！",1000)}
     floatText(label+" +"+pts,true);
     $("#mascot").textContent=err<=.3?"🤩":"😄";
   }else{
@@ -372,7 +358,7 @@ function evaluate(){
   },950);
 }
 function gameOver(){
-  playing=false;roundActive=false;holding=false;released=false;
+  playing=false;roundActive=false;
   $("#finalScore").innerHTML=score.toLocaleString()+"<small>てん</small>";
   $("#resultLine").textContent="ピタリ成功 "+successes+"回 / PERFECT "+perfects+"回";
   const wasBest=score>startBest;
@@ -382,17 +368,9 @@ function gameOver(){
 function loop(now){
   const dt=Math.min(.04,(now-last)/1000);last=now;
   if(playing&&roundActive&&!paused){
-    if(holding){
-      const target=-4.25*difficulty();
-      velocity+=(target-velocity)*Math.min(1,dt*4.2);
-    }else{
-      velocity*=Math.pow(.055,dt);
-      if(Math.abs(velocity)<.02)velocity=0;
-    }
-    temp=clamp(temp+velocity*dt,4,24);
+    temp += (coolingTarget-temp)*Math.min(1,dt*2.6);
+    if(Math.abs(coolingTarget-temp)<.02)temp=coolingTarget;
     updateVisual();
-    if(released&&((performance.now()-releaseAt)>1050||velocity===0))evaluate();
-    if(temp<=4.02&&!released){released=true;holding=false;releaseAt=performance.now()-1100;evaluate()}
   }
   raf=requestAnimationFrame(loop);
 }
