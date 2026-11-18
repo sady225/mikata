@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0d6f8e">
-<title>光合成ラボ！ O₂チャレンジ — 子どものMIKATA</title>
+<title>読谷べにいも 光合成ラボ！ — 子どものMIKATA</title>
 <style>
 :root{--red:#e60012;--yellow:#ffe35c;--blue:#1a76c8;--deep:#0d4f9c;--water:#39bdf2;--green:#46b96f;--ink:#123c55;--safe:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -20,10 +20,28 @@ button{font:inherit;border:0;cursor:pointer}
 .sun{position:absolute;z-index:4;left:22px;top:30px;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 36% 32%,#fffbd0 0 13%,#ffe56b 34%,#ffb82e 100%);box-shadow:0 0 var(--sunGlow,24px) #ffd94ee6,0 0 10px #fff7b6;transform:scale(var(--sunScale,1));transition:transform .18s,box-shadow .18s;transform-origin:center}.sun.feedFlash{animation:sunPop .28s ease-out}.ray{position:absolute;z-index:3;pointer-events:none;left:58px;top:61px;width:190px;height:245px;clip-path:polygon(0 0,100% 14%,78% 100%,12% 88%);background:linear-gradient(100deg,rgba(255,224,74,var(--rayOpacity,.68)) 0%,rgba(255,238,127,var(--rayOpacity,.5)) 38%,rgba(255,244,176,0) 100%);filter:drop-shadow(0 0 10px #ffd84a88);transition:opacity .16s,width .16s;opacity:var(--rayOpacity,.68);mix-blend-mode:multiply}
 @keyframes sunPop{50%{transform:scale(calc(var(--sunScale,1) + .16))}}
 .co2Bottle{position:absolute;left:8px;bottom:58px;width:52px;height:105px;z-index:7}.co2Body{position:absolute;left:6px;bottom:0;width:40px;height:78px;border-radius:12px 12px 16px 16px;background:linear-gradient(90deg,#9aa8ad,#e7eef0 45%,#84969d);border:3px solid #52656c;box-shadow:0 5px #0a4b6650}.co2Body:after{content:"CO₂";position:absolute;left:4px;right:4px;top:28px;background:#fff;color:#285c68;border-radius:7px;text-align:center;font-size:11px;font-weight:1000;padding:2px}.co2Valve{position:absolute;left:17px;top:7px;width:18px;height:22px;background:#5d6d73;border-radius:5px}.co2Knob{position:absolute;left:10px;top:0;width:32px;height:9px;border-radius:6px;background:#e60012}.hose{position:absolute;z-index:6;left:47px;bottom:125px;width:83px;height:73px;border-left:5px solid #4c5c63;border-bottom:5px solid #4c5c63;border-radius:0 0 0 18px;transform:rotate(-8deg);transform-origin:left bottom}.hose:after{content:"";position:absolute;right:-5px;bottom:-6px;width:10px;height:10px;border-radius:50%;background:#4c5c63}.co2Bottle.puff .co2Knob{animation:knob .22s ease-out}.co2Bottle.puff .co2Body{animation:bottle .22s ease-out}@keyframes knob{50%{transform:rotate(18deg) scale(1.12)}}@keyframes bottle{50%{transform:translateY(-3px)}}
-.tank{position:absolute;z-index:2;left:72px;right:26px;bottom:57px;height:70%;border:6px solid rgba(255,255,255,.92);border-top:2px solid rgba(255,255,255,.55);border-radius:10px 10px 22px 22px;background:rgba(255,255,255,.22);overflow:hidden;box-shadow:inset 0 0 0 2px rgba(84,157,181,.2),inset 0 -18px 28px rgba(33,120,158,.08),0 10px 14px rgba(73,45,25,.18)}.waterFill{position:absolute;left:0;right:0;bottom:0;height:var(--waterHeight,62%);background:linear-gradient(180deg,rgba(82,205,226,.78) 0%,rgba(45,171,211,.86) 45%,rgba(27,130,189,.9) 100%);transition:height .18s;box-shadow:inset 0 10px 18px rgba(255,255,255,.14)}.waterline{position:absolute;left:0;right:0;top:0;height:5px;background:rgba(255,255,255,.96);box-shadow:0 2px 0 rgba(57,161,194,.45),0 -2px 7px rgba(255,255,255,.7)}
-.co2Stream{position:absolute;left:13%;bottom:8%;width:28px;height:62%;z-index:4;pointer-events:none;opacity:.35;transition:opacity .15s}.co2Dot{position:absolute;bottom:0;width:7px;height:7px;border:2px solid #e9fcff;border-radius:50%;animation:co2rise 1.35s linear infinite}.co2Dot:nth-child(2){left:10px;animation-delay:.28s}.co2Dot:nth-child(3){left:3px;animation-delay:.58s}.co2Dot:nth-child(4){left:15px;animation-delay:.82s}.co2Stream.burst{opacity:1;filter:drop-shadow(0 0 4px #fff)}@keyframes co2rise{0%{transform:translateY(0) scale(.7);opacity:.3}30%{opacity:1}100%{transform:translateY(-125px) translateX(6px) scale(1.2);opacity:0}}
-.plantWrap{position:absolute;z-index:5;left:50%;bottom:0;width:65%;height:88%;transform:translateX(-50%);transition:.3s}.stem{position:absolute;left:50%;bottom:4%;width:9px;height:72%;background:#398f57;border-radius:10px;transform:translateX(-50%)}.leaf{position:absolute;width:42%;height:16%;background:linear-gradient(135deg,#62cf82,#268a50);border-radius:100% 0 100% 0}.a{left:50%;bottom:22%;transform:rotate(-28deg)}.b{left:10%;bottom:36%;transform:scaleX(-1) rotate(-22deg)}.c{left:50%;bottom:50%;transform:rotate(-20deg)}.d{left:10%;bottom:64%;transform:scaleX(-1) rotate(-15deg)}.e{left:50%;bottom:76%;transform:rotate(-8deg)}.extra{display:none}.lv2 .extra.e1,.lv3 .extra.e1,.lv4 .extra.e1,.lv5 .extra.e1,.lv3 .extra.e2,.lv4 .extra.e2,.lv5 .extra.e2,.lv4 .extra.e3,.lv5 .extra.e3,.lv5 .extra.e4{display:block}
-.bubbles{position:absolute;z-index:8;inset:0;overflow:hidden}.bubble{position:absolute;bottom:12%;width:var(--s,11px);height:var(--s,11px);border:2px solid #fff;border-radius:50%;background:#ffffff44;box-shadow:inset 2px 2px 3px #fff9,0 0 8px #fff7;animation:rise var(--dur,1.8s) linear forwards}.bubble.gold{border-color:var(--yellow);background:#fff2a477;box-shadow:0 0 13px #ffe35c;cursor:pointer}
+.tank{position:absolute;z-index:2;left:72px;right:26px;bottom:57px;height:70%;border:5px solid rgba(150,177,183,.72);border-top:3px solid rgba(180,199,202,.5);border-radius:12px 12px 20px 20px;background:rgba(255,255,255,.34);overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7),0 10px 14px rgba(73,45,25,.18)}
+.caseLabel{position:absolute;z-index:11;right:6px;top:6px;background:#ffffffcc;color:#6b4b32;border:1px solid #d7c5aa;border-radius:10px;padding:3px 7px;font-size:8px;font-weight:1000}
+.soil{position:absolute;z-index:2;left:0;right:0;bottom:0;height:44%;background:linear-gradient(180deg,#9a6944 0%,#70492f 44%,#513522 100%);box-shadow:inset 0 8px 10px rgba(255,255,255,.08)}
+.soil:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 25%,#c29060 0 3px,transparent 4px),radial-gradient(circle at 65% 55%,#3e2a1f 0 2px,transparent 3px),radial-gradient(circle at 83% 20%,#b27a50 0 2px,transparent 3px);background-size:38px 32px;opacity:.65}
+.soilMoisture{position:absolute;z-index:1;left:0;right:0;bottom:0;height:100%;background:linear-gradient(180deg,rgba(62,160,192,.02),rgba(38,126,163,.48));opacity:var(--moisture,.42);transition:opacity .18s}
+.rootLine{position:absolute;z-index:3;width:2px;background:#d6c18c;transform-origin:top;border-radius:2px;opacity:.75}
+.r1{left:48%;top:-56px;height:78px;transform:rotate(10deg)}.r2{left:57%;top:-46px;height:72px;transform:rotate(-18deg)}.r3{left:38%;top:-38px;height:66px;transform:rotate(24deg)}
+.soilCrop{position:absolute;z-index:5;inset:0;pointer-events:none}
+.tuber{position:absolute;display:none;width:32px;height:58px;border-radius:48% 52% 46% 54% / 34% 38% 62% 66%;background:linear-gradient(100deg,#5e245c 0%,#8f3d86 45%,#b75da6 67%,#68245f 100%);box-shadow:inset -5px -3px 7px rgba(59,15,57,.28),inset 5px 2px 6px rgba(255,176,241,.16),0 3px 4px rgba(50,26,20,.25);transform:rotate(var(--rot,8deg)) scale(var(--tuberScale,.65));transition:transform .35s}
+.tuber:after{content:"";position:absolute;left:8px;top:9px;width:4px;height:4px;border-radius:50%;background:#d99bcf;box-shadow:10px 15px #d99bcf,5px 31px #d99bcf}
+.t1{left:43%;bottom:12%;--rot:8deg}.t2{left:61%;bottom:7%;--rot:-12deg}.t3{left:25%;bottom:5%;--rot:15deg}
+.lv3 .t1{display:block;--tuberScale:.58}.lv4 .t1,.lv4 .t2{display:block;--tuberScale:.82}.lv5 .t1,.lv5 .t2,.lv5 .t3{display:block;--tuberScale:1}
+.plantWrap{position:absolute;z-index:6;left:50%;bottom:38%;width:74%;height:58%;transform:translateX(-50%);transition:.3s;pointer-events:none}
+.vine{position:absolute;left:46%;bottom:0;width:8px;height:72%;background:linear-gradient(#4e9f54,#2f7e43);border-radius:10px;transform:rotate(-7deg);transform-origin:bottom;box-shadow:18px -26px 0 -2px #3d8c49,-17px -43px 0 -2px #3d8c49}
+.leaf{position:absolute;width:40px;height:40px;color:#338d4b;font-size:40px;line-height:1;text-shadow:0 2px #1e6c38;transform-origin:center}.leaf:before{content:"♥"}.a{left:52%;bottom:12%;transform:rotate(18deg)}.b{left:19%;bottom:27%;transform:rotate(-24deg)}.c{left:55%;bottom:42%;transform:rotate(15deg)}.d{left:18%;bottom:57%;transform:rotate(-18deg)}.e{left:50%;bottom:72%;transform:rotate(9deg)}.extra{display:none}
+.lv1 .c,.lv1 .d,.lv1 .e{display:none}.lv1 .a,.lv1 .b{transform:scale(.72)}
+.lv2 .extra.e1,.lv3 .extra.e1,.lv4 .extra.e1,.lv5 .extra.e1,.lv3 .extra.e2,.lv4 .extra.e2,.lv5 .extra.e2,.lv4 .extra.e3,.lv5 .extra.e3,.lv5 .extra.e4{display:block}
+.waterDrop{position:absolute;z-index:10;top:5%;width:9px;height:15px;border-radius:55% 55% 60% 60%;background:#44bce2;box-shadow:0 1px 2px #167ba155;animation:waterFall .65s ease-in forwards;pointer-events:none}
+@keyframes waterFall{0%{transform:translateY(0) scale(.7);opacity:0}15%{opacity:1}100%{transform:translateY(155px) scale(1);opacity:.25}}
+.co2Stream{position:absolute;left:12%;bottom:43%;width:54%;height:45%;z-index:7;pointer-events:none;opacity:.35;transition:opacity .15s}.co2Dot{position:absolute;left:0;bottom:5%;width:8px;height:8px;border:2px solid #7bcfe1;border-radius:50%;background:#ffffff99;animation:co2air 1.35s linear infinite}.co2Dot:nth-child(2){bottom:28%;animation-delay:.28s}.co2Dot:nth-child(3){bottom:52%;animation-delay:.58s}.co2Dot:nth-child(4){bottom:72%;animation-delay:.82s}.co2Stream.burst{opacity:1;filter:drop-shadow(0 0 4px #fff)}
+@keyframes co2air{0%{transform:translateX(0) scale(.7);opacity:.25}30%{opacity:1}100%{transform:translateX(105px) translateY(-10px) scale(1.15);opacity:0}}
+.bubbles{position:absolute;z-index:8;inset:0;overflow:hidden}.bubble{position:absolute;bottom:48%;width:var(--s,11px);height:var(--s,11px);border:2px solid #fff;border-radius:50%;background:#ffffff44;box-shadow:inset 2px 2px 3px #fff9,0 0 8px #fff7;animation:rise var(--dur,1.8s) linear forwards}.bubble.gold{border-color:var(--yellow);background:#fff2a477;box-shadow:0 0 13px #ffe35c;cursor:pointer}
 @keyframes rise{0%{transform:translate(0,0) scale(.7);opacity:.4}20%{opacity:1}100%{transform:translate(var(--drift,8px),-210px) scale(1.2);opacity:0}}
 .statusPill{position:absolute;z-index:12;left:8px;top:8px;max-width:58%;background:#ffffffdd;color:var(--deep);font-size:10px;font-weight:1000;padding:6px 9px;border-radius:13px;box-shadow:0 3px #0d4f9c22;pointer-events:none}.statusPill b{color:var(--red)}
 .rush{position:absolute;z-index:15;left:50%;top:27%;transform:translate(-50%,-50%) scale(.6);font-size:21px;font-weight:1000;color:#fff;text-shadow:0 3px var(--deep),0 0 12px #fff;opacity:0;white-space:nowrap}.rush.show{animation:rush .8s ease-out}@keyframes rush{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}100%{opacity:0;transform:translate(-50%,-68%) scale(1)}}
@@ -46,7 +64,7 @@ button{font:inherit;border:0;cursor:pointer}
    <div class="nextBox"><div id="nextBubble" class="nextBubble">🌱</div><div class="nextText">NEXT<br><b id="nextText">あと 30</b></div></div>
   </div>
   <div id="evo" class="evo">
-   <span class="evoItem on cur">🌱</span><span class="evoItem">🌿</span><span class="evoItem">🪴</span><span class="evoItem">🌳</span><span class="evoItem">✨</span>
+   <span class="evoItem on cur">🌱</span><span class="evoItem">🌿</span><span class="evoItem">🍃</span><span class="evoItem">🍠</span><span class="evoItem">🍠🍠</span>
   </div>
   <div class="wave"></div>
  </section>
@@ -56,12 +74,13 @@ button{font:inherit;border:0;cursor:pointer}
   <div id="sun" class="sun"></div><div id="ray" class="ray"></div>
   <div id="co2Bottle" class="co2Bottle"><div class="co2Knob"></div><div class="co2Valve"></div><div class="co2Body"></div></div><div class="hose"></div>
   <div class="tank">
-   <div id="waterFill" class="waterFill"><div class="waterline"></div></div>
+   <div class="caseLabel">読谷べにいも 観察ケース</div>
    <div id="co2Stream" class="co2Stream"><i class="co2Dot"></i><i class="co2Dot"></i><i class="co2Dot"></i><i class="co2Dot"></i></div>
    <div id="plant" class="plantWrap lv1">
-    <div class="stem"></div><div class="leaf a"></div><div class="leaf b"></div><div class="leaf c"></div><div class="leaf d"></div><div class="leaf e"></div>
-    <div class="leaf a extra e1" style="left:30%;bottom:27%"></div><div class="leaf b extra e2" style="left:36%;bottom:45%"></div><div class="leaf c extra e3" style="left:22%;bottom:57%"></div><div class="leaf d extra e4" style="left:44%;bottom:70%"></div>
+    <div class="vine"></div><div class="leaf a"></div><div class="leaf b"></div><div class="leaf c"></div><div class="leaf d"></div><div class="leaf e"></div>
+    <div class="leaf a extra e1" style="left:35%;bottom:20%"></div><div class="leaf b extra e2" style="left:62%;bottom:54%"></div><div class="leaf c extra e3" style="left:7%;bottom:42%"></div><div class="leaf d extra e4" style="left:64%;bottom:76%"></div>
    </div>
+   <div id="soil" class="soil"><div id="soilMoisture" class="soilMoisture"></div><i class="rootLine r1"></i><i class="rootLine r2"></i><i class="rootLine r3"></i><div id="soilCrop" class="soilCrop lv1"><div class="tuber t1"></div><div class="tuber t2"></div><div class="tuber t3"></div></div></div>
    <div id="bubbles" class="bubbles"></div>
   </div>
   <div id="statusPill" class="statusPill">3つをそろえると <b>O₂</b> がふえる！</div>
@@ -77,8 +96,8 @@ button{font:inherit;border:0;cursor:pointer}
  </section>
 
  <section id="title" class="title">
-  <div><div class="chip">光合成ゲーム</div><h1 class="logo"><span>光合成ラボ！</span><small>O₂をたくさんつくろう</small></h1></div>
-  <div class="titleBot"><div class="how">☀️ 光 ＋ 💧 水 ＋ ☁️ 二酸化炭素<br>3つを使って、植物は <b>🫧酸素</b> をつくる！<br><span>このはたらきを「光合成」というよ。</span><br>ボタンを押して材料を届けよう！</div><button id="play" class="play">スタート！</button><div id="titleBest" class="bestLine">BEST 0000 O₂</div></div>
+  <div><div class="chip">読谷の植物で学ぶ</div><h1 class="logo"><span>べにいもラボ！</span><small>光・水・CO₂で育てよう</small></h1></div>
+  <div class="titleBot"><div class="how">☀️ 光 ＋ 💧 水 ＋ ☁️ 二酸化炭素<br>3つを使って、紅芋の葉は <b>🫧酸素</b> をつくる！<br><span>このはたらきを「光合成」というよ。</span><br>ボタンを押して材料を届けよう！</div><button id="play" class="play">スタート！</button><div id="titleBest" class="bestLine">BEST 0000 O₂</div></div>
  </section>
 
  <section id="finish" class="modal"><div class="card"><h2>けんきゅう おわり！</h2><div id="finalScore" class="bigScore">0</div><div>O₂</div><div id="rank" class="rank">🌱 けんきゅういん</div><p id="resultText">3つをバランスよく届けよう！</p><button id="retry" class="retry">もういちど！</button></div></section>
@@ -86,7 +105,7 @@ button{font:inherit;border:0;cursor:pointer}
 <script>
 (()=>{
 const $=s=>document.querySelector(s);
-const thresholds=[0,30,80,150,260],icons=['🌱','🌿','🪴','🌳','✨'];
+const thresholds=[0,30,80,150,260],icons=['🌱','🌿','🍃','🍠','🍠🍠'];
 const S={light:.45,water:.45,co2:.45,score:0,best:0,level:1,running:false,time:60,last:0,lastBubble:0,lastTick:0,highSince:null,muted:false,audio:null,master:null,soundReady:false,raf:0};
 try{S.best=+localStorage.getItem('photosynthesis_best')||0}catch(e){}
 function clamp(v){return Math.max(0,Math.min(1,v))}
@@ -102,7 +121,7 @@ function updateHUD(){
  $('#score').textContent=fmt(S.score);$('#best').textContent='BEST '+fmt(S.best);$('#titleBest').textContent='BEST '+fmt(S.best)+' O₂';
  const nl=calcLevel(S.score);if(nl>S.level){S.level=nl;levelUp()}else S.level=nl;
  document.querySelectorAll('.evoItem').forEach((el,i)=>{el.classList.toggle('on',i<S.level);el.classList.toggle('cur',i===S.level-1)});
- $('#plant').className='plantWrap lv'+S.level;
+ $('#plant').className='plantWrap lv'+S.level;$('#soilCrop').className='soilCrop lv'+S.level;
  if(S.level<5){const target=thresholds[S.level];$('#nextBubble').textContent=icons[S.level];$('#nextText').textContent='あと '+Math.max(0,target-Math.floor(S.score))}else{$('#nextBubble').textContent='👑';$('#nextText').textContent='MAX！'}
 }
 function levelUp(){sfx('level');const r=$('#rush');r.textContent=S.level===5?'MAX 光合成！':'LEVEL UP！';r.classList.remove('show');void r.offsetWidth;r.classList.add('show')}
@@ -123,14 +142,14 @@ function updateNeed(){
  $('#sun').style.setProperty('--sunGlow',(8+S.light*38)+'px');
  $('#ray').style.setProperty('--rayOpacity',(.20+S.light*.75).toFixed(2));
 
- // 水：水槽の実際の水位を上下させる
- $('#waterFill').style.setProperty('--waterHeight',(25+S.water*70)+'%');
+ // 水：土の湿り気を見た目で変える
+ $('#soilMoisture').style.setProperty('--moisture',(.08+S.water*.72).toFixed(2));
 
- // CO2：水中への注入泡を供給量に応じて見せる
+ // CO2：葉のまわりへ届く様子を供給量に応じて見せる
  $('#co2Stream').style.opacity=(.12+S.co2*.68).toFixed(2);
 
  const p=power(),st=$('#statusPill');
- if(p>.83)st.innerHTML='🔥 <b>3つそろった！</b> 酸素がどんどんできる！';
+ if(p>.83)st.innerHTML='🔥 <b>3つそろった！</b> 紅芋の葉から酸素がどんどん！';
  else st.innerHTML='もっと必要：<b>'+weakest[2]+'</b>';
 }
 function animateSupply(k){
@@ -138,7 +157,9 @@ function animateSupply(k){
   const sun=$('#sun');sun.classList.remove('feedFlash');void sun.offsetWidth;sun.classList.add('feedFlash');setTimeout(()=>sun.classList.remove('feedFlash'),300);
  }
  if(k==='water'){
-  const w=$('#waterFill');w.animate([{filter:'brightness(1)'},{filter:'brightness(1.25)'},{filter:'brightness(1)'}],{duration:280});
+  const box=document.querySelector('.tank');
+  for(let i=0;i<5;i++){const d=document.createElement('i');d.className='waterDrop';d.style.left=(34+i*8+Math.random()*4)+'%';d.style.animationDelay=(i*.045)+'s';box.appendChild(d);setTimeout(()=>d.remove(),850)}
+  const soil=$('#soil');soil.animate([{filter:'brightness(1)'},{filter:'brightness(.82) saturate(1.15)'},{filter:'brightness(1)'}],{duration:420});
  }
  if(k==='co2'){
   const b=$('#co2Bottle'),s=$('#co2Stream');b.classList.add('puff');s.classList.add('burst');setTimeout(()=>{b.classList.remove('puff');s.classList.remove('burst')},650);
@@ -153,7 +174,7 @@ function loop(ts){
  if(S.time<=0){finish();return}S.raf=requestAnimationFrame(loop)
 }
 async function start(){await unlockAudio();S.light=.44;S.water=.44;S.co2=.44;S.score=0;S.level=1;S.time=60;S.running=true;S.last=performance.now();S.lastBubble=S.last;S.lastTick=S.last;$('#title').style.display='none';$('#finish').classList.remove('show');updateHUD();updateNeed();requestAnimationFrame(loop)}
-function finish(){S.running=false;cancelAnimationFrame(S.raf);sfx('end');$('#finalScore').textContent=Math.floor(S.score);let r='🌱 けんきゅういん',t='3つをバランスよく届けると、もっとO₂が増えるよ！';if(S.score>=260){r='👑 光合成マスター';t='光・水・CO₂をそろえて、植物をMAXまで育てた！'}else if(S.score>=150){r='🌳 光合成エース';t='足りない材料をすばやく見つけられた！'}else if(S.score>=80){r='🪴 O₂名人';t='光合成のコツがわかってきた！'}$('#rank').textContent=r;$('#resultText').textContent=t;$('#finish').classList.add('show')}
+function finish(){S.running=false;cancelAnimationFrame(S.raf);sfx('end');$('#finalScore').textContent=Math.floor(S.score);let r='🌱 けんきゅういん',t='3つをバランスよく届けると、もっとO₂が増えるよ！';if(S.score>=260){r='👑 べにいもマスター';t='光・水・CO₂をそろえて、読谷の紅芋を大きく育てた！'}else if(S.score>=150){r='🍠 べにいもエース';t='足りない材料をすばやく見つけて、土の中の紅芋を育てた！'}else if(S.score>=80){r='🪴 O₂名人';t='光合成のコツがわかってきた！'}$('#rank').textContent=r;$('#resultText').textContent=t;$('#finish').classList.add('show')}
 document.querySelectorAll('.btn').forEach(btn=>btn.addEventListener('pointerdown',async e=>{e.preventDefault();if(!S.running)return;await unlockAudio();feed(btn.dataset.k,btn)}));
 document.addEventListener('pointerdown',()=>unlockAudio(),{once:true,capture:true});
 $('#play').addEventListener('click',start);$('#retry').addEventListener('click',start);$('#mute').addEventListener('click',async e=>{S.muted=!S.muted;e.currentTarget.textContent=S.muted?'🔇':'🔊';if(!S.muted){await unlockAudio();sfx('level')}});
