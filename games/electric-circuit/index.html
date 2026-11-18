@@ -4,33 +4,33 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#07516d">
-<title>電気回路のひみつ！ — 子どものMIKATA</title>
+<title>11円電池でLEDを光らせよう！ — 子どものMIKATA</title>
 <style>
 :root{--blue:#0a6687;--navy:#06384b;--yellow:#ffdd62;--orange:#f49a4c;--green:#42a875;--red:#d85c55;--ink:#173f4b;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#052f40}body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}button{font:inherit}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#052f40}body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}button,input{font:inherit}
 #app{width:min(100vw,480px);height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(180deg,#42b7cd,#93dfe6 48%,#edf5dc);user-select:none}
 header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + var(--safe-top));padding:calc(8px + var(--safe-top)) 11px 8px;background:linear-gradient(#0b6888,#07506a);color:white;border-bottom:3px solid #ffffff88}
 .headrow{display:flex;align-items:center;justify-content:space-between;gap:8px}.brand{font-size:10px;font-weight:1000}.stage{font-size:12px;font-weight:1000;background:#ffffff24;padding:5px 9px;border-radius:999px}.hud{display:flex;gap:6px}.hud button{border:0;border-radius:999px;min-height:32px;background:white;color:#07506a;font-weight:1000;font-size:11px;padding:0 10px}.progress{height:7px;margin-top:7px;background:#ffffff25;border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:var(--yellow);transition:width .2s}
 .screen{position:absolute;inset:0;display:none}.screen.active{display:flex}.title{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(100px + var(--safe-top)) 18px calc(16px + var(--safe-bottom))}
-.badge{background:#fff;color:#0b6787;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:1000}.title h1{font-size:clamp(35px,10vw,48px);line-height:1.05;margin:12px 0 5px;color:#fff;text-shadow:0 4px #07516d}.title h1 em{font-style:normal;color:var(--yellow)}.subtitle{font-size:14px;font-weight:900;color:#0a4d63}.hero{width:min(76vw,290px);height:min(31dvh,225px);display:grid;place-items:center}.start,.check,.next,.retry,.small{border:0;border-radius:999px;background:var(--yellow);color:#7b4c17;font-weight:1000;box-shadow:0 5px #c59531,0 0 0 3px white inset}.start{width:min(86vw,320px);min-height:56px;font-size:20px}.title small{max-width:340px;font-size:11px;line-height:1.45;color:#0a536b;font-weight:800;margin-top:10px}
+.badge{background:#fff;color:#0b6787;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:1000}.title h1{font-size:clamp(33px,9.5vw,46px);line-height:1.05;margin:12px 0 5px;color:#fff;text-shadow:0 4px #07516d}.title h1 em{font-style:normal;color:var(--yellow)}.subtitle{font-size:14px;font-weight:900;color:#0a4d63}.hero{width:min(78vw,300px);height:min(31dvh,225px);display:grid;place-items:center}.start,.check,.next,.retry,.small{border:0;border-radius:999px;background:var(--yellow);color:#7b4c17;font-weight:1000;box-shadow:0 5px #c59531,0 0 0 3px white inset}.start{width:min(86vw,320px);min-height:56px;font-size:20px}.title small{max-width:350px;font-size:11px;line-height:1.45;color:#0a536b;font-weight:800;margin-top:10px}
 .game{flex-direction:column;padding-top:calc(96px + var(--safe-top));min-height:0}.task{flex:0 0 auto;margin:6px 10px 4px;background:#fff;border-radius:17px;padding:7px 10px;box-shadow:0 4px #0a728c30}.task b{display:block;color:var(--orange);font-size:10px}.task h2{font-size:16px;margin:2px 0}.task p{font-size:10px;margin:0;color:#5e7a84;font-weight:800;line-height:1.32}
-.lab{position:relative;flex:1 1 auto;min-height:220px;margin:0 8px 4px;border:3px solid #ffffffb5;border-radius:22px;background:linear-gradient(#f9feffdd,#edf8f5e9);overflow:hidden}.lab svg{width:100%;height:100%;display:block;touch-action:none}.component-label{font-size:12px;font-weight:1000;fill:#365661}.terminal{fill:#fff;stroke:#244e5a;stroke-width:3}.terminal.hot{fill:#ffe66d;stroke:#d28b23}.wire{fill:none;stroke:#334f5a;stroke-width:8;stroke-linecap:round}.wire.live{stroke:#ef9c3e}.wireEnd{fill:#f6f8f8;stroke:#334f5a;stroke-width:4}.glow{opacity:0}.on .glow{opacity:1;filter:drop-shadow(0 0 18px #ffd95a)}.filament{stroke:#7d5d24;stroke-width:3;fill:none}.on .filament{stroke:#fff3a4}.currentDot{fill:#fff176;opacity:0}.on .currentDot{opacity:1;animation:pulse .9s ease-in-out infinite alternate}@keyframes pulse{to{opacity:.25}}
+.lab{position:relative;flex:1 1 auto;min-height:220px;margin:0 8px 4px;border:3px solid #ffffffb5;border-radius:22px;background:linear-gradient(#f9feffdd,#edf8f5e9);overflow:hidden}.bench{position:absolute;inset:0;padding:10px}.meter{position:absolute;right:10px;top:10px;width:118px;background:#2a424d;color:#dffccf;border-radius:15px;padding:8px;text-align:center;box-shadow:0 5px #18303a}.meter .display{background:#cfe6b6;border-radius:7px;padding:7px 4px;color:#233a25;font-weight:1000;font-size:20px;font-variant-numeric:tabular-nums}.meter small{font-size:9px}.batteryStack{position:absolute;left:30px;bottom:22px;width:135px;height:175px;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start}.cell{width:92px;height:22px;position:relative;margin-top:-2px}.coin10,.coin1,.paper{position:absolute;left:50%;transform:translateX(-50%);border-radius:50%}.coin10{width:82px;height:18px;background:linear-gradient(#c87c37,#9c531f);border:3px solid #7a3d18}.paper{width:74px;height:11px;background:#f1f4f2;border:2px dashed #8fb7bb}.coin1{width:78px;height:16px;background:linear-gradient(#eef2f3,#adb8bd);border:3px solid #78878d}.cell .coin10{bottom:0}.cell .paper{bottom:7px}.cell .coin1{bottom:13px}.cell.bad .paper{display:none}.cell.rev .coin10{bottom:13px}.cell.rev .coin1{bottom:0}.polarity{position:absolute;left:18px;bottom:198px;font-size:10px;font-weight:1000;color:#375864}.led{position:absolute;right:40px;bottom:45px;width:92px;text-align:center}.ledBulb{width:50px;height:62px;margin:auto;border-radius:50% 50% 42% 42%;background:#d9e2dd;border:5px solid #4d6268;transition:.2s;position:relative}.led.on .ledBulb{background:#ff6363;box-shadow:0 0 30px 10px #ff777799}.led.dim .ledBulb{background:#ef9b9b;box-shadow:0 0 15px 4px #ff777755}.ledLegs{display:flex;justify-content:center;gap:20px;height:50px}.ledLegs span{width:4px;background:#909b9e}.ledLegs .long{height:48px}.ledLegs .short{height:34px}.ledLabel{font-size:10px;font-weight:1000}.lead{position:absolute;height:5px;background:#dc4e48;transform-origin:left center;border-radius:5px}.lead.black{background:#303a3f}.materials{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}.material{border:0;border-radius:14px;background:#fff;color:#07516d;min-height:44px;padding:7px 10px;font-weight:1000;font-size:11px;box-shadow:0 3px #003e54}.material.selected{background:var(--yellow)}.layerList{position:absolute;left:18px;top:18px;width:150px}.layerRow{display:flex;align-items:center;gap:5px;margin-bottom:5px;background:#ffffffde;border-radius:10px;padding:5px;font-size:10px;font-weight:900}.chip{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:9px}.c10{background:#b96b2e;color:white}.c1{background:#cfd7da}.cp{background:#eff5f4;border:2px dashed #91b1b6}.pressure{position:absolute;left:20px;right:20px;bottom:18px;background:#ffffffdd;border-radius:14px;padding:9px}.pressure input{width:100%;accent-color:var(--yellow)}.dataTable{position:absolute;inset:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px;align-content:center}.dataCard{background:white;border-radius:14px;padding:10px;text-align:center;font-weight:900}.dataCard strong{display:block;font-size:22px;color:#0a6687}.cleanup{position:absolute;inset:16px;display:flex;gap:10px;align-items:center;justify-content:center}.coinBig{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;font-weight:1000;font-size:20px}.coinBig.ten{background:#a85f29;color:white}.coinBig.one{background:#d7dfe2}.coinBig.dirty{filter:brightness(.6) saturate(.5);box-shadow:inset 0 0 0 12px #473d38aa}
 .message{flex:0 0 auto;margin:0 10px 4px;min-height:40px;border-radius:14px;padding:6px 9px;background:#fffffff2;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:900}.message.good{background:#e6f8df;color:#2e684a}.message.warn{background:#fff0d7;color:#8a5c20}.message.bad{background:#ffe3df;color:#9b403b}.dot{width:9px;height:9px;border-radius:50%;background:var(--blue);flex:0 0 auto}.good .dot{background:var(--green)}.warn .dot{background:var(--orange)}.bad .dot{background:var(--red)}
 .controls{flex:0 0 auto;background:#07516de8;color:white;border-top:3px solid #ffffff72;padding:8px 10px calc(10px + var(--safe-bottom))}.controlTitle{text-align:center;font-size:10px;font-weight:1000;color:#dff8ff;margin:0 0 6px}.check{width:100%;min-height:44px;font-size:14px}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.choice{border:0;border-radius:13px;background:#fff;color:#07516d;min-height:46px;font-weight:1000;font-size:11px;box-shadow:0 4px #003e54}.choice.active{background:var(--yellow)}.hint{text-align:center;font-size:9px;font-weight:800;color:#d8f4fa;margin-top:6px}
-.overlay{position:absolute;z-index:60;inset:0;display:none;place-items:center;padding:18px;background:#052f42dd}.overlay.show{display:grid}.card{width:100%;max-width:350px;background:white;border-radius:24px;padding:19px;text-align:center;box-shadow:0 10px #052938}.card .emoji{font-size:42px}.card h2{margin:2px 0 6px;color:var(--green);font-size:26px}.card p{font-size:12px;line-height:1.55;font-weight:800;color:#49656e}.next,.retry,.small{width:100%;min-height:48px;font-size:16px;margin-top:8px}.discList{text-align:left;max-height:48dvh;overflow:auto;padding:0;list-style:none}.discList li{background:#eff8f3;margin:6px 0;padding:8px 10px;border-radius:12px;font-size:11px;font-weight:800}.discList li.locked{background:#f1f2f2;color:#9aa5a8}
-@media(max-height:650px){header{min-height:calc(78px + var(--safe-top));padding-top:calc(5px + var(--safe-top))}.game{padding-top:calc(85px + var(--safe-top))}.task{padding:5px 8px}.task p{display:none}.lab{min-height:185px}.message{min-height:32px;font-size:10px}.choice{min-height:40px}}
-@media(max-height:570px){.brand{display:none}.game{padding-top:calc(75px + var(--safe-top))}.lab{min-height:160px}}
+.overlay{position:absolute;z-index:60;inset:0;display:none;place-items:center;padding:18px;background:#052f42dd}.overlay.show{display:grid}.card{width:100%;max-width:350px;background:white;border-radius:24px;padding:19px;text-align:center;box-shadow:0 10px #052938}.card .emoji{font-size:42px}.card h2{margin:2px 0 6px;color:var(--green);font-size:26px}.card p{font-size:12px;line-height:1.55;font-weight:800;color:#49656e}.next,.retry,.small{width:100%;min-height:48px;font-size:16px;margin-top:8px}.discList{text-align:left;max-height:48dvh;overflow:auto;padding:0;list-style:none}.discList li{background:#eff8f3;margin:6px 0;padding:8px 10px;border-radius:12px;font-size:11px;font-weight:800}.discList li.locked{background:#f1f2f2;color:#9aa5a8}.source{font-size:9px;color:#688089;text-align:left;margin-top:10px;border-top:1px solid #dce7e9;padding-top:8px}
+@media(max-height:650px){header{min-height:calc(78px + var(--safe-top));padding-top:calc(5px + var(--safe-top))}.game{padding-top:calc(85px + var(--safe-top))}.task{padding:5px 8px}.task p{display:none}.lab{min-height:185px}.message{min-height:32px;font-size:10px}.choice{min-height:40px}.batteryStack{height:145px;bottom:13px}.led{bottom:28px}}
+@media(max-height:570px){.brand{display:none}.game{padding-top:calc(75px + var(--safe-top))}.lab{min-height:160px}.meter{width:105px}.cell{height:18px}.batteryStack{transform:scale(.85);transform-origin:left bottom}}
 </style>
 </head>
 <body>
 <div id="app">
-<header><div class="headrow"><div><div class="brand">子どものMIKATA｜理科体験ゲーム</div><div id="stageLabel" class="stage">💡 1 / 7</div></div><div class="hud"><button id="discoverBtn">🔬 発見 0</button><button id="muteBtn">🔊</button></div></div><div class="progress"><span id="progress"></span></div></header>
+<header><div class="headrow"><div><div class="brand">子どものMIKATA｜那覇工業高校 課題研究から</div><div id="stageLabel" class="stage">🪙 1 / 7</div></div><div class="hud"><button id="discoverBtn">🔬 発見 0</button><button id="muteBtn">🔊</button></div></div><div class="progress"><span id="progress"></span></div></header>
 
 <main id="title" class="screen title active">
-<div class="badge">危険を見抜いて止める</div><h1>電気回路の<br><em>ひみつ！</em></h1>
-<p class="subtitle">正常？ 故障？ 危険？ 回路を見て、安全な行動を選ぼう。</p>
-<div class="hero" aria-hidden="true"><svg viewBox="0 0 300 230"><rect x="28" y="85" width="78" height="90" rx="16" fill="#f6f7f2" stroke="#315762" stroke-width="6"/><text x="67" y="133" text-anchor="middle" font-size="32" font-weight="1000" fill="#d7554c">＋</text><circle cx="228" cy="120" r="42" fill="#fff6bd" stroke="#315762" stroke-width="7"/><path d="M107 100 C145 60 190 64 210 91" fill="none" stroke="#334f5a" stroke-width="8" stroke-linecap="round"/><path d="M106 160 C145 200 194 183 212 150" fill="none" stroke="#334f5a" stroke-width="8" stroke-linecap="round"/></svg></div>
-<button id="startBtn" class="start">安全パトロール開始</button><small>危険なら止める、故障なら直す、正常ならむやみに触らない。ゲーム内の疑似実験で安全判断を身につけます。</small>
+<div class="badge">10円＋1円＝11円電池</div><h1>11円電池で<br><em>LEDを光らせよう！</em></h1>
+<p class="subtitle">重ねる・測る・つなぐ。光らない理由まで実験しよう。</p>
+<div class="hero" aria-hidden="true"><svg viewBox="0 0 300 230"><ellipse cx="95" cy="170" rx="65" ry="18" fill="#a95d26"/><ellipse cx="95" cy="155" rx="60" ry="16" fill="#eff4f2"/><ellipse cx="95" cy="140" rx="62" ry="17" fill="#cfd8db"/><ellipse cx="95" cy="125" rx="65" ry="18" fill="#a95d26"/><ellipse cx="95" cy="110" rx="60" ry="16" fill="#eff4f2"/><ellipse cx="95" cy="95" rx="62" ry="17" fill="#cfd8db"/><path d="M155 100 C205 75 225 75 245 98" fill="none" stroke="#d64c45" stroke-width="7"/><path d="M155 168 C205 195 225 190 245 162" fill="none" stroke="#303a3f" stroke-width="7"/><path d="M247 98 V145" stroke="#8d999d" stroke-width="5"/><path d="M265 112 V145" stroke="#8d999d" stroke-width="5"/><path d="M238 86 Q256 62 274 86 V108 H238 Z" fill="#ff6f6f" stroke="#435a62" stroke-width="5"/></svg></div>
+<button id="startBtn" class="start">11円電池の実験開始</button><small>那覇工業高校の課題研究で確認した実測結果をもとにした学習ゲームです。実物実験は先生・大人の管理下で行ってください。</small>
 </main>
 
 <main id="game" class="screen game">
@@ -41,181 +41,123 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 </main>
 
 <div id="stageOverlay" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">できた！</h2><p id="clearText"></p><button id="nextBtn" class="next">次の実験へ</button></div></div>
-<div id="whyOverlay" class="overlay"><div class="card"><div class="emoji">🤔</div><h2>なぜ？</h2><p id="whyText"></p><button id="whyClose" class="small">もう一度試す</button></div></div>
-<div id="dangerOverlay" class="overlay"><div class="card"><div class="emoji">⚠️</div><h2>ちょっと待って！</h2><p>乾電池の＋極と−極を、電球などを通さず導線だけで直接つなぐのは危険。大きな電流が流れて、電池や導線が熱くなることがあるよ。実際の実験ではやらないでね。</p><button id="dangerClose" class="small">安全な回路に戻す</button></div></div>
-<div id="discoverOverlay" class="overlay"><div class="card"><div class="emoji">🔬</div><h2>発見コレクション</h2><ul id="discList" class="discList"></ul><button id="closeDisc" class="small">戻る</button></div></div>
-<div id="finishOverlay" class="overlay"><div class="card"><div class="emoji">⚡✨</div><h2>回路研究員！</h2><p id="finishText"></p><button id="showDisc" class="small">発見を見る</button><button id="retryBtn" class="retry">最初からもう一度</button></div></div>
+<div id="whyOverlay" class="overlay"><div class="card"><div class="emoji">🤔</div><h2>なぜ？</h2><p id="whyText"></p><button id="whyClose" class="small">実験へ戻る</button></div></div>
+<div id="discoverOverlay" class="overlay"><div class="card"><div class="emoji">🔬</div><h2>今日の発見</h2><ul id="discList" class="discList"></ul><button id="closeDisc" class="small">戻る</button></div></div>
+<div id="finishOverlay" class="overlay"><div class="card"><div class="emoji">🪙💡</div><h2>11円電池研究員！</h2><p id="finishText"></p><div class="source">参考：那覇工業高校 課題研究「11円電池を作ってみよう！」、2026年5月28日課題研究メモ、2026年11月12日「11円電池の電流測定と電池ケース改良」。外部参考：Science Buddies “Charge from Change: Make a Coin Battery”。</div><button id="showDisc" class="small">発見を見る</button><button id="retryBtn" class="retry">最初からもう一度</button></div></div>
 </div>
 
 <script>
 (()=>{
-let stage=0,muted=false,audio=null,drag=null,trial={},scenarioIndex=0,patrolCorrect=0;
+let stage=0,muted=false,audio=null,stack=[],cells=1,ledReverse=false,wet=true,pressure=70,measured=false,cleaned=false;
 const discoveries=new Set();
 const all=[
-['normal','正常な閉回路 → むやみに止めなくてよい'],
-['open','回路が切れている → 光らないが、短絡とは違う'],
-['short','＋極と−極の直接接続 → 危険なので止める'],
-['stop-short','危険な導線を外す → 短絡を止められる'],
-['repair','接点の外れ → 原因を見つけて修理できる'],
-['series-break','直列回路 → 1か所切れると両方消える'],
-['parallel-one','並列回路 → 片方が切れても他方は光る'],
-['dont-touch','正常な回路 → 不要な操作をしないことも安全'],
-['diagnose','「危険」「故障」「正常」を現象から見分ける'],
-['patrol','危険を止め、故障を直し、正常を守れた']
+['layers','10円玉と1円玉の間に食塩水を含んだ紙をはさむ'],
+['polarity','10円側が＋、1円側が−になる'],
+['one','11円電池1組は授業実測で約0.5V'],
+['three','3組では約1.5VでもLEDは点灯しなかった'],
+['six','6組でLED1個の点灯を確認した'],
+['ledpolarity','LEDには向きがあり、長い足を＋側につなぐ'],
+['contact','接触が不安定だと点灯しにくい'],
+['electrolyte','食塩水を含んだ紙が電解質の役割をする'],
+['cleanup','実験後はコインを洗って乾かして保管する'],
+['research','実測して「なぜ光らない？」を1つずつ確かめる']
 ];
 const defs=[
-['🛑 1 / 7','MISSION 01','危険なつなぎ方を止めろ！','＋極と−極を直接つなごうとしている。危険だと思ったら接続前に止めよう。'],
-['⚠️ 2 / 7','MISSION 02','短絡を解除しよう','危険な導線がすでにつながっている。どの導線を外せば安全になる？'],
-['✅ 3 / 7','MISSION 03','正常な回路を守ろう','電球が正しく光っている。止める必要がある？ まず状態を判断しよう。'],
-['🛠️ 4 / 7','MISSION 04','「危険」と「故障」を見分けよう','電球が消えている。でも、消えている＝危険とは限らない。原因を調べよう。'],
-['🔗 5 / 7','MISSION 05','直列回路の故障診断','2個とも消えた。危険だから止める？ それとも回路が切れている？'],
-['🌿 6 / 7','MISSION 06','並列回路の故障診断','片方だけ消えた。どの枝に問題があるか見つけて安全に直そう。'],
-['🚨 7 / 7','MISSION 07','電気安全パトロール','正常・故障・危険がランダムに出る。3件連続で正しく対応しよう。']
+['🪙 1 / 7','MISSION 01','11円電池1組を作ろう','10円玉・食塩水ペーパー・1円玉を正しく重ねる。'],
+['📟 2 / 7','MISSION 02','何組で何V？','那覇工業高校の実測値をテスターで確かめよう。'],
+['💡 3 / 7','MISSION 03','LEDの向きを合わせよう','長い足と短い足。どちらを＋側につなぐ？'],
+['❓ 4 / 7','MISSION 04','3組なのに光らない！','極性は合っている。次に何を変えるとLEDが光る？'],
+['🤏 5 / 7','MISSION 05','接触を安定させよう','6組あるのに不安定。押さえ方と湿り具合を調節しよう。'],
+['🧪 6 / 7','MISSION 06','条件を比べて研究しよう','組数・極性・食塩水を変えて、LEDが光る条件を探そう。'],
+['🧼 7 / 7','MISSION 07','実験後までが実験','使った10円玉と1円玉をどう片づける？']
 ];
 const $=s=>document.querySelector(s),lab=$('#lab'),controls=$('#controls'),msg=$('#message');
-let model={nodes:{},wires:[],bulbs:[]};
-
 function setMsg(t,c='warn'){msg.className='message '+c;msg.querySelector('span:last-child').textContent=t}
 function add(id){if(!discoveries.has(id)){discoveries.add(id);$('#discoverBtn').textContent='🔬 発見 '+discoveries.size;tone(720,.05,.018)}}
-function ensureAudio(){if(muted)return null;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}if(audio&&audio.state==='suspended')audio.resume();return audio}
-function tone(f=440,d=.06,g=.02){const ctx=ensureAudio();if(!ctx)return;const o=ctx.createOscillator(),a=ctx.createGain(),t=ctx.currentTime;o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(ctx.destination);o.start();o.stop(t+d+.03)}
-function bulb(x,y,id){return '<g id="'+id+'"><circle class="glow" cx="'+x+'" cy="'+y+'" r="45" fill="#ffd95a" opacity=".5"/><circle cx="'+x+'" cy="'+y+'" r="34" fill="#fff9d5" stroke="#315762" stroke-width="6"/><path class="filament" d="M'+(x-14)+' '+y+' Q'+x+' '+(y-22)+' '+(x+14)+' '+y+' Q'+x+' '+(y+22)+' '+(x-14)+' '+y+'"/><rect x="'+(x-14)+'" y="'+(y+32)+'" width="28" height="24" rx="4" fill="#afb8ba" stroke="#315762" stroke-width="5"/></g>'}
-function battery(x,y){return '<g id="battery"><rect x="'+x+'" y="'+y+'" width="70" height="95" rx="14" fill="#f8f8f2" stroke="#315762" stroke-width="6"/><text x="'+(x+24)+'" y="'+(y+54)+'" font-size="27" font-weight="1000" fill="#d7554c">＋</text><text x="'+(x+49)+'" y="'+(y+54)+'" font-size="25" font-weight="1000" fill="#315762">−</text></g>'}
-function term(id,x,y){model.nodes[id]={x,y};return '<circle id="n-'+id+'" class="terminal" cx="'+x+'" cy="'+y+'" r="11"/>'}
-function reset(two=false,j=false){
- model={nodes:{},wires:[],bulbs:[]};
- let s=battery(25,102)+term('bp',52,102)+term('bm',89,117)+bulb(298,two?82:145,'b1')+term('b1a',284,two?126:189)+term('b1b',312,two?126:189);
- model.bulbs.push({id:'b1',a:'b1a',b:'b1b'});
- if(two){s+=bulb(298,205,'b2')+term('b2a',284,249)+term('b2b',312,249);model.bulbs.push({id:'b2',a:'b2a',b:'b2b'})}
- if(j){s+='<circle cx="170" cy="90" r="20" fill="#eef6f8" stroke="#315762" stroke-width="5"/>'+term('j1',170,90)+'<circle cx="170" cy="230" r="20" fill="#eef6f8" stroke="#315762" stroke-width="5"/>'+term('j2',170,230)}
- lab.innerHTML='<svg id="svg" viewBox="0 0 390 300">'+s+'<g id="wireLayer"></g></svg>';
- Object.keys(model.nodes).forEach(id=>$('#n-'+id).addEventListener('pointerdown',e=>startNewWire(e,id)));
- renderWires();evaluate()
-}
-function offsetFree(from){const p=model.nodes[from];return{x:Math.min(360,p.x+(p.x<180?75:-75)),y:Math.max(28,Math.min(272,p.y+(Math.random()>.5?35:-35)))}}
-function addWire(from,to=null,free=null){model.wires.push({from,to,free:free||offsetFree(from)});renderWires();evaluate();return model.wires.length-1}
-function startNewWire(e,from){e.preventDefault();const i=addWire(from,null);drag={i,pid:e.pointerId};$('#svg').setPointerCapture?.(e.pointerId)}
-function startEndDrag(e,i){e.preventDefault();e.stopPropagation();model.wires[i].to=null;drag={i,pid:e.pointerId};$('#svg').setPointerCapture?.(e.pointerId);evaluate()}
-function nearest(x,y,except){let best=null,bd=999;for(const [id,p] of Object.entries(model.nodes)){if(id===except)continue;const d=Math.hypot(x-p.x,y-p.y);if(d<34&&d<bd){best=id;bd=d}}return best}
-function renderWires(){
- const layer=$('#wireLayer');if(!layer)return;layer.innerHTML='';
- model.wires.forEach((w,i)=>{
-   const a=model.nodes[w.from],b=w.to?model.nodes[w.to]:w.free;
-   const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('class','wire');path.setAttribute('d','M'+a.x+' '+a.y+' C'+((a.x+b.x)/2)+' '+a.y+' '+((a.x+b.x)/2)+' '+b.y+' '+b.x+' '+b.y);layer.appendChild(path);
-   const end=document.createElementNS('http://www.w3.org/2000/svg','circle');end.setAttribute('class','wireEnd');end.setAttribute('cx',b.x);end.setAttribute('cy',b.y);end.setAttribute('r','14');end.dataset.i=i;end.addEventListener('pointerdown',e=>startEndDrag(e,i));layer.appendChild(end)
- })
-}
-lab.addEventListener('pointermove',e=>{if(!drag)return;const s=$('#svg'),p=s.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());model.wires[drag.i].free={x:q.x,y:q.y};renderWires()});
-lab.addEventListener('pointerup',e=>{if(!drag)return;const s=$('#svg'),p=s.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());const w=model.wires[drag.i],target=nearest(q.x,q.y,w.from);if(target){w.to=target;w.free={...model.nodes[target]};tone(360,.04,.02)}drag=null;renderWires();evaluate()});
-
-function graph(includeBulbs=true){
- const g={};Object.keys(model.nodes).forEach(k=>g[k]=[]);
- model.wires.filter(w=>w.to).forEach(w=>{g[w.from].push(w.to);g[w.to].push(w.from)});
- if(includeBulbs)model.bulbs.forEach(b=>{g[b.a].push(b.b);g[b.b].push(b.a)});
- return g
-}
-function reachable(a,b,g,skip=null){if(!g[a]||!g[b])return false;const q=[a],seen=new Set([a]);while(q.length){const n=q.shift();if(n===b)return true;for(const v of g[n]){if(skip&&((n===skip[0]&&v===skip[1])||(n===skip[1]&&v===skip[0])))continue;if(!seen.has(v)){seen.add(v);q.push(v)}}}return false}
-function bulbOn(b,g){const skip=[b.a,b.b];return (reachable('bp',b.a,g,skip)&&reachable(b.b,'bm',g,skip))||(reachable('bp',b.b,g,skip)&&reachable(b.a,'bm',g,skip))}
-function classify(){
- const wg=graph(false),g=graph(true),short=reachable('bp','bm',wg),ons=model.bulbs.map(b=>bulbOn(b,g));
- let type=short?'short':reachable('bp','bm',g)?'closed':'open';
- if(!short&&ons.length===2&&ons[0]&&ons[1]){
-   const b1=model.bulbs[0],b2=model.bulbs[1];
-   type=(reachable('bp','bm',g,[b1.a,b1.b])&&reachable('bp','bm',g,[b2.a,b2.b]))?'parallel':'series'
- }
- return{type,short,ons}
-}
-function evaluate(){
- const s=classify();
- model.bulbs.forEach((b,i)=>$('#'+b.id)?.classList.toggle('on',!!s.ons[i]));
- [...lab.querySelectorAll('.wire')].forEach(x=>x.classList.toggle('live',s.type!=='open'&&!s.short));
- if(s.short)setMsg('⚠ 危険：電球を通らず＋極と−極が直接つながっている。','bad');
- else if(s.type==='open')setMsg('回路が切れている。光らないが、短絡とは別の状態。','warn');
- else if(s.type==='series')setMsg('2個とも点灯。直列の正常な閉回路。','good');
- else if(s.type==='parallel')setMsg('2個とも点灯。並列の正常な閉回路。','good');
- else if(s.ons[0])setMsg('電球が点灯している正常な閉回路。','good');
- return s
-}
+function tone(f=440,d=.06,g=.02){if(muted)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!audio)audio=new C();if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),a=audio.createGain(),t=audio.currentTime;o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(audio.destination);o.start();o.stop(t+d+.03)}
 function clear(t,x,e='✨'){$('#clearTitle').textContent=t;$('#clearText').textContent=x;$('#clearEmoji').textContent=e;$('#stageOverlay').classList.add('show');tone(660,.08,.025)}
-function why(text){$('#whyText').textContent=text;$('#whyOverlay').classList.add('show')}
-function choices(html){controls.innerHTML='<div class="choices">'+html+'</div>'}
+function why(t){$('#whyText').textContent=t;$('#whyOverlay').classList.add('show')}
+function voltageFor(n){if(n===1)return .5;if(n===2)return 1.0;if(n===3)return 1.5;if(n===6)return 2.4;return null}
+function stackHtml(n,{bad=false,reverse=false}={}){let s='';for(let i=0;i<n;i++)s+='<div class="cell '+(bad?'bad ':'')+(reverse?'rev':'')+'"><div class="coin10"></div><div class="paper"></div><div class="coin1"></div></div>';return s}
+function baseBench(n=cells,opts={}){lab.innerHTML='<div class="bench"><div class="meter"><small>テスター</small><div id="meterDisplay" class="display">-- V</div></div><div class="polarity">上：1円側 − ／ 下：10円側 ＋</div><div id="stack" class="batteryStack">'+stackHtml(n,opts)+'</div><div id="led" class="led"><div class="ledBulb"></div><div class="ledLegs"><span class="long"></span><span class="short"></span></div><div class="ledLabel">赤色LED</div></div></div>'}
+function updateLed(){
+ const led=$('#led');if(!led)return false;
+ led.classList.remove('on','dim');
+ const goodVoltage=cells>=6,goodPolarity=!ledReverse,goodWet=wet,goodContact=pressure>=65;
+ const on=goodVoltage&&goodPolarity&&goodWet&&goodContact;
+ if(on)led.classList.add('on');else if(cells>=4&&goodPolarity&&goodWet&&goodContact)led.classList.add('dim');
+ return on
+}
 function render(){
- const d=defs[stage];$('#stageLabel').textContent=d[0];$('#mission').textContent=d[1];$('#taskTitle').textContent=d[2];$('#taskText').textContent=d[3];$('#progress').style.width=((stage+1)/7*100)+'%';controls.innerHTML='';trial={};
+ const d=defs[stage];$('#stageLabel').textContent=d[0];$('#mission').textContent=d[1];$('#taskTitle').textContent=d[2];$('#taskText').textContent=d[3];$('#progress').style.width=((stage+1)/7*100)+'%';controls.innerHTML='';
  [r1,r2,r3,r4,r5,r6,r7][stage]()
 }
 function r1(){
- $('#controlTitle').textContent='接続する前に判断する';
- reset(false,false);addWire('bp','b1a');addWire('b1b','bm');const danger=addWire('bp');
- choices('<button id="stop" class="choice">🛑 危険！止める</button><button id="go" class="choice">🔌 そのままつなぐ</button>');
- $('#stop').onclick=()=>{model.wires.splice(danger,1);renderWires();evaluate();add('short');add('stop-short');clear('危険を未然に止めた！','＋極と−極を電球を通さず直接つなぐ短絡を、接続前に止められた。','🛑')};
- $('#go').onclick=()=>{model.wires[danger].to='bm';model.wires[danger].free={...model.nodes.bm};renderWires();evaluate();add('short');$('#dangerOverlay').classList.add('show')}
+ stack=[];$('#controlTitle').textContent='材料を順番に重ねる';lab.innerHTML='<div class="bench"><div class="layerList" id="layerList"></div></div>';
+ controls.innerHTML='<div class="materials"><button class="material" data-x="10">10円玉</button><button class="material" data-x="paper">食塩水ペーパー</button><button class="material" data-x="1">1円玉</button></div><button id="reset" class="small">やり直す</button><button id="check" class="check">🪙 11円電池完成！</button>';
+ const draw=()=>{const l=$('#layerList');l.innerHTML=stack.map(x=>'<div class="layerRow"><span class="chip '+(x==='10'?'c10':x==='1'?'c1':'cp')+'">'+(x==='10'?'10円':x==='1'?'1円':'塩水')+'</span><span>'+(x==='10'?'10円玉（銅系）':x==='1'?'1円玉（アルミ）':'食塩水を含んだ紙')+'</span></div>').join('')};
+ controls.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{if(stack.length<3){stack.push(b.dataset.x);draw();tone(350,.03,.015)}});
+ $('#reset').onclick=()=>{stack=[];draw();setMsg('10円玉・紙・1円玉の3層を作ろう。','warn')};
+ $('#check').onclick=()=>{
+   if(stack.join(',')==='10,paper,1'){add('layers');add('polarity');clear('11円電池1組完成！','10円玉と1円玉の間に、食塩水を含んだ紙をはさんだ。10円側が＋、1円側が−。','🪙')}
+   else if(stack.includes('10')&&stack.includes('1')&&!stack.includes('paper')){add('electrolyte');setMsg('10円玉と1円玉が直接触れている。間に食塩水ペーパーが必要だよ。','bad')}
+   else if(stack.join(',')==='1,paper,10'){add('layers');add('polarity');setMsg('電池にはなっているけれど、上下の極性が逆。今回は10円側を＋として作ろう。','warn')}
+   else setMsg('3つの材料の役割を考えて、もう一度重ねよう。','bad')
+ };
+ setMsg('まず1組。10円玉と1円玉の間に何を入れる？','warn')
 }
 function r2(){
- $('#controlTitle').textContent='危険な導線を見つけ、端を外す';
- reset(false,false);addWire('bp','b1a');addWire('b1b','bm');addWire('bp','bm');add('short');evaluate();
- controls.innerHTML='<button id="check" class="check">🛑 短絡を解除した</button><button id="why" class="small">🤔 なぜ危険？</button>';
- $('#why').onclick=()=>why('電球などを通らず＋極と−極が直接つながると、大きな電流が流れて電池や導線が熱くなることがある。実物では試さないでね。');
- $('#check').onclick=()=>{const s=evaluate();if(!s.short&&s.ons[0]){add('stop-short');clear('安全な回路に戻した！','危険な直結だけを外し、必要な回路は残せた。','⚠️')}else setMsg('危険な直結だけを外そう。正常な電球回路まで全部外す必要はないよ。','warn')}
+ cells=1;measured=false;baseBench(cells);$('#controlTitle').textContent='組数を選び、テスターで測る';
+ controls.innerHTML='<div class="choices"><button class="choice" data-n="1">1組</button><button class="choice" data-n="2">2組</button><button class="choice" data-n="3">3組</button><button class="choice" data-n="6">6組</button></div><button id="measure" class="check">📟 電圧を測る</button>';
+ controls.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{cells=+b.dataset.n;baseBench(cells);setMsg(cells+'組をセットした。測ってみよう。','warn')});
+ $('#measure').onclick=()=>{const v=voltageFor(cells);$('#meterDisplay').textContent=v.toFixed(1)+' V';measured=true;if(cells===1)add('one');if(cells===3)add('three');if(cells===6)add('six');setMsg('那覇工業高校の記録：'+cells+'組で '+v.toFixed(1)+' V。','good');if(cells===6)clear('実測値を比べた！','1組0.5V、2組1.0V、3組1.5V。後の実験では6組で2.4Vを測定し、LED1個の点灯を確認した。','📟')};
+ setMsg('数を増やすと電圧はどう変わる？ 実測値で見よう。','warn')
 }
 function r3(){
- $('#controlTitle').textContent='正常なものまで止めない';
- reset(false,false);addWire('bp','b1a');addWire('b1b','bm');evaluate();add('normal');
- choices('<button id="stop" class="choice">🛑 止める</button><button id="leave" class="choice">✅ 正常なので触らない</button>');
- $('#leave').onclick=()=>{add('dont-touch');clear('正常を見分けた！','安全では「危険を止める」だけでなく、正常な状態を見分けることも大切。','✅')};
- $('#stop').onclick=()=>setMsg('これは正常な閉回路。何でも止めるのではなく、危険かどうかを見分けよう。','warn')
+ cells=6;ledReverse=true;wet=true;pressure=80;baseBench(6);updateLed();$('#controlTitle').textContent='LEDの向きを切り替えて観察';
+ controls.innerHTML='<div class="choices"><button id="normal" class="choice">長い足→10円側＋</button><button id="reverse" class="choice active">長い足→1円側−</button></div><button id="check" class="check">💡 この向きで点灯</button>';
+ $('#normal').onclick=()=>{ledReverse=false;$('#normal').classList.add('active');$('#reverse').classList.remove('active');updateLed();setMsg('LEDが光った！ LEDには向きがある。','good')};
+ $('#reverse').onclick=()=>{ledReverse=true;$('#reverse').classList.add('active');$('#normal').classList.remove('active');updateLed();setMsg('向きを逆にすると光らない。','warn')};
+ $('#check').onclick=()=>{if(updateLed()){add('ledpolarity');clear('極性を発見！','LEDの長い足（アノード）を＋側、短い足（カソード）を−側につないだ。','💡')}else setMsg('LEDの長い足と、11円電池の＋側を確認しよう。','bad')}
 }
 function r4(){
- $('#controlTitle').textContent='光らない原因を調べる';
- reset(false,false);addWire('bp','b1a');addWire('bm');evaluate();add('open');
- choices('<button id="danger" class="choice">⚠ 危険だから全部外す</button><button id="repair" class="choice">🛠️ 外れた接点を修理</button>');
- $('#danger').onclick=()=>setMsg('光らない＝短絡とは限らない。これは回路が途中で切れた「故障」だよ。','warn');
- $('#repair').onclick=()=>{model.wires[1].to='b1b';model.wires[1].free={...model.nodes.b1b};renderWires();const s=evaluate();if(s.ons[0]){add('repair');add('diagnose');clear('故障を安全に修理！','危険な短絡ではなく、接点が外れていた故障だと見分けて直せた。','🛠️')}}
+ cells=3;ledReverse=false;wet=true;pressure=80;baseBench(3);updateLed();$('#meterDisplay').textContent='1.5 V';$('#controlTitle').textContent='光らない理由を1つずつ変える';
+ controls.innerHTML='<div class="choices"><button id="flip" class="choice">LEDを逆向きにする</button><button id="addCells" class="choice">6組まで増やす</button></div><button id="dry" class="small">紙を乾かしてみる</button><button id="check" class="check">💡 LEDを光らせる</button>';
+ $('#flip').onclick=()=>{ledReverse=!ledReverse;updateLed();setMsg('向きを逆にしても点灯しない。原因はそれだけじゃない。','warn')};
+ $('#dry').onclick=()=>{wet=false;updateLed();add('electrolyte');setMsg('乾いた紙では電解質として働きにくく、さらに点灯しにくい。','bad')};
+ $('#addCells').onclick=()=>{cells=6;wet=true;ledReverse=false;baseBench(6);$('#meterDisplay').textContent='2.4 V';updateLed();setMsg('6組にしたらLEDが点灯した！','good')};
+ $('#check').onclick=()=>{if(updateLed()){add('three');add('six');add('research');clear('「光らない」を研究できた！','3組・約1.5Vでは点灯しなかった。6組・2.4VではLED1個が点灯したという課題研究の結果を再現した。','❓')}else setMsg('極性・電解質・組数を1つずつ変えて比べよう。','bad')}
 }
 function r5(){
- $('#controlTitle').textContent='2個とも消えた原因を診断';
- reset(true,false);addWire('bp','b1a');addWire('b1b','b2a');addWire('b2b');evaluate();
- controls.innerHTML='<button id="why" class="small">🤔 危険？ 故障？</button><button id="repair" class="check">🔧 切れた場所を直す</button>';
- $('#why').onclick=()=>why('直列回路は電流の道が1本。1か所切れると両方消える。でも、＋極と−極の直接接続ではないので短絡とは違うよ。');
- $('#repair').onclick=()=>{model.wires[2].to='bm';model.wires[2].free={...model.nodes.bm};renderWires();const s=evaluate();if(s.type==='series'){add('series-break');add('diagnose');clear('直列の故障を修理！','2個とも消えていても、危険な短絡ではなく1本の道が切れた故障だった。','🔗')}}
+ cells=6;ledReverse=false;wet=true;pressure=30;baseBench(6);updateLed();$('#controlTitle').textContent='電池を押さえる強さを調節';
+ lab.querySelector('.bench').insertAdjacentHTML('beforeend','<div class="pressure"><div style="font-size:10px;font-weight:1000">接触の安定：<span id="pv">30</span>%</div><input id="press" type="range" min="0" max="100" value="30"></div>');
+ controls.innerHTML='<button id="check" class="check">🤏 安定して点灯した</button>';
+ $('#press').oninput=e=>{pressure=+e.target.value;$('#pv').textContent=pressure;const on=updateLed();setMsg(on?'接触が安定してLEDが点灯した。':'まだ接触が不安定。少し押さえてみよう。',on?'good':'warn')};
+ $('#check').onclick=()=>{if(updateLed()){add('contact');clear('接触も大事！','課題研究でも、6組をセットして通電するまで時間がかかり、接触を安定させる仕組みが課題になった。','🤏')}else setMsg('LEDが安定して点灯するところまで調節しよう。','bad')}
 }
 function r6(){
- $('#controlTitle').textContent='片方だけ消えた枝を見つける';
- reset(true,true);addWire('bp','j1');addWire('j1','b1a');addWire('b1b','j2');addWire('j1','b2a');addWire('b2b');addWire('j2','bm');evaluate();
- controls.innerHTML='<button id="check" class="check">🛠️ 消えた枝を修理</button><button id="why" class="small">🤔 なぜ片方は光る？</button>';
- $('#why').onclick=()=>why('並列回路では電流の道が枝分かれしている。一方の枝が切れても、もう一方には一周できる道が残るよ。');
- $('#check').onclick=()=>{model.wires[4].to='j2';model.wires[4].free={...model.nodes.j2};renderWires();const s=evaluate();if(s.type==='parallel'){add('parallel-one');add('repair');clear('枝の故障を修理！','片方だけ消えた現象から、問題のある枝を見つけて直せた。','🌿')}}
-}
-function setupPatrolScenario(kind){
- if(kind==='short'){reset(false,false);addWire('bp','b1a');addWire('b1b','bm');addWire('bp','bm');setMsg('この回路は正常・故障・危険のどれ？','warn')}
- if(kind==='open'){reset(false,false);addWire('bp','b1a');addWire('bm');setMsg('電球が消えている。状態を判断しよう。','warn')}
- if(kind==='normal'){reset(false,false);addWire('bp','b1a');addWire('b1b','bm');setMsg('電球は光っている。状態を判断しよう。','good')}
- trial.kind=kind;evaluate()
+ cells=1;ledReverse=false;wet=true;pressure=80;baseBench(1);$('#controlTitle').textContent='条件を自由に変えて、点灯条件を探す';
+ controls.innerHTML='<div class="choices"><button class="choice" data-n="1">1組</button><button class="choice" data-n="3">3組</button><button class="choice" data-n="6">6組</button><button id="flip" class="choice">LED向き反転</button></div><div class="choices" style="margin-top:7px"><button id="wet" class="choice active">塩水あり</button><button id="dry" class="choice">乾いた紙</button></div><button id="check" class="check">🧪 点灯条件を見つけた</button>';
+ const redraw=()=>{baseBench(cells,{bad:!wet});updateLed();const v=voltageFor(cells);if(v!==null)$('#meterDisplay').textContent=v.toFixed(1)+' V'};
+ controls.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{cells=+b.dataset.n;redraw();setMsg(cells+'組に変更した。LEDの様子を見よう。','warn')});
+ $('#flip').onclick=()=>{ledReverse=!ledReverse;redraw();setMsg(ledReverse?'LEDを逆向きにした。':'LEDを正しい向きに戻した。','warn')};
+ $('#wet').onclick=()=>{wet=true;redraw();$('#wet').classList.add('active');$('#dry').classList.remove('active');setMsg('食塩水ペーパーあり。','warn')};
+ $('#dry').onclick=()=>{wet=false;redraw();$('#dry').classList.add('active');$('#wet').classList.remove('active');add('electrolyte');setMsg('紙を乾かした。点灯条件はどう変わる？','warn')};
+ $('#check').onclick=()=>{if(updateLed()){add('research');clear('条件を切り分けた！','組数・LEDの向き・電解質・接触を1つずつ変えると、「なぜ光らない？」を研究できる。','🧪')}else setMsg('6組・正しいLEDの向き・食塩水あり・安定した接触を作ってみよう。','bad')}
 }
 function r7(){
- $('#controlTitle').textContent='3件連続で正しく判断する';
- patrolCorrect=0;scenarioIndex=0;nextPatrol();
-}
-function nextPatrol(){
- const seq=['short','open','normal'];const kind=seq[(scenarioIndex+Math.floor(Math.random()*3))%3];setupPatrolScenario(kind);
- controls.innerHTML='<div class="choices"><button data-a="danger" class="choice">🛑 危険</button><button data-a="fault" class="choice">🛠️ 故障</button></div><div class="choices" style="margin-top:7px"><button data-a="normal" class="choice">✅ 正常</button><button id="why" class="choice">🤔 ヒント</button></div><div class="hint">正解 '+patrolCorrect+' / 3</div>';
- controls.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>patrolAnswer(b.dataset.a));
- $('#why').onclick=()=>why('短絡＝危険。回路が切れているだけ＝故障。電球を通る閉回路で短絡がない＝正常。見た目ではなく電流の道をたどろう。')
-}
-function patrolAnswer(a){
- const expected=trial.kind==='short'?'danger':trial.kind==='open'?'fault':'normal';
- if(a!==expected){setMsg('違うよ。電流がどの道を通るか、＋極から−極までたどってみよう。','bad');return}
- patrolCorrect++;scenarioIndex++;add('diagnose');tone(620,.06,.02);
- if(patrolCorrect>=3){add('patrol');clear('安全パトロール完了！','危険は止める、故障は直す、正常はむやみに触らない。3つを見分けられた！','🚨')}
- else nextPatrol()
+ cleaned=false;lab.innerHTML='<div class="cleanup"><div id="ten" class="coinBig ten dirty">10円</div><div id="one" class="coinBig one dirty">1円</div></div>';$('#controlTitle').textContent='使ったコインをどう保管する？';
+ controls.innerHTML='<div class="choices"><button id="leave" class="choice">そのまま袋へ</button><button id="wash" class="choice">水で洗って乾かす</button></div><button id="check" class="check">🧼 片づけ完了</button>';
+ $('#leave').onclick=()=>{setMsg('課題研究では、洗わず保管した10円玉の黒変や1円玉の表面変化が確認された。','bad')};
+ $('#wash').onclick=()=>{cleaned=true;$('#ten').classList.remove('dirty');$('#one').classList.remove('dirty');add('cleanup');setMsg('洗って乾かした。実験後の材料も観察して片づけよう。','good')};
+ $('#check').onclick=()=>{if(cleaned)clear('実験終了！','作る・測る・光らせる・失敗を調べる・片づけるまでが11円電池の実験。','🧼');else setMsg('使ったコインの保管まで考えよう。','warn')}
 }
 function showDisc(){const ul=$('#discList');ul.innerHTML='';all.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#discoverOverlay').classList.add('show')}
 $('#startBtn').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');stage=0;render()};
-$('#nextBtn').onclick=()=>{$('#stageOverlay').classList.remove('show');if(stage<6){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+all.length+'。危険・故障・正常を見分けて、安全に対応できた。';$('#finishOverlay').classList.add('show')}};
+$('#nextBtn').onclick=()=>{$('#stageOverlay').classList.remove('show');if(stage<6){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+all.length+'。11円電池を作り、測り、LEDが光る条件を実験で確かめた。';$('#finishOverlay').classList.add('show')}};
 $('#retryBtn').onclick=()=>{$('#finishOverlay').classList.remove('show');discoveries.clear();$('#discoverBtn').textContent='🔬 発見 0';stage=0;render()};
-$('#discoverBtn').onclick=showDisc;$('#showDisc').onclick=showDisc;$('#closeDisc').onclick=()=>$('#discoverOverlay').classList.remove('show');
-$('#whyClose').onclick=()=>$('#whyOverlay').classList.remove('show');
-$('#dangerClose').onclick=()=>{$('#dangerOverlay').classList.remove('show');if(stage===0){render()}};
-$('#muteBtn').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
+$('#discoverBtn').onclick=showDisc;$('#showDisc').onclick=showDisc;$('#closeDisc').onclick=()=>$('#discoverOverlay').classList.remove('show');$('#whyClose').onclick=()=>$('#whyOverlay').classList.remove('show');$('#muteBtn').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
 })();
 </script>
-</body></html>
+</body>
+</html>
