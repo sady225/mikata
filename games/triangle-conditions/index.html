@@ -154,7 +154,7 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
 
   <main class="gameBody">
    <div class="mission">
-    <div id="missionText" class="missionText">🔒 辺や角を選んでロック。三角形が1つに決まる条件を探そう！</div>
+    <div id="missionText" class="missionText">👆 青い三角形の辺や角を直接タップ。三角形が1つに決まる条件を探そう！</div>
     <button id="helpBtn" class="helpBtn">？</button>
    </div>
    <div class="lab">
@@ -192,7 +192,7 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
      <text x="170" y="190" class="featureMark">BC</text>
      <text x="120" y="125" class="featureMark">CA</text>
     </svg>
-    <div id="labResult" class="labResult">ロックを選んで「TEST！」してみよう</div>
+    <div id="labResult" class="labResult">辺や角をタップして「TEST！」してみよう</div>
    </div>
   </main>
 
@@ -342,7 +342,7 @@ function renderFound(){
 function toggle(k){
  unlockAudio(S.audioReset);sfx('lock');
  if(S.selected.has(k)){S.selected.delete(k)}else{
-  if(S.selected.size>=3){message('ロックは3つまで！ 1つ外してみよう','bad');return}
+  if(S.selected.size>=3){message('選べるのは3つまで！ 1つ解除してみよう','bad');return}
   S.selected.add(k);
  }
  clearVisual();renderSelection();
@@ -364,7 +364,7 @@ function showDiscovery(key){
 }
 function test(){
  unlockAudio(S.audioReset);
- if(S.selected.size<2){message('まず2つ以上ロックしてみよう','bad');sfx('fail');return}
+ if(S.selected.size<2){message('まず2つ以上の辺・角を選んでみよう','bad');sfx('fail');return}
  const key=evaluate(S.mode,S.selected);
  if(!key){
   $('#ghosts').classList.add('show');$('#triB').classList.remove('merge');
