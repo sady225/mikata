@@ -170,7 +170,12 @@ function sfx(k){
  if(k==='water'){tone(520,.05,.03,'sine');tone(390,.12,.04,'sine',.035);tone(780,.05,.012,'triangle',.08)}
  if(k==='co2'){tone(300,.08,.035,'sine');tone(420,.16,.022,'triangle',.05)}
  if(k==='bubble'){tone(560+Math.random()*90,.07,.03);tone(920,.04,.015,'triangle',.015)}
- if(k==='bonus'){tone(720,.08,.065,'triangle');tone(1080,.14,.055,'sine',.06);tone(1440,.12,.026,'sine',.12)}
+ if(k==='bonus'){tone(720,.08,.055,'triangle');tone(1080,.12,.042,'sine',.06);tone(1440,.11,.022,'sine',.12)}
+ if(k==='rush'){
+  if(S.bgmGain&&S.audio){const t=S.audio.currentTime;S.bgmGain.gain.cancelScheduledValues(t);S.bgmGain.gain.setValueAtTime(S.bgmGain.gain.value,t);S.bgmGain.gain.linearRampToValueAtTime(.22,t+.05);S.bgmGain.gain.linearRampToValueAtTime(.55,t+1.15)}
+  [659,784,988,1175,1397,1760].forEach((f,i)=>tone(f,.28,.068,'triangle',i*.075));
+  [659,988,1319,1760].forEach((f,i)=>tone(f,.62,.03,'sine',.48+i*.018));
+ }
  if(k==='level'){[523,659,784,1047].forEach((f,i)=>tone(f,.16,.055,'triangle',i*.075))}
  if(k==='clear'){[659,784,988,1175,1568].forEach((f,i)=>tone(f,.38,.05,'triangle',i*.085));[523,659,784,1047].forEach((f,i)=>tone(f,.75,.026,'sine',.48+i*.025))}
 }
@@ -258,7 +263,7 @@ function spawnWildlife(){
 function triggerRush(){
  const now=performance.now();if(now-S.lastRush<2600)return;S.lastRush=now;
  const r=$('#rush');r.textContent='O₂ ラッシュ！';r.classList.remove('show');void r.offsetWidth;r.classList.add('show');
- spawnWildlife();sfx('bonus');
+ spawnWildlife();sfx('rush');
  const st=$('#statusPill');st.innerHTML='🌿 <b>げんきな畑！</b> ちょうちょがやってきた！';
 }
 function feed(k,btn){S[k]=clamp(S[k]+.115);sfx(k);animateSupply(k);btn.style.transform='translateY(3px) scale(1.03)';setTimeout(()=>btn.style.transform='',90);updateNeed();if(power()>.85&&Math.random()<.25)triggerRush()}
