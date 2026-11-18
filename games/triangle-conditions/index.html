@@ -15,7 +15,7 @@
  --red:#e7473c;--red2:#b62d31;--blue:#178fd0;--deep:#123f61;--yellow:#ffe45c;
  --green:#45b96d;--purple:#7552b9;--paper:#fffdf7;--ink:#17394e;
  --safeT:env(safe-area-inset-top,0px);--safeB:env(safe-area-inset-bottom,0px);
- --topH:112px;--controlH:214px
+ --topH:108px;--controlH:194px
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#0b3551}
@@ -43,34 +43,34 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
 .startBtn:active{transform:translateY(4px);box-shadow:0 2px #c4942f,0 0 0 4px #fff inset}
 .note{margin:10px auto 0;max-width:350px;font-size:10px;font-weight:800;color:#dff6ff;line-height:1.45}
 .game{background:linear-gradient(#43bde9 0 63%,#e8f7ef 63% 100%)}
-.gameBody{position:absolute;left:0;right:0;top:calc(var(--topH) + var(--safeT) + 5px);bottom:calc(var(--controlH) + var(--safeB));padding:8px 10px}
+.gameBody{position:absolute;left:0;right:0;top:calc(var(--topH) + var(--safeT) + 5px);bottom:calc(var(--controlH) + var(--safeB));padding:6px 9px;min-height:0}
 .mission{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.missionText{background:#fff;color:var(--deep);border-radius:18px;padding:7px 10px;box-shadow:0 4px #0a6f9c44;font-size:11px;font-weight:1000;line-height:1.35;flex:1}
-.helpBtn{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--blue);font-weight:1000;box-shadow:0 3px #0a6f9c44}
-.lab{position:relative;height:calc(100% - 47px);min-height:190px;margin-top:5px;border-radius:24px;background:linear-gradient(#fdfefe,#f5fbff);box-shadow:0 5px #0b729d44;overflow:hidden;border:3px solid #ffffff}
+.missionText{background:#fff;color:var(--deep);border-radius:18px;padding:6px 9px;box-shadow:0 4px #0a6f9c44;font-size:10px;font-weight:1000;line-height:1.3;flex:1}
+.helpBtn{width:32px;height:32px;border-radius:50%;background:#fff;color:var(--blue);font-weight:1000;box-shadow:0 3px #0a6f9c44}
+.lab{position:relative;height:calc(100% - 43px);min-height:0;margin-top:4px;border-radius:24px;background:linear-gradient(#fdfefe,#f5fbff);box-shadow:0 5px #0b729d44;overflow:hidden;border:3px solid #ffffff}
 .labLabel{position:absolute;z-index:8;left:50%;top:6px;transform:translateX(-50%);background:#e9f7ff;color:var(--deep);padding:4px 9px;border-radius:13px;font-size:9px;font-weight:1000;white-space:nowrap}
-.lab svg{position:absolute;left:0;right:0;top:18px;width:100%;height:calc(100% - 53px);overflow:visible}
+.lab svg{position:absolute;left:0;right:0;top:16px;width:100%;height:calc(100% - 48px);overflow:visible}
 .triA polygon{fill:#178fd022;stroke:#178fd0;stroke-width:5;stroke-linejoin:round}.triA text{fill:#126e9d;font-weight:1000;font-size:16px}
 .triB{transform-box:fill-box;transform-origin:center;transform:translateX(112px) rotate(8deg);transition:transform .8s cubic-bezier(.2,1.25,.35,1)}
 .triB.simStart{transform:translate(165px,34px) scale(.63) rotate(-7deg)}
 .triB.merge{transform:translate(0,0) rotate(0) scale(1)}
 .triB polygon{fill:#e7473c22;stroke:#e7473c;stroke-width:5;stroke-linejoin:round}.triB text{fill:#bd2f35;font-weight:1000;font-size:16px}
-.featureMark{font-size:12px;font-weight:1000;fill:#17394e}
+.featureMark{font-size:11px;font-weight:1000;fill:#17394e}
 .ghosts{opacity:0;transition:.25s}.ghosts.show{opacity:1}.ghosts polygon{fill:none;stroke:#9b66bd;stroke-width:3;stroke-dasharray:7 5;animation:ghost 1s ease-in-out infinite alternate}
 .ghosts polygon:nth-child(2){animation-delay:-.35s}.ghosts polygon:nth-child(3){animation-delay:-.7s}
 @keyframes ghost{to{transform:translateY(-4px)}}
-.labResult{position:absolute;z-index:9;left:10px;right:10px;bottom:7px;min-height:34px;display:flex;align-items:center;justify-content:center;border-radius:17px;background:#e9f7ff;color:var(--deep);font-size:10px;font-weight:1000;text-align:center;padding:6px 9px}
+.labResult{position:absolute;z-index:9;left:10px;right:10px;bottom:5px;min-height:30px;display:flex;align-items:center;justify-content:center;border-radius:17px;background:#e9f7ff;color:var(--deep);font-size:10px;font-weight:1000;text-align:center;padding:6px 9px}
 .labResult.good{background:#dcf8d8;color:#17613b}.labResult.bad{background:#ffe1dc;color:#a52e2e;animation:shake .3s}
 .discovery{position:absolute;z-index:55;left:16px;right:16px;top:calc(var(--topH) + var(--safeT) + 55px);background:#fffdf6;color:var(--deep);border-radius:25px;padding:14px 15px;box-shadow:0 8px #0a456c55,0 0 0 5px var(--yellow);opacity:0;pointer-events:none;transform:scale(.7);transition:.25s}
 .discovery.show{opacity:1;transform:scale(1)}.discovery b{display:block;color:var(--red);font-size:15px;margin-bottom:4px}.discovery span{font-size:12px;line-height:1.45;font-weight:900}
-.controls{position:absolute;z-index:30;left:0;right:0;bottom:0;height:calc(var(--controlH) + var(--safeB));padding:9px 10px calc(10px + var(--safeB));background:#0a6da4;border-top:4px solid #fff7}
-.controlTitle{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:1000;color:#e8fbff;margin-bottom:6px}.lockCount{background:#07527f;border-radius:15px;padding:4px 8px}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.feature{min-height:48px;border-radius:16px;background:#fff;color:var(--deep);font-size:12px;font-weight:1000;box-shadow:0 4px #064e79;transition:.08s;touch-action:manipulation}
+.controls{position:absolute;z-index:30;left:0;right:0;bottom:0;height:calc(var(--controlH) + var(--safeB));padding:6px 9px calc(7px + var(--safeB));overflow:hidden;background:#0a6da4;border-top:4px solid #fff7}
+.controlTitle{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:1000;color:#e8fbff;margin-bottom:4px}.lockCount{background:#07527f;border-radius:15px;padding:4px 8px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.feature{min-height:39px;border-radius:14px;background:#fff;color:var(--deep);font-size:10px;font-weight:1000;box-shadow:0 4px #064e79;transition:.08s;touch-action:manipulation}
 .feature:active{transform:translateY(3px);box-shadow:0 1px #064e79}.feature.on{background:var(--yellow);color:#8a431b;box-shadow:0 4px #c1912b,0 0 0 3px #fff inset}
-.actions{display:flex;gap:8px;margin-top:8px}.testBtn,.resetBtn{height:49px;border-radius:25px;font-weight:1000}
-.testBtn{flex:2;background:var(--yellow);color:#8a3b23;font-size:17px;box-shadow:0 4px #c18d2e}.resetBtn{flex:1;background:#fff;color:#176a98;font-size:13px;box-shadow:0 4px #064e79}
-.foundBar{display:flex;gap:5px;margin-top:8px}.foundSlot{flex:1;min-width:0;height:29px;border-radius:14px;background:#07527f;color:#8bc0da;display:grid;place-items:center;font-size:9px;font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}.foundSlot.done{background:#fff;color:var(--green)}
+.actions{display:flex;gap:6px;margin-top:6px}.testBtn,.resetBtn{height:41px;border-radius:22px;font-weight:1000}
+.testBtn{flex:2;background:var(--yellow);color:#8a3b23;font-size:15px;box-shadow:0 4px #c18d2e}.resetBtn{flex:1;background:#fff;color:#176a98;font-size:11px;box-shadow:0 4px #064e79}
+.foundBar{display:flex;gap:4px;margin-top:5px}.foundSlot{flex:1;min-width:0;height:22px;border-radius:14px;background:#07527f;color:#8bc0da;display:grid;place-items:center;font-size:8px;font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 3px}.foundSlot.done{background:#fff;color:var(--green)}
 .modal{position:absolute;z-index:80;inset:0;display:none;place-items:center;padding:18px;background:#07334fcc}.modal.show{display:grid}
 .card{width:100%;max-width:370px;max-height:88dvh;overflow:auto;background:#fff;color:var(--deep);border-radius:28px;padding:20px;text-align:center;box-shadow:0 9px #052b46,0 0 0 5px var(--yellow)}
 .card h2{margin:0 0 7px;color:var(--red);font-size:26px}.card p{font-size:12px;line-height:1.55;font-weight:800}.card ul{text-align:left;font-size:11px;line-height:1.55;font-weight:800;padding-left:19px}.card strong{color:var(--red)}
@@ -78,18 +78,29 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
 .finalCrown{font-size:66px;animation:bob 1.4s ease-in-out infinite}
 .sources{text-align:left;margin-top:13px;padding-top:10px;border-top:2px dashed #cbe2ed}.sources h3{font-size:12px;margin:0 0 6px}.sources a{display:block;color:#146f9f;font-size:10px;line-height:1.45;margin:5px 0;word-break:break-all}
 @keyframes bob{50%{transform:translateY(-6px) scale(1.03)}}@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-@media(max-height:680px){
- :root{--topH:102px;--controlH:202px}
- .brand b{font-size:12px}.hudrow{margin-top:3px}.modeBadge{padding:5px 8px}.sound{width:36px;height:36px}
- .gameBody{padding-top:6px}.missionText{font-size:10px;padding:6px 9px}.helpBtn{width:32px;height:32px}
- .controls{padding-top:7px}.feature{min-height:43px;font-size:11px}.testBtn,.resetBtn{height:44px}.foundSlot{height:25px}
+@media(max-height:720px){
+ :root{--topH:100px;--controlH:184px}
+ .brand{font-size:9px}.brand b{font-size:12px}.hudrow{margin-top:2px}.modeBadge{padding:5px 8px}.sound{width:34px;height:34px}
+ .progressText{font-size:9px}.progress{height:7px}
+ .gameBody{padding-top:5px}.missionText{font-size:9px;padding:5px 8px}.helpBtn{width:30px;height:30px}
+ .controls{padding-top:5px}.feature{min-height:36px;font-size:9px}.testBtn,.resetBtn{height:38px}.foundSlot{height:20px;font-size:7px}
 }
-@media(max-height:590px){
- :root{--topH:92px;--controlH:186px}
- .brand{font-size:8px}.brand b{font-size:11px}.progressText{font-size:8px}.progress{height:7px}.modeBadge{font-size:9px;min-width:72px;padding:5px}.sound{width:32px;height:32px;font-size:15px}
- .missionText{font-size:9px}.labLabel{font-size:8px}.labResult{font-size:9px}
- .feature{min-height:38px;font-size:10px}.controlTitle{font-size:9px}.actions{margin-top:6px}.testBtn,.resetBtn{height:39px}.foundBar{margin-top:6px}.foundSlot{height:22px;font-size:8px}
- .titleInner{padding-top:calc(18px + var(--safeT))}.title h1{font-size:38px}.title p{font-size:11px}.hero{height:31dvh;min-height:160px}.startBtn{height:54px;font-size:20px}.note{font-size:9px}
+@media(max-height:620px){
+ :root{--topH:90px;--controlH:170px}
+ .brand{font-size:8px}.brand b{font-size:10px}.progressText{font-size:7px}.progress{height:6px}.modeBadge{font-size:8px;min-width:68px;padding:4px}.sound{width:30px;height:30px;font-size:14px}
+ .missionText{font-size:8px}.labLabel{font-size:7px}.labResult{font-size:8px;padding:4px 6px}
+ .feature{min-height:32px;font-size:8px}.controlTitle{font-size:8px}.actions{margin-top:4px}.testBtn,.resetBtn{height:34px}.foundBar{margin-top:4px}.foundSlot{height:18px;font-size:7px}
+ .titleInner{padding-top:calc(14px + var(--safeT))}.title h1{font-size:34px}.title p{font-size:10px;line-height:1.35}.hero{height:28dvh;min-height:140px}.startBtn{height:50px;font-size:18px}.note{font-size:8px}
+}
+
+@media(orientation:landscape) and (max-height:500px){
+ :root{--topH:78px;--controlH:126px}
+ #app{width:min(100vw,620px)}
+ .brand{font-size:7px}.brand b{font-size:9px}.hudrow{margin-top:1px}.modeBadge{min-width:62px;font-size:7px;padding:3px}.sound{width:26px;height:26px;font-size:12px}
+ .gameBody{padding:3px 7px}.missionText{font-size:7px;padding:4px 6px}.helpBtn{width:26px;height:26px}
+ .controls{padding:3px 7px calc(4px + var(--safeB))}.controlTitle{font-size:7px;margin-bottom:2px}.features{gap:3px}.feature{min-height:24px;font-size:7px;border-radius:10px}
+ .actions{margin-top:3px}.testBtn,.resetBtn{height:28px;font-size:9px}.foundBar{display:none}
+ .lab{height:calc(100% - 34px);margin-top:2px}.labLabel{top:3px;padding:2px 6px}.lab svg{top:10px;height:calc(100% - 34px)}.labResult{min-height:23px;font-size:7px;bottom:3px}
 }
 @media(max-width:350px){
  .brand{font-size:8px}.brand b{font-size:11px}.modeBadge{min-width:72px;font-size:9px}.feature{font-size:10px;padding:2px}.labResult{left:6px;right:6px}
