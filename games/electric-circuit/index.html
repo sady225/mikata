@@ -79,7 +79,18 @@ function clear(t,x,e='✨'){$('#clearTitle').textContent=t;$('#clearText').textC
 function why(t){$('#whyText').textContent=t;$('#whyOverlay').classList.add('show')}
 function voltageFor(n){if(n===1)return .5;if(n===2)return 1.0;if(n===3)return 1.5;if(n===6)return 2.4;return null}
 function stackHtml(n,{bad=false,reverse=false}={}){let s='';for(let i=0;i<n;i++)s+='<div class="cell '+(bad?'bad ':'')+(reverse?'rev':'')+'"><div class="coin10"></div><div class="paper"></div><div class="coin1"></div></div>';return s}
-function baseBench(n=cells,opts={}){lab.innerHTML='<div class="bench"><div class="meter"><small>テスター</small><div id="meterDisplay" class="display">-- V</div></div><div class="polarity">上：1円側 − ／ 下：10円側 ＋</div><div id="stack" class="batteryStack">'+stackHtml(n,opts)+'</div><div id="led" class="led"><div class="ledBulb"></div><div class="ledLegs"><span class="long"></span><span class="short"></span></div><div class="ledLabel">赤色LED</div></div></div>'}
+function baseBench(n=cells,opts={}){
+ lab.innerHTML='<div class="bench">'+
+ '<div class="meter"><small>テスター</small><div id="meterDisplay" class="display">-- V</div></div>'+
+ '<div class="polarity">上：1円側 − ／ 下：10円側 ＋</div>'+
+ '<div id="stack" class="batteryStack">'+stackHtml(n,opts)+'</div>'+
+ '<div id="led" class="led"><div class="ledBulb"></div><div class="ledLegs"><span class="long"></span><span class="short"></span></div><div class="ledLabel">赤色LED</div></div>'+
+ '<div class="lead" style="left:142px;bottom:78px;width:145px;transform:rotate(-7deg)"></div>'+
+ '<div class="lead black" style="left:138px;bottom:43px;width:150px;transform:rotate(8deg)"></div>'+
+ '<div class="leadLabel" style="left:150px;bottom:88px;color:#b43e38">赤線：10円側＋ → LEDの長い足</div>'+
+ '<div class="leadLabel" style="left:146px;bottom:17px;color:#303a3f">黒線：1円側− → LEDの短い足</div>'+
+ '</div>'
+}
 function updateLed(){
  const led=$('#led');if(!led)return false;
  led.classList.remove('on','dim');
