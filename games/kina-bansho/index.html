@@ -277,7 +277,7 @@ function updateMastery(){
  const h=$('#house');h.className='house'+(state.mastery===1?' level1':state.mastery===2?' level2':state.mastery===3?' level3':state.mastery===4?' maxed':'')
 }
 function updateHUD(){
- scoreEl.textContent=state.score;bestEl.textContent=state.best;nextFace.textContent=TYPES[state.nextType].face;
+ scoreEl.textContent=state.score;bestEl.textContent=state.best;nextFace.textContent=TYPES[state.nextType].prop;
  updateTier();
  document.querySelectorAll('.service').forEach((b,i)=>{
    const locked=i>state.tier;b.disabled=locked;
@@ -286,7 +286,7 @@ function updateHUD(){
  updateMastery();
  document.querySelectorAll('.station').forEach((s,i)=>s.classList.toggle('locked',i>state.tier));
  const front=state.guests[0];
- document.querySelectorAll('.station').forEach(s=>s.classList.toggle('hot',!!front&&s.dataset.station===front.type));
+ document.querySelectorAll('.station').forEach(s=>s.classList.toggle('hot',!!front&&s.dataset.station===front.type&&state.score<350));
  $('#tea').disabled=state.tea<=0;$('#help').disabled=state.help<=0
 }
 function stationCenter(type){
