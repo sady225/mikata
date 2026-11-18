@@ -68,21 +68,29 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 .challengeCaption{text-align:center;font-size:10px;font-weight:1000;color:#395860}
 .hintBtn{border:0;border-radius:999px;background:#eef5f6;color:#31505b;font-size:10px;font-weight:1000;padding:7px 10px}
 
+
+.kidHud{display:flex;gap:5px;align-items:center}.starHud{background:#fff8d7;color:#795717;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:1000}
+.mascot{position:absolute;left:9px;bottom:8px;z-index:5;width:72px;height:72px;border-radius:50%;background:#c9f4fb;border:4px solid #fff;box-shadow:0 4px #79b8c5;display:grid;place-items:center;font-size:37px;transition:transform .2s}.mascot.pop{transform:scale(1.18) rotate(-7deg)}
+.mascotBubble{position:absolute;left:86px;bottom:22px;z-index:5;background:#fff;border-radius:13px;padding:6px 8px;max-width:145px;font-size:9px;font-weight:1000;color:#31515c;box-shadow:0 3px #b8ced4}
+.tempChoice{position:relative;padding-top:17px}.tempChoice small{display:block;font-size:15px;line-height:1;margin-bottom:2px}
+.rewardBar{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:5px}.reward{background:#ffffff18;border:1px solid #ffffff30;border-radius:10px;padding:5px;text-align:center;font-size:9px;font-weight:1000}.reward b{display:block;font-size:16px}
+.chest{font-size:44px;margin:2px 0}.rank{font-size:17px;font-weight:1000;color:#8a5a13}.spark{animation:spark .5s ease}@keyframes spark{0%{transform:scale(.7)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+
 @media(max-height:650px){header{min-height:calc(78px + var(--safe-top));padding-top:calc(5px + var(--safe-top))}.game{padding-top:calc(85px + var(--safe-top))}.task{padding:5px 8px;margin-top:3px}.task h2{font-size:14px}.task p{display:none}.lab{min-height:142px}.cupWrap{height:165px;transform:translateX(-50%) scale(.84);transform-origin:bottom}.message{min-height:32px;font-size:10px}.controls{padding-top:5px}.action{min-height:42px}.check{min-height:40px;margin-top:5px}}
 @media(max-height:570px){.brand{display:none}.game{padding-top:calc(75px + var(--safe-top))}.lab{min-height:118px}.cupWrap{height:145px;transform:translateX(-50%) scale(.72)}.message{min-height:29px}.ctitle{display:none}}
 </style>
 </head>
 <body>
 <div id="app">
-<header><div class="headrow"><div><div class="brand">子どものMIKATA｜理科体験ゲーム</div><div id="stageLabel" class="stage">🌡️ 準備 1 / 8</div></div><div class="hud"><button id="discoverBtn" class="discover">💧 発見 0</button><button id="mute" class="mute">🔊</button></div></div><div class="progress"><span id="progress"></span></div></header>
+<header><div class="headrow"><div><div class="brand">子どものMIKATA｜理科体験ゲーム</div><div id="stageLabel" class="stage">🌡️ 準備 1 / 8</div></div><div class="hud kidHud"><div id="starHud" class="starHud">⭐ 0</div><button id="discoverBtn" class="discover">💧 0</button><button id="mute" class="mute">🔊</button></div></div><div class="progress"><span id="progress"></span></div></header>
 
 <main id="title" class="screen title active">
-<div class="badge">グラフを触って「満タン」を理解</div>
-<h1>露点マスター！<br><em>水蒸気の定員を見つけよう</em></h1>
-<p class="subtitle">温度が下がると、空気が入れておける水蒸気の「定員」が小さくなる。あふれた分が水滴になる！</p>
+<div class="badge">しずくを集めて宝箱をひらこう！</div>
+<h1>しずくハンター！<br><em>ひえひえ水滴大ぼうけん</em></h1>
+<p class="subtitle">どの温度なら水滴がたくさん出る？ しずくちゃんと一緒に宝箱をめざそう！</p>
 <div class="hero"><svg viewBox="0 0 280 210" aria-hidden="true"><path d="M30 174 H255 M45 188 V22" stroke="#516b75" stroke-width="4"/><path d="M48 166 C82 158 111 145 139 124 C174 98 203 65 242 28" fill="none" stroke="#18799d" stroke-width="8" stroke-linecap="round"/><circle cx="139" cy="124" r="8" fill="#f09a4d"/><path d="M45 124 H139" stroke="#f09a4d" stroke-width="4" stroke-dasharray="7 5"/><text x="79" y="112" fill="#17465a" font-size="14" font-weight="900">水蒸気10.7g</text><text x="144" y="145" fill="#17465a" font-size="13" font-weight="900">12℃＝露点</text></svg></div>
-<button id="start" class="start">実験を始める</button>
-<small>失敗しても止まらない。大事な操作だけで次へ進めるようにしたよ。</small>
+<button id="start" class="start">ぼうけんスタート！</button>
+<small>まちがえてもだいじょうぶ。遊びながら「なんで？」を見つけよう。</small>
 </main>
 
 <main id="game" class="screen game">
@@ -92,7 +100,7 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 <div id="normalLab">
 <div id="airDots" class="airDots"><i class="vapor v1"></i><i class="vapor v2"></i><i class="vapor v3"></i><i class="vapor v4"></i><i class="vapor v5"></i><i class="vapor v6"></i></div>
 <div class="cupWrap"><div class="cup"><div class="water"></div><i class="ice i1"></i><i class="ice i2"></i><i class="ice i3"></i><div id="drops" class="drops"><i class="drop d1"></i><i class="drop d2"></i><i class="drop d3"></i><i class="drop d4"></i></div></div><div class="thermo"><div class="stem"></div><div id="mercury" class="mercury"></div><div class="bulb"></div><div id="tempRead" class="tempRead">24.0℃</div></div></div>
-<div id="noteTag" class="noteTag">コップの外側を観察</div>
+<div id="noteTag" class="noteTag">コップの外側を観察</div><div id="mascot" class="mascot" aria-hidden="true">💧</div><div id="mascotBubble" class="mascotBubble">どこまで冷やす？</div>
 </div>
 <div id="graphLab" class="graphWrap" hidden>
 <div id="modeTabs" class="modeTabs">
@@ -138,7 +146,7 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 
 <script>
 (()=>{
-let stage=0,muted=false,audio=null,cleared=false,temp=24,dew=12,actual=10.7,graphTemp=24,compareSeen=new Set(),viewMode='intuition',coolPower=18,dropScore=0,challengeTurns=0;
+let stage=0,muted=false,audio=null,cleared=false,temp=24,dew=12,actual=10.7,graphTemp=24,compareSeen=new Set(),viewMode='intuition',coolPower=18,dropScore=0,challengeTurns=0,stars=0;
 const satData=[[0,4.8],[4,6.4],[8,8.3],[12,10.7],[16,13.6],[20,17.3],[24,21.8],[28,27.2]];
 const discoveries=new Set();
 const all=[
@@ -160,20 +168,23 @@ const all=[
 ['cool-cost','低い温度ほど → 冷却パワーを多く使う']
 ];
 const defs=[
-{label:'🌡️ 準備 1 / 7',mission:'MISSION 01',title:'どの水から始める？',text:'まず実験のスタート条件を選ぼう。'},
-{label:'🧊 冷却 2 / 7',mission:'MISSION 02',title:'水滴が現れるまで冷やそう',text:'今回は難しいタイミング判定なし。水滴が出たら自動で止まる。'},
-{label:'📝 露点 3 / 7',mission:'MISSION 03',title:'どの温度が露点？',text:'観察した温度から選ぼう。'},
-{label:'💧 正体 4 / 7',mission:'MISSION 04',title:'外側の水滴はどこから来た？',text:'間違った仮説を選んでも、理由を見てすぐやり直せる。'},
-{label:'🎯 露点ハント 5 / 8',mission:'MISSION 05',title:'最初の1滴を出す温度を当てよう',text:'露点は「たくさん出る温度」ではなく、最初に水滴が出始める温度。'},
-{label:'💦 水滴チャレンジ 6 / 8',mission:'MISSION 06',title:'限られた冷却パワーで水滴をたくさん集めよう',text:'温度を下げるほど水滴は増える。でも冷やすほどパワーを使う。グラフは攻略ヒント。'},
-{label:'☁️ 比較 7 / 8',mission:'MISSION 07',title:'空気中の水蒸気量が変わると攻略はどう変わる？',text:'乾いた空気と湿った空気を比べよう。'},
-{label:'🧪 応用 8 / 8',mission:'MISSION 08',title:'結露を止めるには？',text:'ゲームで見つけた仕組みを生活の結露へつなげよう。'}
+{label:'🌡️ ぼうけん 1 / 8',mission:'MISSION 01',title:'さいしょの水をえらぼう！',text:'まず実験のスタート条件を選ぼう。'},
+{label:'🧊 ひやせ！ 2 / 8',mission:'MISSION 02',title:'コップをひやして水滴を出そう！',text:'今回は難しいタイミング判定なし。水滴が出たら自動で止まる。'},
+{label:'💧 1てき発見 3 / 8',mission:'MISSION 03',title:'最初の1てきは何℃だった？',text:'観察した温度から選ぼう。'},
+{label:'🕵️ しずくの正体 4 / 8',mission:'MISSION 04',title:'この水滴、どこから来た？',text:'間違った仮説を選んでも、理由を見てすぐやり直せる。'},
+{label:'🎯 露点ハント 5 / 8',mission:'MISSION 05',title:'最初の1てきをピタリと当てろ！',text:'露点は「たくさん出る温度」ではなく、最初に水滴が出始める温度。'},
+{label:'💦 水滴チャレンジ 6 / 8',mission:'MISSION 06',title:'3回勝負！ 水滴をいっぱい集めよう！',text:'温度を下げるほど水滴は増える。でも冷やすほどパワーを使う。グラフは攻略ヒント。'},
+{label:'☁️ 比較 7 / 8',mission:'MISSION 07',title:'空気が変わると水滴ゲームも変わる？',text:'乾いた空気と湿った空気を比べよう。'},
+{label:'🧪 応用 8 / 8',mission:'MISSION 08',title:'水滴モンスターを止めろ！',text:'ゲームで見つけた仕組みを生活の結露へつなげよう。'}
 ];
 const $=s=>document.querySelector(s),control=$('#controlArea'),msg=$('#message'),lab=$('#lab');
 function ensureAudio(){if(muted)return null;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}if(audio&&audio.state==='suspended')audio.resume();return audio}
 function tone(f=430,d=.06,g=.025){const c=ensureAudio();if(!c)return;const o=c.createOscillator(),a=c.createGain(),t=c.currentTime;o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(c.destination);o.start();o.stop(t+d+.03)}
 function setMsg(t,c=''){msg.className='message '+c;msg.querySelector('span:last-child').textContent=t}
-function add(id){if(!discoveries.has(id)){discoveries.add(id);$('#discoverBtn').textContent='💧 発見 '+discoveries.size;tone(720,.05,.02)}}
+function mascotSay(t,face='💧'){const m=$('#mascot'),b=$('#mascotBubble');if(!m||!b)return;m.textContent=face;b.textContent=t;m.classList.remove('pop');void m.offsetWidth;m.classList.add('pop')}
+function addStars(n){stars+=n;const h=$('#starHud');if(h){h.textContent='⭐ '+stars;h.classList.remove('spark');void h.offsetWidth;h.classList.add('spark')}}
+function tempIcon(t){return t<=4?'🥶':t<=8?'❄️❄️':t<=12?'❄️':t<=16?'🧊':t<=20?'🌬️':'☀️'}
+function add(id){if(!discoveries.has(id)){discoveries.add(id);$('#discoverBtn').textContent='💧 '+discoveries.size;tone(720,.05,.02)}}
 function setTemp(v){temp=Math.round(v*10)/10;$('#tempRead').textContent=temp.toFixed(1)+'℃';$('#mercury').style.setProperty('--mercury',Math.max(8,Math.min(102,(temp/30)*100))+'px');const cond=temp<=dew;$('#drops').style.opacity=cond?Math.min(1,(dew-temp+1)*.42):0;lab.classList.toggle('condense',cond);document.querySelectorAll('.ice').forEach((x,i)=>x.style.opacity=temp<22?(i+1)*.25:0)}
 function showNormal(){document.querySelector('#normalLab').hidden=false;document.querySelector('#graphLab').hidden=true;$('#room').hidden=false}
 function showGraph(){document.querySelector('#normalLab').hidden=true;document.querySelector('#graphLab').hidden=false;$('#room').hidden=true;drawBaseGraph();setViewMode(viewMode)}
@@ -188,7 +199,7 @@ function setViewMode(mode){
  if(mode==='intuition')setMsg('まずは「定員が縮む」様子を見よう。グラフに切り替えて同じ現象も確かめられる。','good');
  else setMsg('同じ現象をグラフで確認。青い曲線＝定員、オレンジ横線＝実際の水蒸気量。','good');
 }
-function clearStage(title,body,emoji='✨'){if(cleared)return;cleared=true;tone(650,.07,.03);setTimeout(()=>tone(820,.1,.03),80);$('#clearEmoji').textContent=emoji;$('#clearTitle').textContent=title;$('#clearText').textContent=body;$('#clear').classList.add('show')}
+function clearStage(title,body,emoji='✨'){if(cleared)return;cleared=true;addStars(1);mascotSay('やったー！ ⭐ゲット！','😄');tone(650,.07,.03);setTimeout(()=>tone(820,.1,.03),80);$('#clearEmoji').textContent=emoji;$('#clearTitle').textContent=title;$('#clearText').textContent=body;$('#clear').classList.add('show')}
 function sat(t){if(t<=0)return 4.8;if(t>=28)return 27.2;for(let i=0;i<satData.length-1;i++){const [t1,v1]=satData[i],[t2,v2]=satData[i+1];if(t>=t1&&t<=t2)return v1+(v2-v1)*(t-t1)/(t2-t1)}return 10.7}
 function invSat(v){if(v<=4.8)return 0;if(v>=27.2)return 28;for(let i=0;i<satData.length-1;i++){const [t1,v1]=satData[i],[t2,v2]=satData[i+1];if(v>=v1&&v<=v2)return t1+(t2-t1)*(v-v1)/(v2-v1)}return 12}
 const gx=t=>42+(t/28)*294, gy=v=>174-(v/30)*156;
@@ -269,12 +280,12 @@ function dewHunt(t){
 }
 function renderDropChallenge(){
  showGraph();setViewMode(viewMode);drawBaseGraph();updateGraph(24,actual);
- $('#taskTitle').textContent='冷却パワー18で、3回の実験から水滴をたくさん集めよう';
+ $('#taskTitle').textContent='3回勝負！ しずくを集めて宝箱をランクアップ！';
  const temps=[20,16,12,8,4];
- control.innerHTML='<div class="challengeArena" style="position:relative;inset:auto;padding:7px"><div class="scoreRow"><div class="scoreBox">残りパワー<b id="powerVal">'+coolPower+'</b></div><div class="scoreBox">水滴スコア<b id="dropVal">'+dropScore.toFixed(1)+'</b></div><div class="scoreBox">残り回数<b id="turnVal">'+(3-challengeTurns)+'</b></div></div><div class="tempChoices">'+temps.map(t=>'<button class="tempChoice" data-temp="'+t+'">'+t+'℃</button>').join('')+'</div><button id="hintGraph" class="hintBtn">📈 飽和水蒸気量グラフを見る</button><div class="hintline">冷却コスト＝24℃から何℃下げたか ÷ 4（切り上げ）</div></div>';
+ control.innerHTML='<div class="challengeArena" style="position:relative;inset:auto;padding:7px"><div class="scoreRow"><div class="scoreBox">残りパワー<b id="powerVal">'+coolPower+'</b></div><div class="scoreBox">水滴スコア<b id="dropVal">'+dropScore.toFixed(1)+'</b></div><div class="scoreBox">残り回数<b id="turnVal">'+(3-challengeTurns)+'</b></div></div><div class="tempChoices">'+temps.map(t=>'<button class="tempChoice" data-temp="'+t+'"><small>'+tempIcon(t)+'</small>'+t+'℃</button>').join('')+'</div><button id="hintGraph" class="hintBtn">🗺️ ひみつの攻略マップを見る</button><div class="rewardBar"><div class="reward">🥉<b>3+</b>銅</div><div class="reward">🥈<b>6+</b>銀</div><div class="reward">🥇<b>9+</b>金</div></div></div>';
  control.querySelectorAll('[data-temp]').forEach(b=>b.onclick=()=>playDrop(+b.dataset.temp));
- $('#hintGraph').onclick=()=>{viewMode='graph';setViewMode('graph');setMsg('青い曲線が低い温度ほど下がるほど、同じ水蒸気量との差＝水滴が増える。','good')};
- setMsg('低く冷やすほど水滴は増える。でもパワーを使う。どこを狙う？','warn')
+ $('#hintGraph').onclick=()=>{viewMode='graph';setViewMode('graph');setMsg('攻略マップの青い線が低いほど、水滴になれる分が大きいよ。','good');mascotSay('このマップ、つよい温度がわかるかも！','🧐')};
+ setMsg('3回だけ温度をえらべるよ。水滴スコアをいっぱい集めよう！','warn');mascotSay('どの温度にする？ ぼくをいっぱい増やして！','💧')
 }
 function playDrop(t){
  if(challengeTurns>=3)return;
@@ -285,9 +296,9 @@ function playDrop(t){
  add('drop-score');if(cost>=4)add('cool-cost');if(condensed>0)add('overflow');
  updateGraph(t,actual);graphTemp=t;
  $('#powerVal').textContent=coolPower;$('#dropVal').textContent=dropScore.toFixed(1);$('#turnVal').textContent=3-challengeTurns;
- setMsg(t+'℃：水滴 '+condensed.toFixed(1)+' g/m³、パワー -'+cost+'。','good');
+ const gained=Math.max(0,Math.round(condensed));setMsg(t+'℃：💧を '+gained+'こゲット！ ひえひえパワー -'+cost+'。','good');mascotSay(gained?('わーい！ '+gained+'こふえた！'):'まだ水滴が出ないよ！',gained>=3?'🤩':gained?'😄':'😯');
  if(challengeTurns>=3||coolPower<=0){
-   setTimeout(()=>clearStage('水滴スコア '+dropScore.toFixed(1)+'！','低い温度ほど飽和水蒸気量が小さくなり、入りきらない分が水滴になる。ただし冷やすほどコストも大きい。グラフを使うと攻略できる。','💦'),450)
+   setTimeout(()=>{const rank=dropScore>=9?'🥇 金の宝箱':dropScore>=6?'🥈 銀の宝箱':'🥉 銅の宝箱';clearStage(rank+'！','水滴スコア '+dropScore.toFixed(1)+'！ 温度を下げるほど水滴は増えるけど、ひえひえパワーもたくさん使うよ。','🎁')},450)
  }
 }
 function compareAir(a){actual=a;graphTemp=24;updateGraph(graphTemp,a);compareSeen.add(a);const dp=invSat(a);if(a===6.4){add('dry');setMsg('6.4 g/m³ → 露点は約4℃。水蒸気が少ないと、かなり冷やすまで満タンにならない。','warn')}else if(a===17.3){add('humid');setMsg('17.3 g/m³ → 露点は約20℃。水蒸気が多いと、少し冷やすだけで満タンになる。','good')}else setMsg('10.7 g/m³ → 露点は約12℃。','warn');$('#dewPoint').setAttribute('cx',gx(dp));$('#dewPoint').setAttribute('cy',gy(a))}
@@ -295,10 +306,10 @@ function finishCompare(){if(compareSeen.has(6.4)&&compareSeen.has(17.3)){clearSt
 function bonusPredict(q){if(q==='up'){add('predict');setMsg('ボーナス正解！ 水蒸気量が増えると横線が上がり、交点は高温側へ移動する。','good')}else setMsg('惜しい。横線が上がったとき、青い曲線との交点がどちらへ動くか見てみよう。','warn')}
 function trouble(x){if(x==='warm'){setTemp(15);$('#drops').style.opacity=0;lab.classList.remove('condense');add('trouble');clearStage('結露を止められた！','表面温度が露点12℃より高くなると、この条件では結露しにくくなる。','🧪')}else if(x==='wipe'){ $('#drops').style.opacity=0;setMsg('一度消えた。でも表面8℃は露点12℃より低いまま…また水滴が出る。','bad');setTimeout(()=>$('#drops').style.opacity=1,550)}else{setTemp(4);$('#drops').style.opacity=1;setMsg('もっと冷やすと、飽和水蒸気量の「定員」がさらに小さくなって水滴が増える。','bad')}}
 function showDiscoveries(){const ul=$('#discoverList');ul.innerHTML='';all.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#discoverOverlay').classList.add('show')}
-$('#start').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');stage=0;render()};
+$('#start').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');stage=0;stars=0;$('#starHud').textContent='⭐ 0';render();mascotSay('いっしょに水滴をさがそう！','💧')};
 $('#mute').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
-$('#next').onclick=()=>{$('#clear').classList.remove('show');if(stage<7){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+all.length+'。「交点＝最初の1滴が出る露点」と、「さらに冷やすほど水滴量が増える」が区別できれば大成功！';$('#finish').classList.add('show')}};
-$('#retry').onclick=()=>{$('#finish').classList.remove('show');discoveries.clear();$('#discoverBtn').textContent='💧 発見 0';stage=0;render()};
+$('#next').onclick=()=>{$('#clear').classList.remove('show');if(stage<7){stage++;render()}else{$('#finishText').textContent='⭐ '+stars+'こ、発見 '+discoveries.size+' / '+all.length+'。「交点＝最初の1滴が出る露点」と、「さらに冷やすほど水滴量が増える」が区別できれば大成功！';$('#finish').classList.add('show')}};
+$('#retry').onclick=()=>{$('#finish').classList.remove('show');discoveries.clear();stars=0;$('#starHud').textContent='⭐ 0';$('#discoverBtn').textContent='💧 0';stage=0;render()};
 $('#discoverBtn').onclick=showDiscoveries;$('#showCollection').onclick=showDiscoveries;$('#closeDiscover').onclick=()=>$('#discoverOverlay').classList.remove('show');
 $('#modeIntuition').onclick=()=>setViewMode('intuition');$('#modeGraph').onclick=()=>setViewMode('graph');
 })();
