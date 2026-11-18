@@ -2,169 +2,126 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#075d78">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0d6f8e">
 <title>光合成ラボ！ O₂チャレンジ — 子どものMIKATA</title>
 <style>
-:root{
- --navy:#073847;--blue:#08718f;--green:#42a86f;--deep:#247449;--yellow:#ffdc5c;
- --orange:#ef9447;--red:#d95c55;--ink:#173e49;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)
-}
+:root{--red:#e60012;--yellow:#ffe35c;--blue:#1a76c8;--deep:#0d4f9c;--water:#39bdf2;--green:#46b96f;--ink:#123c55;--safe:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#052f40}
-body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}
-button{font:inherit;cursor:pointer}button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
-#app{width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(#45b8cf,#a6e3e8 46%,#e6f3d8);user-select:none}
-.screen{position:absolute;inset:0;display:none}.screen.active{display:flex}
-.intro{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(18px + var(--safe-top)) 16px calc(16px + var(--safe-bottom))}
-.badge{font-size:12px;font-weight:1000;color:#075d78;background:#fff;padding:7px 14px;border-radius:999px;box-shadow:0 4px #07516d30}
-.intro h1{font-size:clamp(32px,9vw,46px);line-height:1.06;color:#fff;text-shadow:0 4px #07516d;margin:10px 0 5px}.intro h1 em{font-style:normal;color:var(--yellow)}
-.lead{font-size:14px;font-weight:1000;color:#07556d;margin:0 0 9px}
-.need{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;width:min(92vw,370px);margin:7px 0}.needCard{background:#fff;border-radius:17px;padding:9px 5px;box-shadow:0 4px #07516d22}.needCard .ico{font-size:34px}.needCard b{display:block;font-size:12px}.needCard span{font-size:9px;color:#6b8188;font-weight:800}
-.arrow{font-size:22px;color:#fff;font-weight:1000;margin:1px}.formula{background:#ffffffd9;border-radius:18px;padding:9px 12px;width:min(92vw,370px);font-weight:1000;font-size:13px;color:#285c68}.formula strong{color:var(--green)}
-.start{width:min(90vw,350px);min-height:58px;margin-top:11px;border:0;border-radius:999px;background:var(--yellow);color:#774813;font-weight:1000;font-size:20px;box-shadow:0 5px #c2912e,0 0 0 3px white inset}.start:active{transform:translateY(3px);box-shadow:0 2px #c2912e,0 0 0 3px white inset}
-.intro small{font-size:10px;line-height:1.4;color:#14566b;font-weight:800;max-width:360px;margin-top:9px}
-.game{flex-direction:column;padding:calc(6px + var(--safe-top)) 7px calc(6px + var(--safe-bottom));min-height:0}
-.top{flex:0 0 auto;background:linear-gradient(#086d8c,#07516d);border-radius:18px;padding:7px;color:#fff;box-shadow:0 4px #06394b35}
-.toprow{display:flex;align-items:center;justify-content:space-between}.titleMini{font-size:10px;font-weight:1000}.mute{border:0;border-radius:999px;background:#fff;color:#07516d;min-width:38px;min-height:32px;font-weight:1000}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:5px}.stat{background:#ffffff17;border:1px solid #ffffff2f;border-radius:11px;padding:5px;text-align:center}.stat b{display:block;font-size:17px}.stat span{font-size:8px;font-weight:900;color:#dff7fc}.meter{height:7px;margin-top:5px;background:#ffffff24;border-radius:99px;overflow:hidden}.meter span{display:block;height:100%;background:var(--yellow);width:100%}
-.lab{position:relative;flex:1 1 auto;min-height:180px;margin:5px 0;border:3px solid #ffffffbd;border-radius:22px;background:linear-gradient(#f9feffe8,#e6f6f1e8);overflow:hidden}
-.sun{position:absolute;left:6%;top:7%;width:48px;height:48px;border-radius:50%;background:#ffe16a;box-shadow:0 0 var(--glow,18px) rgba(255,218,68,.8)}
-.ray{position:absolute;left:16%;top:16%;width:36%;height:49%;clip-path:polygon(0 0,100% 18%,80% 100%,18% 85%);background:linear-gradient(100deg,rgba(255,226,93,.28),rgba(255,226,93,0));opacity:var(--ray,.45)}
-.tank{position:absolute;left:27%;right:8%;bottom:8%;height:78%;border:5px solid #709ba7;border-top:0;border-radius:0 0 14px 14px;background:linear-gradient(#d9f9fcaa,#83d9e5bb);overflow:hidden}.waterLine{position:absolute;left:0;right:0;top:6%;height:3px;background:#fff8}.plant{position:absolute;left:49%;bottom:0;width:52%;height:85%;transform:translateX(-50%)}.stem{position:absolute;left:49%;bottom:2%;width:8px;height:77%;background:#378d57;border-radius:10px}.leaf{position:absolute;width:36%;height:15%;background:linear-gradient(135deg,#5fc27b,#2d8b53);border-radius:100% 0 100% 0}.l1{left:47%;bottom:22%;transform:rotate(-28deg)}.l2{left:25%;bottom:36%;transform:scaleX(-1) rotate(-22deg)}.l3{left:47%;bottom:50%;transform:rotate(-22deg)}.l4{left:25%;bottom:64%;transform:scaleX(-1) rotate(-17deg)}.l5{left:47%;bottom:76%;transform:rotate(-10deg)}
-.bubbles{position:absolute;inset:0;overflow:hidden}.bubble{position:absolute;bottom:16%;width:var(--s,11px);height:var(--s,11px);border:2px solid #fff;border-radius:50%;background:#ffffff35;box-shadow:inset 2px 2px 3px #fff9,0 0 7px #fff6;animation:rise var(--dur,1.7s) linear forwards}.bubble.gold{border-color:#ffe064;background:#fff4a780;box-shadow:0 0 11px #ffd84a;cursor:pointer}.bubble.pop{animation:none;transform:scale(1.8);opacity:0;transition:.16s}
-@keyframes rise{0%{transform:translate(0,0) scale(.7);opacity:.35}20%{opacity:1}100%{transform:translate(var(--drift,7px),-175px) scale(1.15);opacity:0}}
-.power{position:absolute;right:7px;top:7px;background:#ffffffec;border-radius:13px;padding:6px 8px;min-width:96px;text-align:center}.power b{display:block;font-size:19px;color:var(--green)}.power span{font-size:8px;font-weight:1000;color:#57727b}
-.message{position:absolute;left:6px;right:6px;bottom:6px;background:#073847dc;color:#fff;border-radius:11px;padding:5px 7px;text-align:center;font-size:10px;font-weight:1000}.message.good{background:#2d8e5de8}.message.warn{background:#b96b2bea}
-.super{position:absolute;z-index:20;left:50%;top:28%;transform:translate(-50%,-50%) scale(.7);font-size:18px;font-weight:1000;color:#fff;text-shadow:0 3px #08718f,0 0 10px #0a7895;opacity:0;white-space:nowrap}.super.show{animation:super .75s ease-out}@keyframes super{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}100%{opacity:0;transform:translate(-50%,-65%) scale(1)}}
-.fly{position:absolute;z-index:25;font-size:12px;font-weight:1000;color:#fff;text-shadow:0 2px 3px #07516d;pointer-events:none;animation:fly .6s ease-out forwards}@keyframes fly{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-42px) scale(1.25)}}
-.supply{flex:0 0 auto;background:#07516de8;border-radius:18px;padding:7px;color:#fff}.supplyHead{text-align:center;font-size:10px;font-weight:1000;color:#dff6fb;margin-bottom:5px}.gauges{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.gauge{background:#ffffff11;border:1px solid #ffffff2d;border-radius:11px;padding:5px}.gaugeTop{display:flex;justify-content:space-between;font-size:9px;font-weight:1000}.track{height:8px;background:#ffffff22;border-radius:99px;overflow:hidden;margin-top:4px}.track span{display:block;height:100%;background:var(--yellow);width:50%;transition:width .12s}
-.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}.feed{border:0;min-height:54px;border-radius:15px;background:#fff;color:#07516d;font-weight:1000;font-size:12px;box-shadow:0 4px #003e54;touch-action:manipulation}.feed strong{display:block;font-size:22px;line-height:1}.feed:active{transform:translateY(3px);box-shadow:0 1px #003e54;background:var(--yellow)}.feed.flash{animation:tapflash .18s}@keyframes tapflash{50%{transform:scale(1.05)}}
-.tip{font-size:9px;text-align:center;color:#d9f5fb;font-weight:800;margin-top:5px}
-.countdown{position:absolute;z-index:90;inset:0;display:none;place-items:center;background:#053247c7;color:white;font-size:78px;font-weight:1000;text-shadow:0 6px #063047}.countdown.show{display:grid}
-.overlay{position:absolute;z-index:80;inset:0;display:none;place-items:center;padding:18px;background:#052f42df}.overlay.show{display:grid}.card{width:100%;max-width:356px;background:#fff;border-radius:25px;padding:18px;text-align:center;box-shadow:0 10px #052938}.card .emoji{font-size:45px}.card h2{font-size:27px;color:var(--green);margin:3px 0 5px}.card p{font-size:12px;line-height:1.5;font-weight:800;color:#536e76}.resultGrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}.result{background:#eef8f1;border-radius:13px;padding:9px}.result b{font-size:21px;display:block}.result span{font-size:9px;font-weight:900;color:#647b82}.rank{font-size:20px;font-weight:1000;color:#dd7e2e;margin:4px 0}.primary{width:100%;min-height:50px;border:0;border-radius:999px;background:var(--yellow);color:#774813;font-weight:1000;font-size:16px;box-shadow:0 5px #c2912e,0 0 0 3px white inset}
-@media(max-height:650px){.lab{min-height:150px}.feed{min-height:48px}.feed strong{font-size:19px}.supply{padding:5px}.stats{margin-top:3px}.stat b{font-size:15px}}
-@media(max-height:570px){.titleMini{display:none}.lab{min-height:125px}.tip{display:none}.feed{min-height:43px;font-size:10px}.gauge{padding:4px}.game{padding-top:calc(3px + var(--safe-top))}}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition:none!important}}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#082e52}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:#fff}
+button{font:inherit;border:0;cursor:pointer}
+#app{position:relative;width:min(100vw,calc(100dvh*.62));height:100dvh;margin:auto;overflow:hidden;background:linear-gradient(#35b9f0 0 18%,#72d7ef 18% 66%,#1596d5 66%);user-select:none;touch-action:none}
+.hud{position:absolute;z-index:30;left:0;right:0;top:0;height:126px;background:var(--red);padding:8px 12px 0;box-shadow:0 4px #aa0010}
+.wave{position:absolute;left:0;right:0;top:124px;height:12px;background:radial-gradient(circle at 12px 0,var(--red) 11px,transparent 12px) repeat-x;background-size:24px 12px}
+.row1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.lbl{font-size:10px;font-weight:900;letter-spacing:.12em}.score{font-size:38px;font-weight:1000;color:var(--yellow);line-height:1;text-shadow:0 3px #a8000f;font-variant-numeric:tabular-nums}.best{font-size:11px;font-weight:900;margin-top:2px}.nextBox{display:flex;gap:7px;align-items:center}.nextBubble{width:60px;height:60px;border-radius:50%;background:#fff;color:var(--deep);display:grid;place-items:center;box-shadow:0 3px #a8000f;font-size:28px;position:relative}.nextBubble:after{content:"";position:absolute;left:-5px;bottom:6px;border:8px solid transparent;border-right-color:#fff;border-left:0;transform:rotate(-20deg)}.nextText{font-size:10px;font-weight:900;line-height:1.3}.nextText b{font-size:15px;color:var(--yellow)}
+.evo{display:flex;align-items:center;justify-content:space-between;margin-top:7px;padding:5px 7px;background:rgba(0,0,0,.16);border-radius:16px}.evoItem{font-size:24px;filter:brightness(.25) opacity(.4);transition:.25s;position:relative}.evoItem.on{filter:none;animation:bob 1.7s ease-in-out infinite}.evoItem.cur:after{content:"★";position:absolute;right:-6px;top:-5px;color:var(--yellow);font-size:11px}
+.stage{position:absolute;inset:136px 0 92px;overflow:hidden}
+.sun{position:absolute;left:25px;top:36px;width:56px;height:56px;border-radius:50%;background:#ffe16a;box-shadow:0 0 22px #ffe16aaa;animation:pulse 2s ease-in-out infinite}.ray{position:absolute;left:63px;top:72px;width:140px;height:210px;clip-path:polygon(0 0,100% 20%,78% 100%,18% 88%);background:linear-gradient(100deg,#ffe16a66,#ffe16a00);opacity:.7}
+.tank{position:absolute;left:72px;right:26px;bottom:26px;height:72%;border:6px solid #d7f7ff;border-top:0;border-radius:0 0 22px 22px;background:linear-gradient(#d8f9ff66,#6ed6ea99);overflow:hidden;box-shadow:inset 0 -18px 26px #0d79a733}.waterline{position:absolute;left:0;right:0;top:8%;height:4px;background:#fff8}
+.plantWrap{position:absolute;left:50%;bottom:0;width:65%;height:88%;transform:translateX(-50%);transition:.3s}.stem{position:absolute;left:50%;bottom:4%;width:9px;height:72%;background:#398f57;border-radius:10px;transform:translateX(-50%)}.leaf{position:absolute;width:42%;height:16%;background:linear-gradient(135deg,#62cf82,#268a50);border-radius:100% 0 100% 0}.a{left:50%;bottom:22%;transform:rotate(-28deg)}.b{left:10%;bottom:36%;transform:scaleX(-1) rotate(-22deg)}.c{left:50%;bottom:50%;transform:rotate(-20deg)}.d{left:10%;bottom:64%;transform:scaleX(-1) rotate(-15deg)}.e{left:50%;bottom:76%;transform:rotate(-8deg)}.extra{display:none}.lv2 .extra.e1,.lv3 .extra.e1,.lv4 .extra.e1,.lv5 .extra.e1,.lv3 .extra.e2,.lv4 .extra.e2,.lv5 .extra.e2,.lv4 .extra.e3,.lv5 .extra.e3,.lv5 .extra.e4{display:block}
+.bubbles{position:absolute;inset:0;overflow:hidden}.bubble{position:absolute;bottom:12%;width:var(--s,11px);height:var(--s,11px);border:2px solid #fff;border-radius:50%;background:#ffffff44;box-shadow:inset 2px 2px 3px #fff9,0 0 8px #fff7;animation:rise var(--dur,1.8s) linear forwards}.bubble.gold{border-color:var(--yellow);background:#fff2a477;box-shadow:0 0 13px #ffe35c;cursor:pointer}
+@keyframes rise{0%{transform:translate(0,0) scale(.7);opacity:.4}20%{opacity:1}100%{transform:translate(var(--drift,8px),-210px) scale(1.2);opacity:0}}
+.speech{position:absolute;left:14px;right:14px;top:48%;display:flex;justify-content:center;pointer-events:none}.speech span{background:#fff;color:var(--deep);font-size:14px;font-weight:900;padding:10px 16px;border-radius:24px;box-shadow:0 4px #0d4f9c33}.speech b{color:var(--red)}
+.rush{position:absolute;z-index:15;left:50%;top:31%;transform:translate(-50%,-50%) scale(.6);font-size:21px;font-weight:1000;color:#fff;text-shadow:0 3px var(--deep),0 0 12px #fff;opacity:0;white-space:nowrap}.rush.show{animation:rush .8s ease-out}@keyframes rush{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}100%{opacity:0;transform:translate(-50%,-68%) scale(1)}}
+.fly{position:absolute;z-index:20;font-size:13px;font-weight:1000;color:#fff;text-shadow:0 2px var(--deep);pointer-events:none;animation:fly .65s ease-out forwards}@keyframes fly{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-48px) scale(1.3)}}
+.bar{position:absolute;z-index:35;left:0;right:0;bottom:0;height:92px;padding:7px 10px calc(10px + var(--safe));display:flex;gap:7px;align-items:center;background:linear-gradient(transparent,#0c76b4aa)}
+.btn{position:relative;flex:1;height:60px;border-radius:30px;background:#fff;color:var(--red);font-weight:1000;font-size:15px;box-shadow:0 4px var(--blue),0 0 0 3px var(--yellow) inset;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05}.btn:active{transform:translateY(3px);box-shadow:0 1px var(--blue),0 0 0 3px var(--yellow) inset}.btn .ico{font-size:23px}.miniGauge{position:absolute;left:12px;right:12px;bottom:-7px;height:10px;background:#d9e6ea;border-radius:99px;overflow:hidden;border:2px solid #fff}.miniGauge span{display:block;height:100%;background:var(--green);width:50%;transition:.1s}.need{animation:need .45s ease-in-out infinite alternate;background:var(--yellow)}@keyframes need{to{transform:scale(1.06)}}
+.mute{position:absolute;z-index:40;right:8px;top:132px;width:38px;height:38px;border-radius:50%;background:#fff;color:var(--deep);font-weight:1000;box-shadow:0 3px #0d4f9c55}
+.title{position:absolute;z-index:50;inset:0;background:linear-gradient(#0d4f9ccc,#35b9f033 45%,#0d4f9ccc);display:flex;flex-direction:column;justify-content:space-between;text-align:center;padding:calc(28px + env(safe-area-inset-top)) 18px calc(22px + var(--safe))}
+.chip{display:inline-block;background:var(--red);padding:6px 15px;border-radius:20px;font-size:12px;font-weight:1000;box-shadow:0 3px #a8000f}.logo{margin:10px 0 0;line-height:1}.logo span{display:block;color:var(--yellow);font-size:min(15vw,72px);font-weight:1000;text-shadow:0 5px #0d4f9c;-webkit-text-stroke:8px #fff;paint-order:stroke fill}.logo small{display:block;font-size:min(8vw,38px);color:#fff;font-weight:1000;text-shadow:0 4px #0d4f9c}.titleBot{pointer-events:none}.how{font-size:13px;font-weight:900;line-height:1.5;text-shadow:0 2px #0d4f9c;margin-bottom:10px}.how b{color:var(--yellow)}.play{pointer-events:auto;width:80%;max-width:320px;height:70px;border-radius:35px;background:var(--red);color:#fff;font-size:28px;font-weight:1000;letter-spacing:.08em;box-shadow:0 6px #a8000f,0 0 0 5px var(--yellow);animation:pulse 1.5s ease-in-out infinite}.bestLine{margin-top:10px;font-size:12px;font-weight:900}
+.modal{position:absolute;z-index:70;inset:0;display:none;align-items:center;justify-content:center;background:#06326499;padding:22px}.modal.show{display:flex}.card{width:100%;max-width:340px;background:#fff;color:var(--deep);border-radius:30px;padding:20px;text-align:center;box-shadow:0 8px #0003,0 0 0 6px var(--red);animation:pop .4s cubic-bezier(.2,1.5,.4,1)}@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}.card h2{margin:0;color:var(--red);font-size:24px}.bigScore{font-size:48px;font-weight:1000;color:var(--red);line-height:1.05;margin-top:6px}.rank{display:inline-block;margin-top:6px;background:var(--yellow);color:#a84b00;padding:5px 13px;border-radius:16px;font-weight:1000}.retry{width:100%;height:58px;border-radius:29px;background:var(--red);color:#fff;font-size:20px;font-weight:1000;box-shadow:0 5px #a8000f,0 0 0 4px var(--yellow);margin-top:12px}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@media(max-height:650px){.hud{height:112px}.wave{top:110px}.stage{inset:122px 0 86px}.bar{height:86px}.btn{height:54px}.score{font-size:31px}.nextBubble{width:52px;height:52px}.evoItem{font-size:20px}.mute{top:119px}.title{padding-top:18px}.logo span{font-size:min(13vw,60px)}}
 </style>
 </head>
 <body>
 <div id="app">
-<main id="intro" class="screen intro active">
- <div class="badge">まずは ひみつを知ろう</div>
- <h1>光合成には<br><em>3つ必要！</em></h1>
- <p class="lead">植物は、3つの材料をそろえて光合成するよ。</p>
- <div class="need">
-  <div class="needCard"><div class="ico">☀️</div><b>ひかり</b><span>太陽やライト</span></div>
-  <div class="needCard"><div class="ico">💧</div><b>みず</b><span>根から取りこむ</span></div>
-  <div class="needCard"><div class="ico">☁️</div><b>二酸化炭素</b><span>空気から取りこむ</span></div>
- </div>
- <div class="arrow">↓</div>
- <div class="formula">3つがそろうと <strong>🌿 光合成</strong> が進んで<br>🫧 <strong>酸素 O₂</strong> が出てくる！</div>
- <button id="start" class="start">O₂をたくさん集めよう！</button>
- <small>ゲームでは、3つの条件のうち一番足りないものが光合成パワーを下げる単純モデルを使います。</small>
-</main>
-
-<main id="game" class="screen game">
- <section class="top">
-  <div class="toprow"><div class="titleMini">子どものMIKATA｜光合成ラボ</div><button id="mute" class="mute">🔊</button></div>
-  <div class="stats">
-   <div class="stat"><b id="time">60</b><span>びょう</span></div>
-   <div class="stat"><b id="oxygen">0</b><span>O₂</span></div>
-   <div class="stat"><b id="combo">×1</b><span>コンボ</span></div>
+ <section class="hud">
+  <div class="row1">
+   <div><div class="lbl">O₂ SCORE</div><div id="score" class="score">0000</div><div id="best" class="best">BEST 0000</div></div>
+   <div class="nextBox"><div id="nextBubble" class="nextBubble">🌱</div><div class="nextText">NEXT<br><b id="nextText">あと 30</b></div></div>
   </div>
-  <div class="meter"><span id="timeMeter"></span></div>
+  <div id="evo" class="evo">
+   <span class="evoItem on cur">🌱</span><span class="evoItem">🌿</span><span class="evoItem">🪴</span><span class="evoItem">🌳</span><span class="evoItem">✨</span>
+  </div>
+  <div class="wave"></div>
  </section>
 
- <section class="lab">
-  <div id="sun" class="sun"></div><div id="ray" class="ray"></div>
-  <div class="tank"><div class="waterLine"></div><div class="plant"><div class="stem"></div><div class="leaf l1"></div><div class="leaf l2"></div><div class="leaf l3"></div><div class="leaf l4"></div><div class="leaf l5"></div></div><div id="bubbles" class="bubbles"></div></div>
-  <div class="power"><b id="power">0%</b><span>光合成パワー</span></div>
-  <div id="message" class="message">3つをそろえよう！</div>
-  <div id="super" class="super">O₂ ラッシュ！</div>
+ <main class="stage">
+  <div id="sun" class="sun"></div><div class="ray"></div>
+  <div class="tank"><div class="waterline"></div><div id="plant" class="plantWrap lv1">
+   <div class="stem"></div><div class="leaf a"></div><div class="leaf b"></div><div class="leaf c"></div><div class="leaf d"></div><div class="leaf e"></div>
+   <div class="leaf a extra e1" style="left:30%;bottom:27%"></div><div class="leaf b extra e2" style="left:36%;bottom:45%"></div><div class="leaf c extra e3" style="left:22%;bottom:57%"></div><div class="leaf d extra e4" style="left:44%;bottom:70%"></div>
+  </div><div id="bubbles" class="bubbles"></div></div>
+  <div id="speech" class="speech"><span>3つをそろえると <b>O₂</b> がふえるよ！</span></div>
+  <div id="rush" class="rush">O₂ ラッシュ！</div>
+ </main>
+
+ <button id="mute" class="mute">🔊</button>
+
+ <section class="bar">
+  <button class="btn" data-k="light"><span class="ico">☀️</span>ひかり！<span class="miniGauge"><span id="gLight"></span></span></button>
+  <button class="btn" data-k="water"><span class="ico">💧</span>みず！<span class="miniGauge"><span id="gWater"></span></span></button>
+  <button class="btn" data-k="co2"><span class="ico">☁️</span>CO₂！<span class="miniGauge"><span id="gCo2"></span></span></button>
  </section>
 
- <section class="supply">
-  <div class="supplyHead">ボタンを連打して、植物に必要なものを届けよう！</div>
-  <div class="gauges">
-   <div class="gauge"><div class="gaugeTop"><span>☀️ 光</span><b id="lightNum">45</b></div><div class="track"><span id="lightBar"></span></div></div>
-   <div class="gauge"><div class="gaugeTop"><span>💧 水</span><b id="waterNum">45</b></div><div class="track"><span id="waterBar"></span></div></div>
-   <div class="gauge"><div class="gaugeTop"><span>☁️ CO₂</span><b id="co2Num">45</b></div><div class="track"><span id="co2Bar"></span></div></div>
-  </div>
-  <div class="buttons">
-   <button class="feed" data-k="light"><strong>☀️</strong>ひかり！</button>
-   <button class="feed" data-k="water"><strong>💧</strong>みず！</button>
-   <button class="feed" data-k="co2"><strong>☁️</strong>CO₂！</button>
-  </div>
-  <div class="tip">どれか1つが減ると、気泡が少なくなるよ。金色の気泡はタップでボーナス！</div>
+ <section id="title" class="title">
+  <div><div class="chip">光合成ゲーム</div><h1 class="logo"><span>光合成ラボ！</span><small>O₂をたくさんつくろう</small></h1></div>
+  <div class="titleBot"><div class="how">☀️ 光 ＋ 💧 水 ＋ ☁️ 二酸化炭素<br>3つがそろうと <b>🌿光合成 → 🫧酸素！</b><br>ボタンを押して材料を届けよう！</div><button id="play" class="play">スタート！</button><div id="titleBest" class="bestLine">BEST 0000 O₂</div></div>
  </section>
-</main>
 
-<div id="countdown" class="countdown">3</div>
-<div id="finish" class="overlay"><div class="card">
- <div class="emoji">🌿🫧</div><h2>研究終了！</h2><div id="rank" class="rank"></div>
- <div class="resultGrid"><div class="result"><b id="finalO2">0</b><span>集めたO₂</span></div><div class="result"><b id="bestPower">0%</b><span>最高パワー</span></div><div class="result"><b id="bestCombo">×1</b><span>最高コンボ</span></div><div class="result"><b id="taps">0</b><span>供給した回数</span></div></div>
- <p id="resultText"></p><button id="retry" class="primary">もう一度チャレンジ</button>
-</div></div>
+ <section id="finish" class="modal"><div class="card"><h2>けんきゅう おわり！</h2><div id="finalScore" class="bigScore">0</div><div>O₂</div><div id="rank" class="rank">🌱 けんきゅういん</div><p id="resultText">3つをバランスよく届けよう！</p><button id="retry" class="retry">もういちど！</button></div></section>
 </div>
 <script>
 (()=>{
 const $=s=>document.querySelector(s);
-const state={light:.45,water:.45,co2:.45,power:0,oxygen:0,combo:1,bestCombo:1,bestPower:0,time:60,running:false,taps:0,lastTs:0,lastBubble:0,lastScore:0,highSince:null,audio:null,master:null,muted:false,soundReady:false,raf:0};
+const thresholds=[0,30,80,150,260],icons=['🌱','🌿','🪴','🌳','✨'];
+const S={light:.45,water:.45,co2:.45,score:0,best:0,level:1,running:false,time:60,last:0,lastBubble:0,lastTick:0,highSince:null,muted:false,audio:null,master:null,soundReady:false,raf:0};
+try{S.best=+localStorage.getItem('photosynthesis_best')||0}catch(e){}
 function clamp(v){return Math.max(0,Math.min(1,v))}
-function lightEffect(v){return 1-Math.exp(-3*v)}
-function calcPower(){return Math.min(lightEffect(state.light),state.water,state.co2)}
-async function unlockAudio(){
- if(state.muted)return;
- if(!state.audio){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;state.audio=new C();state.master=state.audio.createGain();state.master.gain.value=.75;state.master.connect(state.audio.destination)}
- try{if(state.audio.state==='suspended')await state.audio.resume()}catch(e){}
- if(!state.soundReady&&state.audio.state==='running'){const o=state.audio.createOscillator(),g=state.audio.createGain(),t=state.audio.currentTime;g.gain.value=.0001;o.connect(g).connect(state.master);o.start(t);o.stop(t+.015);state.soundReady=true}
+function lightEff(v){return 1-Math.exp(-3*v)}
+function power(){return Math.min(lightEff(S.light),S.water,S.co2)}
+async function unlockAudio(){if(S.muted)return;if(!S.audio){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;S.audio=new C();S.master=S.audio.createGain();S.master.gain.value=.75;S.master.connect(S.audio.destination)}try{if(S.audio.state==='suspended')await S.audio.resume()}catch(e){}if(!S.soundReady&&S.audio.state==='running'){const o=S.audio.createOscillator(),g=S.audio.createGain(),t=S.audio.currentTime;g.gain.value=.0001;o.connect(g).connect(S.master);o.start(t);o.stop(t+.015);S.soundReady=true}}
+function tone(f,d=.08,g=.055,type='sine',delay=0){if(S.muted||!S.audio||!S.master||S.audio.state!=='running')return;const t=S.audio.currentTime+delay,o=S.audio.createOscillator(),a=S.audio.createGain();o.type=type;o.frequency.setValueAtTime(f,t);a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(S.master);o.start(t);o.stop(t+d+.02)}
+function sfx(k){if(k==='tap'){tone(320,.05,.045,'triangle');tone(620,.05,.02,'sine',.02)}if(k==='bubble'){tone(560+Math.random()*90,.07,.03);tone(920,.04,.015,'triangle',.015)}if(k==='bonus'){tone(720,.08,.065,'triangle');tone(1080,.14,.055,'sine',.06)}if(k==='level'){[523,659,784,1047].forEach((f,i)=>tone(f,.16,.055,'triangle',i*.075))}if(k==='end'){[440,392,330,262].forEach((f,i)=>tone(f,.18,.045,'sine',i*.11))}}
+function fmt(n){return String(Math.floor(n)).padStart(4,'0')}
+function calcLevel(score){let l=1;for(let i=1;i<thresholds.length;i++)if(score>=thresholds[i])l=i+1;return l}
+function nextTarget(){return thresholds[Math.min(S.level,thresholds.length-1)]}
+function updateHUD(){
+ $('#score').textContent=fmt(S.score);$('#best').textContent='BEST '+fmt(S.best);$('#titleBest').textContent='BEST '+fmt(S.best)+' O₂';
+ const nl=calcLevel(S.score);if(nl>S.level){S.level=nl;levelUp()}else S.level=nl;
+ document.querySelectorAll('.evoItem').forEach((el,i)=>{el.classList.toggle('on',i<S.level);el.classList.toggle('cur',i===S.level-1)});
+ $('#plant').className='plantWrap lv'+S.level;
+ if(S.level<5){const target=thresholds[S.level];$('#nextBubble').textContent=icons[S.level];$('#nextText').textContent='あと '+Math.max(0,target-Math.floor(S.score))}else{$('#nextBubble').textContent='👑';$('#nextText').textContent='MAX！'}
 }
-function tone(f,d=.08,g=.055,type='sine',delay=0){if(state.muted||!state.audio||!state.master||state.audio.state!=='running')return;const t=state.audio.currentTime+delay,o=state.audio.createOscillator(),a=state.audio.createGain();o.type=type;o.frequency.setValueAtTime(f,t);a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(state.master);o.start(t);o.stop(t+d+.02)}
-function sfx(k){if(k==='tap'){tone(360,.05,.045,'triangle');tone(620,.05,.02,'sine',.02)}if(k==='bubble'){tone(560+Math.random()*80,.07,.035);tone(900,.04,.015,'triangle',.015)}if(k==='gold'){tone(720,.08,.06,'triangle');tone(1050,.14,.05,'sine',.06)}if(k==='good'){tone(523,.09,.055);tone(659,.11,.05,'sine',.07);tone(784,.15,.055,'sine',.14)}if(k==='end'){tone(392,.12,.05);tone(523,.13,.05,'sine',.1);tone(659,.2,.06,'sine',.2)}}
-function updateUI(){
- state.power=calcPower();state.bestPower=Math.max(state.bestPower,state.power);
- const data=[['light',state.light,'☀️ 光'],['water',state.water,'💧 水'],['co2',state.co2,'☁️ CO₂']];
- data.forEach(([k,v])=>{$('#'+k+'Bar').style.width=Math.round(v*100)+'%';$('#'+k+'Num').textContent=Math.round(v*100)});
- $('#power').textContent=Math.round(state.power*100)+'%';
- $('#sun').style.setProperty('--glow',(6+state.light*30)+'px');$('#ray').style.setProperty('--ray',(.06+state.light*.5));
- const weakest=data.slice().sort((a,b)=>a[1]-b[1])[0];const msg=$('#message');
- if(state.power>=.82){msg.className='message good';msg.textContent='🔥 3つそろった！ O₂がどんどん出る！'}
- else{msg.className='message warn';msg.textContent='もっと必要：'+weakest[2]+' を連打！'}
- if(state.power>=.82){if(state.highSince===null)state.highSince=performance.now();const held=(performance.now()-state.highSince)/1000;state.combo=held>8?3:held>3?2:1}else{state.highSince=null;state.combo=1}
- state.bestCombo=Math.max(state.bestCombo,state.combo);$('#combo').textContent='×'+state.combo
-}
-function addO2(n,x=55,y=35){state.oxygen+=n;$('#oxygen').textContent=Math.floor(state.oxygen);const p=document.createElement('div');p.className='fly';p.textContent='+'+n+' O₂';p.style.left=x+'%';p.style.top=y+'%';$('.lab').appendChild(p);setTimeout(()=>p.remove(),650)}
+function levelUp(){sfx('level');const r=$('#rush');r.textContent=S.level===5?'MAX 光合成！':'LEVEL UP！';r.classList.remove('show');void r.offsetWidth;r.classList.add('show')}
+function addScore(n,x=58,y=38){S.score+=n;if(S.score>S.best){S.best=Math.floor(S.score);try{localStorage.setItem('photosynthesis_best',S.best)}catch(e){}}updateHUD();const p=document.createElement('div');p.className='fly';p.textContent='+'+n+' O₂';p.style.left=x+'%';p.style.top=y+'%';$('.stage').appendChild(p);setTimeout(()=>p.remove(),700)}
 function spawnBubble(){
- const gold=Math.random()<(.05+.08*state.power),b=document.createElement('div');b.className='bubble'+(gold?' gold':'');const size=(gold?14:8)+Math.random()*(gold?7:8);b.style.setProperty('--s',size+'px');b.style.left=(43+Math.random()*18)+'%';b.style.setProperty('--dur',(1.1+Math.random()*.8)+'s');b.style.setProperty('--drift',(-12+Math.random()*24)+'px');$('#bubbles').appendChild(b);
- if(gold)b.addEventListener('pointerdown',async e=>{e.preventDefault();await unlockAudio();if(b.dataset.hit)return;b.dataset.hit='1';addO2(5);sfx('gold');b.classList.add('pop');setTimeout(()=>b.remove(),170)});
- b.addEventListener('animationend',()=>{if(!b.dataset.hit){addO2(gold?2:1);if(Math.random()<.25)sfx('bubble')}b.remove()})
+ const p=power(),gold=Math.random()<(.05+p*.08),b=document.createElement('div');b.className='bubble'+(gold?' gold':'');b.style.setProperty('--s',(gold?14:8)+Math.random()*(gold?8:9)+'px');b.style.left=(44+Math.random()*16)+'%';b.style.setProperty('--dur',(1.15+Math.random()*.8)+'s');b.style.setProperty('--drift',(-12+Math.random()*24)+'px');$('#bubbles').appendChild(b);
+ if(gold)b.addEventListener('pointerdown',async e=>{e.preventDefault();await unlockAudio();if(b.dataset.hit)return;b.dataset.hit='1';addScore(5);sfx('bonus');b.classList.add('pop');setTimeout(()=>b.remove(),160)});
+ b.addEventListener('animationend',()=>{if(!b.dataset.hit){addScore(gold?2:1);if(Math.random()<.2)sfx('bubble')}b.remove()})
 }
-function showSuper(){const el=$('#super');el.classList.remove('show');void el.offsetWidth;el.classList.add('show')}
-function feed(k,btn){
- const add=.105;state[k]=clamp(state[k]+add);state.taps++;btn.classList.remove('flash');void btn.offsetWidth;btn.classList.add('flash');sfx('tap');updateUI();if(state.power>=.86&&Math.random()<.28){showSuper();sfx('good')}
+function updateNeed(){
+ const vals=[['light',S.light,'☀️ ひかり'],['water',S.water,'💧 みず'],['co2',S.co2,'☁️ CO₂']];vals.forEach(([k,v])=>$('#g'+(k==='light'?'Light':k==='water'?'Water':'Co2')).style.width=Math.round(v*100)+'%');
+ const weakest=vals.slice().sort((a,b)=>a[1]-b[1])[0];document.querySelectorAll('.btn').forEach(b=>b.classList.toggle('need',b.dataset.k===weakest[0]&&weakest[1]<.5));
+ const sp=$('#speech span'),p=power();
+ if(p>.83)sp.innerHTML='🔥 <b>光合成チャンス！</b> O₂がいっぱい！';else sp.innerHTML='もっと必要：<b>'+weakest[2]+'</b> をおして！';
 }
-function decay(dt){
- state.light=clamp(state.light-dt*.020);state.water=clamp(state.water-dt*.015);state.co2=clamp(state.co2-dt*.023);
-}
+function feed(k,btn){S[k]=clamp(S[k]+.115);sfx('tap');btn.style.transform='translateY(3px) scale(1.03)';setTimeout(()=>btn.style.transform='',90);updateNeed();if(power()>.85&&Math.random()<.25){const r=$('#rush');r.textContent='O₂ ラッシュ！';r.classList.remove('show');void r.offsetWidth;r.classList.add('show')}}
+function decay(dt){S.light=clamp(S.light-dt*.021);S.water=clamp(S.water-dt*.015);S.co2=clamp(S.co2-dt*.023)}
 function loop(ts){
- if(!state.running)return;
- const dt=Math.min(.05,(ts-state.lastTs)/1000||0);state.lastTs=ts;state.time=Math.max(0,state.time-dt);decay(dt);updateUI();$('#time').textContent=Math.ceil(state.time);$('#timeMeter').style.width=(state.time/60*100)+'%';
- const interval=1350-state.power*1120;if(ts-state.lastBubble>interval){spawnBubble();state.lastBubble=ts}
- if(ts-state.lastScore>1000){const gain=Math.max(0,Math.round(state.power*state.combo*2));if(gain)addO2(gain,77,18);state.lastScore=ts}
- if(state.time<=0){finish();return}state.raf=requestAnimationFrame(loop)
+ if(!S.running)return;const dt=Math.min(.05,(ts-S.last)/1000||0);S.last=ts;S.time-=dt;decay(dt);updateNeed();
+ const p=power(),interval=1250-p*1030;if(ts-S.lastBubble>interval){spawnBubble();S.lastBubble=ts}
+ if(ts-S.lastTick>1000){const gain=Math.max(0,Math.round(p*(S.level*.65+1)));if(gain)addScore(gain,77,18);S.lastTick=ts}
+ if(S.time<=0){finish();return}S.raf=requestAnimationFrame(loop)
 }
-function rank(){const s=state.oxygen;if(s>=180)return['👑 O₂マスター','3つの材料をバランスよく届けて、大量の酸素を集めた！'];if(s>=120)return['🌟 光合成エース','足りないものを見つけるのが上手！'];if(s>=75)return['🌿 光合成研究員','3つ必要なことが分かってきた！'];return['🧪 研究スタート','どれか1つが足りないと気泡が減るよ。ゲージを見て連打しよう！']}
-async function startGame(){
- await unlockAudio();state.light=.42;state.water=.42;state.co2=.42;state.power=0;state.oxygen=0;state.combo=1;state.bestCombo=1;state.bestPower=0;state.time=60;state.taps=0;state.highSince=null;state.running=false;$('#oxygen').textContent='0';$('#time').textContent='60';$('#combo').textContent='×1';$('#finish').classList.remove('show');$('#intro').classList.remove('active');$('#game').classList.add('active');updateUI();
- const cd=$('#countdown');cd.classList.add('show');for(const n of ['3','2','1','GO!']){cd.textContent=n;if(n==='GO!')sfx('good');else tone(420,.07,.05,'triangle');await new Promise(r=>setTimeout(r,n==='GO!'?450:600))}cd.classList.remove('show');state.running=true;state.lastTs=performance.now();state.lastBubble=state.lastTs;state.lastScore=state.lastTs;requestAnimationFrame(loop)
-}
-function finish(){state.running=false;cancelAnimationFrame(state.raf);sfx('end');const [r,t]=rank();$('#rank').textContent=r;$('#finalO2').textContent=Math.floor(state.oxygen);$('#bestPower').textContent=Math.round(state.bestPower*100)+'%';$('#bestCombo').textContent='×'+state.bestCombo;$('#taps').textContent=state.taps;$('#resultText').textContent=t+'　光・水・二酸化炭素、3つとも必要なのがポイント。';$('#finish').classList.add('show')}
-document.querySelectorAll('.feed').forEach(btn=>btn.addEventListener('pointerdown',async e=>{e.preventDefault();await unlockAudio();feed(btn.dataset.k,btn)}));
+async function start(){await unlockAudio();S.light=.44;S.water=.44;S.co2=.44;S.score=0;S.level=1;S.time=60;S.running=true;S.last=performance.now();S.lastBubble=S.last;S.lastTick=S.last;$('#title').style.display='none';$('#finish').classList.remove('show');updateHUD();updateNeed();requestAnimationFrame(loop)}
+function finish(){S.running=false;cancelAnimationFrame(S.raf);sfx('end');$('#finalScore').textContent=Math.floor(S.score);let r='🌱 けんきゅういん',t='3つをバランスよく届けると、もっとO₂が増えるよ！';if(S.score>=260){r='👑 光合成マスター';t='光・水・CO₂をそろえて、植物をMAXまで育てた！'}else if(S.score>=150){r='🌳 光合成エース';t='足りない材料をすばやく見つけられた！'}else if(S.score>=80){r='🪴 O₂名人';t='光合成のコツがわかってきた！'}$('#rank').textContent=r;$('#resultText').textContent=t;$('#finish').classList.add('show')}
+document.querySelectorAll('.btn').forEach(btn=>btn.addEventListener('pointerdown',async e=>{e.preventDefault();if(!S.running)return;await unlockAudio();feed(btn.dataset.k,btn)}));
 document.addEventListener('pointerdown',()=>unlockAudio(),{once:true,capture:true});
-$('#start').addEventListener('click',startGame);$('#retry').addEventListener('click',startGame);
-$('#mute').addEventListener('click',async e=>{state.muted=!state.muted;e.currentTarget.textContent=state.muted?'🔇':'🔊';if(!state.muted){await unlockAudio();sfx('good')}});
-updateUI();
+$('#play').addEventListener('click',start);$('#retry').addEventListener('click',start);$('#mute').addEventListener('click',async e=>{S.muted=!S.muted;e.currentTarget.textContent=S.muted?'🔇':'🔊';if(!S.muted){await unlockAudio();sfx('level')}});
+updateHUD();updateNeed();
 })();
 </script>
 </body>
