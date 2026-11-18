@@ -106,7 +106,7 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
  .lab{height:calc(100% - 34px);margin-top:2px}.labLabel{top:3px;padding:2px 6px}.lab svg{top:10px;height:calc(100% - 34px)}.labResult{min-height:23px;font-size:7px;bottom:3px}
 }
 @media(max-width:350px){
- .brand{font-size:8px}.brand b{font-size:11px}.modeBadge{min-width:72px;font-size:9px}.feature{font-size:10px;padding:2px}.labResult{left:6px;right:6px}
+ .brand{font-size:8px}.brand b{font-size:11px}.modeBadge{min-width:72px;font-size:9px}.labResult{left:6px;right:6px}
 }
 </style>
 </head>
@@ -162,9 +162,9 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
       <circle class="pickAngle" data-k="aB" cx="140" cy="42" r="24"/>
       <circle class="pickAngle" data-k="aC" cx="235" cy="205" r="24"/>
       <text x="26" y="230">A</text><text x="132" y="27">B</text><text x="244" y="230">C</text>
-      <text x="72" y="120" class="pickHint">辺AB</text>
-      <text x="177" y="120" class="pickHint">辺BC</text>
-      <text x="119" y="199" class="pickHint">辺CA</text>
+      <text id="labelAB" x="72" y="120" class="pickHint">辺AB</text>
+      <text id="labelBC" x="177" y="120" class="pickHint">辺BC</text>
+      <text id="labelCA" x="119" y="199" class="pickHint">辺CA</text>
      </g>
      <g id="triB" class="triB">
       <polygon points="45,205 140,42 235,205"/>
@@ -310,6 +310,9 @@ function renderSelection(){
  document.querySelectorAll('#gameScreen [data-k]').forEach(el=>el.classList.toggle('on',S.selected.has(el.dataset.k)));
  $('#lockCount').textContent=S.selected.size+' / 3';
  $('#controlTitle').textContent=S.mode==='cong'?'👆 辺・角を直接タップ（3つまで）':'👆 辺の比・角を直接タップ（3つまで）';
+ $('#labelAB').textContent=S.mode==='cong'?'辺AB':'ABの比';
+ $('#labelBC').textContent=S.mode==='cong'?'辺BC':'BCの比';
+ $('#labelCA').textContent=S.mode==='cong'?'辺CA':'CAの比';
 }
 function renderFound(){
  const order=S.mode==='cong'?['sss','sas','asa']:['sss','sas','aa'];
