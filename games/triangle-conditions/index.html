@@ -231,7 +231,7 @@ const S={mode:'cong',selected:new Set(),found:{cong:new Set(),sim:new Set()},mut
 
 function includedAngle(sideA,sideB){
  const k=[sideA,sideB].sort().join('+');
- return {'sAB+sAC':'aA','sAB+sBC':'aB','sAC+sBC':'aC'}[k]||null;
+ return {'sAB+sCA':'aA','sAB+sBC':'aB','sBC+sCA':'aC'}[k]||null;
 }
 function endpoints(side){
  return {sAB:['aA','aB'],sBC:['aB','aC'],sCA:['aC','aA']}[side];
