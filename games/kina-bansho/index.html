@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#6d5337">
+<title>喜名番所 見え方ラボ — 子どものMIKATA</title>
+<style>
+:root{--wood:#6d5337;--earth:#9b7650;--paper:#fff8e9;--sand:#ead7b1;--ink:#3e342a;--green:#557a55;--blue:#537e91;--gold:#d8ac53;--red:#9d5a50;--purple:#806d97;--safe:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#352c25}body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}button{font:inherit;touch-action:manipulation}
+#app{width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(#b9d7d5 0%,#e6ddbd 50%,#d4b27f 100%);user-select:none}
+header{position:absolute;z-index:20;top:0;left:0;right:0;height:96px;padding:9px 10px;background:linear-gradient(#74583d,#5b442f);color:#fff;border-bottom:4px solid #c99d57}
+.headrow{display:flex;justify-content:space-between;align-items:center;gap:7px}.brand{font-size:9px;font-weight:1000}.stage{font-size:11px;font-weight:1000;background:#ffffff20;padding:5px 8px;border-radius:999px}.hud{display:flex;gap:5px}.hud button{border:0;border-radius:999px;background:white;color:#634932;min-height:31px;font-size:10px;font-weight:1000;padding:0 9px}.progress{height:7px;margin-top:7px;background:#ffffff24;border-radius:999px;overflow:hidden}.progress span{display:block;height:100%;width:16.6%;background:#f2d274;transition:.25s}
+.screen{position:absolute;inset:0;display:none}.screen.active{display:flex}
+.title{padding:108px 18px 16px;flex-direction:column;align-items:center;justify-content:center;text-align:center}.badge{background:#fff;color:#6a5139;padding:7px 14px;border-radius:999px;font-size:11px;font-weight:1000;box-shadow:0 4px #6a4b3233}.title h1{font-size:clamp(33px,9vw,45px);line-height:1.03;color:#fff;text-shadow:0 4px #6b5038;margin:11px 0 4px;letter-spacing:-.04em}.title h1 em{font-style:normal;color:#f3d875}.subtitle{font-size:13px;font-weight:900;color:#5c4936;margin:0 0 7px}.hero{height:min(28dvh,210px);min-height:145px;width:min(84vw,320px);display:grid;place-items:center}.start,.check,.next,.retry,.small{border:0;border-radius:999px;background:#f1d06e;color:#674717;font-weight:1000;box-shadow:0 5px #ad8034,0 0 0 3px #fff inset}.start{width:min(88vw,330px);min-height:54px;font-size:19px}.start:active,.check:active,.next:active,.retry:active,.small:active{transform:translateY(3px);box-shadow:0 2px #ad8034,0 0 0 3px #fff inset}.title small{max-width:345px;font-size:10px;line-height:1.45;color:#654b38;font-weight:800;margin-top:9px}
+.game{flex-direction:column;padding-top:103px;min-height:0}.task{flex:0 0 auto;margin:5px 9px 4px;background:white;border-radius:17px;padding:6px 9px;box-shadow:0 4px #6a50322d}.task b{display:block;color:#9a6947;font-size:9px}.task h2{font-size:15px;margin:2px 0}.task p{font-size:9px;font-weight:800;color:#76685d;margin:0;line-height:1.3}
+.lenses{flex:0 0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:0 8px 4px}.lens{border:0;border-radius:12px;background:#ffffffc9;color:#5d4c3d;min-height:42px;padding:4px 2px;font-size:9px;font-weight:1000;box-shadow:0 3px #6e53332b}.lens span{display:block;font-size:15px;line-height:1.1}.lens.on{background:#fff0aa;color:#62451c;box-shadow:0 0 0 2px #fff inset,0 3px #b1883a}.lens.seen:after{content:"✓";margin-left:2px;color:#557a55}
+.lab{position:relative;flex:1 1 auto;min-height:150px;margin:0 8px 4px;border:3px solid #ffffffba;border-radius:22px;background:#f8f1dfdd;overflow:hidden}.placeTitle{position:absolute;left:9px;top:7px;font-size:10px;font-weight:1000;color:#604b38;background:#ffffffdf;padding:4px 7px;border-radius:999px;z-index:5}.lensNote{position:absolute;right:8px;top:7px;max-width:58%;z-index:5;background:#fff;border-radius:12px;padding:5px 7px;font-size:9px;line-height:1.3;font-weight:900;color:#5b5047;box-shadow:0 3px #6f583826}
+.scene{position:absolute;inset:0}.ground{position:absolute;left:0;right:0;bottom:0;height:36%;background:#c7aa7a}.road{position:absolute;left:-10%;right:-10%;bottom:6%;height:23%;background:#b99866;transform:rotate(-3deg);border-top:3px solid #96764c;border-bottom:3px solid #96764c}.building{position:absolute;left:18%;bottom:22%;width:64%;height:46%;background:#8f714c;border:5px solid #5b4734}.roof{position:absolute;left:12%;bottom:65%;width:76%;height:18%;background:#6d6a61;clip-path:polygon(10% 100%,20% 20%,50% 0,80% 20%,90% 100%)}.door{position:absolute;left:43%;bottom:22%;width:14%;height:30%;background:#44362c}.post{position:absolute;bottom:18%;width:5%;height:35%;background:#7e7667}.post.left{left:12%}.post.right{right:12%}.marker{position:absolute;left:50%;bottom:16%;transform:translateX(-50%);background:#8d846f;color:#1d1a17;font-size:11px;font-weight:1000;padding:7px 10px;border-radius:45% 45% 35% 35%}.pine{position:absolute;bottom:34%;width:10px;height:35%;background:#5f4936}.pine:before,.pine:after{content:"";position:absolute;left:50%;transform:translateX(-50%);border-radius:50%;background:#4f7355}.pine:before{width:52px;height:28px;top:-4px}.pine:after{width:38px;height:24px;top:13px}.pine.p1{left:7%}.pine.p2{right:8%}
+.person{position:absolute;width:28px;height:48px;bottom:19%;transition:.25s}.person:before{content:"";position:absolute;left:50%;top:0;width:14px;height:14px;border-radius:50%;background:#d4a27d;transform:translateX(-50%)}.person:after{content:"";position:absolute;left:50%;top:13px;width:18px;height:27px;border-radius:6px;background:var(--pc,#657e8b);transform:translateX(-50%)}.person.traveler{left:11%;--pc:#6c8898}.person.official{left:29%;--pc:#8c6253}.person.local{right:27%;--pc:#6d835f}.person.foreign{right:10%;--pc:#92785c}
+.timeline{position:absolute;left:8%;right:8%;top:26%;bottom:12%;display:none;align-items:center;justify-content:space-between}.timeline.show{display:flex}.timeNode{width:18%;text-align:center;font-size:9px;font-weight:1000}.timeDot{width:20px;height:20px;border-radius:50%;background:#fff;border:5px solid #7f6a4d;margin:0 auto 5px}.timeLine{position:absolute;left:8%;right:8%;top:46%;height:4px;background:#8a7656;z-index:-1}
+.message{flex:0 0 auto;margin:0 9px 4px;min-height:37px;border-radius:13px;padding:6px 8px;background:#fffffff4;display:flex;align-items:center;gap:7px;font-size:10px;font-weight:900;box-shadow:0 3px #6c513725}.message.good{background:#e5f4df;color:#315e3f}.message.warn{background:#fff0d8;color:#7a5929}.message.bad{background:#f8e2df;color:#873f39}.dot{width:8px;height:8px;border-radius:50%;background:#806a4b;flex:0 0 auto}.good .dot{background:#557a55}.warn .dot{background:#c78d47}.bad .dot{background:#a75a52}
+.controls{flex:0 0 auto;background:#5f4937e9;color:white;border-top:3px solid #ffffff70;padding:6px 8px calc(8px + var(--safe))}.ctitle{text-align:center;font-size:9px;font-weight:1000;color:#f8ead8;margin:0 0 5px}.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}.actions.three{grid-template-columns:repeat(3,1fr)}.action{min-height:44px;border:0;border-radius:13px;background:white;color:#634b38;font-size:10px;font-weight:1000;box-shadow:0 4px #3d2e24;padding:5px}.action:active{transform:translateY(2px);box-shadow:0 2px #3d2e24}.check{width:100%;min-height:40px;margin-top:6px;font-size:13px}.mentor{margin-top:5px;width:100%;min-height:34px;border:1px solid #ffffff70;border-radius:11px;background:#ffffff16;color:#fff7e9;font-size:9px;font-weight:1000}.hint{font-size:8px;text-align:center;color:#f8ead7;font-weight:800;margin-top:4px}
+.overlay{position:absolute;z-index:50;inset:0;display:none;place-items:center;padding:17px;background:#34281fdd}.overlay.show{display:grid}.card{width:100%;max-width:350px;background:white;border-radius:23px;padding:17px;text-align:center;box-shadow:0 10px #261d17}.emoji{font-size:38px}.card h2{margin:2px 0 6px;font-size:24px;color:#557a55}.card p{font-size:11px;font-weight:800;line-height:1.55;color:#5c5148}.next,.retry,.small{width:100%;min-height:46px;margin-top:7px;font-size:14px}.discoverList{list-style:none;padding:0;margin:9px 0;max-height:46dvh;overflow:auto;text-align:left}.discoverList li{font-size:10px;font-weight:800;background:#edf4ee;padding:8px 9px;margin:5px 0;border-radius:11px}.discoverList .locked{background:#f2f2f2;color:#9aa2a4}.sources{font-size:9px;text-align:left;background:#f8f1e4;padding:9px;border-radius:11px;margin-top:9px}.sources a{color:#604735}
+@media(max-height:650px){header{height:82px}.game{padding-top:88px}.task{padding:4px 7px}.task h2{font-size:13px}.task p{display:none}.lenses{margin-bottom:3px}.lens{min-height:36px;font-size:8px}.lens span{font-size:13px}.lab{min-height:125px}.message{min-height:29px;font-size:9px}.action{min-height:38px}.controls{padding-top:4px}}
+@media(max-height:570px){.brand{display:none}.game{padding-top:78px}.lab{min-height:105px}.lensNote{font-size:8px}.ctitle{display:none}}
+</style>
+</head>
+<body>
+<div id="app">
+<header><div class="headrow"><div><div class="brand">子どものMIKATA｜地域文化体験ゲーム</div><div id="stageLabel" class="stage">🛣️ 宿道 1 / 6</div></div><div class="hud"><button id="discoverBtn">🔎 発見 0</button><button id="mute">🔊</button></div></div><div class="progress"><span id="progress"></span></div></header>
+
+<main id="title" class="screen title active">
+<div class="badge">同じ場所でも、立場で景色が変わる</div>
+<h1>喜名番所<br><em>見え方ラボ</em></h1>
+<p class="subtitle">旅人・役人・地域の人・時間の流れ。4つの窓から喜名を見よう。</p>
+<div class="hero" aria-hidden="true">
+<svg viewBox="0 0 320 210"><rect x="69" y="95" width="182" height="83" fill="#8f714c" stroke="#5b4734" stroke-width="6"/><polygon points="52,99 90,48 160,34 232,48 268,99" fill="#68675f"/><rect x="142" y="126" width="38" height="52" fill="#43362c"/><rect x="82" y="115" width="42" height="30" fill="#cfbf98"/><rect x="197" y="115" width="42" height="30" fill="#cfbf98"/><rect x="35" y="113" width="13" height="75" fill="#7d7566"/><rect x="273" y="113" width="13" height="75" fill="#7d7566"/><ellipse cx="160" cy="193" rx="73" ry="12" fill="#a98f66"/><path d="M15 195 Q160 167 305 196" fill="none" stroke="#9b7c53" stroke-width="17"/><circle cx="24" cy="53" r="26" fill="#557a55"/><circle cx="293" cy="63" r="24" fill="#557a55"/><rect x="18" y="58" width="8" height="88" fill="#5f4936"/><rect x="289" y="68" width="8" height="80" fill="#5f4936"/></svg>
+</div>
+<button id="start" class="start">喜名の時間旅行を始める</button>
+<small>史実を一つの説明に固定せず、「誰から見た場所か」を切り替えて理解するゲーム。失敗や見落としも発見として残る。</small>
+</main>
+
+<main id="game" class="screen game">
+<section class="task"><b id="mission"></b><h2 id="taskTitle"></h2><p id="taskText"></p></section>
+<div class="lenses">
+<button class="lens" data-lens="traveler"><span>🥾</span>旅人</button>
+<button class="lens" data-lens="official"><span>📜</span>役人</button>
+<button class="lens" data-lens="local"><span>🏘️</span>地域</button>
+<button class="lens" data-lens="time"><span>⏳</span>時間</button>
+</div>
+<section class="lab">
+<div id="placeTitle" class="placeTitle">喜名番所</div><div id="lensNote" class="lensNote">見方を選んで観察しよう</div>
+<div id="scene" class="scene"><div class="ground"></div><div class="road"></div><div class="building"></div><div class="roof"></div><div class="door"></div><div class="post left"></div><div class="post right"></div><div class="marker">喜名番所</div><div class="pine p1"></div><div class="pine p2"></div><div class="person traveler"></div><div class="person official"></div><div class="person local"></div><div class="person foreign"></div></div>
+<div id="timeline" class="timeline"><div class="timeLine"></div><div class="timeNode"><div class="timeDot"></div>琉球王国</div><div class="timeNode"><div class="timeDot"></div>1853</div><div class="timeNode"><div class="timeDot"></div>村役場</div><div class="timeNode"><div class="timeDot"></div>戦争</div><div class="timeNode"><div class="timeDot"></div>現在</div></div>
+</section>
+<div id="message" class="message warn"><span class="dot"></span><span></span></div>
+<section class="controls"><p id="ctitle" class="ctitle"></p><div id="controlArea"></div><button id="mentor" class="mentor">👵 おばぁ翻訳：別の人にはどう見える？</button></section>
+</main>
+
+<div id="stageClear" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">発見！</h2><p id="clearText"></p><button id="next" class="next">次の景色へ</button></div></div>
+<div id="discoverOverlay" class="overlay"><div class="card"><div class="emoji">🔎</div><h2>喜名の発見コレクション</h2><ul id="discoverList" class="discoverList"></ul><button id="closeDiscover" class="small">戻る</button></div></div>
+<div id="finish" class="overlay"><div class="card"><div class="emoji">🌺</div><h2>喜名の翻訳者！</h2><p id="finishText"></p><div class="sources"><strong>📚 主な参考</strong><br><a href="https://www.vill.yomitan.okinawa.jp/soshiki/shoko_kanko/gyomu/shisetsu/1325.html" target="_blank" rel="noopener noreferrer">読谷村「道の駅 喜名番所」</a><br><a href="https://heiwa.yomitan-sonsi.jp/profile/historic_sites/" target="_blank" rel="noopener noreferrer">読谷バーチャル平和資料館「喜名番所」</a><br><a href="https://okimu.jp/museum/minwa/1582436972/" target="_blank" rel="noopener noreferrer">沖縄県立博物館・美術館「喜名番所と多幸山フェーレー」</a></div><button id="showCollection" class="small">発見コレクションを見る</button><button id="retry" class="retry">最初からもう一度</button></div></div>
+</div>
+
+<script>
+(()=>{
+let stage=0,currentLens='traveler',muted=false,audio=null,cleared=false,viewsSeen=new Set(),choice='';
+const discoveries=new Set();
+const allDiscoveries=[
+['route','喜名番所は首里から中頭・国頭へ向かう街道沿いの要所だった'],
+['rest','旅人から見ると、喜名は休息や安心につながる宿場だった'],
+['admin','役人から見ると、番所は地域行政の中心だった'],
+['exchange','地域から見ると、人の往来は情報や文化の交流にもつながった'],
+['perry','1853年、ペリー一行の調査隊が喜名番所を訪れた'],
+['heine','一行の画家ハイネは喜名番所の様子を絵に残した'],
+['office','廃藩置県後、喜名番所は読谷の役場として使われた'],
+['war','建物は沖縄戦で失われた'],
+['move','1946年、村役場は喜名から波平へ移った'],
+['rebuild','現在の建物は2005年に当時の雰囲気を再現して整備された'],
+['roadstation','2006年、喜名番所は「道の駅」に認定された'],
+['translate','同じ喜名番所でも、立場と時代で意味が変わる']
+];
+const defs=[
+{label:'🛣️ 宿道 1 / 6',mission:'MISSION 01',title:'首里から北へ向かう旅。喜名はどんな場所？',text:'旅人・役人・地域、それぞれに違う意味がある。'},
+{label:'🏛️ 番所 2 / 6',mission:'MISSION 02',title:'「番所＝昔の役場」だけで十分？',text:'行政だけでなく、宿場・往来・交流の役割も見てみよう。'},
+{label:'⛵ 1853 3 / 6',mission:'MISSION 03',title:'ペリー一行が来た日。同じ出来事はどう見えた？',text:'訪問者の記録と、地域側の景色は同じではない。'},
+{label:'🏢 村役場 4 / 6',mission:'MISSION 04',title:'時代が変わると、同じ場所の役割も変わる',text:'琉球王国時代の番所から、近代の行政拠点へ。'},
+{label:'🔥 戦争と再現 5 / 6',mission:'MISSION 05',title:'失われた建物と、いま目の前にある建物',text:'「昔からそのまま残っている」と思うと見落とすことがある。'},
+{label:'🌉 翻訳ラボ 6 / 6',mission:'MISSION 06',title:'喜名番所を、相手に合わせて説明しよう',text:'子ども・旅人・地域の人・歴史好きへ、説明の窓を変える。'}
+];
+const lensNames={traveler:'🥾旅人',official:'📜役人',local:'🏘️地域',time:'⏳時間'};
+const lensText={
+traveler:[
+'長い道の途中。休める場所、安心できる場所として見える。',
+'「役場」より先に、旅の途中の宿場としての意味が見える。',
+'外から来た一行にとって、喜名は北へ向かう途中の重要な地点。',
+'旅人から見ると、行政制度より「ここで休める・次へ進める」が大きい。',
+'今は観光案内所。現代の旅人にも情報と休憩を与える場所。',
+'旅人には「昔も今も、人が立ち止まる場所」と説明すると伝わりやすい。'
+],
+official:[
+'街道の要所を管理する場所として見える。',
+'番所は今日の役場に近い行政の拠点として機能した。',
+'外来者の動きも、行政側からは記録・対応の対象になる。',
+'廃藩置県後は役場として、読谷の政治・行政の中心的役割を担った。',
+'戦後は行政拠点が移り、現在の建物は役場ではない。',
+'役人の窓では「地域行政の中心がどう移ったか」を軸に説明できる。'
+],
+local:[
+'人が行き交う場所は、物だけでなく話や文化も行き交う場所。',
+'地域の人から見ると、番所は生活圏の中にある交流の節点でもある。',
+'外から来た人を見る地域側の視点も忘れない。',
+'役場がある場所は、地域の相談や決定が集まる場所でもあった。',
+'建物が失われても、場所の記憶や語りは地域に残る。',
+'地域の人には「自分たちの場所が何をつないできたか」を軸に説明できる。'
+],
+time:[
+'首里から中頭・国頭へ続く街道の流れの中で喜名を見る。',
+'番所→役場→戦争による消失→再現された観光案内所、と役割が変化する。',
+'1853年の訪問も、長い時間の一場面として位置づける。',
+'琉球王国時代と近代行政を一続きに見ると、場所の役割変化が見える。',
+'現在の建物は2005年に当時の雰囲気を再現したもの。2006年に道の駅認定。',
+'時間の窓では「同じ場所でも意味は固定されない」と説明できる。'
+]
+};
+const $=s=>document.querySelector(s),control=$('#controlArea'),msg=$('#message');
+function tone(f=440,d=.05,g=.02){if(muted)return;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}if(!audio)return;if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),a=audio.createGain(),t=audio.currentTime;o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(audio.destination);o.start();o.stop(t+d+.02)}
+function setMsg(t,c=''){msg.className='message '+c;msg.querySelector('span:last-child').textContent=t}
+function addDiscovery(id){if(!discoveries.has(id)){discoveries.add(id);tone(720,.05,.02);$('#discoverBtn').textContent='🔎 発見 '+discoveries.size}}
+function selectLens(lens){currentLens=lens;viewsSeen.add(lens);document.querySelectorAll('.lens').forEach(b=>{b.classList.toggle('on',b.dataset.lens===lens);b.classList.toggle('seen',viewsSeen.has(b.dataset.lens))});$('#lensNote').textContent=lensText[lens][stage];if(viewsSeen.size>=2)addDiscovery('translate')}
+function requireViews(n,text){if(viewsSeen.size<n){setMsg(text||'まだ一つの景色しか見ていない。別の窓も開こう。','bad');return false}return true}
+function showTimeline(on){$('#scene').style.display=on?'none':'block';$('#timeline').classList.toggle('show',on)}
+function render(){
+ cleared=false;choice='';viewsSeen=new Set();showTimeline(stage>=3&&stage<=4);const d=defs[stage];$('#stageLabel').textContent=d.label;$('#mission').textContent=d.mission;$('#taskTitle').textContent=d.title;$('#taskText').textContent=d.text;$('#progress').style.width=((stage+1)/6*100)+'%';document.querySelectorAll('.lens').forEach(b=>b.classList.remove('on','seen'));selectLens('traveler');
+ if(stage===0){$('#placeTitle').textContent='首里から北へ続く道の途中';$('#ctitle').textContent='喜名に立ち寄る理由を考える';control.innerHTML='<div class="actions"><button class="action" data-c="rest">休む・安心する</button><button class="action" data-c="random">特に意味はない</button></div><button id="check" class="check">👁️ 喜名の意味を説明する</button>';bindChoices();$('#check').onclick=()=>{if(choice!=='rest')return setMsg('「ただの途中」では説明しきれない。旅人以外の窓も見てみよう。','bad');if(!requireViews(2))return;addDiscovery('route');addDiscovery('rest');clear('宿場としての喜名を発見！','旅人には休息・安心の場所。別の立場からは行政や交流の意味も見えてくる。','🛣️')}}
+ if(stage===1){$('#placeTitle').textContent='琉球王国時代の喜名番所';$('#ctitle').textContent='番所の役割を一つに決めつけない';control.innerHTML='<div class="actions three"><button class="action" data-c="admin">行政</button><button class="action" data-c="rest">宿場</button><button class="action" data-c="exchange">交流</button></div><button id="check" class="check">👁️ 2つ以上の役割をつなげる</button>';bindChoices(true);$('#check').onclick=()=>{if(!requireViews(3,'番所は一つの役割だけでは見えない。3つの窓を開こう。'))return;addDiscovery('admin');addDiscovery('exchange');clear('番所は「役場だけ」じゃない！','行政・宿場・往来が重なり、人と情報が集まる場所だった。','🏛️')}}
+ if(stage===2){$('#placeTitle').textContent='1853年の喜名番所';$('#ctitle').textContent='同じ訪問を、外から／地域から見る';control.innerHTML='<div class="actions"><button class="action" data-c="perry">ペリー一行の調査隊が訪れた</button><button class="action" data-c="nothing">特に記録は残らなかった</button></div><button id="check" class="check">👁️ 記録と地域の景色を分けて考える</button>';bindChoices();$('#check').onclick=()=>{if(choice!=='perry')return setMsg('1853年の訪問記録が残っている。時間の窓も開いてみよう。','bad');if(!requireViews(3))return;addDiscovery('perry');addDiscovery('heine');clear('1853年の一場面を発見！','ペリー一行の調査隊が訪れ、一行の画家ハイネは番所の様子を絵に残した。外来者の記録だけで地域全体を語らないことも大切。','⛵')}}
+ if(stage===3){$('#placeTitle').textContent='番所から村役場へ';$('#ctitle').textContent='時代が変わると役割も変わる';control.innerHTML='<div class="actions"><button class="action" data-c="office">廃藩置県後は役場へ</button><button class="action" data-c="same">ずっと同じ番所のまま</button></div><button id="check" class="check">👁️ 役割の変化を説明する</button>';bindChoices();$('#check').onclick=()=>{if(choice!=='office')return setMsg('場所は同じでも制度と役割は変わった。「時間」の窓を見よう。','bad');if(!viewsSeen.has('time'))return setMsg('時間の窓を開くと、番所→役場への変化が見える。','bad');addDiscovery('office');clear('同じ場所、違う役割！','廃藩置県後は読谷の役場として、政治・行政の中心的役割を担った。','🏢')}}
+ if(stage===4){$('#placeTitle').textContent='戦争・移転・再現';$('#ctitle').textContent='「今ある建物＝昔から残る建物」ではない';control.innerHTML='<div class="actions"><button class="action" data-c="original">昔の建物がそのまま残った</button><button class="action" data-c="rebuild">戦争で失われ、後に再現された</button></div><button id="check" class="check">👁️ 今の建物の意味を説明する</button>';bindChoices();$('#check').onclick=()=>{if(choice!=='rebuild')return setMsg('ここは大事な見落とし。現在の建物は昔の建物そのものではない。','bad');if(!requireViews(2))return;addDiscovery('war');addDiscovery('move');addDiscovery('rebuild');addDiscovery('roadstation');clear('「残った」と「再現した」は違う！','建物は沖縄戦で失われ、役場も1946年に喜名から波平へ移った。現在の建物は2005年に当時の雰囲気を再現し、2006年に道の駅となった。','🔥')}}
+ if(stage===5){showTimeline(false);$('#placeTitle').textContent='喜名番所 翻訳ラボ';$('#ctitle').textContent='相手によって、入口となる説明を変える';control.innerHTML='<div class="actions"><button class="action" data-c="child">子どもへ：「昔の旅の休憩所＋役場みたいな場所」</button><button class="action" data-c="flat">全員へ：「番所です」で終わる</button><button class="action" data-c="history">歴史好きへ：「宿道・行政・1853年・戦争・再現をつなぐ」</button><button class="action" data-c="tourist">旅行者へ：「今の観光案内所から昔の宿場を見る」</button></div><button id="check" class="check">👁️ 2つ以上の相手に説明を変えた</button>';const used=new Set();control.querySelectorAll('.action').forEach(b=>b.onclick=()=>{if(b.dataset.c==='flat'){setMsg('同じ言葉だけでは、相手の入口が見つからないことがある。','bad');return}used.add(b.dataset.c);b.style.background='#fff0aa';setMsg('相手の入口に合わせて説明の窓を変えた。','good');addDiscovery('translate')});$('#check').onclick=()=>{if(used.size<2)return setMsg('少なくとも2種類の相手へ、説明の入口を変えてみよう。','bad');if(!requireViews(3,'最後は3つ以上の窓を開いて、説明をつなごう。'))return;clear('喜名の翻訳者！','一つの場所を一つの説明に閉じず、旅・行政・地域・時間を行き来して伝えられた。','🌉')}}
+}
+function bindChoices(multi=false){control.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{if(multi){b.classList.toggle('active');b.style.background=b.style.background?'':'#fff0aa';choice='multi';if(b.dataset.c==='admin')addDiscovery('admin');if(b.dataset.c==='exchange')addDiscovery('exchange');if(b.dataset.c==='rest')addDiscovery('rest')}else{choice=b.dataset.c;control.querySelectorAll('[data-c]').forEach(x=>x.style.background='white');b.style.background='#fff0aa';setMsg('選んだ見方を、別の窓でも確かめてみよう。','warn')}})}
+function mentor(){if(viewsSeen.size<2){setMsg('おばぁ「同じ場所でも、旅人と役人では見えるものが違うさぁ。もう一つ窓を開けてごらん」','warn');return}const names=[...viewsSeen].map(v=>lensNames[v]).join('・');setMsg('おばぁ「'+names+'を重ねると、喜名番所が一つの説明では足りない場所だと見えてくるねぇ」','good');addDiscovery('translate')}
+function clear(title,body,emoji){if(cleared)return;cleared=true;tone(650,.08,.03);setTimeout(()=>tone(820,.11,.03),90);$('#clearTitle').textContent=title;$('#clearText').textContent=body;$('#clearEmoji').textContent=emoji;$('#stageClear').classList.add('show')}
+function showDiscoveries(){const ul=$('#discoverList');ul.innerHTML='';allDiscoveries.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#discoverOverlay').classList.add('show')}
+document.querySelectorAll('.lens').forEach(b=>b.onclick=()=>selectLens(b.dataset.lens));
+$('#mentor').onclick=mentor;
+$('#start').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');stage=0;render()};
+$('#next').onclick=()=>{$('#stageClear').classList.remove('show');if(stage<5){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+allDiscoveries.length+'。喜名番所を、旅人・役人・地域・時間の4つの景色から見て、相手に合わせて説明できた。';$('#finish').classList.add('show')}};
+$('#retry').onclick=()=>{$('#finish').classList.remove('show');discoveries.clear();$('#discoverBtn').textContent='🔎 発見 0';stage=0;render()};
+$('#discoverBtn').onclick=showDiscoveries;$('#showCollection').onclick=showDiscoveries;$('#closeDiscover').onclick=()=>$('#discoverOverlay').classList.remove('show');
+$('#mute').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
+})();
+</script>
+</body>
+</html>
