@@ -56,8 +56,9 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
 .triB.merge{transform:translate(0,0) rotate(0) scale(1)}
 .triB polygon{fill:#e7473c22;stroke:#e7473c;stroke-width:5;stroke-linejoin:round}.triB text{fill:#bd2f35;font-weight:1000;font-size:16px}
 .featureMark{font-size:11px;font-weight:1000;fill:#17394e;pointer-events:none}
-.pickSide{stroke:transparent;stroke-width:28;stroke-linecap:round;cursor:pointer;pointer-events:stroke}
-.pickSide.on,.pickSide.pickPulse{stroke:#ffe45c;stroke-width:14;filter:drop-shadow(0 0 4px #e8a900)}
+.pickSide{stroke:transparent;stroke-width:30;stroke-linecap:round;cursor:pointer;pointer-events:stroke;transition:.16s;vector-effect:non-scaling-stroke}
+.pickSide.on,.pickSide.pickPulse{stroke:#ffe45c99;stroke-width:30;filter:drop-shadow(0 0 4px #e8a900)}
+.pickSideB,.pickAngleB{pointer-events:none;cursor:default}
 .pickAngle{fill:#fff0;stroke:#178fd055;stroke-width:3;cursor:pointer;pointer-events:all}
 .pickAngle.on,.pickAngle.pickPulse{fill:#ffe45c88;stroke:#e2a400;stroke-width:6;filter:drop-shadow(0 0 4px #ffd84d)}
 .pickHint{fill:#126e9d;font-size:10px;font-weight:1000;pointer-events:none}
@@ -188,9 +189,6 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
       <polygon points="225,210 328,93 382,210"/>
       <polygon points="225,210 277,43 382,210"/>
      </g>
-     <text x="66" y="190" class="featureMark">AB</text>
-     <text x="170" y="190" class="featureMark">BC</text>
-     <text x="120" y="125" class="featureMark">CA</text>
     </svg>
     <div id="labResult" class="labResult">辺や角をタップして「TEST！」してみよう</div>
    </div>
@@ -326,7 +324,7 @@ function renderSelection(){
   el.setAttribute('aria-pressed',on?'true':'false');
  });
  $('#lockCount').textContent=S.selected.size+' / 3';
- $('#controlTitle').textContent=S.mode==='cong'?'👆 辺・角を直接タップ（3つまで）':'👆 辺の比・角を直接タップ（3つまで）';
+ $('#controlTitle').textContent=S.mode==='cong'?'👆 辺・角を直接タップ（3つまで）':'👆 青い三角形の辺の比・角をタップ（3つまで）';
  $('#labelAB').textContent=S.mode==='cong'?'辺AB':'ABの比';
  $('#labelBC').textContent=S.mode==='cong'?'辺BC':'BCの比';
  $('#labelCA').textContent=S.mode==='cong'?'辺CA':'CAの比';
@@ -490,7 +488,7 @@ let lastTouchEnd=0;document.addEventListener('touchend',e=>{const n=Date.now();i
 document.addEventListener('visibilitychange',()=>{if(document.hidden){S.audioReset=true;stopBgm()}else if($('#gameScreen').classList.contains('active'))setTimeout(startBgm,300)});
 window.addEventListener('pageshow',()=>{S.audioReset=true;setSession()});
 
-document.querySelectorAll('#gameScreen [data-k]').forEach(el=>{
+document.querySelectorAll('#gameScreen .triA [data-k]').forEach(el=>{
  el.setAttribute('tabindex','0');el.setAttribute('role','button');
  el.setAttribute('aria-label',(labelsCong[el.dataset.k]||el.dataset.k)+'を選ぶ');
  el.addEventListener('click',()=>toggle(el.dataset.k));
