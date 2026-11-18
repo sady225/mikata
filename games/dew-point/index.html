@@ -91,6 +91,15 @@ button{font:inherit;border:0;cursor:pointer}
 @keyframes dropbob{0%,100%{transform:translateY(0)}50%{transform:translateY(12px)}}
 @keyframes scorepop{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-85%) scale(1)}}
 @keyframes burst{0%{opacity:1;transform:translate(0,0) scale(.7)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(1.2)}}
+
+.timingRing{position:absolute;left:50%;top:50%;width:205px;height:205px;transform:translate(-50%,-52%);border-radius:50%;border:8px solid #66cbe6aa;box-shadow:0 0 0 8px #ffffff45 inset;pointer-events:none;transition:border-color .16s,box-shadow .16s,transform .16s;z-index:3}
+.timingRing.soon{border-color:#ffd95f;box-shadow:0 0 0 8px #fff4a955 inset,0 0 22px #ffd95faa}
+.timingRing.now{border-color:#ff785f;box-shadow:0 0 0 8px #ffd1c955 inset,0 0 28px #ff7b67cc;animation:ringPulse .45s ease-in-out infinite alternate}
+.releaseCue{position:absolute;left:50%;top:18%;transform:translateX(-50%);z-index:9;background:#fff;color:#2d5870;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:1000;box-shadow:0 4px #2c76902c;opacity:0;transition:.16s;pointer-events:none;white-space:nowrap}
+.releaseCue.show{opacity:1}
+.releaseCue.now{background:#ffdf67;color:#774a12;font-size:17px}
+@keyframes ringPulse{from{transform:translate(-50%,-52%) scale(1)}to{transform:translate(-50%,-52%) scale(1.05)}}
+
 @media(max-height:640px){.hud{height:103px}.playfield{inset:103px 0 90px}.controls{height:90px}.cupArea{transform:translate(-50%,-50%) scale(.85)}.title{padding-top:18px}.demo{height:205px}.demoCup{font-size:90px}.logo{font-size:42px}}
 </style>
 </head>
@@ -122,7 +131,7 @@ button{font:inherit;border:0;cursor:pointer}
 
   <div id="playfield" class="playfield hide">
     <i class="skyBubble b1"></i><i class="skyBubble b2"></i><i class="skyBubble b3"></i>
-    <div id="airTag" class="airTag">☁️ ふつうの空気</div>
+    <div id="airTag" class="airTag">☁️ ふつうの空気</div><div id="releaseCue" class="releaseCue">まだ！</div><div id="timingRing" class="timingRing"></div>
     <div id="tempBadge" class="tempBadge">24.0℃</div>
     <div class="cupArea">
       <div class="cupShadow"></div>
@@ -157,7 +166,7 @@ button{font:inherit;border:0;cursor:pointer}
     </div>
     <div>
       <button id="playBtn" class="playBtn">あそぶ</button>
-      <div class="howto">① <b>おして</b> 冷やす　② <b>はなして</b> 止める<br>水が出るギリギリをねらえ！</div>
+      <div class="howto">① <b>おして</b> 冷やす　② リングが <b>赤</b> で <b>はなす</b><br>なれたらガイドなしでピタリをねらえ！</div>
       <div id="titleBest" class="titleBest"></div>
     </div>
   </div>
@@ -205,7 +214,7 @@ let best=0;
 try{best=Number(localStorage.getItem("dewHunterBest")||0)}catch(e){}
 let muted=false,audio=null;
 let playing=false,roundActive=false,holding=false,released=false,paused=false,startBest=best;
-let score=0,combo=0,lives=3,round=0,successes=0,perfects=0,brakes=0;
+let score=0,combo=0,lives=3,round=0,successes=0,perfects=0,brakes=0,guideRounds=4;
 let temp=24,velocity=0,dew=12,nextDew=14,releaseAt=0,roundStart=0,raf=0,last=performance.now();
 
 function ctx(){
@@ -248,6 +257,22 @@ function updateHud(){
   const thresholds=[1,3,6,10,15,22];
   $$("#collection span").forEach((el,i)=>el.classList.toggle("on",successes>=thresholds[i]));
 }
+function updateTimingGuide(){
+  const gap=temp-dew;
+  const ring=$("#timingRing"),cue=$("#releaseCue");
+  ring.classList.remove("soon","now");
+  cue.classList.remove("show","now");
+  if(!roundActive||released)return;
+  if(gap>3.0){
+    if(round<=guideRounds){cue.textContent="まだ！";cue.classList.add("show")}
+  }else if(gap>1.25){
+    ring.classList.add("soon");
+    if(round<=guideRounds){cue.textContent="そろそろ…";cue.classList.add("show")}
+  }else{
+    ring.classList.add("now");
+    if(round<=guideRounds){cue.textContent="いま はなす！";cue.classList.add("show","now")}
+  }
+}
 function updateVisual(){
   $("#tempBadge").textContent=temp.toFixed(1)+"℃";
   $("#mercury").style.height=clamp((temp/24)*92,9,92)+"px";
@@ -256,7 +281,8 @@ function updateVisual(){
   const fog=gap>2?0:gap>0?(.08+(2-gap)*.16):.42;
   $("#fog").style.opacity=clamp(fog,0,.65);
   const amount=gap>0?0:clamp((-gap+0.35)/4,0,1);
-  $$(".drop").forEach((el,i)=>{
+  updateTimingGuide();
+  $(".drop").forEach((el,i)=>{
     const on=amount>(i*.13);
     el.style.opacity=on?1:0;
     el.style.transform=on?"translateY(0)":"translateY(-5px)";
@@ -293,7 +319,7 @@ function startRound(first=false){
   const a=airInfo(dew);$("#airTag").textContent=a.full;
   $("#mascot").textContent="💧";
   updateHud();updateVisual();
-  if(first)say("おして冷やす<br>はなして止める！",1500);
+  if(first)say("リングが赤くなったら<br>はなしてみよう！",1600);
   else if(round%5===0)say("だんだん冷えやすく<br>なってきたぞ！",1100);
 }
 function difficulty(){
@@ -325,9 +351,9 @@ function evaluate(){
   roundActive=false;
   const err=Math.abs(temp-dew);
   let pts=0,label="",ok=true;
-  if(err<=.3){combo++;perfects++;successes++;pts=300+combo*60;label="PERFECT!";burst("✨",12);tone(880,.09,.03);setTimeout(()=>tone(1170,.1,.025),70)}
-  else if(err<=.75){combo++;successes++;pts=170+combo*35;label="GREAT!";burst("💧",9);tone(740,.09,.025)}
-  else if(err<=1.3){combo++;successes++;pts=90+combo*20;label="GOOD!";burst("💧",6);tone(620,.08,.02)}
+  if(err<=.3){combo++;perfects++;successes++;if(successes>=3)guideRounds=Math.min(guideRounds,round);pts=300+combo*60;label="PERFECT!";burst("✨",12);tone(880,.09,.03);setTimeout(()=>tone(1170,.1,.025),70)}
+  else if(err<=.75){combo++;successes++;if(successes>=3)guideRounds=Math.min(guideRounds,round);pts=170+combo*35;label="GREAT!";burst("💧",9);tone(740,.09,.025)}
+  else if(err<=1.3){combo++;successes++;if(successes>=3)guideRounds=Math.min(guideRounds,round);pts=90+combo*20;label="GOOD!";burst("💧",6);tone(620,.08,.02)}
   else{ok=false;combo=0;lives--;label=temp>dew?"はやい！":"冷やしすぎ！";tone(170,.14,.025,"sawtooth")}
   if(ok){
     score+=pts;
