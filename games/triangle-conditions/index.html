@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#e7473c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="三角形ラボ！">
+<link rel="manifest" href="./manifest.webmanifest">
+<title>三角形ラボ！ 合同・相似の条件｜アルパカすく〜る</title>
+<style>
+:root{
+ --red:#e7473c;--red2:#b62d31;--blue:#178fd0;--deep:#123f61;--yellow:#ffe45c;
+ --green:#45b96d;--purple:#7552b9;--paper:#fffdf7;--ink:#17394e;
+ --safeT:env(safe-area-inset-top,0px);--safeB:env(safe-area-inset-bottom,0px);
+ --topH:112px;--controlH:214px
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;background:#0b3551}
+body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:#fff}
+button{font:inherit;border:0}
+button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
+#app{position:relative;width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;overflow:hidden;background:linear-gradient(#43bde9 0 61%,#e8f7ef 61% 100%);touch-action:none;user-select:none;-webkit-user-select:none}
+.screen{position:absolute;inset:0;display:none}.screen.active{display:block}
+.topbar{position:absolute;z-index:40;left:0;right:0;top:0;height:calc(var(--topH) + var(--safeT));padding:calc(8px + var(--safeT)) 11px 7px;background:var(--red);box-shadow:0 5px 0 var(--red2)}
+.brand{font-size:10px;font-weight:1000;letter-spacing:.04em;white-space:nowrap}.brand b{font-size:14px;color:var(--yellow)}
+.hudrow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:5px}
+.modeBadge{background:#fff;color:var(--red);border-radius:20px;padding:7px 10px;font-size:11px;font-weight:1000;min-width:86px;text-align:center}
+.progressBox{flex:1}.progressText{display:flex;justify-content:space-between;font-size:10px;font-weight:1000}.progress{height:9px;margin-top:4px;background:#a8282d;border-radius:99px;overflow:hidden}.progress i{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--yellow),#fff4a8);border-radius:99px;transition:.35s}
+.sound{width:40px;height:40px;border-radius:50%;background:#fff;color:var(--red);font-size:18px;font-weight:1000;box-shadow:0 3px #aa2028}
+.title{background:linear-gradient(#37bce9,#167fbf 64%,#0a527f);text-align:center}
+.titleInner{padding:calc(34px + var(--safeT)) 16px calc(20px + var(--safeB))}
+.tag{display:inline-block;background:#fff;color:var(--red);padding:6px 14px;border-radius:20px;font-size:11px;font-weight:1000;box-shadow:0 3px #9cd6e8}
+.title h1{margin:13px 0 3px;font-size:clamp(38px,11vw,58px);line-height:.96;color:var(--yellow);text-shadow:0 5px 0 #0b5481;font-weight:1000;letter-spacing:-.05em}
+.title h1 small{display:block;font-size:.39em;color:#fff;margin-bottom:5px;letter-spacing:0}
+.title p{margin:7px auto 0;max-width:360px;font-size:13px;line-height:1.55;font-weight:900;color:#eaf9ff}
+.hero{position:relative;height:min(38dvh,305px);min-height:205px;max-width:420px;margin:0 auto}
+.hero svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 10px 8px #06466a66)}
+.heroNote{position:absolute;left:50%;bottom:3px;transform:translateX(-50%);background:#fff;color:var(--deep);padding:7px 12px;border-radius:18px;font-size:11px;font-weight:1000;white-space:nowrap}
+.startBtn{width:min(88%,350px);height:64px;border-radius:34px;background:var(--yellow);color:#8e3a29;font-size:23px;font-weight:1000;box-shadow:0 6px #c4942f,0 0 0 4px #fff inset;animation:bob 1.5s ease-in-out infinite}
+.startBtn:active{transform:translateY(4px);box-shadow:0 2px #c4942f,0 0 0 4px #fff inset}
+.note{margin:10px auto 0;max-width:350px;font-size:10px;font-weight:800;color:#dff6ff;line-height:1.45}
+.game{background:linear-gradient(#43bde9 0 63%,#e8f7ef 63% 100%)}
+.gameBody{position:absolute;left:0;right:0;top:calc(var(--topH) + var(--safeT) + 5px);bottom:calc(var(--controlH) + var(--safeB));padding:8px 10px}
+.mission{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.missionText{background:#fff;color:var(--deep);border-radius:18px;padding:7px 10px;box-shadow:0 4px #0a6f9c44;font-size:11px;font-weight:1000;line-height:1.35;flex:1}
+.helpBtn{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--blue);font-weight:1000;box-shadow:0 3px #0a6f9c44}
+.lab{position:relative;height:calc(100% - 47px);min-height:190px;margin-top:5px;border-radius:24px;background:linear-gradient(#fdfefe,#f5fbff);box-shadow:0 5px #0b729d44;overflow:hidden;border:3px solid #ffffff}
+.labLabel{position:absolute;z-index:8;left:50%;top:6px;transform:translateX(-50%);background:#e9f7ff;color:var(--deep);padding:4px 9px;border-radius:13px;font-size:9px;font-weight:1000;white-space:nowrap}
+.lab svg{position:absolute;left:0;right:0;top:18px;width:100%;height:calc(100% - 53px);overflow:visible}
+.triA polygon{fill:#178fd022;stroke:#178fd0;stroke-width:5;stroke-linejoin:round}.triA text{fill:#126e9d;font-weight:1000;font-size:16px}
+.triB{transform-box:fill-box;transform-origin:center;transform:translateX(112px) rotate(8deg);transition:transform .8s cubic-bezier(.2,1.25,.35,1)}
+.triB.simStart{transform:translate(165px,34px) scale(.63) rotate(-7deg)}
+.triB.merge{transform:translate(0,0) rotate(0) scale(1)}
+.triB polygon{fill:#e7473c22;stroke:#e7473c;stroke-width:5;stroke-linejoin:round}.triB text{fill:#bd2f35;font-weight:1000;font-size:16px}
+.featureMark{font-size:12px;font-weight:1000;fill:#17394e}
+.ghosts{opacity:0;transition:.25s}.ghosts.show{opacity:1}.ghosts polygon{fill:none;stroke:#9b66bd;stroke-width:3;stroke-dasharray:7 5;animation:ghost 1s ease-in-out infinite alternate}
+.ghosts polygon:nth-child(2){animation-delay:-.35s}.ghosts polygon:nth-child(3){animation-delay:-.7s}
+@keyframes ghost{to{transform:translateY(-4px)}}
+.labResult{position:absolute;z-index:9;left:10px;right:10px;bottom:7px;min-height:34px;display:flex;align-items:center;justify-content:center;border-radius:17px;background:#e9f7ff;color:var(--deep);font-size:10px;font-weight:1000;text-align:center;padding:6px 9px}
+.labResult.good{background:#dcf8d8;color:#17613b}.labResult.bad{background:#ffe1dc;color:#a52e2e;animation:shake .3s}
+.discovery{position:absolute;z-index:55;left:16px;right:16px;top:calc(var(--topH) + var(--safeT) + 55px);background:#fffdf6;color:var(--deep);border-radius:25px;padding:14px 15px;box-shadow:0 8px #0a456c55,0 0 0 5px var(--yellow);opacity:0;pointer-events:none;transform:scale(.7);transition:.25s}
+.discovery.show{opacity:1;transform:scale(1)}.discovery b{display:block;color:var(--red);font-size:15px;margin-bottom:4px}.discovery span{font-size:12px;line-height:1.45;font-weight:900}
+.controls{position:absolute;z-index:30;left:0;right:0;bottom:0;height:calc(var(--controlH) + var(--safeB));padding:9px 10px calc(10px + var(--safeB));background:#0a6da4;border-top:4px solid #fff7}
+.controlTitle{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:1000;color:#e8fbff;margin-bottom:6px}.lockCount{background:#07527f;border-radius:15px;padding:4px 8px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.feature{min-height:48px;border-radius:16px;background:#fff;color:var(--deep);font-size:12px;font-weight:1000;box-shadow:0 4px #064e79;transition:.08s;touch-action:manipulation}
+.feature:active{transform:translateY(3px);box-shadow:0 1px #064e79}.feature.on{background:var(--yellow);color:#8a431b;box-shadow:0 4px #c1912b,0 0 0 3px #fff inset}
+.actions{display:flex;gap:8px;margin-top:8px}.testBtn,.resetBtn{height:49px;border-radius:25px;font-weight:1000}
+.testBtn{flex:2;background:var(--yellow);color:#8a3b23;font-size:17px;box-shadow:0 4px #c18d2e}.resetBtn{flex:1;background:#fff;color:#176a98;font-size:13px;box-shadow:0 4px #064e79}
+.foundBar{display:flex;gap:5px;margin-top:8px}.foundSlot{flex:1;min-width:0;height:29px;border-radius:14px;background:#07527f;color:#8bc0da;display:grid;place-items:center;font-size:9px;font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}.foundSlot.done{background:#fff;color:var(--green)}
+.modal{position:absolute;z-index:80;inset:0;display:none;place-items:center;padding:18px;background:#07334fcc}.modal.show{display:grid}
+.card{width:100%;max-width:370px;max-height:88dvh;overflow:auto;background:#fff;color:var(--deep);border-radius:28px;padding:20px;text-align:center;box-shadow:0 9px #052b46,0 0 0 5px var(--yellow)}
+.card h2{margin:0 0 7px;color:var(--red);font-size:26px}.card p{font-size:12px;line-height:1.55;font-weight:800}.card ul{text-align:left;font-size:11px;line-height:1.55;font-weight:800;padding-left:19px}.card strong{color:var(--red)}
+.nextBtn,.closeBtn{width:100%;min-height:52px;border-radius:28px;font-weight:1000;margin-top:8px}.nextBtn{background:var(--yellow);color:#8c3c24;box-shadow:0 4px #c08f2d;font-size:17px}.closeBtn{background:#e9f5fb;color:#12678f;font-size:13px}
+.finalCrown{font-size:66px;animation:bob 1.4s ease-in-out infinite}
+.sources{text-align:left;margin-top:13px;padding-top:10px;border-top:2px dashed #cbe2ed}.sources h3{font-size:12px;margin:0 0 6px}.sources a{display:block;color:#146f9f;font-size:10px;line-height:1.45;margin:5px 0;word-break:break-all}
+@keyframes bob{50%{transform:translateY(-6px) scale(1.03)}}@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media(max-height:680px){
+ :root{--topH:102px;--controlH:202px}
+ .brand b{font-size:12px}.hudrow{margin-top:3px}.modeBadge{padding:5px 8px}.sound{width:36px;height:36px}
+ .gameBody{padding-top:6px}.missionText{font-size:10px;padding:6px 9px}.helpBtn{width:32px;height:32px}
+ .controls{padding-top:7px}.feature{min-height:43px;font-size:11px}.testBtn,.resetBtn{height:44px}.foundSlot{height:25px}
+}
+@media(max-height:590px){
+ :root{--topH:92px;--controlH:186px}
+ .brand{font-size:8px}.brand b{font-size:11px}.progressText{font-size:8px}.progress{height:7px}.modeBadge{font-size:9px;min-width:72px;padding:5px}.sound{width:32px;height:32px;font-size:15px}
+ .missionText{font-size:9px}.labLabel{font-size:8px}.labResult{font-size:9px}
+ .feature{min-height:38px;font-size:10px}.controlTitle{font-size:9px}.actions{margin-top:6px}.testBtn,.resetBtn{height:39px}.foundBar{margin-top:6px}.foundSlot{height:22px;font-size:8px}
+ .titleInner{padding-top:calc(18px + var(--safeT))}.title h1{font-size:38px}.title p{font-size:11px}.hero{height:31dvh;min-height:160px}.startBtn{height:54px;font-size:20px}.note{font-size:9px}
+}
+@media(max-width:350px){
+ .brand{font-size:8px}.brand b{font-size:11px}.modeBadge{min-width:72px;font-size:9px}.feature{font-size:10px;padding:2px}.labResult{left:6px;right:6px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+ <section id="titleScreen" class="screen title active">
+  <div class="titleInner">
+   <div class="tag">中2・中3 図形を「触って」理解</div>
+   <h1><small>アルパカすく〜る</small>三角形ラボ！</h1>
+   <p>何を固定すれば、三角形は1つに決まる？<br><b>合同</b>と<b>相似</b>の条件を、重ねて発見しよう。</p>
+   <div class="hero">
+    <svg viewBox="0 0 400 250" aria-hidden="true">
+     <polygon points="45,205 145,48 245,205" fill="#178fd033" stroke="#fff" stroke-width="6"/>
+     <polygon points="176,205 252,86 328,205" fill="#e7473c44" stroke="#ffe45c" stroke-width="6"/>
+     <text x="58" y="225" fill="#fff" font-size="16" font-weight="900">ぴったり重なる = 合同</text>
+     <path d="M254 72 C286 48 322 44 350 55" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-dasharray="7 7"/>
+     <text x="205" y="35" fill="#fff" font-size="15" font-weight="900">大きさを変えて重なる = 相似</text>
+    </svg>
+    <div class="heroNote">辺・角をロック → TEST！</div>
+   </div>
+   <button id="startBtn" class="startBtn">合同ラボ START！</button>
+   <div class="note">まず合同の3条件を発見。全部見つけたら相似ラボが開くよ。</div>
+  </div>
+ </section>
+
+ <section id="gameScreen" class="screen game">
+  <header class="topbar">
+   <div class="brand">アルパカすく〜る <b>「三角形ラボ！」</b></div>
+   <div class="hudrow">
+    <div id="modeBadge" class="modeBadge">合同ラボ</div>
+    <div class="progressBox">
+     <div class="progressText"><span id="progressLabel">発見 0 / 6</span><span id="chapterLabel">合同 0 / 3</span></div>
+     <div class="progress"><i id="progressFill"></i></div>
+    </div>
+    <button id="soundBtn" class="sound" aria-label="音を切り替える">🔊</button>
+   </div>
+  </header>
+
+  <main class="gameBody">
+   <div class="mission">
+    <div id="missionText" class="missionText">🔒 辺や角を選んでロック。三角形が1つに決まる条件を探そう！</div>
+    <button id="helpBtn" class="helpBtn">？</button>
+   </div>
+   <div class="lab">
+    <div id="labLabel" class="labLabel">同じ条件で作った2つの三角形</div>
+    <svg viewBox="0 0 410 255" role="img" aria-label="2つの三角形を比較する実験画面">
+     <g class="triA">
+      <polygon points="45,205 140,42 235,205"/>
+      <text x="34" y="224">A</text><text x="132" y="34">B</text><text x="238" y="224">C</text>
+     </g>
+     <g id="triB" class="triB">
+      <polygon points="45,205 140,42 235,205"/>
+      <text x="34" y="224">A′</text><text x="126" y="34">B′</text><text x="238" y="224">C′</text>
+     </g>
+     <g id="ghosts" class="ghosts">
+      <polygon points="225,210 300,62 382,210"/>
+      <polygon points="225,210 328,93 382,210"/>
+      <polygon points="225,210 277,43 382,210"/>
+     </g>
+     <text x="66" y="190" class="featureMark">AB</text>
+     <text x="170" y="190" class="featureMark">BC</text>
+     <text x="120" y="125" class="featureMark">CA</text>
+    </svg>
+    <div id="labResult" class="labResult">ロックを選んで「TEST！」してみよう</div>
+   </div>
+  </main>
+
+  <section class="controls">
+   <div class="controlTitle"><span id="controlTitle">🔒 3つまでロックできる</span><span id="lockCount" class="lockCount">0 / 3</span></div>
+   <div id="featureGrid" class="features"></div>
+   <div class="actions">
+    <button id="testBtn" class="testBtn">重ねて TEST！</button>
+    <button id="resetBtn" class="resetBtn">リセット</button>
+   </div>
+   <div id="foundBar" class="foundBar"></div>
+  </section>
+
+  <div id="discovery" class="discovery"><b id="discoveryTitle">発見！</b><span id="discoveryText"></span></div>
+
+  <div id="chapterModal" class="modal">
+   <div class="card">
+    <h2 id="chapterTitle">合同コンプリート！</h2>
+    <p id="chapterText"></p>
+    <button id="chapterNext" class="nextBtn">相似ラボへ！</button>
+   </div>
+  </div>
+
+  <div id="helpModal" class="modal">
+   <div class="card">
+    <h2>遊び方</h2>
+    <p><strong>合同</strong>は、移動するとぴったり重なる三角形。<br><strong>相似</strong>は、大きさを変えるとぴったり重なる三角形。</p>
+    <ul>
+     <li>辺・角をタップして条件をロック</li>
+     <li>合同は3つまで、相似は2〜3つの条件でTEST</li>
+     <li>条件が足りないと、違う形の「ゴースト三角形」が出る</li>
+     <li>十分なら2つの三角形が重なって、条件を発見できる</li>
+    </ul>
+    <button id="helpClose" class="closeBtn">ゲームにもどる</button>
+   </div>
+  </div>
+
+  <div id="finalModal" class="modal">
+   <div class="card">
+    <div class="finalCrown">👑</div>
+    <h2>三角形マスター！</h2>
+    <p>合同3条件＋相似3条件、全部発見！</p>
+    <div id="finalList"></div>
+    <div class="sources">
+     <h3>📚 出典・参考文献</h3>
+     <a href="https://www.mext.go.jp/component/a_menu/education/micro_detail/__icsFiles/afieldfile/2019/03/18/1387018_004.pdf" target="_blank" rel="noopener noreferrer">文部科学省「中学校学習指導要領（平成29年告示）解説 数学編」</a>
+     <a href="https://www.mext.go.jp/a_menu/shotou/clarinet/002/20221109-mxt_kouhou02-6.pdf" target="_blank" rel="noopener noreferrer">文部科学省「中学2年生 数学・展開／板書例」三角形の合同条件</a>
+    </div>
+    <button id="againBtn" class="nextBtn">もう一度あそぶ</button>
+   </div>
+  </div>
+ </section>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const featureOrder=['sAB','sBC','sCA','aA','aB','aC'];
+const labelsCong={sAB:'辺 AB',sBC:'辺 BC',sCA:'辺 CA',aA:'∠A',aB:'∠B',aC:'∠C'};
+const labelsSim={sAB:'AB の比',sBC:'BC の比',sCA:'CA の比',aA:'∠A',aB:'∠B',aC:'∠C'};
+const conditions={
+ cong:{
+  sss:{short:'3辺',full:'対応する3組の辺がそれぞれ等しい'},
+  sas:{short:'2辺＋間の角',full:'対応する2組の辺がそれぞれ等しく、その間の角が等しい'},
+  asa:{short:'1辺＋両端の角',full:'対応する1組の辺が等しく、その両端の角がそれぞれ等しい'}
+ },
+ sim:{
+  sss:{short:'3辺の比',full:'対応する3組の辺の比がすべて等しい'},
+  sas:{short:'2辺の比＋間の角',full:'対応する2組の辺の比とその間の角がそれぞれ等しい'},
+  aa:{short:'2角',full:'対応する2組の角がそれぞれ等しい'}
+ }
+};
+const S={mode:'cong',selected:new Set(),found:{cong:new Set(),sim:new Set()},muted:false,audio:null,master:null,bgmGain:null,bgmTimer:null,bgmStep:0,audioReset:false,discoveryTimer:null};
+
+function includedAngle(sideA,sideB){
+ const k=[sideA,sideB].sort().join('+');
+ return {'sAB+sAC':'aA','sAB+sBC':'aB','sAC+sBC':'aC'}[k]||null;
+}
+function endpoints(side){
+ return {sAB:['aA','aB'],sBC:['aB','aC'],sCA:['aC','aA']}[side];
+}
+function evaluate(mode,set){
+ const a=[...set],sides=a.filter(x=>x[0]==='s'),angles=a.filter(x=>x[0]==='a');
+ if(mode==='cong'){
+  if(a.length!==3)return null;
+  if(sides.length===3)return 'sss';
+  if(sides.length===2&&angles.length===1&&includedAngle(sides[0],sides[1])===angles[0])return 'sas';
+  if(sides.length===1&&angles.length===2){
+   const ep=endpoints(sides[0]);
+   if(ep.every(x=>angles.includes(x)))return 'asa';
+  }
+  return null;
+ }
+ if(sides.length===3&&a.length===3)return 'sss';
+ if(sides.length===2&&angles.length===1&&includedAngle(sides[0],sides[1])===angles[0])return 'sas';
+ if(sides.length===0&&angles.length===2)return 'aa';
+ return null;
+}
+function failReason(){
+ const a=[...S.selected],sides=a.filter(x=>x[0]==='s'),angles=a.filter(x=>x[0]==='a');
+ if(S.mode==='cong'&&angles.length===3)return '角が3つ同じでも、大きさは変えられる。これは「相似」のヒント！';
+ if(S.mode==='cong'&&sides.length===2&&angles.length===1)return 'その角は「2辺の間の角」かな？ 場所を変えて試そう。';
+ if(S.mode==='cong'&&sides.length===1&&angles.length===2)return 'その2つの角は、選んだ辺の「両端」かな？';
+ if(S.mode==='sim'&&angles.length===3)return '角3つでも同じ形だけど、実は角2つだけで十分！ 1つ外してTEST。';
+ if(S.mode==='sim'&&sides.length===2&&angles.length===1)return 'その角は「2辺の間の角」かな？ 位置を確かめよう。';
+ if(S.mode==='sim'&&sides.length===1&&angles.length>=1)return '辺の比1つだけでは形は決まらない。もう少し証拠が必要！';
+ return '同じ条件でも、違う三角形が作れた！ 別のロックを試そう。';
+}
+function renderFeatures(){
+ const labels=S.mode==='cong'?labelsCong:labelsSim;
+ $('#featureGrid').innerHTML=featureOrder.map(k=>'<button class="feature'+(S.selected.has(k)?' on':'')+'" data-k="'+k+'">'+labels[k]+'</button>').join('');
+ document.querySelectorAll('.feature').forEach(b=>b.addEventListener('click',()=>toggle(b.dataset.k)));
+ $('#lockCount').textContent=S.selected.size+' / 3';
+ $('#controlTitle').textContent=S.mode==='cong'?'🔒 3つまでロックできる':'🔒 2〜3つで形を決めよう';
+}
+function renderFound(){
+ const order=S.mode==='cong'?['sss','sas','asa']:['sss','sas','aa'];
+ $('#foundBar').innerHTML=order.map(k=>'<div class="foundSlot '+(S.found[S.mode].has(k)?'done':'')+'">'+(S.found[S.mode].has(k)?'✓ '+conditions[S.mode][k].short:'？ 未発見')+'</div>').join('');
+ const total=S.found.cong.size+S.found.sim.size;
+ $('#progressLabel').textContent='発見 '+total+' / 6';
+ $('#chapterLabel').textContent=(S.mode==='cong'?'合同 ':'相似 ')+S.found[S.mode].size+' / 3';
+ $('#progressFill').style.width=(total/6*100)+'%';
+}
+function toggle(k){
+ unlockAudio(S.audioReset);sfx('lock');
+ if(S.selected.has(k)){S.selected.delete(k)}else{
+  if(S.selected.size>=3){message('ロックは3つまで！ 1つ外してみよう','bad');return}
+  S.selected.add(k);
+ }
+ clearVisual();renderFeatures();
+}
+function clearVisual(){
+ $('#ghosts').classList.remove('show');
+ const tri=$('#triB');tri.classList.remove('merge');tri.classList.toggle('simStart',S.mode==='sim');
+ $('#labResult').className='labResult';$('#labResult').textContent='ロックを選んで「TEST！」してみよう';
+}
+function message(text,type){
+ const el=$('#labResult');el.className='labResult '+(type||'');el.textContent=text;
+}
+function showDiscovery(key){
+ clearTimeout(S.discoveryTimer);
+ $('#discoveryTitle').textContent='✨ '+conditions[S.mode][key].short+' を発見！';
+ $('#discoveryText').textContent=conditions[S.mode][key].full;
+ $('#discovery').classList.add('show');
+ S.discoveryTimer=setTimeout(()=>$('#discovery').classList.remove('show'),2400);
+}
+function test(){
+ unlockAudio(S.audioReset);
+ if(S.selected.size<2){message('まず2つ以上ロックしてみよう','bad');sfx('fail');return}
+ const key=evaluate(S.mode,S.selected);
+ if(!key){
+  $('#ghosts').classList.add('show');$('#triB').classList.remove('merge');
+  message(failReason(),'bad');sfx('fail');return;
+ }
+ $('#ghosts').classList.remove('show');$('#triB').classList.add('merge');
+ const first=!S.found[S.mode].has(key);
+ S.found[S.mode].add(key);
+ message(S.mode==='cong'?'ぴったり重なった！ この条件なら合同になる。':'大きさを変えたらぴったり！ この条件なら相似になる。','good');
+ sfx(first?'discover':'good');showDiscovery(key);renderFound();
+ if(first&&S.found[S.mode].size===3)setTimeout(chapterComplete,1500);
+}
+function chapterComplete(){
+ if(S.mode==='cong'){
+  stopBgm();sfx('chapter');
+  $('#chapterTitle').textContent='合同 3条件コンプリート！';
+  $('#chapterText').innerHTML='合同は、<b>大きさも形も同じ</b>。<br>次は「大きさが違っても同じ形」になる相似を探そう。';
+  $('#chapterNext').textContent='相似ラボへ！';
+  $('#chapterModal').classList.add('show');
+ }else{
+  stopBgm();sfx('clear');renderFinal();$('#finalModal').classList.add('show');
+ }
+}
+function switchToSimilarity(){
+ $('#chapterModal').classList.remove('show');S.mode='sim';S.selected.clear();
+ $('#modeBadge').textContent='相似ラボ';$('#missionText').innerHTML='🔍 辺の<b>比</b>や角をロック。大きさを変えて同じ形になる条件を探そう！';
+ $('#labLabel').textContent='大きさが違う2つの三角形';
+ $('#testBtn').textContent='拡大して TEST！';$('#triB').classList.add('simStart');
+ clearVisual();renderFeatures();renderFound();startBgm();
+}
+function renderFinal(){
+ const list=[...['sss','sas','asa'].map(k=>'✓ 合同：'+conditions.cong[k].full),...['sss','sas','aa'].map(k=>'✓ 相似：'+conditions.sim[k].full)];
+ $('#finalList').innerHTML='<ul>'+list.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+}
+function resetSelection(){S.selected.clear();clearVisual();renderFeatures();sfx('reset')}
+function restart(){
+ $('#finalModal').classList.remove('show');S.mode='cong';S.selected.clear();S.found={cong:new Set(),sim:new Set()};
+ $('#modeBadge').textContent='合同ラボ';$('#missionText').innerHTML='🔒 辺や角を選んでロック。三角形が1つに決まる条件を探そう！';
+ $('#labLabel').textContent='同じ条件で作った2つの三角形';$('#testBtn').textContent='重ねて TEST！';
+ clearVisual();renderFeatures();renderFound();startBgm();
+}
+
+function createAudio(){
+ const C=window.AudioContext||window.webkitAudioContext;if(!C)return false;
+ try{S.audio=new C({latencyHint:'interactive'})}catch(e){try{S.audio=new C()}catch(e2){return false}}
+ S.master=S.audio.createGain();S.master.gain.value=.82;S.master.connect(S.audio.destination);
+ S.bgmGain=S.audio.createGain();S.bgmGain.gain.value=.5;S.bgmGain.connect(S.master);return true
+}
+function setSession(){
+ if(!('audioSession' in navigator))return;
+ try{navigator.audioSession.type='playback'}catch(e){}
+}
+async function unlockAudio(reset=false){
+ if(S.muted)return false;setSession();
+ if(reset&&S.audio){try{S.audio.close()}catch(e){}S.audio=null;S.master=null;S.bgmGain=null}
+ if(!S.audio||S.audio.state==='closed'){if(!createAudio())return false}
+ try{if(S.audio.state!=='running')await S.audio.resume()}catch(e){}
+ S.audioReset=false;return S.audio&&S.audio.state==='running';
+}
+function tone(f,d=.1,g=.04,type='sine',delay=0,target=null){
+ if(S.muted||!S.audio||S.audio.state!=='running')return;
+ const t=S.audio.currentTime+delay,o=S.audio.createOscillator(),a=S.audio.createGain();
+ o.type=type;o.frequency.setValueAtTime(f,t);a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);
+ o.connect(a).connect(target||S.master);o.start(t);o.stop(t+d+.03);
+}
+function sfx(k){
+ if(k==='lock'){tone(430,.06,.035,'triangle');tone(650,.05,.02,'sine',.025)}
+ if(k==='reset'){tone(380,.08,.03,'sine')}
+ if(k==='fail'){tone(260,.12,.045,'square');tone(210,.16,.035,'sine',.09)}
+ if(k==='good'){tone(660,.1,.05,'triangle');tone(880,.15,.04,'sine',.08)}
+ if(k==='discover'){[523,659,784,1047].forEach((f,i)=>tone(f,.2,.055,'triangle',i*.07))}
+ if(k==='chapter'){[523,659,784,988,1175].forEach((f,i)=>tone(f,.25,.05,'triangle',i*.075))}
+ if(k==='clear'){[659,784,988,1175,1397,1760].forEach((f,i)=>tone(f,.34,.055,'triangle',i*.07));[523,659,784,1047].forEach((f,i)=>tone(f,.7,.028,'sine',.5+i*.02))}
+}
+function bgmStep(){
+ if(S.muted||!S.audio||S.audio.state!=='running')return;
+ const notes=[262,330,392,330,294,349,440,349],f=notes[S.bgmStep%notes.length];
+ tone(f,.32,.014,'triangle',0,S.bgmGain);tone(f/2,.4,.006,'sine',.01,S.bgmGain);S.bgmStep++;
+}
+function startBgm(){if(S.muted||S.bgmTimer)return;S.bgmStep=0;bgmStep();S.bgmTimer=setInterval(bgmStep,540)}
+function stopBgm(){if(S.bgmTimer){clearInterval(S.bgmTimer);S.bgmTimer=null}}
+async function startGame(){
+ await unlockAudio(true);sfx('discover');$('#titleScreen').classList.remove('active');$('#gameScreen').classList.add('active');renderFeatures();renderFound();clearVisual();startBgm();
+}
+['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
+document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
+let lastTouchEnd=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastTouchEnd<280)e.preventDefault();lastTouchEnd=n},{passive:false});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){S.audioReset=true;stopBgm()}else if($('#gameScreen').classList.contains('active'))setTimeout(startBgm,300)});
+window.addEventListener('pageshow',()=>{S.audioReset=true;setSession()});
+
+$('#startBtn').addEventListener('click',startGame);
+$('#testBtn').addEventListener('click',test);
+$('#resetBtn').addEventListener('click',resetSelection);
+$('#chapterNext').addEventListener('click',switchToSimilarity);
+$('#againBtn').addEventListener('click',restart);
+$('#helpBtn').addEventListener('click',()=>$('#helpModal').classList.add('show'));
+$('#helpClose').addEventListener('click',()=>$('#helpModal').classList.remove('show'));
+$('#soundBtn').addEventListener('click',async e=>{
+ S.muted=!S.muted;e.currentTarget.textContent=S.muted?'🔇':'🔊';
+ if(S.muted)stopBgm();else{await unlockAudio(true);sfx('good');startBgm()}
+});
+setSession();
+</script>
+</body>
+</html>
