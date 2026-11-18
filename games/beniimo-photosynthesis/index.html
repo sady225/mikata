@@ -19,7 +19,7 @@ button{font:inherit;border:0;cursor:pointer}
 #app{position:relative;width:100vw;max-width:430px;height:100vh;margin:auto;overflow:hidden;background:#fff;user-select:none;touch-action:none}@supports(height:100dvh){#app{height:100dvh}}
 .hud{position:absolute;z-index:30;left:0;right:0;top:0;height:calc(var(--hud-h) + var(--safe-top));background:var(--red);padding:calc(8px + var(--safe-top)) 12px 0;box-shadow:0 4px #aa0010;overflow:visible}
 .wave{position:absolute;left:0;right:0;top:calc(var(--hud-h) - 2px + var(--safe-top));height:12px;background:radial-gradient(circle at 12px 0,var(--red) 11px,transparent 12px) repeat-x;background-size:24px 12px}
-.row1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.lbl{font-size:10px;font-weight:900;letter-spacing:.12em}.score{font-size:38px;font-weight:1000;color:var(--yellow);line-height:1;text-shadow:0 3px #a8000f;font-variant-numeric:tabular-nums}.best{font-size:11px;font-weight:900;margin-top:2px}.nextBox{display:flex;gap:7px;align-items:center}.nextBubble{width:60px;height:60px;border-radius:50%;background:#fff;color:var(--deep);display:grid;place-items:center;box-shadow:0 3px #a8000f;font-size:28px;position:relative}.nextBubble:after{content:"";position:absolute;left:-5px;bottom:6px;border:8px solid transparent;border-right-color:#fff;border-left:0;transform:rotate(-20deg)}.nextText{font-size:10px;font-weight:900;line-height:1.3}.nextText b{font-size:15px;color:var(--yellow)}
+.row1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.lbl{font-size:10px;font-weight:900;letter-spacing:.12em}.score{font-size:38px;font-weight:1000;color:var(--yellow);line-height:1;text-shadow:0 3px #a8000f;font-variant-numeric:tabular-nums}.best{font-size:11px;font-weight:900;margin-top:2px}.nextBox{display:flex;gap:7px;align-items:center}.nextBubble{width:60px;height:60px;flex:0 0 auto;border-radius:50%;background:#fff;color:var(--deep);display:grid;place-items:center;box-shadow:0 3px #a8000f;font-size:28px;position:relative;white-space:nowrap;transition:width .2s,border-radius .2s,font-size .2s}.nextBubble.wide{width:78px;border-radius:30px;font-size:24px;padding:0 4px}.nextBubble:after{content:"";position:absolute;left:-5px;bottom:6px;border:8px solid transparent;border-right-color:#fff;border-left:0;transform:rotate(-20deg)}.nextText{font-size:10px;font-weight:900;line-height:1.3}.nextText b{font-size:15px;color:var(--yellow)}
 .evo{display:grid;grid-template-rows:auto 8px;row-gap:7px;margin-top:7px;padding:6px 8px 7px;background:#fffdf4;border:3px solid var(--yellow);border-radius:18px;box-shadow:0 3px #a8000f,0 0 0 2px #ffffff55 inset}.evoIcons{display:flex;align-items:center;justify-content:space-between;min-height:36px;padding:1px 3px}.evoTrack{position:relative;height:8px;background:#dfe8df;border-radius:99px;overflow:hidden;box-shadow:inset 0 1px 2px #0002}.evoTrack span{display:block;height:100%;width:0;background:linear-gradient(90deg,#55b96d,#8c4c91);border-radius:99px;transition:width .25s ease}.evoItem{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;font-size:25px;filter:grayscale(.9) opacity(.32);transition:transform .25s,filter .25s,opacity .25s,background .25s,box-shadow .25s;position:relative;line-height:1}.evoItem.on{filter:none;opacity:1}.evoItem.cur{transform:scale(1.08);background:#fff2a8;box-shadow:0 0 0 3px #ffca28,0 2px 5px #0002}.evoItem.cur:after{content:"★";position:absolute;right:-5px;top:-7px;color:#f5a000;font-size:12px;text-shadow:0 1px #fff}
 .stage{position:absolute;inset:calc(var(--hud-h) + var(--safe-top) + 10px) 0 calc(var(--bar-h) + var(--safe));overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#fffdf7 72%,#f8f4eb 100%)}.stage:before{content:"";position:absolute;left:0;right:0;bottom:84px;height:2px;background:#eadfce;box-shadow:0 -1px #fff}.tableSurface{position:absolute;z-index:1;left:0;right:0;bottom:0;height:86px;background:linear-gradient(180deg,#c98b52 0%,#ae6d37 9%,#9b5d2f 100%);border-top:7px solid #dca66e;box-shadow:inset 0 4px rgba(255,255,255,.22),0 -5px 14px rgba(95,57,29,.12)}.tableSurface:after{content:"";position:absolute;inset:18px 0 0;background:repeating-linear-gradient(4deg,rgba(89,48,20,.11) 0 2px,transparent 2px 22px);opacity:.55}
 .sun{position:absolute;z-index:4;left:22px;top:30px;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 36% 32%,#fffbd0 0 13%,#ffe56b 34%,#ffb82e 100%);box-shadow:0 0 var(--sunGlow,24px) #ffd94ee6,0 0 10px #fff7b6;transform:scale(var(--sunScale,1));transition:transform .18s,box-shadow .18s;transform-origin:center}.sunFace{position:relative;z-index:2;color:#7b4a12;font-size:16px;font-weight:1000;line-height:1;letter-spacing:.02em;text-shadow:0 1px #fff8;transform:translateY(2px);transition:transform .18s,font-size .18s}.sun.maxSmile .sunFace{font-size:18px;animation:sunSmile .55s ease-in-out infinite alternate}.sun.feedFlash{animation:sunPop .28s ease-out}.ray{position:absolute;z-index:3;pointer-events:none;left:58px;top:61px;width:190px;height:245px;clip-path:polygon(0 0,100% 14%,78% 100%,12% 88%);background:linear-gradient(100deg,rgba(255,224,74,var(--rayOpacity,.68)) 0%,rgba(255,238,127,var(--rayOpacity,.5)) 38%,rgba(255,244,176,0) 100%);filter:drop-shadow(0 0 10px #ffd84a88);transition:opacity .16s,width .16s;opacity:var(--rayOpacity,.68);mix-blend-mode:multiply}
@@ -60,7 +60,7 @@ button{font:inherit;border:0;cursor:pointer}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
 @media(max-height:700px){
  :root{--hud-h:154px;--bar-h:86px}
- .score{font-size:32px}.nextBubble{width:52px;height:52px;font-size:24px}
+ .score{font-size:32px}.nextBubble{width:52px;height:52px;font-size:24px}.nextBubble.wide{width:68px;font-size:21px}
  .evo{margin-top:5px;padding:5px 6px 6px;row-gap:5px;grid-template-rows:auto 7px}.evoIcons{min-height:31px}.evoItem{width:31px;height:31px;font-size:21px}.evoTrack{height:7px}
  .btn{height:54px;font-size:14px}.btn .ico{font-size:21px}.statusPill{font-size:10px;padding:7px 10px}
  .title{padding-top:calc(18px + var(--safe-top))}.logo span{font-size:min(13vw,60px)}.play{height:62px;font-size:25px}
@@ -68,7 +68,7 @@ button{font:inherit;border:0;cursor:pointer}
 @media(max-height:600px){
  :root{--hud-h:146px;--bar-h:82px}
  .hud{padding-left:9px;padding-right:9px}.score{font-size:29px}.best{font-size:10px}
- .nextBubble{width:48px;height:48px;font-size:22px}.nextText b{font-size:13px}
+ .nextBubble{width:48px;height:48px;font-size:22px}.nextBubble.wide{width:64px;font-size:20px}.nextText b{font-size:13px}
  .evo{margin-top:4px;padding:4px 5px 5px;row-gap:4px;grid-template-rows:auto 6px}.evoIcons{min-height:29px}.evoItem{width:29px;height:29px;font-size:20px}.evoTrack{height:6px}
  .btn{height:50px;font-size:13px}.miniGauge{bottom:-6px;height:9px}.statusPill{font-size:10px;padding:6px 8px}
  .title{padding-top:calc(12px + var(--safe-top));padding-bottom:calc(14px + var(--safe))}.how{font-size:12px;line-height:1.35}.play{height:56px;font-size:23px}
@@ -76,7 +76,7 @@ button{font:inherit;border:0;cursor:pointer}
 @media(max-width:350px){
  .hud{padding-left:8px;padding-right:8px}.row1{gap:5px}
  .evo{padding-left:5px;padding-right:5px}.evoItem{width:28px;height:28px;font-size:19px}
- .nextBox{gap:4px}.nextBubble{width:48px;height:48px;font-size:22px}
+ .nextBox{gap:4px}.nextBubble{width:48px;height:48px;font-size:22px}.nextBubble.wide{width:62px;font-size:19px}
  .bar{gap:4px;padding-left:6px;padding-right:6px}.btn{font-size:13px}.statusPill{left:6px;right:6px}
  .title{padding-left:12px;padding-right:12px}.how{font-size:12px}
 }
@@ -89,7 +89,7 @@ button{font:inherit;border:0;cursor:pointer}
  #app{max-width:560px}
  :root{--hud-h:108px;--bar-h:66px}
  .hud{padding:4px 8px 0}.row1{gap:5px}.lbl{font-size:8px}.score{font-size:25px}.best{font-size:9px}
- .nextBox{gap:4px}.nextBubble{width:38px;height:38px;font-size:19px}.nextText{font-size:8px}.nextText b{font-size:11px}
+ .nextBox{gap:4px}.nextBubble{width:38px;height:38px;font-size:19px}.nextBubble.wide{width:52px;font-size:16px}.nextText{font-size:8px}.nextText b{font-size:11px}
  .evo{margin-top:2px;padding:3px 5px 4px;row-gap:3px;grid-template-rows:auto 5px;border-width:2px;border-radius:12px}.evoIcons{min-height:24px}.evoItem{width:24px;height:24px;font-size:16px}.evoItem.cur{transform:scale(1.05)}.evoTrack{height:5px}
  .bar{padding:4px 6px calc(6px + var(--safe));gap:4px}.btn{height:42px;font-size:11px;border-radius:21px}.btn .ico{font-size:16px}.miniGauge{bottom:-5px;height:8px}
  .statusPill{font-size:9px;padding:5px 8px}
@@ -153,8 +153,8 @@ button{font:inherit;border:0;cursor:pointer}
 <script>
 (()=>{
 const $=s=>document.querySelector(s);
-const thresholds=[0,30,80,150,260],icons=['🌱','🌿','🍃','🍠','🍠🍠'];
-const S={light:.45,water:.45,co2:.45,score:0,best:0,level:1,running:false,time:60,last:0,lastBubble:0,lastTick:0,lastRush:0,highSince:null,muted:false,audio:null,master:null,bgmGain:null,bgmTimer:null,bgmStep:0,soundReady:false,needsAudioReset:false,raf:0};
+const thresholds=[0,30,80,150,260],maxTarget=330,icons=['🌱','🌿','🍃','🍠','🍠🍠'];
+const S={light:.45,water:.45,co2:.45,score:0,best:0,level:1,maxReached:false,running:false,time:60,last:0,lastBubble:0,lastTick:0,lastRush:0,highSince:null,muted:false,audio:null,master:null,bgmGain:null,bgmTimer:null,bgmStep:0,soundReady:false,needsAudioReset:false,raf:0};
 try{S.best=+localStorage.getItem('photosynthesis_best')||0}catch(e){}
 function clamp(v){return Math.max(0,Math.min(1,v))}
 function lightEff(v){return 1-Math.exp(-3*v)}
@@ -231,13 +231,17 @@ function updateGrowthVisual(){
  });
 }
 function updateHUD(){
- $('#score').textContent=fmt(S.score);$('#best').textContent='BEST '+fmt(S.best);$('#titleBest').textContent='BEST '+fmt(S.best)+' O₂';$('#growthBar').style.width=Math.min(100,S.score/260*100)+'%';
+ $('#score').textContent=fmt(S.score);$('#best').textContent='BEST '+fmt(S.best);$('#titleBest').textContent='BEST '+fmt(S.best)+' O₂';$('#growthBar').style.width=Math.min(100,S.score/maxTarget*100)+'%';
  const nl=calcLevel(S.score);if(nl>S.level){S.level=nl;levelUp()}else S.level=nl;
  document.querySelectorAll('.evoItem').forEach((el,i)=>{el.classList.toggle('on',i<S.level);el.classList.toggle('cur',i===S.level-1)});
  $('#plant').className='plantWrap lv'+S.level;$('#soilCrop').className='soilCrop lv'+S.level;updateGrowthVisual();
- if(S.level<5){const target=thresholds[S.level];$('#nextBubble').textContent=icons[S.level];$('#nextText').textContent='あと '+Math.max(0,target-Math.floor(S.score))}else{$('#nextBubble').textContent='👑';$('#nextText').textContent='MAX！'}
+ const nb=$('#nextBubble');nb.classList.remove('wide');
+ if(S.level<5){const target=thresholds[S.level],icon=icons[S.level];nb.textContent=icon;nb.classList.toggle('wide',icon==='🍠🍠');$('#nextText').textContent='あと '+Math.max(0,target-Math.floor(S.score))}
+ else if(S.score<maxTarget){nb.textContent='👑';$('#nextText').textContent='あと '+Math.max(0,maxTarget-Math.floor(S.score))}
+ else{nb.textContent='👑';$('#nextText').textContent='MAX！';if(!S.maxReached){S.maxReached=true;maxAchieved()}}
 }
-function levelUp(){sfx('level');const r=$('#rush');r.textContent=S.level===5?'MAX 光合成！':'LEVEL UP！';r.classList.remove('show');void r.offsetWidth;r.classList.add('show')}
+function levelUp(){sfx('level');const r=$('#rush');r.textContent=S.level===5?'🍠 大収穫！':'LEVEL UP！';r.classList.remove('show');void r.offsetWidth;r.classList.add('show')}
+function maxAchieved(){sfx('clear');const r=$('#rush');r.textContent='👑 MAX！';r.classList.remove('show');void r.offsetWidth;r.classList.add('show');const st=$('#statusPill');st.innerHTML='👑 <b>MAX達成！</b> 紅芋が大きく育った！'}
 function addScore(n,x=58,y=38){S.score+=n;if(S.score>S.best){S.best=Math.floor(S.score);try{localStorage.setItem('photosynthesis_best',S.best)}catch(e){}}updateHUD();const p=document.createElement('div');p.className='fly';p.textContent='+'+n+' O₂';p.style.left=x+'%';p.style.top=y+'%';$('.stage').appendChild(p);setTimeout(()=>p.remove(),700)}
 function spawnBubble(){
  const p=power(),gold=Math.random()<(.05+p*.08),b=document.createElement('div');b.className='bubble'+(gold?' gold':'');b.style.setProperty('--s',(gold?14:8)+Math.random()*(gold?8:9)+'px');b.style.left=(44+Math.random()*16)+'%';b.style.setProperty('--dur',(1.15+Math.random()*.8)+'s');b.style.setProperty('--drift',(-12+Math.random()*24)+'px');$('#bubbles').appendChild(b);
@@ -307,8 +311,8 @@ function tryFullscreen(){
  const el=document.documentElement;
  if(el.requestFullscreen){try{const p=el.requestFullscreen({navigationUI:'hide'});if(p?.catch)p.catch(()=>{})}catch(e){}}
 }
-async function start(){stopBgm();const audioOk=await unlockAudio(true);if(audioOk)sfx('start');S.light=.44;S.water=.44;S.co2=.44;S.score=0;S.level=1;S.time=60;S.running=true;S.last=performance.now();S.lastBubble=S.last;S.lastTick=S.last;S.lastRush=0;$('#wildlife').innerHTML='';$('#title').style.display='none';$('#finish').classList.remove('show');updateHUD();updateNeed();startBgm();requestAnimationFrame(loop)}
-function finish(){S.running=false;cancelAnimationFrame(S.raf);stopBgm();sfx('clear');$('#finalScore').textContent=Math.floor(S.score);let r='🌱 けんきゅういん',t='3つをバランスよく届けると、もっとO₂が増えるよ！';if(S.score>=260){r='👑 べにいもマスター';t='光・水・CO₂をそろえて、読谷の紅芋を大きく育てた！'}else if(S.score>=150){r='🍠 べにいもエース';t='足りない材料をすばやく見つけて、土の中の紅芋を育てた！'}else if(S.score>=80){r='🪴 O₂名人';t='光合成のコツがわかってきた！'}$('#rank').textContent=r;$('#resultText').textContent=t;$('#finish').classList.add('show')}
+async function start(){stopBgm();const audioOk=await unlockAudio(true);if(audioOk)sfx('start');S.light=.44;S.water=.44;S.co2=.44;S.score=0;S.level=1;S.maxReached=false;S.time=60;S.running=true;S.last=performance.now();S.lastBubble=S.last;S.lastTick=S.last;S.lastRush=0;$('#wildlife').innerHTML='';$('#title').style.display='none';$('#finish').classList.remove('show');updateHUD();updateNeed();startBgm();requestAnimationFrame(loop)}
+function finish(){S.running=false;cancelAnimationFrame(S.raf);stopBgm();sfx('clear');$('#finalScore').textContent=Math.floor(S.score);let r='🌱 けんきゅういん',t='3つをバランスよく届けると、もっとO₂が増えるよ！';if(S.score>=330){r='👑 べにいもマスター';t='MAX達成！ 光・水・CO₂をそろえて、読谷の紅芋を大きく育てた！'}else if(S.score>=260){r='🍠🍠 大収穫！';t='紅芋がたくさん育った！ あと少しでMAX！'}else if(S.score>=150){r='🍠 べにいもエース';t='足りない材料をすばやく見つけて、土の中の紅芋を育てた！'}else if(S.score>=80){r='🪴 O₂名人';t='光合成のコツがわかってきた！'}$('#rank').textContent=r;$('#resultText').textContent=t;$('#finish').classList.add('show')}
 document.querySelectorAll('.btn').forEach(btn=>btn.addEventListener('pointerdown',async e=>{e.preventDefault();if(!S.running)return;await unlockAudio(S.needsAudioReset);feed(btn.dataset.k,btn)}));
 document.addEventListener('visibilitychange',()=>{if(document.hidden){S.needsAudioReset=true;stopBgm()}else setPlaybackSession(true)});
 window.addEventListener('pageshow',()=>{setPlaybackSession(true);S.needsAudioReset=true});
