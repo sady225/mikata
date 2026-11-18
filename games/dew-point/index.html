@@ -76,6 +76,21 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 .rewardBar{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:5px}.reward{background:#ffffff18;border:1px solid #ffffff30;border-radius:10px;padding:5px;text-align:center;font-size:9px;font-weight:1000}.reward b{display:block;font-size:16px}
 .chest{font-size:44px;margin:2px 0}.rank{font-size:17px;font-weight:1000;color:#8a5a13}.spark{animation:spark .5s ease}@keyframes spark{0%{transform:scale(.7)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
 
+
+.dewMeterBox{background:#ffffff12;border:1px solid #ffffff32;border-radius:16px;padding:8px}
+.dewMeterTop{display:grid;grid-template-columns:54px 1fr 54px;align-items:center;gap:8px}
+.dewAdj{min-height:48px;border:0;border-radius:13px;background:#fff;color:#07516d;font-size:22px;font-weight:1000;box-shadow:0 4px #003e54}
+.dewAdj:active{transform:translateY(2px);box-shadow:0 2px #003e54}
+.dewDialWrap{text-align:center}
+.dewDial{width:76px;height:76px;margin:auto;border-radius:50%;background:conic-gradient(#70cfe1 0 55%,#dceff3 55% 100%);border:6px solid #edf8fa;box-shadow:0 5px #234d5c;position:relative;transform:rotate(var(--dial-rot,0deg));transition:transform .12s}
+.dewDial:after{content:"";position:absolute;left:50%;top:7px;width:5px;height:24px;background:var(--yellow);border-radius:4px;transform:translateX(-50%)}
+.dewDial:before{content:"";position:absolute;inset:19px;border-radius:50%;background:#5e7f8a}
+.dewValue{margin-top:4px;font-size:18px;font-weight:1000;color:#fff}
+.dewTrack{position:relative;height:14px;margin:10px 4px 3px;border-radius:999px;background:linear-gradient(90deg,#8bdff0,#d7f3f7 45%,#ffd781 70%,#f3a86a);overflow:hidden}
+.dewMarker{position:absolute;top:-3px;width:4px;height:20px;background:#fff;border-radius:2px;left:var(--marker,75%)}
+.dewTrackLabels{display:flex;justify-content:space-between;font-size:9px;color:#d8f4fa;font-weight:900}
+.dewHint{text-align:center;font-size:9px;color:#d8f4fa;font-weight:900;margin-top:5px}
+
 @media(max-height:650px){header{min-height:calc(78px + var(--safe-top));padding-top:calc(5px + var(--safe-top))}.game{padding-top:calc(85px + var(--safe-top))}.task{padding:5px 8px;margin-top:3px}.task h2{font-size:14px}.task p{display:none}.lab{min-height:142px}.cupWrap{height:165px;transform:translateX(-50%) scale(.84);transform-origin:bottom}.message{min-height:32px;font-size:10px}.controls{padding-top:5px}.action{min-height:42px}.check{min-height:40px;margin-top:5px}}
 @media(max-height:570px){.brand{display:none}.game{padding-top:calc(75px + var(--safe-top))}.lab{min-height:118px}.cupWrap{height:145px;transform:translateX(-50%) scale(.72)}.message{min-height:29px}.ctitle{display:none}}
 </style>
@@ -146,7 +161,7 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 
 <script>
 (()=>{
-let stage=0,muted=false,audio=null,cleared=false,temp=24,dew=12,actual=10.7,graphTemp=24,compareSeen=new Set(),viewMode='intuition',coolPower=18,dropScore=0,challengeTurns=0,stars=0;
+let stage=0,muted=false,audio=null,cleared=false,temp=24,dew=12,actual=10.7,graphTemp=24,compareSeen=new Set(),viewMode='intuition',coolPower=18,dropScore=0,challengeTurns=0,stars=0,lastDewTemp=24,dewMeterTimer=null;
 const satData=[[0,4.8],[4,6.4],[8,8.3],[12,10.7],[16,13.6],[20,17.3],[24,21.8],[28,27.2]];
 const discoveries=new Set();
 const all=[
@@ -170,9 +185,9 @@ const all=[
 const defs=[
 {label:'🌡️ ぼうけん 1 / 8',mission:'MISSION 01',title:'さいしょの水をえらぼう！',text:'まず実験のスタート条件を選ぼう。'},
 {label:'🧊 ひやせ！ 2 / 8',mission:'MISSION 02',title:'コップをひやして水滴を出そう！',text:'今回は難しいタイミング判定なし。水滴が出たら自動で止まる。'},
-{label:'💧 1てき発見 3 / 8',mission:'MISSION 03',title:'最初の1てきは何℃だった？',text:'観察した温度から選ぼう。'},
+{label:'🌡️ 1てきメーター 3 / 8',mission:'MISSION 03',title:'つまみを動かして最初の1てきを探そう',text:'ボタンで答えるんじゃない。温度を少しずつ変えて境目を見つけよう。'},
 {label:'🕵️ しずくの正体 4 / 8',mission:'MISSION 04',title:'この水滴、どこから来た？',text:'間違った仮説を選んでも、理由を見てすぐやり直せる。'},
-{label:'🎯 露点ハント 5 / 8',mission:'MISSION 05',title:'最初の1てきをピタリと当てろ！',text:'露点は「たくさん出る温度」ではなく、最初に水滴が出始める温度。'},
+{label:'🎯 露点ハント 5 / 8',mission:'MISSION 05',title:'温度メーターで露点をピタリと探せ！',text:'つまみを回して、水滴が出る直前と直後の境目を見つけよう。'},
 {label:'💦 水滴チャレンジ 6 / 8',mission:'MISSION 06',title:'3回勝負！ 水滴をいっぱい集めよう！',text:'温度を下げるほど水滴は増える。でも冷やすほどパワーを使う。グラフは攻略ヒント。'},
 {label:'☁️ 比較 7 / 8',mission:'MISSION 07',title:'空気が変わると水滴ゲームも変わる？',text:'乾いた空気と湿った空気を比べよう。'},
 {label:'🧪 応用 8 / 8',mission:'MISSION 08',title:'水滴モンスターを止めろ！',text:'ゲームで見つけた仕組みを生活の結露へつなげよう。'}
@@ -238,15 +253,13 @@ function render(){
  if(stage<4||stage===7)showNormal();else if(stage===4||stage===5||stage===6)showGraph();
  if(stage===0){dew=12;temp=24;setTemp(24);$('#room').textContent='室温 24℃';$('#ctitle').textContent='おすすめを選べばすぐ進める';control.innerHTML='<div class="actions"><button class="action" data-s="cold">冷たい水<br>8℃</button><button class="action" data-s="room">室温に近い水<br>24℃</button><button class="action" data-s="hot">温かい水<br>40℃</button></div>';control.querySelectorAll('.action').forEach(b=>b.onclick=()=>setup(b.dataset.s));setMsg('間違えても止まらない。室温に近い水が測りやすいよ。','warn')}
  if(stage===1){temp=24;setTemp(24);$('#room').textContent='室温 24℃｜露点は約12℃';$('#ctitle').textContent='「少しずつ」で水滴まで自動停止';control.innerHTML='<div class="actions two"><button id="little" class="action">🧊 少しずつ冷やす</button><button id="lot" class="action">🧊🧊 一気に冷やす</button></div>';$('#little').onclick=coolSlow;$('#lot').onclick=coolFast;setMsg('今回は何度も押さなくてOK。1回で結果まで進む。','good')}
- if(stage===2){setTemp(12);$('#drops').style.opacity=.5;$('#ctitle').textContent='露点を1つ選ぶだけ';control.innerHTML='<div class="actions"><button class="action" data-d="24">24℃</button><button class="action" data-d="12">12℃</button><button class="action" data-d="6">6℃</button></div>';control.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>chooseDew(+b.dataset.d));setMsg('最初に水滴が現れたのは12℃だった。','good')}
+ if(stage===2){dew=12;lastDewTemp=24;setTemp(24);$('#drops').style.opacity=0;$('#ctitle').textContent='温度つまみを動かして、最初の1てきを探そう';renderDewMeter(false);setMsg('ゆっくり冷やしてみよう。水滴が「はじめて」出る温度を探すよ。','warn');mascotSay('つまみを少しずつ回してね！','🧐')}
  if(stage===3){setTemp(11);$('#drops').style.opacity=.8;$('#ctitle').textContent='水滴の出どころを選ぶ';control.innerHTML='<div class="actions"><button class="action" data-h="inside">中の水が<br>しみ出す</button><button class="action" data-h="air">空気中の<br>水蒸気</button><button class="action" data-h="metal">金属が<br>水を作る</button></div>';control.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>sourceChoice(b.dataset.h));setMsg('違っても理由が出る。正解を選べばすぐ次へ。','warn')}
  if(stage===4){
-  actual=10.7;graphTemp=24;viewMode='graph';drawBaseGraph();setViewMode('graph');
-  $('#ctitle').textContent='最初の1滴が出る温度を1つ選ぶ';
-  control.innerHTML='<div class="actions"><button class="action" data-hunt="20">20℃</button><button class="action" data-hunt="12">12℃</button><button class="action" data-hunt="8">8℃</button></div><button id="huntHint" class="check">📈 グラフのヒントを見る</button>';
-  control.querySelectorAll('[data-hunt]').forEach(b=>b.onclick=()=>dewHunt(+b.dataset.hunt));
-  $('#huntHint').onclick=()=>{setViewMode('graph');updateGraph(12,actual);setMsg('実際の水蒸気量10.7 g/m³と青い曲線が交わる温度を見る。','good')};
-  setMsg('「最初の1滴」が出るギリギリを狙おう。','warn')
+  actual=10.7;dew=12;lastDewTemp=24;graphTemp=24;viewMode='intuition';drawBaseGraph();setViewMode('intuition');
+  $('#ctitle').textContent='メーターで露点をピタリと探す';
+  renderDewMeter(true);
+  setMsg('今度は攻略マップも使えるよ。境目を自分の手で探そう。','warn');mascotSay('最初の1てき、どこかな？','💧')
 }
 if(stage===5){
   actual=10.7;graphTemp=24;coolPower=18;dropScore=0;challengeTurns=0;viewMode='intuition';drawBaseGraph();setViewMode('intuition');
@@ -264,6 +277,57 @@ if(stage===6){
 }
 if(stage===7){dew=12;temp=8;setTemp(8);$('#drops').style.opacity=1;$('#room').textContent='室温24℃｜表面8℃｜露点12℃';$('#ctitle').textContent='結露を減らす操作を選ぶ';control.innerHTML='<div class="actions"><button class="action" data-t="wipe">水滴を<br>拭くだけ</button><button class="action" data-t="cold">もっと<br>冷やす</button><button class="action" data-t="warm">表面を<br>12℃より高く</button></div>';control.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>trouble(b.dataset.t));setMsg('正解は1つ。間違えてもすぐ試し直せる。','warn')}
 }
+
+function renderDewMeter(withHint){
+ if(dewMeterTimer){clearTimeout(dewMeterTimer);dewMeterTimer=null}
+ control.innerHTML='<div class="dewMeterBox"><div class="dewMeterTop"><button id="dewMinus" class="dewAdj">−</button><div class="dewDialWrap"><div id="dewDial" class="dewDial"></div><div id="dewValue" class="dewValue">24.0℃</div></div><button id="dewPlus" class="dewAdj">＋</button></div><input id="dewRange" class="slider" type="range" min="4" max="24" step="0.5" value="24" aria-label="温度を調節"><div class="dewTrack"><span id="dewMarker" class="dewMarker"></span></div><div class="dewTrackLabels"><span>🥶 4℃</span><span>ひやす</span><span>24℃ ☀️</span></div><div class="dewHint">ゆっくり下げて「最初の1てき」が出る境目を探そう</div>'+(withHint?'<button id="dewMapHint" class="check">🗺️ ひみつの攻略マップ</button>':'')+'</div>';
+ const r=$('#dewRange');
+ const apply=v=>{
+   const nv=Math.max(4,Math.min(24,Math.round(v*2)/2));
+   lastDewTemp=temp;
+   r.value=nv;
+   setTemp(nv);
+   const ratio=(24-nv)/20;
+   $('#dewDial').style.setProperty('--dial-rot',(-120+ratio*240)+'deg');
+   $('#dewValue').textContent=nv.toFixed(1)+'℃';
+   $('#dewMarker').style.setProperty('--marker',((nv-4)/20*100)+'%');
+   dewMeterReact(nv);
+ };
+ r.oninput=e=>apply(+e.target.value);
+ $('#dewMinus').onclick=()=>apply(+r.value-0.5);
+ $('#dewPlus').onclick=()=>apply(+r.value+0.5);
+ if(withHint)$('#dewMapHint').onclick=()=>{setViewMode('graph');updateGraph(temp,actual);setMsg('青い曲線とオレンジ横線が交わるあたりが「最初の1てき」の温度。','good');mascotSay('地図を見てもいいし、見なくても探せるよ！','🗺️')};
+ apply(24);
+}
+function dewMeterReact(v){
+ const diff=v-dew;
+ if(diff>3){
+   $('#drops').style.opacity=0;
+   setMsg(v.toFixed(1)+'℃。まだ水滴は出ない。少しずつ冷やそう。','warn');
+   mascotSay('まだかな〜？','💧');
+ }else if(diff>0.5){
+   $('#drops').style.opacity=0;
+   setMsg('もう少し！ コップの表面をよく見て。','warn');
+   mascotSay('なんだか近い気がする！','👀');
+ }else if(diff>=-0.5){
+   $('#drops').style.opacity=.28;
+   setMsg('ポツ…！ 最初の1てきが出た！','good');
+   mascotSay('でたー！ ここが境目！','🤩');
+   if(!cleared&&!dewMeterTimer){
+     dewMeterTimer=setTimeout(()=>{
+       add('dew');add('first-drop-game');add('intersection');
+       clearStage('露点を自分で見つけた！','温度を少しずつ下げて、最初の水滴が現れた境目が露点。今回は約12℃。','💧');
+       dewMeterTimer=null;
+     },550);
+   }
+ }else{
+   if(dewMeterTimer){clearTimeout(dewMeterTimer);dewMeterTimer=null}
+   $('#drops').style.opacity=Math.min(1,.35+Math.abs(diff)*.15);
+   add('overshoot');add('overflow');
+   setMsg(v.toFixed(1)+'℃。水滴は増えたけど、露点を通り過ぎたよ。少し温度を上げて境目へ戻ろう。','bad');
+   mascotSay('冷やしすぎ！ ちょっと戻してみよう','🥶');
+ }
+}
 function setup(x){if(x==='room'){add('room');setTemp(24);clearStage('準備OK！','室温に近い水から始めると、水滴が現れ始める温度までの変化を追いやすい。','🌡️')}else if(x==='cold'){add('overshoot');setTemp(8);setMsg('もう露点より低い。最初から水滴が出ていて「始まり」が分かりにくい。次は24℃を押してみよう。','bad')}else{setTemp(30);setMsg('温かすぎると露点まで遠い。24℃くらいから始めると楽。','warn')}}
 function coolSlow(){add('slow');add('dew');setTemp(12);$('#drops').style.opacity=.45;setMsg('12℃で最初の水滴が現れた！ 自動でここで停止。','good');setTimeout(()=>clearStage('水滴の始まりを発見！','少しずつ冷やすと、「現れ始め」を見つけやすい。今回は12℃が露点。','💧'),450)}
 function coolFast(){add('overshoot');setTemp(6);$('#drops').style.opacity=1;setMsg('6℃まで一気に下がって水滴だらけ。露点12℃を通り過ぎた！','bad');setTimeout(()=>{setMsg('失敗も発見。次へ進めるよう12℃の露点を確認しよう。','warn');clearStage('冷やしすぎを体験！','一気に冷やすと、最初の水滴が出る温度を取り逃がしやすい。露点は約12℃だった。','🧊')},650)}
@@ -272,12 +336,6 @@ function sourceChoice(x){if(x==='air'){add('air');clearStage('水滴の正体を
 function graphMessage(){const cap=sat(graphTemp),dp=invSat(actual);if(Math.abs(graphTemp-dp)<=1){setMsg('横線と曲線がぶつかった！ ここが「満タン」になる境目。','good')}else if(graphTemp>dp){setMsg('定員 '+cap.toFixed(1)+' > 実際 '+actual.toFixed(1)+'。まだ水蒸気を入れておける。','warn')}else{add('overflow');setMsg('定員 '+cap.toFixed(1)+' < 実際 '+actual.toFixed(1)+'。入りきらない分が水滴になる！','bad')}}
 function checkGraphDew(){const dp=invSat(actual);if(Math.abs(graphTemp-dp)<=1){add('intersection');clearStage('グラフで露点を発見！','横線「実際の水蒸気量 10.7 g/m³」と飽和水蒸気量の曲線が交わる12℃が露点。','📈')}else{setMsg('交点を探そう。紫の縦線を、オレンジ横線と青い曲線が出会う場所へ。','warn')}}
 
-function dewHunt(t){
- updateGraph(t,actual);
- if(t===12){add('first-drop-game');add('intersection');setMsg('12℃で最初の1滴！ ここが露点。','good');clearStage('露点ヒット！','露点は、水滴がたくさん出る温度ではなく「最初に凝結が始まる温度」。今回は12℃。','🎯')}
- else if(t>12)setMsg(t+'℃ではまだ定員が実際の水蒸気量より大きい。水滴は出ない。','warn');
- else{add('overflow');setMsg(t+'℃では水滴は出るけど、もう露点を通り過ぎている。','bad')}
-}
 function renderDropChallenge(){
  showGraph();setViewMode(viewMode);drawBaseGraph();updateGraph(24,actual);
  $('#taskTitle').textContent='3回勝負！ しずくを集めて宝箱をランクアップ！';
