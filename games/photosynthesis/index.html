@@ -43,6 +43,9 @@ button{font:inherit;border:0;cursor:pointer}
 @keyframes rise{0%{transform:translate(0,0) scale(.7);opacity:.4}20%{opacity:1}100%{transform:translate(var(--drift,8px),-210px) scale(1.2);opacity:0}}
 .statusPill{position:absolute;z-index:40;left:10px;right:10px;bottom:calc(96px + var(--safe));top:auto;max-width:none;text-align:center;background:#fffffff5;color:var(--deep);font-size:11px;font-weight:1000;padding:8px 12px;border-radius:15px;box-shadow:0 3px #0d4f9c22,0 6px 14px rgba(13,79,156,.14);pointer-events:none}.statusPill:after{content:"";position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);border:8px solid transparent;border-top-color:#fffffff5;border-bottom:0}.statusPill b{color:var(--red)}
 .rush{position:absolute;z-index:15;left:50%;top:27%;transform:translate(-50%,-50%) scale(.6);font-size:21px;font-weight:1000;color:#fff;text-shadow:0 3px var(--deep),0 0 12px #fff;opacity:0;white-space:nowrap}.rush.show{animation:rush .8s ease-out}@keyframes rush{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}100%{opacity:0;transform:translate(-50%,-68%) scale(1)}}
+.wildlife{position:absolute;z-index:14;inset:0;overflow:hidden;pointer-events:none}.butterfly,.bird{position:absolute;will-change:transform,opacity;filter:drop-shadow(0 2px 2px #ffffffaa)}.butterfly{left:-12%;font-size:22px;animation:butterflyFlight var(--dur,2.6s) ease-in-out forwards;animation-delay:var(--delay,0s);opacity:0}.butterfly.b2{font-size:19px}.butterfly.b3{font-size:24px}.bird{left:-18%;top:14%;font-size:30px;animation:birdFlight 2.4s ease-in-out .45s forwards;opacity:0}
+@keyframes butterflyFlight{0%{transform:translate(0,30px) rotate(-10deg) scale(.7);opacity:0}12%{opacity:1}28%{transform:translate(28vw,-8px) rotate(8deg) scale(1)}48%{transform:translate(50vw,24px) rotate(-7deg) scale(.92)}70%{transform:translate(72vw,-12px) rotate(9deg) scale(1.05)}100%{transform:translate(118vw,12px) rotate(-6deg) scale(.8);opacity:0}}
+@keyframes birdFlight{0%{transform:translateX(0) translateY(8px) scale(.85);opacity:0}12%{opacity:1}45%{transform:translateX(54vw) translateY(-16px) scale(1)}72%{transform:translateX(86vw) translateY(4px) scale(.95)}100%{transform:translateX(128vw) translateY(-12px) scale(.8);opacity:0}}
 .fly{position:absolute;z-index:20;font-size:13px;font-weight:1000;color:#fff;text-shadow:0 2px var(--deep);pointer-events:none;animation:fly .65s ease-out forwards}@keyframes fly{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-48px) scale(1.3)}}
 .bar{position:absolute;z-index:35;left:0;right:0;bottom:0;height:92px;padding:7px 10px calc(10px + var(--safe));display:flex;gap:7px;align-items:center;background:linear-gradient(transparent,#0c76b4aa)}
 .btn{position:relative;flex:1;height:60px;border-radius:30px;background:#fff;color:var(--red);font-weight:1000;font-size:15px;box-shadow:0 4px var(--blue),0 0 0 3px var(--yellow) inset;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05}.btn:active{transform:translateY(3px);box-shadow:0 1px var(--blue),0 0 0 3px var(--yellow) inset}.btn .ico{font-size:23px}.miniGauge{position:absolute;left:12px;right:12px;bottom:-7px;height:10px;background:#d9e6ea;border-radius:99px;overflow:hidden;border:2px solid #fff}.miniGauge span{display:block;height:100%;background:var(--green);width:50%;transition:.1s}.need{animation:need .45s ease-in-out infinite alternate;background:var(--yellow)}@keyframes need{to{transform:scale(1.06)}}
@@ -82,6 +85,7 @@ button{font:inherit;border:0;cursor:pointer}
    <div id="soil" class="soil"><div id="soilMoisture" class="soilMoisture"></div><i class="rootLine r1"></i><i class="rootLine r2"></i><i class="rootLine r3"></i><div id="soilCrop" class="soilCrop lv1"><div class="tuber t1"></div><div class="tuber t2"></div><div class="tuber t3"></div></div></div>
    <div id="bubbles" class="bubbles"></div>
   </div>
+  <div id="wildlife" class="wildlife"></div>
   <div id="rush" class="rush">O₂ ラッシュ！</div>
  </main>
 
@@ -106,7 +110,7 @@ button{font:inherit;border:0;cursor:pointer}
 (()=>{
 const $=s=>document.querySelector(s);
 const thresholds=[0,30,80,150,260],icons=['🌱','🌿','🍃','🍠','🍠🍠'];
-const S={light:.45,water:.45,co2:.45,score:0,best:0,level:1,running:false,time:60,last:0,lastBubble:0,lastTick:0,highSince:null,muted:false,audio:null,master:null,soundReady:false,raf:0};
+const S={light:.45,water:.45,co2:.45,score:0,best:0,level:1,running:false,time:60,last:0,lastBubble:0,lastTick:0,lastRush:0,highSince:null,muted:false,audio:null,master:null,soundReady:false,raf:0};
 try{S.best=+localStorage.getItem('photosynthesis_best')||0}catch(e){}
 function clamp(v){return Math.max(0,Math.min(1,v))}
 function lightEff(v){return 1-Math.exp(-3*v)}
@@ -186,7 +190,20 @@ function animateSupply(k){
   const b=$('#co2Bottle'),s=$('#co2Stream');b.classList.add('puff');s.classList.add('burst');setTimeout(()=>{b.classList.remove('puff');s.classList.remove('burst')},650);
  }
 }
-function feed(k,btn){S[k]=clamp(S[k]+.115);sfx('tap');animateSupply(k);btn.style.transform='translateY(3px) scale(1.03)';setTimeout(()=>btn.style.transform='',90);updateNeed();if(power()>.85&&Math.random()<.25){const r=$('#rush');r.textContent='O₂ ラッシュ！';r.classList.remove('show');void r.offsetWidth;r.classList.add('show')}}
+function spawnWildlife(){
+ const w=$('#wildlife');w.innerHTML='';
+ const specs=[['butterfly b1','🦋','46%','2.45s','0s'],['butterfly b2','🦋','58%','2.8s','.16s'],['butterfly b3','🦋','37%','2.6s','.32s']];
+ specs.forEach(([cls,emoji,top,dur,delay])=>{const el=document.createElement('span');el.className=cls;el.textContent=emoji;el.style.top=top;el.style.setProperty('--dur',dur);el.style.setProperty('--delay',delay);w.appendChild(el)});
+ const bird=document.createElement('span');bird.className='bird';bird.textContent='🐦';w.appendChild(bird);
+ setTimeout(()=>{if(w)w.innerHTML=''},3600);
+}
+function triggerRush(){
+ const now=performance.now();if(now-S.lastRush<2600)return;S.lastRush=now;
+ const r=$('#rush');r.textContent='O₂ ラッシュ！';r.classList.remove('show');void r.offsetWidth;r.classList.add('show');
+ spawnWildlife();sfx('bonus');
+ const st=$('#statusPill');st.innerHTML='🌿 <b>げんきな畑！</b> 生きものがやってきた！';
+}
+function feed(k,btn){S[k]=clamp(S[k]+.115);sfx('tap');animateSupply(k);btn.style.transform='translateY(3px) scale(1.03)';setTimeout(()=>btn.style.transform='',90);updateNeed();if(power()>.85&&Math.random()<.25)triggerRush()}
 function decay(dt){S.light=clamp(S.light-dt*.021);S.water=clamp(S.water-dt*.018);S.co2=clamp(S.co2-dt*.023)}
 function loop(ts){
  if(!S.running)return;const dt=Math.min(.05,(ts-S.last)/1000||0);S.last=ts;S.time-=dt;decay(dt);updateNeed();
@@ -194,7 +211,7 @@ function loop(ts){
  if(ts-S.lastTick>1000){const gain=Math.max(0,Math.round(p*(S.level*.65+1)));if(gain)addScore(gain,77,18);S.lastTick=ts}
  if(S.time<=0){finish();return}S.raf=requestAnimationFrame(loop)
 }
-async function start(){await unlockAudio();S.light=.44;S.water=.44;S.co2=.44;S.score=0;S.level=1;S.time=60;S.running=true;S.last=performance.now();S.lastBubble=S.last;S.lastTick=S.last;$('#title').style.display='none';$('#finish').classList.remove('show');updateHUD();updateNeed();requestAnimationFrame(loop)}
+async function start(){await unlockAudio();S.light=.44;S.water=.44;S.co2=.44;S.score=0;S.level=1;S.time=60;S.running=true;S.last=performance.now();S.lastBubble=S.last;S.lastTick=S.last;S.lastRush=0;$('#wildlife').innerHTML='';$('#title').style.display='none';$('#finish').classList.remove('show');updateHUD();updateNeed();requestAnimationFrame(loop)}
 function finish(){S.running=false;cancelAnimationFrame(S.raf);sfx('end');$('#finalScore').textContent=Math.floor(S.score);let r='🌱 けんきゅういん',t='3つをバランスよく届けると、もっとO₂が増えるよ！';if(S.score>=260){r='👑 べにいもマスター';t='光・水・CO₂をそろえて、読谷の紅芋を大きく育てた！'}else if(S.score>=150){r='🍠 べにいもエース';t='足りない材料をすばやく見つけて、土の中の紅芋を育てた！'}else if(S.score>=80){r='🪴 O₂名人';t='光合成のコツがわかってきた！'}$('#rank').textContent=r;$('#resultText').textContent=t;$('#finish').classList.add('show')}
 document.querySelectorAll('.btn').forEach(btn=>btn.addEventListener('pointerdown',async e=>{e.preventDefault();if(!S.running)return;await unlockAudio();feed(btn.dataset.k,btn)}));
 document.addEventListener('pointerdown',()=>unlockAudio(),{once:true,capture:true});
