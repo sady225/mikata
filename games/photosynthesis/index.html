@@ -257,11 +257,17 @@ function loop(ts){
  if(ts-S.lastTick>1000){const gain=Math.max(0,Math.round(p*(S.level*.65+1)));if(gain)addScore(gain,77,18);S.lastTick=ts}
  if(S.time<=0){finish();return}S.raf=requestAnimationFrame(loop)
 }
+function tryFullscreen(){
+ const standalone=window.matchMedia?.('(display-mode: standalone)').matches||window.navigator.standalone===true;
+ if(standalone||document.fullscreenElement)return;
+ const el=document.documentElement;
+ if(el.requestFullscreen){try{const p=el.requestFullscreen({navigationUI:'hide'});if(p?.catch)p.catch(()=>{})}catch(e){}}
+}
 async function start(){await unlockAudio();S.light=.44;S.water=.44;S.co2=.44;S.score=0;S.level=1;S.time=60;S.running=true;S.last=performance.now();S.lastBubble=S.last;S.lastTick=S.last;S.lastRush=0;$('#wildlife').innerHTML='';$('#title').style.display='none';$('#finish').classList.remove('show');updateHUD();updateNeed();requestAnimationFrame(loop)}
 function finish(){S.running=false;cancelAnimationFrame(S.raf);sfx('end');$('#finalScore').textContent=Math.floor(S.score);let r='🌱 けんきゅういん',t='3つをバランスよく届けると、もっとO₂が増えるよ！';if(S.score>=260){r='👑 べにいもマスター';t='光・水・CO₂をそろえて、読谷の紅芋を大きく育てた！'}else if(S.score>=150){r='🍠 べにいもエース';t='足りない材料をすばやく見つけて、土の中の紅芋を育てた！'}else if(S.score>=80){r='🪴 O₂名人';t='光合成のコツがわかってきた！'}$('#rank').textContent=r;$('#resultText').textContent=t;$('#finish').classList.add('show')}
 document.querySelectorAll('.btn').forEach(btn=>btn.addEventListener('pointerdown',async e=>{e.preventDefault();if(!S.running)return;await unlockAudio();feed(btn.dataset.k,btn)}));
 document.addEventListener('pointerdown',()=>unlockAudio(),{once:true,capture:true});
-$('#play').addEventListener('click',start);$('#retry').addEventListener('click',start);$('#mute').addEventListener('click',async e=>{S.muted=!S.muted;e.currentTarget.textContent=S.muted?'🔇':'🔊';if(!S.muted){await unlockAudio();sfx('level')}});
+$('#play').addEventListener('click',()=>{tryFullscreen();start()});$('#retry').addEventListener('click',start);$('#mute').addEventListener('click',async e=>{S.muted=!S.muted;e.currentTarget.textContent=S.muted?'🔇':'🔊';if(!S.muted){await unlockAudio();sfx('level')}});
 updateHUD();updateNeed();
 })();
 </script>
