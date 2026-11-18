@@ -204,7 +204,7 @@ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 let best=0;
 try{best=Number(localStorage.getItem("dewHunterBest")||0)}catch(e){}
 let muted=false,audio=null;
-let playing=false,roundActive=false,holding=false,released=false;
+let playing=false,roundActive=false,holding=false,released=false,paused=false,startBest=best;
 let score=0,combo=0,lives=3,round=0,successes=0,perfects=0,brakes=0;
 let temp=24,velocity=0,dew=12,nextDew=14,releaseAt=0,roundStart=0,raf=0,last=performance.now();
 
@@ -282,7 +282,7 @@ function burst(symbol="💧",count=9){
   }
 }
 function startGame(){
-  score=0;combo=0;lives=3;round=0;successes=0;perfects=0;brakes=0;
+  score=0;combo=0;lives=3;round=0;successes=0;perfects=0;brakes=0;paused=false;startBest=best;
   playing=true;nextDew=chooseDew();setScreen(true);updateHud();startRound(true);
 }
 function startRound(first=false){
@@ -349,13 +349,13 @@ function gameOver(){
   playing=false;roundActive=false;holding=false;released=false;
   $("#finalScore").innerHTML=score.toLocaleString()+"<small>てん</small>";
   $("#resultLine").textContent="ピタリ成功 "+successes+"回 / PERFECT "+perfects+"回";
-  const wasBest=score>0&&score>=best;
+  const wasBest=score>startBest;
   $("#newBest").classList.toggle("hide",!wasBest);
   $("#over").classList.remove("hide");
 }
 function loop(now){
   const dt=Math.min(.04,(now-last)/1000);last=now;
-  if(playing&&roundActive){
+  if(playing&&roundActive&&!paused){
     if(holding){
       const target=-4.25*difficulty();
       velocity+=(target-velocity)*Math.min(1,dt*4.2);
@@ -370,8 +370,8 @@ function loop(now){
   }
   raf=requestAnimationFrame(loop);
 }
-function openMemo(){$("#memoModal").classList.remove("hide")}
-function closeMemo(){$("#memoModal").classList.add("hide")}
+function openMemo(){paused=true;$("#memoModal").classList.remove("hide")}
+function closeMemo(){$("#memoModal").classList.add("hide");paused=false}
 
 $("#playBtn").addEventListener("click",()=>{ctx();startGame()});
 $("#again").addEventListener("click",()=>{$("#over").classList.add("hide");startGame()});
