@@ -119,17 +119,46 @@ function r1(){
 }
 function r2(){
  cells=1;measured=false;baseBench(cells);$('#controlTitle').textContent='組数を選び、赤黒プローブを当てて測る';
- controls.innerHTML='<div class="choices"><button class="choice" data-n="1">1組</button><button class="choice" data-n="2">2組</button><button class="choice" data-n="3">3組</button><button class="choice" data-n="6">6組</button></div><button id="measure" class="check">📟 赤黒プローブを当てて測る</button>';
- const redraw=()=>{baseBench(cells);const b=lab.querySelector('.bench');b.insertAdjacentHTML('beforeend','<div class="probe" style="left:128px;bottom:116px"></div><div class="probe black" style="left:112px;bottom:78px"></div>')};
- controls.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{cells=+b.dataset.n;redraw();setMsg(cells+'組をセット。赤を10円側＋、黒を1円側−に当てて測ろう。','warn')});
- $('#measure').onclick=()=>{
-   const v=voltageFor(cells);if(v===null){setMsg('この組数は授業の実測記録がないため表示しない。','warn');return}
-   $('#meterDisplay').textContent=v.toFixed(1)+' V';measured=true;
-   if(cells===1)add('one');if(cells===3)add('three');if(cells===6)add('six');
-   setMsg(cells+'組の実測記録：'+v.toFixed(1)+' V。','good');
-   if(cells===6)clear('6組を測定できた！','那覇工業高校の2026年11月12日の記録では、11円電池6組で2.4Vを測定し、LED1個の点灯を確認した。','📟')
+ controls.innerHTML='<div class="choices"><button class="choice" data-n="1">1組</button><button class="choice" data-n="2">2組</button><button class="choice" data-n="3">3組</button><button class="choice" data-n="6">6組</button></div><button id="measure" class="check">📟 赤黒プローブを当てて測る</button><button id="confirm6" class="small" disabled style="opacity:.45">✅ 2.4Vを確認した</button>';
+ const redraw=()=>{
+   baseBench(cells);
+   measured=false;
+   const b=lab.querySelector('.bench');
+   b.insertAdjacentHTML('beforeend','<div class="probe" style="left:128px;bottom:116px"></div><div class="probe black" style="left:112px;bottom:78px"></div>');
+   $('#confirm6').disabled=true;
+   $('#confirm6').style.opacity='.45';
  };
- redraw();setMsg('1組→2組→3組→6組と変えて、電圧を測ってみよう。','warn')
+ controls.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{
+   cells=+b.dataset.n;
+   redraw();
+   setMsg(cells+'組をセット。赤を10円側＋、黒を1円側−に当てて測ろう。','warn')
+ });
+ $('#measure').onclick=()=>{
+   const v=voltageFor(cells);
+   if(v===null){setMsg('この組数は授業の実測記録がないため表示しない。','warn');return}
+   $('#meterDisplay').textContent=v.toFixed(1)+' V';
+   measured=true;
+   if(cells===1)add('one');
+   if(cells===3)add('three');
+   if(cells===6){
+     add('six');
+     $('#confirm6').disabled=false;
+     $('#confirm6').style.opacity='1';
+     setMsg('6組で 2.4 V。表示を確認してから次へ進もう。','good');
+   }else{
+     $('#confirm6').disabled=true;
+     $('#confirm6').style.opacity='.45';
+     setMsg(cells+'組の実測記録：'+v.toFixed(1)+' V。次は組数を変えて測ってみよう。','good');
+   }
+ };
+ $('#confirm6').onclick=()=>{
+   if(!(cells===6&&measured&&$('#meterDisplay').textContent.trim()==='2.4 V')){
+     setMsg('先に6組を選び、テスターで2.4Vを表示させよう。','warn');return
+   }
+   clear('6組を測定できた！','那覇工業高校の2026年11月12日の記録では、11円電池6組で2.4Vを測定し、LED1個の点灯を確認した。','📟')
+ };
+ redraw();
+ setMsg('1組→2組→3組→6組と変えて、電圧を測ってみよう。','warn')
 }
 function r3(){
  cells=6;ledReverse=true;wet=true;pressure=80;baseBench(6);updateLed();$('#controlTitle').textContent='LEDの向きを切り替えて観察';
