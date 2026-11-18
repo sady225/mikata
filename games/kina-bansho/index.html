@@ -42,13 +42,21 @@ button{font:inherit;border:0;cursor:pointer}
 .station span{font-size:25px;line-height:1}.station small{font-size:8px;color:#7b695b}.station.inn{left:3%;top:12%}.station.admin{right:3%;top:12%}.station.guide{left:3%;bottom:12%}.station.exchange{right:3%;bottom:12%}
 .station.locked{filter:grayscale(1);opacity:.35}.station.hot{animation:stationPulse .55s ease-in-out infinite alternate;box-shadow:0 0 0 5px #fff3a5,0 4px rgba(70,45,28,.18)}
 .walker{position:absolute;z-index:18;width:48px;height:48px;border-radius:50%;background:#fff;border:3px solid #f0c95f;display:grid;place-items:center;font-size:28px;box-shadow:0 4px rgba(55,36,24,.22);pointer-events:none}
-.queueLane{position:absolute;left:16%;right:16%;top:6%;bottom:10%}
-.guest{position:absolute;left:50%;width:84%;min-height:66px;transform:translateX(-50%);border-radius:24px;background:#fff;color:#523f32;border:4px solid #e2bb65;box-shadow:0 5px rgba(64,42,28,.2);display:grid;grid-template-columns:52px 1fr 42px;align-items:center;padding:7px 8px;transition:transform .12s,opacity .2s,filter .2s}
-.guest.current{border-color:#ffe162;box-shadow:0 0 0 5px #fff7a5,0 5px rgba(64,42,28,.2);animation:currentPulse .8s ease-in-out infinite alternate}
-.guest .face{font-size:32px;text-align:center}
-.guest .need{font-size:13px;font-weight:900}.guest .sub{font-size:9px;font-weight:800;color:#7d6b60;margin-top:2px}
-.patience{width:12px;height:46px;border-radius:10px;background:#eadfd2;overflow:hidden;justify-self:end;display:flex;align-items:flex-end}.patience i{display:block;width:100%;height:100%;background:#67a96c;transition:height .1s,background .1s}
-.guest.bad{animation:shake .22s linear 2;border-color:#d95c55}.guest.done{opacity:0;transform:translateX(-50%) scale(.5) translateY(-25px)}
+.queueLane{position:absolute;inset:0;z-index:12;pointer-events:none}
+.queueDots{position:absolute;left:4%;bottom:7%;width:58%;height:32%;border-bottom:4px dashed rgba(102,76,48,.35);transform:rotate(-18deg);transform-origin:left bottom;pointer-events:none}
+.guest{position:absolute;width:54px;height:76px;transition:left .42s cubic-bezier(.2,.8,.25,1),top .42s cubic-bezier(.2,.8,.25,1),opacity .2s,transform .2s;pointer-events:none;filter:drop-shadow(0 3px 2px rgba(55,35,22,.22))}
+.guest .personHead{position:absolute;left:17px;top:9px;width:22px;height:22px;border-radius:50%;background:#d7a47e;border:2px solid #fff}
+.guest .personBody{position:absolute;left:13px;top:29px;width:30px;height:34px;border-radius:10px 10px 7px 7px;background:var(--shirt,#69899a);border:2px solid #fff}
+.guest .legs{position:absolute;left:17px;top:59px;width:22px;height:14px;border-left:6px solid #4c423b;border-right:6px solid #4c423b}
+.guest .prop{position:absolute;right:-5px;top:27px;width:28px;height:28px;border-radius:50%;background:#fff7d8;border:3px solid #e0b757;display:grid;place-items:center;font-size:17px}
+.guest .frontMark{display:none;position:absolute;left:50%;top:-18px;transform:translateX(-50%);white-space:nowrap;background:#ffe16b;color:#62472f;border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900;box-shadow:0 2px #a97d2f}
+.guest.current .frontMark{display:block}
+.guest.current{animation:personBounce .75s ease-in-out infinite alternate}
+.guest.current .prop{box-shadow:0 0 0 4px #fff3a5}
+.patience{position:absolute;left:8px;right:8px;bottom:-6px;height:6px;border-radius:6px;background:#e7ddd0;overflow:hidden}.patience i{display:block;height:100%;width:100%;background:#67a96c;transition:width .1s,background .1s}
+.guest.bad{animation:personShake .18s linear 2}.guest.done{opacity:0;transform:scale(.6) translateY(-20px)}
+@keyframes personBounce{to{transform:translateY(-4px)}}
+@keyframes personShake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .pop{position:absolute;z-index:25;pointer-events:none;font-size:24px;font-weight:900;color:#fff;text-shadow:0 3px #6d3c2a;animation:popUp .9s ease-out forwards}
 .combo{position:absolute;z-index:20;left:50%;top:37%;transform:translateX(-50%);font-size:31px;font-weight:900;color:#ffe162;text-shadow:0 4px #75402b;pointer-events:none;animation:comboPop .8s ease-out forwards}
 .toast{position:absolute;z-index:24;left:50%;top:57%;transform:translateX(-50%);max-width:82%;background:#fff;color:#604735;border-radius:22px;padding:10px 15px;font-size:12px;font-weight:900;text-align:center;box-shadow:0 5px rgba(70,45,28,.2);animation:toastIn .2s ease-out}
@@ -116,7 +124,7 @@ button{font:inherit;border:0;cursor:pointer}
     <div class="station admin locked" data-station="admin"><span>📜</span>村の仕事<small>800点で開く</small></div>
     <div class="station guide locked" data-station="guide"><span>🪧</span>道案内<small>2200点で開く</small></div>
     <div class="station exchange locked" data-station="exchange"><span>🤝</span>交流<small>4500点で開く</small></div>
-    <div class="queueLane" id="queueLane"></div>
+    <div class="queueDots"></div><div class="queueLane" id="queueLane"></div>
     <div class="specials">
       <button class="special" id="tea"><span>🍵</span>お茶<div class="badgeCount" id="teaCount">2</div></button>
       <button class="special" id="help"><span>👴</span>お助け<div class="badgeCount" id="helpCount">1</div></button>
@@ -137,7 +145,7 @@ button{font:inherit;border:0;cursor:pointer}
     </div>
     <div class="titleBot">
       <button class="play" id="play">スタート！</button>
-      <div class="howto"><b>人が歩いてやってくる！</b><br>困りごとを見て、行き先ボタンを押そう。正解ならその場所へ歩いていくよ！</div>
+      <div class="howto"><b>人が道から歩いてきて行列になる！</b><br>先頭の人が持つマークを見て、ぴったりの行き先ボタンを押そう。</div>
     </div>
   </div>
 
@@ -146,7 +154,7 @@ button{font:inherit;border:0;cursor:pointer}
       <div class="clearIcon">😵</div>
       <h2>行列がいっぱい！</h2>
       <div class="bigScore" id="overScore">0</div>
-      <div class="smallLine">人の動きと行き先を見ながら、番所の仕事をうまく分けよう！</div>
+      <div class="smallLine">行列が長くなる前に、先頭の人からどんどん案内しよう！</div>
       <button class="again" id="again">もう一回！</button>
     </div>
   </div>
@@ -165,10 +173,10 @@ button{font:inherit;border:0;cursor:pointer}
 <script>
 (()=>{
 const TYPES={
-  inn:{icon:'🥾',face:'🥾',need:'休みたい！',sub:'長い道でつかれた旅人',pts:90,station:'🛏️'},
-  admin:{icon:'📜',face:'👨',need:'村の相談です',sub:'村の仕事をたずねる人',pts:130,station:'📜'},
-  guide:{icon:'🧭',face:'🧭',need:'道を教えて！',sub:'北へ行きたい旅人',pts:170,station:'🪧'},
-  exchange:{icon:'🗣️',face:'🗣️',need:'話を伝えたい！',sub:'人や情報をつなぐ人',pts:210,station:'🤝'}
+  inn:{icon:'🛏️',face:'🙂',prop:'🛏️',shirt:'#66899b',pts:90,station:'🛏️'},
+  admin:{icon:'📜',face:'🙂',prop:'📜',shirt:'#8c6553',pts:130,station:'📜'},
+  guide:{icon:'🪧',face:'🙂',prop:'🪧',shirt:'#6f855f',pts:170,station:'🪧'},
+  exchange:{icon:'🤝',face:'🙂',prop:'🤝',shirt:'#8a7295',pts:210,station:'🤝'}
 };
 const unlocks=[0,800,2200,4500];
 const clearScoreTarget=7000;
@@ -238,7 +246,7 @@ function stationCenter(type){
 }
 function animateWalker(g,type,successMove=true){
  const fr=field.getBoundingClientRect(),gr=g.el.getBoundingClientRect(),to=stationCenter(type);
- const w=document.createElement('div');w.className='walker';w.textContent=TYPES[g.type].face;
+ const w=document.createElement('div');w.className='walker';w.textContent='🚶';
  w.style.left=(gr.left-fr.left+8)+'px';w.style.top=(gr.top-fr.top+10)+'px';field.appendChild(w);
  const sx=parseFloat(w.style.left),sy=parseFloat(w.style.top),tx=to.x-24,ty=to.y-24;
  const frames=successMove
@@ -247,27 +255,31 @@ function animateWalker(g,type,successMove=true){
  const a=w.animate(frames,{duration:successMove?650:430,easing:'ease-in-out'});
  a.onfinish=()=>w.remove()
 }
+const QUEUE_POS=[
+ {left:48,top:43},{left:38,top:54},{left:28,top:64},
+ {left:19,top:73},{left:11,top:81},{left:4,top:88}
+];
 function spawnGuest(){
  if(state.guests.length>=6){gameOver();return}
  const type=state.guests.length===0?'inn':state.nextType;
  state.nextType=randomType();
- const data=TYPES[type],g={id:state.uid++,type,pat:1,y:-82,el:null};
- const el=document.createElement('div');el.className='guest';el.dataset.id=g.id;
- el.innerHTML='<div class="face">'+data.face+'</div><div><div class="need">'+data.need+'</div><div class="sub">'+data.sub+'</div></div><div class="patience"><i></i></div>';
- lane.appendChild(el);g.el=el;state.guests.push(g);layoutGuests();updateCurrent();updateHUD();
- el.animate([{opacity:0,transform:'translateX(75%) translateY(-18px) scale(.8)'},{opacity:1,transform:'translateX(-50%) translateY(0) scale(1)'}],{duration:520,easing:'cubic-bezier(.2,.9,.3,1)'})
+ const data=TYPES[type],g={id:state.uid++,type,pat:1,el:null};
+ const el=document.createElement('div');el.className='guest';el.dataset.id=g.id;el.style.setProperty('--shirt',data.shirt);
+ el.innerHTML='<div class="frontMark">せんとう</div><div class="personHead"></div><div class="personBody"></div><div class="legs"></div><div class="prop">'+data.prop+'</div><div class="patience"><i></i></div>';
+ lane.appendChild(el);g.el=el;state.guests.push(g);
+ const start={left:92,top:88};el.style.left=start.left+'%';el.style.top=start.top+'%';
+ requestAnimationFrame(()=>{layoutGuests();updateCurrent();updateHUD()})
 }
 function layoutGuests(){
- state.guests.forEach((g,i)=>{g.y=i*76+8;g.el.style.top=g.y+'px'})
+ state.guests.forEach((g,i)=>{
+   const p=QUEUE_POS[Math.min(i,QUEUE_POS.length-1)];
+   g.el.style.left=p.left+'%';g.el.style.top=p.top+'%'
+ })
 }
 function updateCurrent(){
  state.guests.forEach((g,i)=>g.el.classList.toggle('current',i===0));
  const front=state.guests[0];
- document.querySelectorAll('.station').forEach(s=>s.classList.toggle('hot',!!front&&s.dataset.station===front.type));
- if(front&&state.score<350){
-   const label={inn:'🛏️ 宿へ行きたいみたい！',admin:'📜 村の仕事かな？',guide:'🪧 道案内かな？',exchange:'🤝 交流かな？'}[front.type];
-   toast(label)
- }
+ document.querySelectorAll('.station').forEach(s=>s.classList.toggle('hot',!!front&&s.dataset.station===front.type&&state.score<350));
 }
 function service(type){
  if(state.screen!=='play'||!state.guests.length)return;
@@ -294,7 +306,7 @@ function success(g){
 }
 function fail(g){
  state.combo=0;g.pat=Math.max(0,g.pat-.22);g.el.classList.add('bad');setTimeout(()=>g.el.classList.remove('bad'),420);
- const i=g.el.querySelector('.patience i');i.style.height=(g.pat*100)+'%';i.style.background=g.pat<.35?'#d85c53':'#e7a94c';
+ const i=g.el.querySelector('.patience i');i.style.width=(g.pat*100)+'%';i.style.background=g.pat<.35?'#d85c53':'#e7a94c';
  const pressed=window.__lastServiceType||g.type;animateWalker(g,pressed,false);
  addPop('ちがう！',g.el,'#ff6b61');sfxBad();
  if(g.pat<=0){toast('お客さんが帰っちゃった！');g.el.classList.add('done');state.guests.shift();setTimeout(()=>g.el.remove(),180);layoutGuests();updateCurrent()}
@@ -305,7 +317,7 @@ function addPop(txt,el,color='#fff'){
 function addCombo(txt){const d=document.createElement('div');d.className='combo';d.textContent=txt;$('#field').appendChild(d);setTimeout(()=>d.remove(),850)}
 function toast(txt){const old=$('#field .toast');if(old)old.remove();const d=document.createElement('div');d.className='toast';d.textContent=txt;$('#field').appendChild(d);setTimeout(()=>d.remove(),1500)}
 function useTea(){
- if(state.screen!=='play'||state.tea<=0)return;state.tea--;state.slowed=6;state.guests.forEach(g=>{g.pat=Math.min(1,g.pat+.35);const i=g.el.querySelector('.patience i');i.style.height=(g.pat*100)+'%';i.style.background='#67a96c'});toast('🍵 お茶でみんなニコニコ！');tone(1100,.14,.03);updateHUD();$('#teaCount').textContent=state.tea
+ if(state.screen!=='play'||state.tea<=0)return;state.tea--;state.slowed=6;state.guests.forEach(g=>{g.pat=Math.min(1,g.pat+.35);const i=g.el.querySelector('.patience i');i.style.width=(g.pat*100)+'%';i.style.background='#67a96c'});toast('🍵 お茶でみんなニコニコ！');tone(1100,.14,.03);updateHUD();$('#teaCount').textContent=state.tea
 }
 function useHelp(){
  if(state.screen!=='play'||state.help<=0||!state.guests.length)return;state.help--;toast('👴 おじぃが手伝ってくれた！');success(state.guests[0]);$('#helpCount').textContent=state.help;updateHUD()
@@ -325,7 +337,7 @@ function loop(now){
    if(state.spawnT<=0){spawnGuest();state.spawnT=state.spawnGap}
    state.guests.forEach((g,i)=>{
      const drain=(.038+state.score/160000)*dt*slow*(1+i*.08);g.pat=Math.max(0,g.pat-drain);
-     const bar=g.el.querySelector('.patience i');bar.style.height=(g.pat*100)+'%';bar.style.background=g.pat<.3?'#d85c53':g.pat<.55?'#e7aa4b':'#67a96c';
+     const bar=g.el.querySelector('.patience i');bar.style.width=(g.pat*100)+'%';bar.style.background=g.pat<.3?'#d85c53':g.pat<.55?'#e7aa4b':'#67a96c';
    });
    if(state.guests[0]&&state.guests[0].pat<=0){const g=state.guests[0];g.el.classList.add('done');state.guests.shift();setTimeout(()=>g.el.remove(),180);layoutGuests();updateCurrent();state.combo=0}
    if(state.guests.length>=6)gameOver()
