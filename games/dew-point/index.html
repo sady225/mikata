@@ -384,13 +384,6 @@ $("#sound").addEventListener("click",()=>{muted=!muted;$("#sound").textContent=m
 $("#infoBtn").addEventListener("click",openMemo);
 $("#memoClose").addEventListener("click",closeMemo);
 $("#brake").addEventListener("click",useBrake);
-const cool=$("#coolBtn");
-cool.addEventListener("pointerdown",pressCool);
-cool.addEventListener("pointerup",releaseCool);
-cool.addEventListener("pointercancel",releaseCool);
-cool.addEventListener("pointerleave",e=>{if(holding)releaseCool(e)});
-cool.addEventListener("keydown",e=>{if((e.key===" "||e.key==="Enter")&&!holding)pressCool(e)});
-cool.addEventListener("keyup",e=>{if(e.key===" "||e.key==="Enter")releaseCool(e)});
 
 $("#titleBest").textContent=best?"BEST "+best.toLocaleString()+" てん":"";
 last=performance.now();raf=requestAnimationFrame(loop);
