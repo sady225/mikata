@@ -78,7 +78,7 @@ button{font:inherit;border:0;cursor:pointer}
 
  <section id="title" class="title">
   <div><div class="chip">光合成ゲーム</div><h1 class="logo"><span>光合成ラボ！</span><small>O₂をたくさんつくろう</small></h1></div>
-  <div class="titleBot"><div class="how">☀️ 光 ＋ 💧 水 ＋ ☁️ 二酸化炭素<br>3つがそろうと <b>🌿光合成 → 🫧酸素！</b><br>ボタンを押して材料を届けよう！</div><button id="play" class="play">スタート！</button><div id="titleBest" class="bestLine">BEST 0000 O₂</div></div>
+  <div class="titleBot"><div class="how">☀️ 光 ＋ 💧 水 ＋ ☁️ 二酸化炭素<br>3つを使って、植物は <b>🫧酸素</b> をつくる！<br><span>このはたらきを「光合成」というよ。</span><br>ボタンを押して材料を届けよう！</div><button id="play" class="play">スタート！</button><div id="titleBest" class="bestLine">BEST 0000 O₂</div></div>
  </section>
 
  <section id="finish" class="modal"><div class="card"><h2>けんきゅう おわり！</h2><div id="finalScore" class="bigScore">0</div><div>O₂</div><div id="rank" class="rank">🌱 けんきゅういん</div><p id="resultText">3つをバランスよく届けよう！</p><button id="retry" class="retry">もういちど！</button></div></section>
@@ -130,7 +130,7 @@ function updateNeed(){
  $('#co2Stream').style.opacity=(.12+S.co2*.68).toFixed(2);
 
  const p=power(),st=$('#statusPill');
- if(p>.83)st.innerHTML='🔥 <b>光合成チャンス！</b> O₂がいっぱい！';
+ if(p>.83)st.innerHTML='🔥 <b>3つそろった！</b> 酸素がどんどんできる！';
  else st.innerHTML='もっと必要：<b>'+weakest[2]+'</b>';
 }
 function animateSupply(k){
