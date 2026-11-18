@@ -1,0 +1,19 @@
+{
+  "id": "/games/triangle-conditions/",
+  "name": "アルパカすく〜る 三角形ラボ！",
+  "short_name": "三角形ラボ",
+  "start_url": "/games/triangle-conditions/",
+  "scope": "/games/triangle-conditions/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e7473c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./triangle-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
