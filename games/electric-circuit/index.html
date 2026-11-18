@@ -27,10 +27,10 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 <header><div class="headrow"><div><div class="brand">子どものMIKATA｜理科体験ゲーム</div><div id="stageLabel" class="stage">💡 1 / 7</div></div><div class="hud"><button id="discoverBtn">🔬 発見 0</button><button id="muteBtn">🔊</button></div></div><div class="progress"><span id="progress"></span></div></header>
 
 <main id="title" class="screen title active">
-<div class="badge">失敗すると発見が増える</div><h1>電気回路の<br><em>ひみつ！</em></h1>
-<p class="subtitle">つなぐ・外す・比べる。自分で実験して見つけよう。</p>
+<div class="badge">危険を見抜いて止める</div><h1>電気回路の<br><em>ひみつ！</em></h1>
+<p class="subtitle">正常？ 故障？ 危険？ 回路を見て、安全な行動を選ぼう。</p>
 <div class="hero" aria-hidden="true"><svg viewBox="0 0 300 230"><rect x="28" y="85" width="78" height="90" rx="16" fill="#f6f7f2" stroke="#315762" stroke-width="6"/><text x="67" y="133" text-anchor="middle" font-size="32" font-weight="1000" fill="#d7554c">＋</text><circle cx="228" cy="120" r="42" fill="#fff6bd" stroke="#315762" stroke-width="7"/><path d="M107 100 C145 60 190 64 210 91" fill="none" stroke="#334f5a" stroke-width="8" stroke-linecap="round"/><path d="M106 160 C145 200 194 183 212 150" fill="none" stroke="#334f5a" stroke-width="8" stroke-linecap="round"/></svg></div>
-<button id="startBtn" class="start">7つの実験を始める</button><small>正解だけを選ぶゲームではありません。失敗したときの変化も観察すると発見が増えます。</small>
+<button id="startBtn" class="start">安全パトロール開始</button><small>危険なら止める、故障なら直す、正常ならむやみに触らない。ゲーム内の疑似実験で安全判断を身につけます。</small>
 </main>
 
 <main id="game" class="screen game">
@@ -49,32 +49,32 @@ header{position:absolute;z-index:20;top:0;left:0;right:0;min-height:calc(88px + 
 
 <script>
 (()=>{
-let stage=0,muted=false,audio=null,drag=null,lastWire=null,trial={};
+let stage=0,muted=false,audio=null,drag=null,trial={},scenarioIndex=0,patrolCorrect=0;
 const discoveries=new Set();
 const all=[
-['open','回路が途中で切れている → 電球は光らない'],
-['closed','回路が一周つながる → 電球が光る'],
-['repair','外れた接点を直す → 電球が再点灯する'],
-['switch','途中を外す → 電流が止まる'],
-['series','直列回路 → 電流の道は1本'],
+['normal','正常な閉回路 → むやみに止めなくてよい'],
+['open','回路が切れている → 光らないが、短絡とは違う'],
+['short','＋極と−極の直接接続 → 危険なので止める'],
+['stop-short','危険な導線を外す → 短絡を止められる'],
+['repair','接点の外れ → 原因を見つけて修理できる'],
 ['series-break','直列回路 → 1か所切れると両方消える'],
-['parallel','並列回路 → 電流の道が枝分かれする'],
-['parallel-one','並列回路 → 片方を外しても他方は光る'],
-['compare','直列と並列では、切れたときの結果が違う'],
-['short','乾電池の＋極と−極を導線だけで直結するのは危険'],
-['trouble','トラブルは「どこで回路が切れたか」を調べる']
+['parallel-one','並列回路 → 片方が切れても他方は光る'],
+['dont-touch','正常な回路 → 不要な操作をしないことも安全'],
+['diagnose','「危険」「故障」「正常」を現象から見分ける'],
+['patrol','危険を止め、故障を直し、正常を守れた']
 ];
 const defs=[
-['💡 1 / 7','MISSION 01','電球を光らせよう','導線の端をドラッグして、乾電池→電球→乾電池の道を完成させよう。'],
-['🛠️ 2 / 7','MISSION 02','なぜ光らない？','最初からどこか1か所が外れている。原因を探して修理しよう。'],
-['🧪 3 / 7','MISSION 03','わざと失敗してみよう','光っている回路の途中を外し、消える理由を観察しよう。'],
-['🔗 4 / 7','MISSION 04','直列回路を作ろう','2個の電球が1本の道に入るよう、自分で導線をつなごう。'],
-['🌿 5 / 7','MISSION 05','並列回路を作ろう','分岐点を使って、電球AとBを別々の枝につなごう。'],
-['⚖️ 6 / 7','MISSION 06','直列と並列、何が違う？','同じ「電球Aの枝を外す」で起こる違いを比べよう。'],
-['🚨 7 / 7','MISSION 07','電気回路トラブル研究所','消えた・枝だけ消えた・危険な接続。原因を見て立て直そう。']
+['🛑 1 / 7','MISSION 01','危険なつなぎ方を止めろ！','＋極と−極を直接つなごうとしている。危険だと思ったら接続前に止めよう。'],
+['⚠️ 2 / 7','MISSION 02','短絡を解除しよう','危険な導線がすでにつながっている。どの導線を外せば安全になる？'],
+['✅ 3 / 7','MISSION 03','正常な回路を守ろう','電球が正しく光っている。止める必要がある？ まず状態を判断しよう。'],
+['🛠️ 4 / 7','MISSION 04','「危険」と「故障」を見分けよう','電球が消えている。でも、消えている＝危険とは限らない。原因を調べよう。'],
+['🔗 5 / 7','MISSION 05','直列回路の故障診断','2個とも消えた。危険だから止める？ それとも回路が切れている？'],
+['🌿 6 / 7','MISSION 06','並列回路の故障診断','片方だけ消えた。どの枝に問題があるか見つけて安全に直そう。'],
+['🚨 7 / 7','MISSION 07','電気安全パトロール','正常・故障・危険がランダムに出る。3件連続で正しく対応しよう。']
 ];
 const $=s=>document.querySelector(s),lab=$('#lab'),controls=$('#controls'),msg=$('#message');
-let model={nodes:{},wires:[],bulbs:[],mode:null};
+let model={nodes:{},wires:[],bulbs:[]};
+
 function setMsg(t,c='warn'){msg.className='message '+c;msg.querySelector('span:last-child').textContent=t}
 function add(id){if(!discoveries.has(id)){discoveries.add(id);$('#discoverBtn').textContent='🔬 発見 '+discoveries.size;tone(720,.05,.018)}}
 function ensureAudio(){if(muted)return null;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}if(audio&&audio.state==='suspended')audio.resume();return audio}
@@ -83,7 +83,7 @@ function bulb(x,y,id){return '<g id="'+id+'"><circle class="glow" cx="'+x+'" cy=
 function battery(x,y){return '<g id="battery"><rect x="'+x+'" y="'+y+'" width="70" height="95" rx="14" fill="#f8f8f2" stroke="#315762" stroke-width="6"/><text x="'+(x+24)+'" y="'+(y+54)+'" font-size="27" font-weight="1000" fill="#d7554c">＋</text><text x="'+(x+49)+'" y="'+(y+54)+'" font-size="25" font-weight="1000" fill="#315762">−</text></g>'}
 function term(id,x,y){model.nodes[id]={x,y};return '<circle id="n-'+id+'" class="terminal" cx="'+x+'" cy="'+y+'" r="11"/>'}
 function reset(two=false,j=false){
- model={nodes:{},wires:[],bulbs:[],mode:null};
+ model={nodes:{},wires:[],bulbs:[]};
  let s=battery(25,102)+term('bp',52,102)+term('bm',89,117)+bulb(298,two?82:145,'b1')+term('b1a',284,two?126:189)+term('b1b',312,two?126:189);
  model.bulbs.push({id:'b1',a:'b1a',b:'b1b'});
  if(two){s+=bulb(298,205,'b2')+term('b2a',284,249)+term('b2b',312,249);model.bulbs.push({id:'b2',a:'b2a',b:'b2b'})}
@@ -92,9 +92,9 @@ function reset(two=false,j=false){
  Object.keys(model.nodes).forEach(id=>$('#n-'+id).addEventListener('pointerdown',e=>startNewWire(e,id)));
  renderWires();evaluate()
 }
-function addWire(from,to=null,free=null){model.wires.push({from,to,free:free||offsetFree(from)});lastWire=model.wires.length-1;renderWires();evaluate();return lastWire}
 function offsetFree(from){const p=model.nodes[from];return{x:Math.min(360,p.x+(p.x<180?75:-75)),y:Math.max(28,Math.min(272,p.y+(Math.random()>.5?35:-35)))}}
-function startNewWire(e,from){e.preventDefault();addWire(from,null);drag={i:model.wires.length-1,pid:e.pointerId};$('#svg').setPointerCapture?.(e.pointerId)}
+function addWire(from,to=null,free=null){model.wires.push({from,to,free:free||offsetFree(from)});renderWires();evaluate();return model.wires.length-1}
+function startNewWire(e,from){e.preventDefault();const i=addWire(from,null);drag={i,pid:e.pointerId};$('#svg').setPointerCapture?.(e.pointerId)}
 function startEndDrag(e,i){e.preventDefault();e.stopPropagation();model.wires[i].to=null;drag={i,pid:e.pointerId};$('#svg').setPointerCapture?.(e.pointerId);evaluate()}
 function nearest(x,y,except){let best=null,bd=999;for(const [id,p] of Object.entries(model.nodes)){if(id===except)continue;const d=Math.hypot(x-p.x,y-p.y);if(d<34&&d<bd){best=id;bd=d}}return best}
 function renderWires(){
@@ -106,25 +106,22 @@ function renderWires(){
  })
 }
 lab.addEventListener('pointermove',e=>{if(!drag)return;const s=$('#svg'),p=s.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());model.wires[drag.i].free={x:q.x,y:q.y};renderWires()});
-lab.addEventListener('pointerup',e=>{if(!drag)return;const s=$('#svg'),p=s.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());const w=model.wires[drag.i],target=nearest(q.x,q.y,w.from);if(target){w.to=target;w.free={...model.nodes[target]};tone(360,.04,.02)}drag=null;renderWires();const st=evaluate();if(st.short){add('short');const bad=lastWire;setTimeout(()=>$('#dangerOverlay').classList.add('show'),100);trial.shortWire=bad}});
-function wireGraph(includeBulbs=true){
+lab.addEventListener('pointerup',e=>{if(!drag)return;const s=$('#svg'),p=s.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(s.getScreenCTM().inverse());const w=model.wires[drag.i],target=nearest(q.x,q.y,w.from);if(target){w.to=target;w.free={...model.nodes[target]};tone(360,.04,.02)}drag=null;renderWires();evaluate()});
+
+function graph(includeBulbs=true){
  const g={};Object.keys(model.nodes).forEach(k=>g[k]=[]);
  model.wires.filter(w=>w.to).forEach(w=>{g[w.from].push(w.to);g[w.to].push(w.from)});
  if(includeBulbs)model.bulbs.forEach(b=>{g[b.a].push(b.b);g[b.b].push(b.a)});
  return g
 }
-function reachable(a,b,g,skipEdge=null){if(!g[a]||!g[b])return false;const q=[a],seen=new Set([a]);while(q.length){const n=q.shift();if(n===b)return true;for(const v of g[n]){if(skipEdge&&((n===skipEdge[0]&&v===skipEdge[1])||(n===skipEdge[1]&&v===skipEdge[0])))continue;if(!seen.has(v)){seen.add(v);q.push(v)}}}return false}
-function bulbOn(b,g){const without=[b.a,b.b];return (reachable('bp',b.a,g,without)&&reachable(b.b,'bm',g,without))||(reachable('bp',b.b,g,without)&&reachable(b.a,'bm',g,without))}
+function reachable(a,b,g,skip=null){if(!g[a]||!g[b])return false;const q=[a],seen=new Set([a]);while(q.length){const n=q.shift();if(n===b)return true;for(const v of g[n]){if(skip&&((n===skip[0]&&v===skip[1])||(n===skip[1]&&v===skip[0])))continue;if(!seen.has(v)){seen.add(v);q.push(v)}}}return false}
+function bulbOn(b,g){const skip=[b.a,b.b];return (reachable('bp',b.a,g,skip)&&reachable(b.b,'bm',g,skip))||(reachable('bp',b.b,g,skip)&&reachable(b.a,'bm',g,skip))}
 function classify(){
- const wireOnly=wireGraph(false),g=wireGraph(true);
- const short=reachable('bp','bm',wireOnly);
- const ons=model.bulbs.map(b=>bulbOn(b,g));
+ const wg=graph(false),g=graph(true),short=reachable('bp','bm',wg),ons=model.bulbs.map(b=>bulbOn(b,g));
  let type=short?'short':reachable('bp','bm',g)?'closed':'open';
  if(!short&&ons.length===2&&ons[0]&&ons[1]){
    const b1=model.bulbs[0],b2=model.bulbs[1];
-   const pathWithout1=reachable('bp','bm',g,[b1.a,b1.b]);
-   const pathWithout2=reachable('bp','bm',g,[b2.a,b2.b]);
-   type=(pathWithout1&&pathWithout2)?'parallel':'series'
+   type=(reachable('bp','bm',g,[b1.a,b1.b])&&reachable('bp','bm',g,[b2.a,b2.b]))?'parallel':'series'
  }
  return{type,short,ons}
 }
@@ -132,83 +129,92 @@ function evaluate(){
  const s=classify();
  model.bulbs.forEach((b,i)=>$('#'+b.id)?.classList.toggle('on',!!s.ons[i]));
  [...lab.querySelectorAll('.wire')].forEach(x=>x.classList.toggle('live',s.type!=='open'&&!s.short));
- if(s.short){setMsg('⚠ 危険な短絡。電球を通らず＋極と−極がつながっている。','bad')}
- else if(s.type==='open'){add('open');setMsg('回路のどこかが切れている。電流は一周できない。','warn')}
- else if(s.type==='series'){add('closed');add('series');setMsg('2個とも点灯。電流の道は1本だ。','good')}
- else if(s.type==='parallel'){add('closed');add('parallel');setMsg('2個とも点灯。電流の道が枝分かれしている。','good')}
- else if(s.ons[0]){add('closed');setMsg('電球が点灯した。閉じた回路ができている。','good')}
+ if(s.short)setMsg('⚠ 危険：電球を通らず＋極と−極が直接つながっている。','bad');
+ else if(s.type==='open')setMsg('回路が切れている。光らないが、短絡とは別の状態。','warn');
+ else if(s.type==='series')setMsg('2個とも点灯。直列の正常な閉回路。','good');
+ else if(s.type==='parallel')setMsg('2個とも点灯。並列の正常な閉回路。','good');
+ else if(s.ons[0])setMsg('電球が点灯している正常な閉回路。','good');
  return s
 }
 function clear(t,x,e='✨'){$('#clearTitle').textContent=t;$('#clearText').textContent=x;$('#clearEmoji').textContent=e;$('#stageOverlay').classList.add('show');tone(660,.08,.025)}
 function why(text){$('#whyText').textContent=text;$('#whyOverlay').classList.add('show')}
+function choices(html){controls.innerHTML='<div class="choices">'+html+'</div>'}
 function render(){
  const d=defs[stage];$('#stageLabel').textContent=d[0];$('#mission').textContent=d[1];$('#taskTitle').textContent=d[2];$('#taskText').textContent=d[3];$('#progress').style.width=((stage+1)/7*100)+'%';controls.innerHTML='';trial={};
- if(stage===0)r1();if(stage===1)r2();if(stage===2)r3();if(stage===3)r4();if(stage===4)r5();if(stage===5)r6();if(stage===6)r7()
+ [r1,r2,r3,r4,r5,r6,r7][stage]()
 }
 function r1(){
- $('#controlTitle').textContent='端子から導線を引く → 見え方を確認 → 自分で判定';reset(false,false);
- addWire('bp');addWire('bm');
- controls.innerHTML='<button id="why" class="small">🤔 なぜ光らない？</button><button id="check" class="check">💡 この回路で光る！</button>';
- $('#why').onclick=()=>why('電流が流れるには、乾電池から出て電球を通り、乾電池へ戻る一周の道が必要。途中が切れていると電流は流れないよ。');
- $('#check').onclick=()=>{const s=evaluate();s.ons[0]&&!s.short?clear('回路ができた！','見た目ではなく、端子同士が本当に一周つながったので点灯した。','💡'):setMsg('まだ閉じた回路になっていない。接点を確かめよう。','bad')}
+ $('#controlTitle').textContent='接続する前に判断する';
+ reset(false,false);addWire('bp','b1a');addWire('b1b','bm');const danger=addWire('bp');
+ choices('<button id="stop" class="choice">🛑 危険！止める</button><button id="go" class="choice">🔌 そのままつなぐ</button>');
+ $('#stop').onclick=()=>{model.wires.splice(danger,1);renderWires();evaluate();add('short');add('stop-short');clear('危険を未然に止めた！','＋極と−極を電球を通さず直接つなぐ短絡を、接続前に止められた。','🛑')};
+ $('#go').onclick=()=>{model.wires[danger].to='bm';model.wires[danger].free={...model.nodes.bm};renderWires();evaluate();add('short');$('#dangerOverlay').classList.add('show')}
 }
 function r2(){
- $('#controlTitle').textContent='最初から1か所だけ外れている。原因は毎回変わる';reset(false,false);
- addWire('bp','b1a');addWire('bm','b1b');
- const bad=Math.floor(Math.random()*2);model.wires[bad].to=null;model.wires[bad].free=offsetFree(model.wires[bad].from);renderWires();evaluate();
- controls.innerHTML='<button id="check" class="check">🛠️ 修理できた！</button>';
- $('#check').onclick=()=>{const s=evaluate();if(s.ons[0]){add('repair');clear('修理成功！','外れていた接点を直すと、回路が再び一周つながった。','🛠️')}else setMsg('まだどこかが外れている。接点を1つずつ見よう。','bad')}
+ $('#controlTitle').textContent='危険な導線を見つけ、端を外す';
+ reset(false,false);addWire('bp','b1a');addWire('b1b','bm');addWire('bp','bm');add('short');evaluate();
+ controls.innerHTML='<button id="check" class="check">🛑 短絡を解除した</button><button id="why" class="small">🤔 なぜ危険？</button>';
+ $('#why').onclick=()=>why('電球などを通らず＋極と−極が直接つながると、大きな電流が流れて電池や導線が熱くなることがある。実物では試さないでね。');
+ $('#check').onclick=()=>{const s=evaluate();if(!s.short&&s.ons[0]){add('stop-short');clear('安全な回路に戻した！','危険な直結だけを外し、必要な回路は残せた。','⚠️')}else setMsg('危険な直結だけを外そう。正常な電球回路まで全部外す必要はないよ。','warn')}
 }
 function r3(){
- $('#controlTitle').textContent='光っている回路を、自分の指で一度切って戻す';reset(false,false);addWire('bp','b1a');addWire('bm','b1b');renderWires();evaluate();
- controls.innerHTML='<button id="why" class="small">🤔 なぜ消えた？</button><button id="check" class="check">🧪 変化を確認した</button>';
- $('#why').onclick=()=>why('途中を外すと、電流が一周できる道がなくなる。もう一度つなぐと閉じた回路に戻り、電球が点灯するよ。');
- const observer=new MutationObserver(()=>{const s=classify();if(!s.ons[0]){trial.cut=true;add('switch')}});observer.observe(lab,{subtree:true,attributes:true});
- $('#check').onclick=()=>{const s=evaluate();trial.cut&&s.ons[0]?clear('開いた回路と閉じた回路','自分で切る→消える→戻す→光る、を観察できた。','🧪'):setMsg('一度、導線の丸い端を外してからつなぎ直してみよう。','warn')}
+ $('#controlTitle').textContent='正常なものまで止めない';
+ reset(false,false);addWire('bp','b1a');addWire('b1b','bm');evaluate();add('normal');
+ choices('<button id="stop" class="choice">🛑 止める</button><button id="leave" class="choice">✅ 正常なので触らない</button>');
+ $('#leave').onclick=()=>{add('dont-touch');clear('正常を見分けた！','安全では「危険を止める」だけでなく、正常な状態を見分けることも大切。','✅')};
+ $('#stop').onclick=()=>setMsg('これは正常な閉回路。何でも止めるのではなく、危険かどうかを見分けよう。','warn')
 }
 function r4(){
- $('#controlTitle').textContent='乾電池→A→B→乾電池の1本の道を自分で作る';reset(true,false);addWire('bp');addWire('b1b');addWire('b2b');
- controls.innerHTML='<button id="check" class="check">🔗 直列回路ができた！</button>';
- $('#check').onclick=()=>{const s=evaluate();if(s.type==='series'&&s.ons.every(Boolean)){clear('直列回路完成！','2個の電球を通る電流の道が1本になった。','🔗')}else setMsg('2個の電球が同じ1本の道に入っているか見直そう。','bad')}
+ $('#controlTitle').textContent='光らない原因を調べる';
+ reset(false,false);addWire('bp','b1a');addWire('bm');evaluate();add('open');
+ choices('<button id="danger" class="choice">⚠ 危険だから全部外す</button><button id="repair" class="choice">🛠️ 外れた接点を修理</button>');
+ $('#danger').onclick=()=>setMsg('光らない＝短絡とは限らない。これは回路が途中で切れた「故障」だよ。','warn');
+ $('#repair').onclick=()=>{model.wires[1].to='b1b';model.wires[1].free={...model.nodes.b1b};renderWires();const s=evaluate();if(s.ons[0]){add('repair');add('diagnose');clear('故障を安全に修理！','危険な短絡ではなく、接点が外れていた故障だと見分けて直せた。','🛠️')}}
 }
 function r5(){
- $('#controlTitle').textContent='分岐点を使って、AとBを別々の枝にする';reset(true,true);
- ['bp','j1','b1b','j1','b2b','j2'].forEach(x=>addWire(x));
- controls.innerHTML='<button id="check" class="check">🌿 並列回路ができた！</button>';
- $('#check').onclick=()=>{const s=evaluate();if(s.type==='parallel'&&s.ons.every(Boolean)){clear('並列回路完成！','電流の道が2本に分かれ、それぞれの枝に電球が入った。','🌿')}else setMsg('AとBが別々の枝になり、両方の枝が乾電池へ戻るか確かめよう。','bad')}
-}
-function buildCompare(mode){
- reset(true,true);model.mode=mode;
- if(mode==='series'){model.nodes.j1&&delete model.nodes.j1;model.nodes.j2&&delete model.nodes.j2;$('#n-j1')?.remove();$('#n-j2')?.remove();addWire('bp','b1a');addWire('b1b','b2a');addWire('b2b','bm')}
- else{addWire('bp','j1');addWire('j1','b1a');addWire('b1b','j2');addWire('j1','b2a');addWire('b2b','j2');addWire('j2','bm')}
- renderWires();evaluate()
+ $('#controlTitle').textContent='2個とも消えた原因を診断';
+ reset(true,false);addWire('bp','b1a');addWire('b1b','b2a');addWire('b2b');evaluate();
+ controls.innerHTML='<button id="why" class="small">🤔 危険？ 故障？</button><button id="repair" class="check">🔧 切れた場所を直す</button>';
+ $('#why').onclick=()=>why('直列回路は電流の道が1本。1か所切れると両方消える。でも、＋極と−極の直接接続ではないので短絡とは違うよ。');
+ $('#repair').onclick=()=>{model.wires[2].to='bm';model.wires[2].free={...model.nodes.bm};renderWires();const s=evaluate();if(s.type==='series'){add('series-break');add('diagnose');clear('直列の故障を修理！','2個とも消えていても、危険な短絡ではなく1本の道が切れた故障だった。','🔗')}}
 }
 function r6(){
- $('#controlTitle').textContent='直列と並列で、電球Aにつながる端を外して比較';buildCompare('series');
- controls.innerHTML='<div class="choices"><button id="seriesBtn" class="choice active">直列</button><button id="parallelBtn" class="choice">並列</button><button id="resetBtn" class="choice">元に戻す</button></div><button id="check" class="check">⚖️ 違いがわかった</button>';
- const markBreak=()=>{const s=evaluate();if(model.mode==='series'&&!s.ons[0]&&!s.ons[1]){trial.series=true;add('series-break')}if(model.mode==='parallel'&&!s.ons[0]&&s.ons[1]){trial.parallel=true;add('parallel-one')}};
- lab.addEventListener('pointerup',()=>setTimeout(markBreak,0),{once:false});
- $('#seriesBtn').onclick=()=>{buildCompare('series');$('#seriesBtn').classList.add('active');$('#parallelBtn').classList.remove('active')};
- $('#parallelBtn').onclick=()=>{buildCompare('parallel');$('#parallelBtn').classList.add('active');$('#seriesBtn').classList.remove('active')};
- $('#resetBtn').onclick=()=>buildCompare(model.mode||'series');
- $('#check').onclick=()=>{if(trial.series&&trial.parallel){add('compare');clear('違いを発見！','直列は道が1本なので切れると両方消える。並列は別の枝が残れば、もう一方は光り続ける。','⚖️')}else setMsg('直列と並列の両方で、電球Aにつながる導線を外して比べよう。','warn')}
+ $('#controlTitle').textContent='片方だけ消えた枝を見つける';
+ reset(true,true);addWire('bp','j1');addWire('j1','b1a');addWire('b1b','j2');addWire('j1','b2a');addWire('b2b');addWire('j2','bm');evaluate();
+ controls.innerHTML='<button id="check" class="check">🛠️ 消えた枝を修理</button><button id="why" class="small">🤔 なぜ片方は光る？</button>';
+ $('#why').onclick=()=>why('並列回路では電流の道が枝分かれしている。一方の枝が切れても、もう一方には一周できる道が残るよ。');
+ $('#check').onclick=()=>{model.wires[4].to='j2';model.wires[4].free={...model.nodes.j2};renderWires();const s=evaluate();if(s.type==='parallel'){add('parallel-one');add('repair');clear('枝の故障を修理！','片方だけ消えた現象から、問題のある枝を見つけて直せた。','🌿')}}
+}
+function setupPatrolScenario(kind){
+ if(kind==='short'){reset(false,false);addWire('bp','b1a');addWire('b1b','bm');addWire('bp','bm');setMsg('この回路は正常・故障・危険のどれ？','warn')}
+ if(kind==='open'){reset(false,false);addWire('bp','b1a');addWire('bm');setMsg('電球が消えている。状態を判断しよう。','warn')}
+ if(kind==='normal'){reset(false,false);addWire('bp','b1a');addWire('b1b','bm');setMsg('電球は光っている。状態を判断しよう。','good')}
+ trial.kind=kind;evaluate()
 }
 function r7(){
- $('#controlTitle').textContent='トラブルはランダム。配線を触って原因を直す';const type=Math.floor(Math.random()*3);
- if(type===0){reset(false,false);addWire('bp','b1a');addWire('bm');trial.kind='open';setMsg('電球が消えている。外れた接点を探そう。','warn')}
- if(type===1){reset(true,true);addWire('bp','j1');addWire('j1','b1a');addWire('b1b','j2');addWire('j1');addWire('b2b','j2');addWire('j2','bm');trial.kind='branch';setMsg('電球Bだけ消えている。枝Bをたどって原因を探そう。','warn')}
- if(type===2){reset(false,false);addWire('bp','b1a');addWire('bm','b1b');trial.kind='safe';setMsg('回路は正常。危険なつなぎ方を作ろうとするとゲームが止めるよ。','good')}
- controls.innerHTML='<button id="shortTry" class="small">⚠ ＋極と−極を直接つなぐ危険を確認</button><button id="check" class="check">🚨 トラブルを解決した</button>';
- $('#shortTry').onclick=()=>{const i=addWire('bp','bm');trial.shortWire=i;add('short');$('#dangerOverlay').classList.add('show')};
- $('#check').onclick=()=>{const s=evaluate();if((trial.kind==='open'&&s.ons[0])||(trial.kind==='branch'&&s.ons[0]&&s.ons[1])||trial.kind==='safe'){add('trouble');clear('トラブル解決！','現象を見て「どこが切れているか」「危険な接続ではないか」を考えて直せた。','🚨')}else setMsg('まだ原因が残っている。光っていない電球につながる道をたどろう。','bad')}
+ $('#controlTitle').textContent='3件連続で正しく判断する';
+ patrolCorrect=0;scenarioIndex=0;nextPatrol();
+}
+function nextPatrol(){
+ const seq=['short','open','normal'];const kind=seq[(scenarioIndex+Math.floor(Math.random()*3))%3];setupPatrolScenario(kind);
+ controls.innerHTML='<div class="choices"><button data-a="danger" class="choice">🛑 危険</button><button data-a="fault" class="choice">🛠️ 故障</button></div><div class="choices" style="margin-top:7px"><button data-a="normal" class="choice">✅ 正常</button><button id="why" class="choice">🤔 ヒント</button></div><div class="hint">正解 '+patrolCorrect+' / 3</div>';
+ controls.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>patrolAnswer(b.dataset.a));
+ $('#why').onclick=()=>why('短絡＝危険。回路が切れているだけ＝故障。電球を通る閉回路で短絡がない＝正常。見た目ではなく電流の道をたどろう。')
+}
+function patrolAnswer(a){
+ const expected=trial.kind==='short'?'danger':trial.kind==='open'?'fault':'normal';
+ if(a!==expected){setMsg('違うよ。電流がどの道を通るか、＋極から−極までたどってみよう。','bad');return}
+ patrolCorrect++;scenarioIndex++;add('diagnose');tone(620,.06,.02);
+ if(patrolCorrect>=3){add('patrol');clear('安全パトロール完了！','危険は止める、故障は直す、正常はむやみに触らない。3つを見分けられた！','🚨')}
+ else nextPatrol()
 }
 function showDisc(){const ul=$('#discList');ul.innerHTML='';all.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#discoverOverlay').classList.add('show')}
 $('#startBtn').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');stage=0;render()};
-$('#nextBtn').onclick=()=>{$('#stageOverlay').classList.remove('show');if(stage<6){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+all.length+'。正解だけでなく、失敗したときの結果まで観察できた。';$('#finishOverlay').classList.add('show')}};
+$('#nextBtn').onclick=()=>{$('#stageOverlay').classList.remove('show');if(stage<6){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+all.length+'。危険・故障・正常を見分けて、安全に対応できた。';$('#finishOverlay').classList.add('show')}};
 $('#retryBtn').onclick=()=>{$('#finishOverlay').classList.remove('show');discoveries.clear();$('#discoverBtn').textContent='🔬 発見 0';stage=0;render()};
 $('#discoverBtn').onclick=showDisc;$('#showDisc').onclick=showDisc;$('#closeDisc').onclick=()=>$('#discoverOverlay').classList.remove('show');
 $('#whyClose').onclick=()=>$('#whyOverlay').classList.remove('show');
-$('#dangerClose').onclick=()=>{if(Number.isInteger(trial.shortWire)){model.wires.splice(trial.shortWire,1);trial.shortWire=null;renderWires();evaluate()}$('#dangerOverlay').classList.remove('show')};
+$('#dangerClose').onclick=()=>{$('#dangerOverlay').classList.remove('show');if(stage===0){render()}};
 $('#muteBtn').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
 })();
 </script>
