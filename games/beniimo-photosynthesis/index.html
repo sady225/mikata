@@ -28,15 +28,13 @@ button{font:inherit;border:0;cursor:pointer}
 .rootLine{position:absolute;z-index:3;width:2px;background:#d6c18c;transform-origin:top;border-radius:2px;opacity:.75}
 .r1{left:48%;top:-56px;height:78px;transform:rotate(10deg)}.r2{left:57%;top:-46px;height:72px;transform:rotate(-18deg)}.r3{left:38%;top:-38px;height:66px;transform:rotate(24deg)}
 .soilCrop{position:absolute;z-index:5;inset:0;pointer-events:none}
-.tuber{position:absolute;display:none;width:32px;height:58px;border-radius:48% 52% 46% 54% / 34% 38% 62% 66%;background:linear-gradient(100deg,#5e245c 0%,#8f3d86 45%,#b75da6 67%,#68245f 100%);box-shadow:inset -5px -3px 7px rgba(59,15,57,.28),inset 5px 2px 6px rgba(255,176,241,.16),0 3px 4px rgba(50,26,20,.25);transform:rotate(var(--rot,8deg)) scale(var(--tuberScale,.65));transition:transform .35s}
+.tuber{position:absolute;display:block;width:32px;height:58px;border-radius:48% 52% 46% 54% / 34% 38% 62% 66%;background:linear-gradient(100deg,#5e245c 0%,#8f3d86 45%,#b75da6 67%,#68245f 100%);box-shadow:inset -5px -3px 7px rgba(59,15,57,.28),inset 5px 2px 6px rgba(255,176,241,.16),0 3px 4px rgba(50,26,20,.25);transform:rotate(var(--rot,8deg)) scale(var(--tuberScale,.08));transform-origin:center bottom;opacity:0;transition:transform .42s ease,opacity .42s ease,filter .42s ease;filter:saturate(.85)}
 .tuber:after{content:"";position:absolute;left:8px;top:9px;width:4px;height:4px;border-radius:50%;background:#d99bcf;box-shadow:10px 15px #d99bcf,5px 31px #d99bcf}
 .t1{left:43%;bottom:12%;--rot:8deg}.t2{left:61%;bottom:7%;--rot:-12deg}.t3{left:25%;bottom:5%;--rot:15deg}
-.lv3 .t1{display:block;--tuberScale:.58}.lv4 .t1,.lv4 .t2{display:block;--tuberScale:.82}.lv5 .t1,.lv5 .t2,.lv5 .t3{display:block;--tuberScale:1}
+.tuber.growing{filter:saturate(1.08) brightness(1.03)}
 .plantWrap{position:absolute;z-index:6;left:50%;bottom:38%;width:74%;height:58%;transform:translateX(-50%);transition:.3s;pointer-events:none}
 .vine{position:absolute;left:46%;bottom:0;width:8px;height:72%;background:linear-gradient(#4e9f54,#2f7e43);border-radius:10px;transform:rotate(-7deg);transform-origin:bottom;box-shadow:18px -26px 0 -2px #3d8c49,-17px -43px 0 -2px #3d8c49}
-.leaf{position:absolute;width:40px;height:40px;color:#338d4b;font-size:40px;line-height:1;text-shadow:0 2px #1e6c38;transform-origin:center}.leaf:before{content:"♥"}.a{left:52%;bottom:12%;transform:rotate(18deg)}.b{left:19%;bottom:27%;transform:rotate(-24deg)}.c{left:55%;bottom:42%;transform:rotate(15deg)}.d{left:18%;bottom:57%;transform:rotate(-18deg)}.e{left:50%;bottom:72%;transform:rotate(9deg)}.extra{display:none}
-.lv1 .c,.lv1 .d,.lv1 .e{display:none}.lv1 .a,.lv1 .b{transform:scale(.72)}
-.lv2 .extra.e1,.lv3 .extra.e1,.lv4 .extra.e1,.lv5 .extra.e1,.lv3 .extra.e2,.lv4 .extra.e2,.lv5 .extra.e2,.lv4 .extra.e3,.lv5 .extra.e3,.lv5 .extra.e4{display:block}
+.leaf{position:absolute;width:40px;height:40px;color:#338d4b;font-size:40px;line-height:1;text-shadow:0 2px #1e6c38;transform-origin:center;opacity:0;transition:transform .34s ease,opacity .34s ease,filter .34s ease;filter:saturate(.9)}.leaf:before{content:"♥"}.a{left:52%;bottom:12%;--rot:18deg}.b{left:19%;bottom:27%;--rot:-24deg}.c{left:55%;bottom:42%;--rot:15deg}.d{left:18%;bottom:57%;--rot:-18deg}.e{left:50%;bottom:72%;--rot:9deg}.extra{display:block}.leaf{transform:rotate(var(--rot,0deg)) scale(var(--leafScale,.08))}.leaf.growing{filter:saturate(1.08) brightness(1.03)}
 .waterDrop{position:absolute;z-index:10;top:5%;width:9px;height:15px;border-radius:55% 55% 60% 60%;background:#44bce2;box-shadow:0 1px 2px #167ba155;animation:waterFall .65s ease-in forwards;pointer-events:none}
 @keyframes waterFall{0%{transform:translateY(0) scale(.7);opacity:0}15%{opacity:1}100%{transform:translateY(155px) scale(1);opacity:.25}}
 .co2Stream{position:absolute;left:12%;bottom:43%;width:54%;height:45%;z-index:7;pointer-events:none;opacity:.35;transition:opacity .15s}.co2Dot{position:absolute;left:0;bottom:5%;width:8px;height:8px;border:2px solid #7bcfe1;border-radius:50%;background:#ffffff99;animation:co2air 1.35s linear infinite}.co2Dot:nth-child(2){bottom:28%;animation-delay:.28s}.co2Dot:nth-child(3){bottom:52%;animation-delay:.58s}.co2Dot:nth-child(4){bottom:72%;animation-delay:.82s}.co2Stream.burst{opacity:1;filter:drop-shadow(0 0 4px #fff)}
@@ -117,11 +115,32 @@ function sfx(k){if(k==='tap'){tone(320,.05,.045,'triangle');tone(620,.05,.02,'si
 function fmt(n){return String(Math.floor(n)).padStart(4,'0')}
 function calcLevel(score){let l=1;for(let i=1;i<thresholds.length;i++)if(score>=thresholds[i])l=i+1;return l}
 function nextTarget(){return thresholds[Math.min(S.level,thresholds.length-1)]}
+function grow01(v){return Math.max(0,Math.min(1,v))}
+function updateGrowthVisual(){
+ const g=grow01(S.score/260);
+ const leaves=[...document.querySelectorAll('#plant .leaf')];
+ const leafStarts=[0,.09,.19,.31,.43,.55,.66,.76,.86];
+ leaves.forEach((el,i)=>{
+  const start=leafStarts[i]??.9,p=grow01((g-start)/.17);
+  const scale=(i===0?.32:.12)+p*(i===0?.68:.88);
+  el.style.setProperty('--leafScale',scale.toFixed(2));
+  el.style.opacity=i===0?1:Math.min(1,p*1.35);
+  el.classList.toggle('growing',p>0&&p<1);
+ });
+ const tubers=[...document.querySelectorAll('#soilCrop .tuber')];
+ const tuberStarts=[.36,.56,.72];
+ tubers.forEach((el,i)=>{
+  const p=grow01((g-tuberStarts[i])/.31);
+  el.style.setProperty('--tuberScale',(.08+p*.92).toFixed(2));
+  el.style.opacity=Math.min(1,p*1.5);
+  el.classList.toggle('growing',p>0&&p<1);
+ });
+}
 function updateHUD(){
  $('#score').textContent=fmt(S.score);$('#best').textContent='BEST '+fmt(S.best);$('#titleBest').textContent='BEST '+fmt(S.best)+' O₂';
  const nl=calcLevel(S.score);if(nl>S.level){S.level=nl;levelUp()}else S.level=nl;
  document.querySelectorAll('.evoItem').forEach((el,i)=>{el.classList.toggle('on',i<S.level);el.classList.toggle('cur',i===S.level-1)});
- $('#plant').className='plantWrap lv'+S.level;$('#soilCrop').className='soilCrop lv'+S.level;
+ $('#plant').className='plantWrap lv'+S.level;$('#soilCrop').className='soilCrop lv'+S.level;updateGrowthVisual();
  if(S.level<5){const target=thresholds[S.level];$('#nextBubble').textContent=icons[S.level];$('#nextText').textContent='あと '+Math.max(0,target-Math.floor(S.score))}else{$('#nextBubble').textContent='👑';$('#nextText').textContent='MAX！'}
 }
 function levelUp(){sfx('level');const r=$('#rush');r.textContent=S.level===5?'MAX 光合成！':'LEVEL UP！';r.classList.remove('show');void r.offsetWidth;r.classList.add('show')}
