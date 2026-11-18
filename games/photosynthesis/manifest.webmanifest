@@ -1,0 +1,19 @@
+{
+  "id": "/games/photosynthesis/",
+  "name": "読谷べにいも 光合成ラボ！",
+  "short_name": "べにいもラボ",
+  "start_url": "/games/photosynthesis/",
+  "scope": "/games/photosynthesis/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e60012",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "../beniimo-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
