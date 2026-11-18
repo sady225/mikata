@@ -38,7 +38,7 @@ button{font:inherit;border:0}
 .game{padding-top:calc(83px + var(--safeT))}
 .mission{position:absolute;z-index:12;left:12px;right:12px;top:calc(88px + var(--safeT));display:flex;justify-content:center;pointer-events:none}
 .speech{background:#fff;color:var(--deep);font-weight:1000;font-size:13px;line-height:1.35;padding:9px 15px;border-radius:20px;box-shadow:0 4px 0 #0b5c9d44;text-align:center;max-width:95%}.speech b{color:var(--red)}
-.lab{position:absolute;left:0;right:0;top:calc(133px + var(--safeT));bottom:calc(102px + var(--safeB));overflow:hidden}
+.lab{position:absolute;left:0;right:0;top:calc(133px + var(--safeT));bottom:calc(54px + var(--safeB));overflow:hidden}
 .table{position:absolute;left:0;right:0;bottom:0;height:34%;background:#f3dfae;border-top:8px solid #d5b476}
 .workarea{position:absolute;inset:0 0 25%;0}
 .tool{position:absolute;display:grid;place-items:center;font-weight:1000;touch-action:none}
@@ -54,7 +54,7 @@ button{font:inherit;border:0}
 .cell.missing .paper{opacity:.08}.cell.loose{transform:translateX(11px)}
 .stackCount{position:absolute;left:50%;transform:translateX(-50%);bottom:22px;background:#fff;color:var(--deep);padding:5px 10px;border-radius:15px;font-size:11px;font-weight:1000}
 .meter{position:absolute;right:14px;top:20px;width:126px;background:#263f4d;border-radius:18px;padding:8px;color:#d9f5d0;text-align:center;box-shadow:0 6px 0 #17303d}.meter small{font-size:9px}.display{margin-top:4px;background:#cde5b8;color:#203a28;border-radius:8px;padding:8px 3px;font-size:22px;font-weight:1000;font-variant-numeric:tabular-nums}
-.probe{position:absolute;right:88px;top:94px;width:7px;height:74px;background:#d74641;border-radius:4px;transform:rotate(18deg);opacity:.3;transition:.25s}.probe.black{right:52px;background:#30383e;transform:rotate(-18deg)}.probe.touch{opacity:1;transform:translateY(38px) rotate(18deg)}.probe.black.touch{transform:translateY(38px) rotate(-18deg)}
+.probe{position:absolute;width:18px;height:92px;border-radius:9px;background:#d74641;box-shadow:0 4px 0 #9d2d2a;touch-action:none;z-index:8}.probe:after{content:"";position:absolute;left:7px;bottom:-20px;width:4px;height:23px;background:#777}.probe.black{background:#30383e;box-shadow:0 4px 0 #171d20}.probe.good{box-shadow:0 0 0 4px #fff,0 0 18px #fff58a}.probeHint{position:absolute;font-size:9px;font-weight:1000;background:#fff;color:var(--deep);border-radius:10px;padding:3px 6px;pointer-events:none}.terminalMark{position:absolute;width:34px;height:34px;border-radius:50%;border:4px dashed #ffffffcc;display:grid;place-items:center;font-size:12px;font-weight:1000;color:#fff}.cellPack{position:absolute;width:126px;height:72px;touch-action:none;z-index:8;filter:drop-shadow(0 5px 0 #0002)}.cellPack .cell{position:absolute;left:4px;bottom:8px}.cellPackLabel{position:absolute;left:0;right:0;bottom:-18px;text-align:center;font-size:10px;font-weight:1000;background:#fff;color:var(--deep);border-radius:12px;padding:3px}.dropZone{position:absolute;left:50%;transform:translateX(-50%);bottom:55px;width:160px;height:260px;border:4px dashed #ffffff66;border-radius:40px;pointer-events:none}.dropZone.hot{border-color:#fff58a;background:#fff58a22}.directNote{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;background:#fff;color:var(--deep);border-radius:18px;padding:6px 10px;font-size:10px;font-weight:1000}.tapPulse{animation:tapPulse .9s ease-in-out infinite alternate}@keyframes tapPulse{to{transform:scale(1.08)}}
 .ledBox{position:absolute;left:16px;top:20px;width:120px;height:180px;text-align:center}
 .ledStage{position:relative;width:100%;height:135px;transition:transform .5s cubic-bezier(.2,1.4,.4,1)}
 .ledStage.flip{transform:rotate(180deg)}.ledHead{position:absolute;left:35px;top:2px;width:52px;height:64px;border-radius:50% 50% 42% 42%;background:#dde4e1;border:6px solid #405964;transition:.25s}.ledStage.on .ledHead{background:#ff6060;box-shadow:0 0 32px 12px #ff6a6aaa}
@@ -63,8 +63,8 @@ button{font:inherit;border:0}
 .wire{position:absolute;height:6px;border-radius:6px;transform-origin:left center;opacity:.95}.wire.red{background:#e23d39;left:126px;bottom:109px;width:132px;transform:rotate(-12deg)}.wire.black{background:#27343a;left:125px;bottom:76px;width:138px;transform:rotate(11deg)}
 .spark{position:absolute;width:13px;height:13px;border-radius:50%;background:#fff58a;box-shadow:0 0 14px #fff58a;opacity:0;pointer-events:none}.spark.go{animation:flow .8s linear 1}
 .finger{position:absolute;left:calc(50% - 55px);bottom:157px;font-size:60px;opacity:.3;transform:rotate(-16deg);transition:.14s}.finger.down{opacity:1;transform:translateY(27px) rotate(-16deg)}
-.bottom{position:absolute;z-index:18;left:0;right:0;bottom:0;height:calc(94px + var(--safeB));padding:8px 11px calc(9px + var(--safeB));display:flex;gap:8px;align-items:center;background:#0a6fb6}
-.bigBtn{flex:1;height:58px;border-radius:30px;background:#fff;color:var(--red);font-weight:1000;font-size:15px;box-shadow:0 4px 0 #07548d,0 0 0 3px var(--yellow) inset;transition:.08s;min-width:0}.bigBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #07548d,0 0 0 3px var(--yellow) inset}.bigBtn.active{background:var(--yellow)}.bigBtn:disabled{opacity:.45}
+.bottom{position:absolute;z-index:18;left:0;right:0;bottom:0;height:calc(46px + var(--safeB));padding:5px 11px calc(7px + var(--safeB));display:flex;gap:8px;align-items:center;justify-content:center;background:#0a6fb6}
+.bigBtn{flex:0 0 auto;height:38px;border-radius:30px;background:#fff;color:var(--red);font-weight:1000;font-size:15px;box-shadow:0 4px 0 #07548d,0 0 0 3px var(--yellow) inset;transition:.08s;min-width:0}.bigBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #07548d,0 0 0 3px var(--yellow) inset}.bigBtn.active{background:var(--yellow)}.bigBtn:disabled{opacity:.45}
 .toast{position:absolute;z-index:25;left:50%;transform:translateX(-50%);bottom:calc(105px + var(--safeB));background:#fff;color:var(--deep);border-radius:20px;padding:9px 14px;font-size:11px;font-weight:1000;box-shadow:0 4px 0 #084d7f44;max-width:90%;text-align:center;opacity:0;pointer-events:none}.toast.show{animation:toast 1.7s ease both}
 .modal{position:absolute;z-index:60;inset:0;display:none;place-items:center;padding:20px;background:#063b6dbb}.modal.show{display:grid}.card{width:100%;max-width:350px;background:#fff;color:var(--deep);border-radius:30px;padding:22px;text-align:center;box-shadow:0 8px 0 #042c50,0 0 0 6px var(--red);animation:pop .4s cubic-bezier(.2,1.4,.4,1)}.card h2{margin:4px 0 6px;color:var(--red);font-size:25px}.card p{font-size:12px;line-height:1.55;font-weight:800}.next{width:100%;height:54px;border-radius:28px;background:var(--yellow);color:#934516;font-weight:1000;font-size:17px;box-shadow:0 4px 0 #d2a631}
 .disc{list-style:none;padding:0;text-align:left;max-height:45dvh;overflow:auto}.disc li{margin:6px 0;padding:8px 10px;border-radius:12px;background:#eaf7ee;font-size:11px;font-weight:800}.disc li.lock{background:#edf0f1;color:#9aa4a8}
@@ -165,57 +165,90 @@ function render1(){
 }
 
 function render2(){
- s2={count:1,measured:false};
- speech('11円電池を<b>積むたびに</b>、電圧はどう変わる？');
- $('#lab').innerHTML='<div class="workarea"><div class="meter"><small>テスター</small><div id="display" class="display">-- V</div></div><div id="pr" class="probe"></div><div id="pb" class="probe black"></div><div id="stack" class="stack">'+stackHTML(1)+'</div><div id="count" class="stackCount">1組</div></div><div class="table"></div>';
- $('#bottom').innerHTML='<button id="addCell" class="bigBtn">🪙 1組追加</button><button id="measure" class="bigBtn">📟 測る</button>';
- const update=()=>{$('#stack').innerHTML=stackHTML(s2.count);$('#count').textContent=s2.count+'組';$('#display').textContent='-- V';s2.measured=false};
- $('#addCell').onclick=()=>{
-   if(s2.count<3)s2.count++;
-   else if(s2.count===3)s2.count=6;
-   else{toast('6組まで積んだよ');return}
-   update();tone(430+s2.count*35,.04,.02);
-   toast(s2.count+'組になった！ まず測ってみよう');
- };
- $('#measure').onclick=()=>{
+ s2={count:1,measured:false,red:false,black:false};
+ speech('11円電池セットを<b>塔の上へ運ぶ</b>。そのあと赤黒プローブを自分で当てて測ろう');
+ $('#lab').innerHTML='<div class="workarea">'+
+ '<div class="meter"><small>テスター</small><div id="display" class="display">-- V</div></div>'+
+ '<div id="redProbe" class="probe" style="right:88px;top:120px"></div><div class="probeHint" style="right:72px;top:214px">赤</div>'+
+ '<div id="blackProbe" class="probe black" style="right:48px;top:120px"></div><div class="probeHint" style="right:30px;top:214px">黒</div>'+
+ '<div id="plusMark" class="terminalMark" style="left:calc(50% - 76px);bottom:82px">＋</div>'+
+ '<div id="minusMark" class="terminalMark" style="left:calc(50% + 42px);bottom:195px">−</div>'+
+ '<div id="dropZone" class="dropZone"></div><div id="stack" class="stack">'+stackHTML(1)+'</div><div id="count" class="stackCount">1組</div>'+
+ '<div id="pack" class="cellPack tapPulse" style="left:18px;top:92px">'+cellHTML('')+'<div class="cellPackLabel">11円電池セット</div></div>'+
+ '<div class="directNote">セットを塔へドラッグ → プローブを＋/−へ</div>'+
+ '</div><div class="table"></div>';
+ $('#bottom').innerHTML='<button id="hint2" class="bigBtn">💡 ヒント</button>';
+ $('#hint2').onclick=()=>toast('左の11円電池セットを塔の上へ運ぶ。6組になったら赤を＋、黒を−へ当てよう');
+
+ const pack=$('#pack'),zone=$('#dropZone');
+ let pd=null;
+ pack.addEventListener('pointerdown',e=>{pd={x:e.clientX,y:e.clientY,left:pack.offsetLeft,top:pack.offsetTop};pack.setPointerCapture?.(e.pointerId);pack.classList.remove('tapPulse');tone(320,.03,.014)});
+ pack.addEventListener('pointermove',e=>{if(!pd)return;pack.style.left=(pd.left+e.clientX-pd.x)+'px';pack.style.top=(pd.top+e.clientY-pd.y)+'px';const a=pack.getBoundingClientRect(),z=zone.getBoundingClientRect();zone.classList.toggle('hot',!(a.right<z.left||a.left>z.right||a.bottom<z.top||a.top>z.bottom))});
+ pack.addEventListener('pointerup',()=>{if(!pd)return;pd=null;const a=pack.getBoundingClientRect(),z=zone.getBoundingClientRect();const hit=!(a.right<z.left||a.left>z.right||a.bottom<z.top||a.top>z.bottom);zone.classList.remove('hot');if(hit){if(s2.count<3)s2.count++;else if(s2.count===3)s2.count=6;else{toast('6組まで積んだよ');resetPack();return}$('#stack').innerHTML=stackHTML(s2.count);$('#count').textContent=s2.count+'組';$('#display').textContent='-- V';s2.measured=false;s2.red=false;s2.black=false;tone(430+s2.count*35,.04,.02);toast(s2.count+'組！ 塔が高くなった');if(s2.count===6)pack.style.display='none';else resetPack()}else resetPack()});
+ function resetPack(){pack.style.left='18px';pack.style.top='92px';pack.classList.add('tapPulse')}
+
+ function dragProbe(el,key,targetId){
+   let d=null;
+   el.addEventListener('pointerdown',e=>{d={x:e.clientX,y:e.clientY,left:el.offsetLeft,top:el.offsetTop};el.setPointerCapture?.(e.pointerId);tone(300,.03,.012)});
+   el.addEventListener('pointermove',e=>{if(!d)return;el.style.left=(d.left+e.clientX-d.x)+'px';el.style.top=(d.top+e.clientY-d.y)+'px'});
+   el.addEventListener('pointerup',()=>{if(!d)return;d=null;const a=el.getBoundingClientRect(),t=$('#'+targetId).getBoundingClientRect();const hit=!(a.right<t.left||a.left>t.right||a.bottom<t.top||a.top>t.bottom);if(hit){s2[key]=true;el.classList.add('good');el.style.left=(t.left-$('#lab').getBoundingClientRect().left+8)+'px';el.style.top=(t.top-$('#lab').getBoundingClientRect().top-55)+'px';tone(520,.04,.018);checkMeasure()}else{el.classList.remove('good');s2[key]=false;toast(key==='red'?'赤プローブは＋へ':'黒プローブは−へ')}})
+ }
+ dragProbe($('#redProbe'),'red','plusMark');dragProbe($('#blackProbe'),'black','minusMark');
+
+ function checkMeasure(){
+   if(!(s2.red&&s2.black))return;
    const v=voltage(s2.count);if(v==null)return;
-   $('#pr').classList.add('touch');$('#pb').classList.add('touch');tone(560,.04,.018);
-   setTimeout(()=>{
-     $('#display').textContent=v.toFixed(1)+' V';s2.measured=true;$('#pr').classList.remove('touch');$('#pb').classList.remove('touch');
-     if(s2.count===1){add('v05');toast('1組で約0.5V')}
-     if(s2.count===3){add('v15');toast('3組で約1.5V。でもLEDはまだ光らなかった')}
-     if(s2.count===6){add('v24');speech('<b>6組で2.4V！</b> 那覇工業高校ではLED1個が点灯。');setTimeout(()=>clear('積むと電圧が上がった！','3組1.5Vでは光らず、6組2.4VでLED1個の点灯を確認した。','📟'),700)}
-   },430)
+   $('#display').textContent=v.toFixed(1)+' V';s2.measured=true;
+   tone(620,.06,.02);
+   if(s2.count===1){add('v05');toast('1組で約0.5V')}
+   if(s2.count===3){add('v15');toast('3組で約1.5V。まだLEDは光らなかった')}
+   if(s2.count===6){add('v24');speech('<b>2.4V！</b> 6組でLED1個の点灯を確認した実測結果。');setTimeout(()=>clear('自分で測れた！','電池を積み、プローブを自分で当てて6組2.4Vを確認した。','📟'),900)}
  }
 }
-
 function render3(){
- s3={count:6,reverse:true,paper:true,contact:false,scenario:0};
- speech('LEDが光らない！ <b>触って原因を直そう</b>');
+ s3={count:6,reverse:true,paper:false,contact:false,scenario:0};
+ speech('LEDが光らない。<b>LED・ペーパー・電池タワーを直接触って</b>直そう');
  $('#lab').innerHTML='<div class="workarea">'+
- '<div class="ledBox"><div id="ledStage" class="ledStage flip"><div class="ledHead"></div><div class="leg long"><em>長い足</em></div><div class="leg short"><em>短い足</em></div></div><div class="turn">↻</div></div>'+
+ '<div class="ledBox"><div id="ledStage" class="ledStage flip tapPulse"><div class="ledHead"></div><div class="leg long"><em>長い足</em></div><div class="leg short"><em>短い足</em></div></div><div class="turn">↻</div></div>'+
  '<div class="wire red"></div><div class="wire black"></div><div id="spark" class="spark" style="left:132px;bottom:106px"></div>'+
- '<div id="stack3" class="stack">'+stackHTML(6)+'</div><div class="stackCount">6組</div><div id="finger" class="finger">☝️</div>'+
+ '<div id="stack3" class="stack">'+stackHTML(6,{missing:true})+'</div><div class="stackCount">6組</div>'+
+ '<div id="paperPiece" class="tool paperDisk tapPulse" style="left:18px;top:185px;width:68px;height:68px;font-size:10px">塩水<br>ペーパー</div>'+
+ '<div id="finger" class="finger">☝️</div><div class="directNote">LEDをタップで回す／ペーパーを塔へドラッグ／塔を長押し</div>'+
  '</div><div class="table"></div>';
- $('#bottom').innerHTML='<button id="turnLed" class="bigBtn">↻ LEDを回す</button><button id="hold" class="bigBtn">🤏 押さえる</button><button id="paper" class="bigBtn">🧻 ペーパー</button>';
- update3();
- $('#turnLed').onclick=()=>{s3.reverse=!s3.reverse;$('#ledStage').classList.toggle('flip',s3.reverse);tone(420,.05,.02);toast(s3.reverse?'長い足が−側。まだ光らない':'長い足が＋側になった！');add('led');update3()};
- let timer=null;
- const pressStart=e=>{e.preventDefault();s3.contact=true;$('#hold').classList.add('active');$('#finger').classList.add('down');tone(330,.04,.015);toast('ぎゅっ…接触が安定してきた');timer=setTimeout(()=>{add('contact');update3()},450)};
- const pressEnd=()=>{clearTimeout(timer);$('#hold').classList.remove('active');$('#finger').classList.remove('down');if(!isReady())s3.contact=false;update3()};
- $('#hold').addEventListener('pointerdown',pressStart);['pointerup','pointercancel','pointerleave'].forEach(x=>$('#hold').addEventListener(x,pressEnd));
- $('#paper').onclick=()=>{s3.paper=!s3.paper;$('#paper').classList.toggle('active',s3.paper);$('#stack3').innerHTML=stackHTML(6,{missing:!s3.paper});tone(390,.04,.015);if(!s3.paper){add('paper');toast('食塩水ペーパーを外すと電池として働きにくい')}else toast('食塩水ペーパーを戻した');update3()}
+ $('#bottom').innerHTML='<button id="hint3" class="bigBtn">💡 ヒント</button>';
+ $('#hint3').onclick=()=>toast('LEDの長い足を＋側へ。ペーパーを戻し、電池タワーをぎゅっと長押し');
+
+ $('#ledStage').onclick=()=>{
+   s3.reverse=!s3.reverse;
+   $('#ledStage').classList.toggle('flip',s3.reverse);
+   $('#ledStage').classList.remove('tapPulse');
+   tone(420,.05,.02);
+   toast(s3.reverse?'長い足が−側。まだ逆向き':'長い足が＋側になった！');
+   add('led');update3()
+ };
+
+ const pp=$('#paperPiece');let pd=null;
+ pp.addEventListener('pointerdown',e=>{pd={x:e.clientX,y:e.clientY,left:pp.offsetLeft,top:pp.offsetTop};pp.setPointerCapture?.(e.pointerId);pp.classList.remove('tapPulse')});
+ pp.addEventListener('pointermove',e=>{if(!pd)return;pp.style.left=(pd.left+e.clientX-pd.x)+'px';pp.style.top=(pd.top+e.clientY-pd.y)+'px'});
+ pp.addEventListener('pointerup',()=>{if(!pd)return;pd=null;const a=pp.getBoundingClientRect(),z=$('#stack3').getBoundingClientRect();const hit=!(a.right<z.left||a.left>z.right||a.bottom<z.top||a.top>z.bottom);if(hit){s3.paper=true;pp.style.display='none';$('#stack3').innerHTML=stackHTML(6);add('paper');tone(500,.05,.02);toast('食塩水ペーパーを戻した！');update3()}else{pp.style.left='18px';pp.style.top='185px';pp.classList.add('tapPulse');toast('ペーパーを電池タワーへ運ぼう')}});
+
+ const st=$('#stack3'),finger=$('#finger');let holdTimer=null;
+ st.style.pointerEvents='auto';
+ st.addEventListener('pointerdown',e=>{e.preventDefault();finger.classList.add('down');toast('そのまま押さえて…');holdTimer=setTimeout(()=>{s3.contact=true;add('contact');tone(560,.06,.02);toast('接触が安定した！');update3()},700)});
+ const endHold=()=>{clearTimeout(holdTimer);finger.classList.remove('down')};
+ ['pointerup','pointercancel','pointerleave'].forEach(ev=>st.addEventListener(ev,endHold));
+ update3()
 }
 function isReady(){return !s3.reverse&&s3.paper&&s3.contact}
 function update3(){
  const led=$('#ledStage');
  led.classList.toggle('on',isReady());
- $('#paper')?.classList.toggle('active',s3.paper);
- if(isReady()){
+ if(isReady()&&!s3.done){
+   s3.done=true;
    $('#spark').classList.remove('go');void $('#spark').offsetWidth;$('#spark').classList.add('go');
    add('research');tone(760,.13,.03);
    speech('<b>光った！</b> 極性・ペーパー・接触、3つを直せた。');
-   setTimeout(()=>clear('原因を自分で直した！','LEDの向き、食塩水ペーパー、コインの接触を1つずつ確かめた。','💡'),900)
+   setTimeout(()=>clear('原因を自分で直した！','LED本体、食塩水ペーパー、電池タワーを直接触って原因を直した。','💡'),900)
  }
 }
 
