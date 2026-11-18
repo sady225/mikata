@@ -3,314 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#5b452f">
-<title>喜名番所 なりきりミッション — 子どものMIKATA</title>
+<meta name="theme-color" content="#5a4431">
+<title>喜名番所 ぼうけんゲーム — 子どものMIKATA</title>
 <style>
-:root{
-  --wood:#5b452f;--wood2:#77593b;--paper:#fffaf0;--ink:#302821;--gold:#f0cf6a;
-  --green:#5f8b61;--red:#a85b53;--blue:#628aa0;--sand:#d7b685;--safe:env(safe-area-inset-bottom,0px)
-}
+:root{--wood:#5a4431;--gold:#f1cf69;--paper:#fffaf0;--ink:#302820;--green:#5d8b61;--red:#ae5b50;--blue:#5e8ca0;--safe:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#2e261f}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#2c251f}
 body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}
 button{font:inherit;touch-action:manipulation}
-#app{
-  width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;overflow:hidden;position:relative;
-  background:linear-gradient(#b9d8d4 0%,#e7ddbb 49%,#d6b47e 100%);user-select:none
-}
-header{
-  position:absolute;z-index:20;inset:0 0 auto 0;height:78px;padding:8px 10px;
-  background:linear-gradient(#72543a,#533d2d);color:#fff;border-bottom:3px solid #c89d54
-}
-.top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.brand{font-size:9px;font-weight:1000}
-.stage{font-size:11px;font-weight:1000;background:#ffffff20;padding:5px 8px;border-radius:999px}
-.tools{display:flex;gap:5px}.tools button{border:0;border-radius:999px;background:#fff;color:#5e452f;min-height:30px;padding:0 9px;font-size:10px;font-weight:1000}
-.track{display:flex;gap:5px;margin-top:7px}.track span{height:7px;flex:1;background:#ffffff25;border-radius:99px}.track span.on{background:var(--gold)}.track span.done{background:#7fc18b}
+#app{width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(#b9d9d5,#e7ddbd 52%,#d4b17c);user-select:none}
+header{position:absolute;z-index:20;inset:0 0 auto 0;height:76px;padding:8px 10px;background:linear-gradient(#71543a,#523d2d);color:#fff;border-bottom:3px solid #c79a52}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-size:9px;font-weight:1000}.stage{font-size:11px;font-weight:1000;background:#ffffff20;border-radius:999px;padding:5px 8px}.tools{display:flex;gap:5px}.tools button{border:0;border-radius:999px;background:#fff;color:#5e452f;min-height:30px;padding:0 9px;font-size:10px;font-weight:1000}
+.track{display:flex;gap:5px;margin-top:7px}.track span{height:7px;flex:1;border-radius:99px;background:#ffffff25}.track .on{background:var(--gold)}.track .done{background:#7fc18b}
 .screen{position:absolute;inset:0;display:none}.screen.active{display:flex}
-.title{padding:90px 18px 16px;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.badge{background:#fff;padding:7px 14px;border-radius:999px;color:#624933;font-size:11px;font-weight:1000;box-shadow:0 4px #60442d33}
-.title h1{font-size:clamp(34px,9vw,46px);line-height:1.02;color:#fff;text-shadow:0 4px #5e4632;margin:12px 0 4px}
-.title h1 em{font-style:normal;color:#f4d36e}.title p{margin:0;color:#5d4734;font-size:13px;font-weight:900}
-.hero{height:min(31dvh,235px);min-height:150px;width:min(84vw,320px);display:grid;place-items:center}
-.start,.bigBtn,.next,.retry,.small{
-  border:0;border-radius:999px;background:var(--gold);color:#684718;font-weight:1000;
-  box-shadow:0 5px #ad8034,0 0 0 3px #fff inset
-}
-.start{width:min(88vw,330px);min-height:54px;font-size:19px}.start:active,.bigBtn:active,.next:active,.retry:active,.small:active{transform:translateY(3px);box-shadow:0 2px #ad8034,0 0 0 3px #fff inset}
-.title small{max-width:340px;margin-top:9px;color:#654c39;font-size:10px;line-height:1.45;font-weight:800}
-
-.game{flex-direction:column;padding-top:84px;min-height:0}
-.steps{
-  flex:0 0 auto;margin:5px 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:5px
-}
-.step{border-radius:12px;background:#ffffff9e;padding:5px 4px;text-align:center;font-size:9px;font-weight:1000;color:#6b5b4f}
-.step strong{display:block;font-size:16px;line-height:1}.step.on{background:#fff0a8;color:#684719;box-shadow:0 0 0 2px #fff inset}.step.done{background:#e3f2df;color:#456d48}
-.mission{
-  flex:0 0 auto;margin:0 8px 5px;background:#fff;border-radius:17px;padding:7px 10px;box-shadow:0 4px #60482d28
-}
-.mission b{font-size:9px;color:#91613f}.mission h2{font-size:15px;margin:2px 0}.mission p{font-size:9px;color:#77685b;font-weight:800;margin:0;line-height:1.3}
-
-.scene{
-  position:relative;flex:1 1 auto;min-height:155px;margin:0 8px 5px;border:3px solid #ffffffbb;border-radius:22px;
-  overflow:hidden;background:#f7f1e4;box-shadow:inset 0 5px #8f765518
-}
-.sceneTag{position:absolute;z-index:4;left:8px;top:7px;background:#ffffffe0;padding:4px 7px;border-radius:999px;font-size:9px;font-weight:1000;color:#604b39}
-.ground{position:absolute;left:0;right:0;bottom:0;height:37%;background:#c6a879}
-.road{position:absolute;left:-15%;right:-15%;bottom:5%;height:22%;background:#b39162;transform:rotate(-3deg);border-top:3px solid #95764c;border-bottom:3px solid #95764c}
-.building{position:absolute;left:19%;bottom:21%;width:62%;height:46%;background:#8f714c;border:5px solid #5a4634}
-.roof{position:absolute;left:12%;bottom:64%;width:76%;height:20%;background:#68675f;clip-path:polygon(10% 100%,20% 20%,50% 0,80% 20%,90% 100%)}
-.door{position:absolute;left:43%;bottom:21%;width:14%;height:30%;background:#44362c}
-.post{position:absolute;bottom:18%;width:5%;height:34%;background:#7d7667}.post.l{left:12%}.post.r{right:12%}
-.pine{position:absolute;bottom:34%;width:9px;height:34%;background:#5f4936}.pine:before,.pine:after{content:"";position:absolute;left:50%;transform:translateX(-50%);border-radius:50%;background:#4f7355}.pine:before{width:52px;height:28px;top:-4px}.pine:after{width:38px;height:24px;top:13px}.pine.a{left:7%}.pine.b{right:8%}
-.person{position:absolute;width:26px;height:46px;bottom:18%;transition:.25s}.person:before{content:"";position:absolute;left:50%;top:0;width:13px;height:13px;border-radius:50%;background:#d2a17d;transform:translateX(-50%)}.person:after{content:"";position:absolute;left:50%;top:13px;width:18px;height:26px;border-radius:6px;background:var(--pc,#6d8190);transform:translateX(-50%)}.person.t{left:10%;--pc:#678797}.person.o{left:28%;--pc:#895f50}.person.l{right:28%;--pc:#6c825e}.person.f{right:10%;--pc:#8e765d}
-.effect{position:absolute;z-index:6;left:50%;top:52%;transform:translate(-50%,-50%);background:#fff;border-radius:18px;padding:11px 13px;max-width:78%;font-size:11px;font-weight:1000;text-align:center;box-shadow:0 5px #5e463225;opacity:0;pointer-events:none;transition:.18s}.effect.show{opacity:1}
-.timeline{position:absolute;inset:20% 7% 12%;display:none;align-items:center;justify-content:space-between}.timeline.show{display:flex}.line{position:absolute;left:7%;right:7%;top:47%;height:4px;background:#887152;z-index:0}.node{width:18%;text-align:center;font-size:8px;font-weight:1000;z-index:1}.dotT{width:20px;height:20px;border-radius:50%;background:#fff;border:5px solid #7c684d;margin:0 auto 5px}
-
-.playPanel{flex:0 0 auto;background:#574332ea;color:#fff;border-top:3px solid #ffffff6d;padding:7px 8px calc(8px + var(--safe))}
-.guide{font-size:11px;font-weight:1000;text-align:center;margin:0 0 7px;color:#fff8e9}
-.roles{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.role{
-  min-height:54px;border:0;border-radius:15px;background:#fff;color:#5e4736;font-size:11px;font-weight:1000;box-shadow:0 4px #35281f;padding:6px
-}.role span{font-size:19px;margin-right:4px}.role.used{background:#e3f2df;color:#486c49}.role:active,.choice:active{transform:translateY(2px);box-shadow:0 2px #35281f}
-.roleSpeech{background:#fff7e8;color:#5d4938;border-radius:14px;padding:8px 10px;font-size:10px;font-weight:900;margin-bottom:7px}
-.choices{display:grid;grid-template-columns:1fr;gap:6px}.choice{min-height:46px;border:0;border-radius:13px;background:#fff;color:#5d4736;font-size:10px;font-weight:1000;box-shadow:0 4px #35281f;padding:6px}
-.choice.good{background:#e1f1dd}.choice.bad{background:#f8dfdc}
-.answerBox{display:none}.answerBox.show{display:block}.feedback{min-height:28px;border-radius:10px;background:#ffffff16;padding:6px 7px;font-size:9px;font-weight:900;color:#fff4e5;margin-top:6px}
-.bigBtn{width:100%;min-height:46px;margin-top:7px;font-size:13px}
-.bigBtn.secondary{background:#fff;color:#5b4432;box-shadow:0 4px #38291f,0 0 0 3px #fff inset}
-
-.overlay{position:absolute;z-index:50;inset:0;display:none;place-items:center;padding:17px;background:#2c241ddd}.overlay.show{display:grid}
-.card{width:100%;max-width:350px;background:#fff;border-radius:23px;padding:17px;text-align:center;box-shadow:0 10px #211a15}.emoji{font-size:38px}.card h2{margin:2px 0 6px;font-size:24px;color:#557a55}.card p{font-size:11px;font-weight:800;line-height:1.55;color:#5d5147}.next,.retry,.small{width:100%;min-height:46px;margin-top:7px;font-size:14px}
-.discoverList{list-style:none;padding:0;margin:9px 0;max-height:46dvh;overflow:auto;text-align:left}.discoverList li{font-size:10px;font-weight:800;background:#edf4ee;padding:8px 9px;margin:5px 0;border-radius:11px}.discoverList .locked{background:#f2f2f2;color:#9ba3a5}
-@media(max-height:650px){
- header{height:70px}.game{padding-top:76px}.steps{margin-top:3px}.mission{padding:5px 8px}.mission h2{font-size:13px}.mission p{display:none}
- .scene{min-height:125px}.role{min-height:47px}.playPanel{padding-top:5px}.guide{font-size:10px;margin-bottom:5px}
-}
-@media(max-height:570px){
- .brand{display:none}.game{padding-top:68px}.scene{min-height:105px}.steps{display:none}.mission{margin-top:3px}.feedback{display:none}
-}
+.title{padding:88px 18px 16px;flex-direction:column;align-items:center;justify-content:center;text-align:center}.badge{background:#fff;padding:7px 14px;border-radius:999px;color:#634a34;font-size:11px;font-weight:1000}.title h1{font-size:clamp(34px,9vw,46px);line-height:1.02;color:#fff;text-shadow:0 4px #5e4632;margin:12px 0 4px}.title h1 em{font-style:normal;color:#f3d26d}.title p{font-size:13px;font-weight:900;color:#5d4734;margin:0}.hero{height:min(30dvh,225px);min-height:145px;width:min(84vw,320px);display:grid;place-items:center}
+.start,.next,.retry,.small{border:0;border-radius:999px;background:var(--gold);color:#684718;font-weight:1000;box-shadow:0 5px #ad8034,0 0 0 3px #fff inset}.start{width:min(88vw,330px);min-height:54px;font-size:19px}.start:active,.next:active,.retry:active,.small:active{transform:translateY(3px);box-shadow:0 2px #ad8034,0 0 0 3px #fff inset}.title small{max-width:340px;margin-top:9px;color:#654c39;font-size:10px;line-height:1.45;font-weight:800}
+.game{flex-direction:column;padding-top:82px}.mission{margin:5px 8px;background:#fff;border-radius:17px;padding:7px 10px;box-shadow:0 4px #60482d28;flex:0 0 auto}.mission b{font-size:9px;color:#91613f}.mission h2{font-size:15px;margin:2px 0}.mission p{font-size:9px;color:#76685b;font-weight:800;margin:0;line-height:1.3}
+.board{position:relative;flex:1 1 auto;min-height:235px;margin:0 8px 5px;border:3px solid #ffffffbb;border-radius:22px;background:#f7f1e4;overflow:hidden}
+.sceneTag{position:absolute;z-index:5;left:8px;top:7px;background:#ffffffe0;padding:4px 7px;border-radius:999px;font-size:9px;font-weight:1000}
+.ground{position:absolute;left:0;right:0;bottom:0;height:38%;background:#c5a676}.road{position:absolute;left:-10%;right:-10%;bottom:4%;height:24%;background:#b28f60;border-top:3px solid #94744b;border-bottom:3px solid #94744b;transform:rotate(-2deg)}
+.building{position:absolute;left:57%;bottom:22%;width:34%;height:42%;background:#8f714c;border:5px solid #5a4634}.roof{position:absolute;left:53%;bottom:61%;width:42%;height:18%;background:#68675f;clip-path:polygon(8% 100%,20% 20%,50% 0,80% 20%,92% 100%)}.door{position:absolute;left:70%;bottom:22%;width:9%;height:27%;background:#44362c}
+.tree{position:absolute;bottom:34%;width:8px;height:28%;background:#5f4936}.tree:before{content:"";position:absolute;left:50%;top:-5px;width:46px;height:28px;border-radius:50%;background:#4f7355;transform:translateX(-50%)}.tree.a{left:6%}.tree.b{left:42%}
+.player{position:absolute;z-index:7;width:34px;height:46px;left:7%;bottom:18%;transition:left .12s,bottom .12s;filter:drop-shadow(0 3px 2px #0002)}.player .head{width:18px;height:18px;border-radius:50%;background:#d6a17d;margin:auto}.player .bodyp{width:24px;height:25px;border-radius:8px;background:#678797;margin:-2px auto 0}.player .bag{position:absolute;width:12px;height:15px;background:#8a653e;border-radius:3px;right:-2px;top:20px}
+.coin,.item{position:absolute;z-index:6;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#fff;border:3px solid #d0a64e;font-size:16px;box-shadow:0 3px #80662e}.coin.collected,.item.collected{opacity:.15;transform:scale(.6)}
+.slot{position:absolute;z-index:5;width:56px;height:48px;border:3px dashed #7b674d;border-radius:12px;background:#ffffff66;display:grid;place-items:center;font-size:10px;font-weight:1000;text-align:center}
+.timelineBoard{position:absolute;inset:16% 5% 10%;display:none;grid-template-rows:auto 1fr;gap:8px}.timelineBoard.show{display:grid}.timelineRow{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.timeCard{border:0;border-radius:12px;background:#fff;padding:6px 4px;font-size:9px;font-weight:1000;box-shadow:0 3px #70573b;min-height:58px}.timeCard.selected{background:#fff0a7}.timeSlot{border:2px dashed #7f6c52;border-radius:12px;background:#ffffff70;min-height:50px;display:grid;place-items:center;font-size:9px;font-weight:1000;padding:4px}
+.flash{position:absolute;z-index:10;left:50%;top:50%;transform:translate(-50%,-50%);max-width:78%;background:#fff;border-radius:18px;padding:11px 13px;font-size:11px;font-weight:1000;text-align:center;box-shadow:0 5px #0002;opacity:0;pointer-events:none;transition:.18s}.flash.show{opacity:1}
+.panel{flex:0 0 auto;background:#574332ea;color:#fff;border-top:3px solid #ffffff6d;padding:7px 8px calc(8px + var(--safe))}
+.guide{text-align:center;font-size:11px;font-weight:1000;margin:0 0 6px}.controls{display:grid;grid-template-columns:repeat(3,52px);justify-content:center;gap:5px}.ctrl{min-height:44px;border:0;border-radius:13px;background:#fff;color:#5c4635;font-size:18px;font-weight:1000;box-shadow:0 4px #35281f}.ctrl.blank{visibility:hidden}.ctrl:active{transform:translateY(2px);box-shadow:0 2px #35281f}
+.actionRow{display:grid;grid-template-columns:1fr 1fr;gap:6px}.action{min-height:44px;border:0;border-radius:13px;background:#fff;color:#5c4635;font-size:10px;font-weight:1000;box-shadow:0 4px #35281f;padding:6px}.action:active{transform:translateY(2px);box-shadow:0 2px #35281f}
+.status{margin-top:6px;background:#ffffff16;border-radius:10px;padding:6px 8px;font-size:9px;font-weight:900;min-height:29px}
+.overlay{position:absolute;z-index:50;inset:0;display:none;place-items:center;padding:17px;background:#2b241ddd}.overlay.show{display:grid}.card{width:100%;max-width:350px;background:#fff;border-radius:23px;padding:17px;text-align:center;box-shadow:0 10px #211a15}.emoji{font-size:38px}.card h2{margin:2px 0 6px;font-size:24px;color:#557a55}.card p{font-size:11px;font-weight:800;line-height:1.55;color:#5d5147}.next,.retry,.small{width:100%;min-height:46px;margin-top:7px;font-size:14px}.discoverList{list-style:none;padding:0;margin:9px 0;max-height:46dvh;overflow:auto;text-align:left}.discoverList li{font-size:10px;font-weight:800;background:#edf4ee;padding:8px 9px;margin:5px 0;border-radius:11px}.discoverList .locked{background:#f2f2f2;color:#9ba3a5}
+@media(max-height:650px){header{height:68px}.game{padding-top:73px}.mission{padding:5px 8px}.mission h2{font-size:13px}.mission p{display:none}.board{min-height:190px}.panel{padding-top:5px}.guide{font-size:10px}.ctrl,.action{min-height:40px}}
+@media(max-height:570px){.brand{display:none}.game{padding-top:66px}.board{min-height:160px}.status{display:none}}
 </style>
 </head>
 <body>
 <div id="app">
 <header>
   <div class="top">
-    <div><div class="brand">子どものMIKATA｜地域文化ゲーム</div><div id="stageLabel" class="stage">1 / 6</div></div>
+    <div><div class="brand">子どものMIKATA｜地域文化ゲーム</div><div id="stageLabel" class="stage">1 / 4</div></div>
     <div class="tools"><button id="collection">🔎 0</button><button id="mute">🔊</button></div>
   </div>
   <div id="track" class="track"></div>
 </header>
 
 <main id="title" class="screen title active">
-  <div class="badge">小学4年生向け｜なりきりゲーム</div>
-  <h1>喜名番所<br><em>なりきりミッション</em></h1>
-  <p>だれになる？ → どうする？ → わかった！</p>
+  <div class="badge">小学4年生向け｜動かして学ぶ</div>
+  <h1>喜名番所<br><em>ぼうけんゲーム</em></h1>
+  <p>歩く！ 集める！ 運ぶ！ 並べる！</p>
   <div class="hero" aria-hidden="true">
     <svg viewBox="0 0 320 210">
       <rect x="69" y="95" width="182" height="83" fill="#8f714c" stroke="#5b4734" stroke-width="6"/>
       <polygon points="52,99 90,48 160,34 232,48 268,99" fill="#68675f"/>
       <rect x="142" y="126" width="38" height="52" fill="#43362c"/>
       <path d="M15 195 Q160 167 305 196" fill="none" stroke="#9b7c53" stroke-width="17"/>
-      <circle cx="24" cy="53" r="26" fill="#557a55"/><circle cx="293" cy="63" r="24" fill="#557a55"/>
-      <rect x="18" y="58" width="8" height="88" fill="#5f4936"/><rect x="289" y="68" width="8" height="80" fill="#5f4936"/>
     </svg>
   </div>
-  <button id="start" class="start">ゲームをはじめる</button>
-  <small>1人になりきって行動したら、次は別の人になってみよう。2人分わかったらミッションクリア。</small>
+  <button id="start" class="start">ぼうけんスタート！</button>
+  <small>文字を読むだけじゃなく、キャラを動かしてミッションをクリアしよう。</small>
 </main>
 
 <main id="game" class="screen game">
-  <div class="steps">
-    <div id="step1" class="step on"><strong>①</strong>だれになる？</div>
-    <div id="step2" class="step"><strong>②</strong>どうする？</div>
-    <div id="step3" class="step"><strong>③</strong>わかった！</div>
-  </div>
-
   <section class="mission">
     <b id="missionNo">ミッション1</b>
     <h2 id="missionTitle"></h2>
     <p id="missionText"></p>
   </section>
 
-  <section class="scene">
-    <div id="sceneTag" class="sceneTag">喜名番所</div>
-    <div class="ground"></div><div class="road"></div>
-    <div class="building"></div><div class="roof"></div><div class="door"></div>
-    <div class="post l"></div><div class="post r"></div><div class="pine a"></div><div class="pine b"></div>
-    <div class="person t"></div><div class="person o"></div><div class="person l"></div><div class="person f"></div>
-    <div id="effect" class="effect"></div>
-    <div id="timeline" class="timeline"><div class="line"></div><div class="node"><div class="dotT"></div>むかし</div><div class="node"><div class="dotT"></div>1853</div><div class="node"><div class="dotT"></div>役場</div><div class="node"><div class="dotT"></div>戦争</div><div class="node"><div class="dotT"></div>今</div></div>
+  <section class="board">
+    <div id="sceneTag" class="sceneTag">喜名への道</div>
+    <div id="normalScene">
+      <div class="ground"></div><div class="road"></div>
+      <div class="building"></div><div class="roof"></div><div class="door"></div>
+      <div class="tree a"></div><div class="tree b"></div>
+      <div id="player" class="player"><div class="head"></div><div class="bodyp"></div><div class="bag"></div></div>
+      <div id="objects"></div>
+    </div>
+    <div id="timelineBoard" class="timelineBoard">
+      <div id="timeCards" class="timelineRow"></div>
+      <div id="timeSlots" class="timelineRow"></div>
+    </div>
+    <div id="flash" class="flash"></div>
   </section>
 
-  <section class="playPanel">
-    <p id="guide" class="guide">① まず「だれになる？」をえらぼう</p>
-
-    <div id="roleArea" class="roles">
-      <button class="role" data-role="traveler"><span>🥾</span>旅をする人</button>
-      <button class="role" data-role="official"><span>📜</span>仕事をする人</button>
-      <button class="role" data-role="local"><span>🏘️</span>村の人</button>
-      <button class="role" data-role="time"><span>⏳</span>時間をみる人</button>
-    </div>
-
-    <div id="answerBox" class="answerBox">
-      <div id="roleSpeech" class="roleSpeech"></div>
-      <div id="choices" class="choices"></div>
-      <div id="feedback" class="feedback"></div>
-      <button id="afterSuccess" class="bigBtn" style="display:none"></button>
-    </div>
+  <section class="panel">
+    <p id="guide" class="guide"></p>
+    <div id="controlArea"></div>
+    <div id="status" class="status"></div>
   </section>
 </main>
 
-<div id="clear" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">わかった！</h2><p id="clearText"></p><button id="next" class="next">つぎのミッションへ</button></div></div>
+<div id="clear" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">クリア！</h2><p id="clearText"></p><button id="next" class="next">つぎへ！</button></div></div>
 <div id="collectionOverlay" class="overlay"><div class="card"><div class="emoji">🔎</div><h2>みつけたこと</h2><ul id="discoverList" class="discoverList"></ul><button id="closeCollection" class="small">もどる</button></div></div>
-<div id="finish" class="overlay"><div class="card"><div class="emoji">🗺️✨</div><h2>喜名番所ガイド！</h2><p id="finishText"></p><button id="showCollection" class="small">みつけたことを見る</button><button id="retry" class="retry">もう一回あそぶ</button></div></div>
+<div id="finish" class="overlay"><div class="card"><div class="emoji">🏆</div><h2>喜名番所マスター！</h2><p id="finishText"></p><button id="showCollection" class="small">みつけたことを見る</button><button id="retry" class="retry">もう一回あそぶ</button></div></div>
 </div>
 
 <script>
 (()=>{
 const discoveries=new Set();
 const allDiscoveries=[
- ['route','喜名番所は、首里から北へ向かう道の大事な場所だった'],
- ['rest','旅をする人にとって、休んだり安心したりできる場所だった'],
- ['admin','仕事をする人にとって、村のことを決める場所だった'],
- ['exchange','村の人にとって、人や話が集まる場所でもあった'],
+ ['rest','旅をする人にとって、喜名は休める場所だった'],
+ ['route','喜名は首里から北へ向かう道の大事な場所だった'],
+ ['admin','番所では村の仕事もしていた'],
+ ['exchange','人が集まると、話や情報も集まった'],
  ['perry','1853年、ペリー一行の調査隊が喜名番所を訪れた'],
- ['heine','一行の画家ハイネが喜名番所のようすを絵に残した'],
  ['office','のちに読谷の役場として使われた'],
- ['war','建物は沖縄戦でなくなった'],
- ['move','1946年、役場は喜名から波平へ移った'],
- ['rebuild','今の建物は2005年に昔のふんいきを再現して作られた'],
- ['roadstation','2006年に「道の駅」になった'],
- ['translate','同じ場所でも、だれの目で見るかで意味が変わる']
+ ['war','建物は沖縄戦で失われた'],
+ ['rebuild','今の建物は2005年に再現された'],
+ ['roadstation','2006年に道の駅になった']
 ];
 const stages=[
- {
-  title:'北へ行く旅のとちゅう。喜名に来た！',text:'ここは、ただ通るだけの場所かな？',tag:'宿道のとちゅう',timeline:false,
-  summary:'喜名は、旅をする人が休んだり、村の仕事をしたり、人や話が集まったりする大事な場所だった。',
-  roles:{
-   traveler:{speech:'「長い道を歩いてつかれたなあ…」',choices:[['休める場所をさがす','rest',true,'そう！ 旅をする人には、休める場所として見える。'],['すぐ通りすぎる','skip',false,'それだと、喜名が大事な場所だった理由を見のがしちゃう。']]},
-   official:{speech:'「この道を通る人や村のことを見ておこう。」',choices:[['大事な道の場所として見る','route',true,'そう！ 喜名は首里から北へ向かう道の大事な場所だった。'],['建物の形だけ見る','shape',false,'形だけでは、ここで何をしていたか分からないね。']]},
-   local:{speech:'「人が来ると、いろんな話も入ってくるね。」',choices:[['人の話を聞く','exchange',true,'そう！ 人が集まると、話や文化も集まる。'],['だれとも話さない','ignore',false,'人の行き来も、喜名の大事なところだよ。']]},
-   time:{speech:'「この場所を、長い道の中で見てみよう。」',choices:[['首里から北への道で考える','route',true,'そう！ 喜名は道の途中の大事な地点だった。'],['今だけを見る','now',false,'今だけだと、昔なぜ大事だったか分かりにくいね。']]}
-  }
- },
- {
-  title:'番所って、昔の役場だけ？',text:'ひとつの仕事だけだったのかな？',tag:'琉球王国のころ',timeline:false,
-  summary:'喜名番所は、村の仕事をする場所でもあり、旅の休けい所でもあり、人が集まる場所でもあった。',
-  roles:{
-   traveler:{speech:'「ここで休ませてもらえるかな？」',choices:[['休けいする場所として見る','rest',true,'そう！ 旅をする人には宿場として見える。'],['役場だから関係ないと思う','avoid',false,'役場みたいな仕事だけじゃなかったんだ。']]},
-   official:{speech:'「村の仕事をする場所だ。」',choices:[['村の仕事をする','admin',true,'そう！ 番所は行政の仕事をする場所だった。'],['休けいだけする','onlyrest',false,'休けい所だけではないよ。']]},
-   local:{speech:'「ここには、いろんな人が来るね。」',choices:[['人や話が集まる場所として見る','exchange',true,'そう！ 交流する場所でもあった。'],['建物だけ見る','shape',false,'建物より、ここで何が起きていたかが大事。']]},
-   time:{speech:'「この場所、あとで役場にもなるんだ。」',choices:[['あとで役場になる流れを見る','office',true,'そう！ 時代が変わると役わりも変わる。'],['ずっと同じだと思う','same',false,'同じ場所でも、時代で役わりは変わるよ。']]}
-  }
- },
- {
-  title:'1853年。外国から人が来た！',text:'だれの目で見ると、何が見える？',tag:'1853年',timeline:false,
-  summary:'1853年、ペリー一行の調査隊が喜名番所を訪れた。外から来た人の記録と、村の人から見た景色は同じとは限らない。',
-  roles:{
-   traveler:{speech:'「はじめて見る場所だ。記録しておこう。」',choices:[['見たことを記録する','perry',true,'そう！ 1853年にペリー一行の調査隊が訪れた記録がある。'],['何も残さない','none',false,'この訪問は記録に残っているよ。']]},
-   official:{speech:'「外から来た人には、どう対応しよう？」',choices:[['来た人の動きを確認する','perry',true,'そう！ 仕事をする人には、来訪者への対応として見える。'],['休けい所だけを見る','rest',false,'この日は「だれが来たか」も大事だね。']]},
-   local:{speech:'「村の人には、どう見えたんだろう？」',choices:[['村の人の見え方も考える','translate',true,'そう！ 外から来た人の記録だけが、すべてじゃない。'],['外国の人の記録だけで決める','onlyforeign',false,'村の人からの見え方もあるね。']]},
-   time:{speech:'「この時の絵も、今の手がかりになるね。」',choices:[['ハイネの絵も手がかりにする','heine',true,'そう！ 一行の画家ハイネが喜名番所のようすを絵に残した。'],['1853年だけで全部説明する','only1853',false,'1853年は大事だけど、喜名の歴史はもっと長いよ。']]}
-  }
- },
- {
-  title:'番所が、役場になった！',text:'同じ場所でも、仕事は変わる？',tag:'近代の役場',timeline:true,
-  summary:'喜名は、琉球王国の番所から、のちに読谷の役場として使われる場所へ変わった。',
-  roles:{
-   traveler:{speech:'「前に来た時と、使われ方がちがうみたい。」',choices:[['昔とのちがいを見る','office',true,'そう！ 同じ場所でも役わりは変わる。'],['昔と同じだと思う','same',false,'時代が変わると、使われ方も変わるよ。']]},
-   official:{speech:'「ここで村の仕事をしよう。」',choices:[['役場として使う','office',true,'そう！ のちに読谷の役場として使われた。'],['番所のままだと思う','same',false,'時代が変わって、役場として使われるようになった。']]},
-   local:{speech:'「村の相談をする場所になったんだね。」',choices:[['村の相談が集まる場所として見る','admin',true,'そう！ 行政の中心としての意味が強くなった。'],['建物だけを見る','shape',false,'建物より、そこで何をしていたかが大事だね。']]},
-   time:{speech:'「番所から役場へ、つながっているね。」',choices:[['番所→役場をつなげる','office',true,'そう！ 時間でつなぐと変化が見える。'],['別々の話だと思う','cut',false,'同じ場所の時間の流れとして見ると分かりやすいよ。']]}
-  }
- },
- {
-  title:'今の建物は、昔のまま？',text:'ここは、よーく考えるミッション！',tag:'戦争・移転・再現',timeline:true,
-  summary:'建物は沖縄戦で失われ、役場も移った。今の建物は2005年に昔のふんいきを再現して作られた。',
-  roles:{
-   traveler:{speech:'「今の建物、ずっと昔から残っているのかな？」',choices:[['案内を見てたしかめる','rebuild',true,'そう！ 今の建物は2005年に再現されたもの。'],['昔の建物がそのまま残ったと思う','original',false,'ここが大事！ 今の建物は昔のものそのままではないよ。']]},
-   official:{speech:'「戦争のあと、役場はどうなった？」',choices:[['役場が移ったことを見る','move',true,'そう！ 1946年、役場は喜名から波平へ移った。'],['ずっとここで役場を続けたと思う','same',false,'戦後、役場は別の場所へ移っているよ。']]},
-   local:{speech:'「建物がなくなったら、歴史もなくなるの？」',choices:[['建物と記憶を分けて考える','war',true,'そう！ 建物は失われても、記録や記憶は残る。'],['建物がない＝歴史もない','gone',false,'建物がなくなっても、歴史や記憶は残るよ。']]},
-   time:{speech:'「2005年、2006年…何があった？」',choices:[['2005→2006の流れを見る','roadstation',true,'そう！ 2005年に再現、2006年に道の駅になった。'],['今だけを見る','now',false,'時間で見ると、「再現された場所」だと分かるね。']]}
-  }
- },
- {
-  title:'さいご！ 喜名番所をだれかに教えよう',text:'相手によって、話しはじめを変えよう。',tag:'ガイドミッション',timeline:false,
-  summary:'喜名番所は、旅・村の仕事・人の交流・時間の変化を重ねると、もっとよく分かる。',
-  roles:{
-   traveler:{speech:'「旅行で来た人には、何から話す？」',choices:[['「昔も今も、人が立ち止まる場所」と話す','translate',true,'いいね！ 旅行の人には「立ち止まる場所」から話すと分かりやすい。'],['「番所です」だけ言う','flat',false,'それだけだと、どんな場所かイメージしにくいね。']]},
-   official:{speech:'「歴史が好きな人には、何から話す？」',choices:[['番所→役場の変化から話す','translate',true,'いいね！ 仕事の変化から話すと、歴史の流れが見える。'],['年号だけ言う','years',false,'年号だけだと、何が大事か伝わりにくいよ。']]},
-   local:{speech:'「村の人には、何から話す？」',choices:[['人や話が集まる場所として話す','translate',true,'いいね！ 地域のつながりから話せる。'],['外国の人の記録だけ話す','foreign',false,'村の人から見た景色も大事だね。']]},
-   time:{speech:'「時間の流れで話すなら？」',choices:[['番所→役場→戦争→再現で話す','translate',true,'いいね！ 場所の変化が一つの物語になる。'],['今の建物だけ話す','now',false,'今だけでは、なぜ再現されたか分からないね。']]}
-  }
- }
+ {title:'旅人ミッション！ 番所までたどり着け',text:'道にある「水」「休けい」「道しるべ」を3つ集めよう。',tag:'旅人ステージ',type:'walk',
+  summary:'旅をする人にとって、喜名は休んだり、道をたしかめたりできる大事な場所だった。'},
+ {title:'番所のお仕事！ 荷物を正しい場所へ',text:'手紙・荷物・旅人を、合う場所へ運ぼう。',tag:'番所お仕事ステージ',type:'deliver',
+  summary:'喜名番所は、休けいだけでなく、村の仕事や人の行き来をささえる場所でもあった。'},
+ {title:'村の情報集め！ 3つの話を見つけよう',text:'村の人に近づいて、ちがう話を3つ集めよう。',tag:'村の交流ステージ',type:'collect',
+  summary:'人が集まる場所には、物だけでなく、話や情報も集まった。'},
+ {title:'時空パズル！ 喜名の歴史を順番にせよ',text:'5枚のカードを、古い順に並べよう。',tag:'時間ステージ',type:'timeline',
+  summary:'喜名番所は、番所→役場→戦争→再現→道の駅と、時代によって役わりや姿を変えてきた。'}
 ];
 
-let stage=0,currentRole=null,usedRoles=new Set(),muted=false,audio=null,step=1;
-const $=s=>document.querySelector(s),roleArea=$('#roleArea'),answerBox=$('#answerBox'),choicesEl=$('#choices'),feedback=$('#feedback'),afterSuccess=$('#afterSuccess'),effect=$('#effect');
+let stage=0,muted=false,audio=null;
+let x=7,y=18,score=0,carrying=null,selectedTime=null,timelineOrder=[];
+const $=s=>document.querySelector(s),player=$('#player'),objects=$('#objects'),control=$('#controlArea'),status=$('#status'),flash=$('#flash');
 
-function tone(f=440,d=.05,g=.02){
- if(muted)return;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}
- if(!audio)return;if(audio.state==='suspended')audio.resume();
- const o=audio.createOscillator(),a=audio.createGain(),t=audio.currentTime;o.type='triangle';o.frequency.value=f;
- a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);
- o.connect(a).connect(audio.destination);o.start();o.stop(t+d+.02)
-}
-function addDiscovery(id){if(!discoveries.has(id)){discoveries.add(id);$('#collection').textContent='🔎 '+discoveries.size;tone(720,.05,.02)}}
-function renderTrack(){const t=$('#track');t.innerHTML='';for(let i=0;i<6;i++){const s=document.createElement('span');if(i<stage)s.className='done';else if(i===stage)s.className='on';t.appendChild(s)}}
-function setStep(n){
- step=n;
- [1,2,3].forEach(i=>{const el=$('#step'+i);el.classList.toggle('on',i===n);el.classList.toggle('done',i<n)});
- if(n===1)$('#guide').textContent='① まず「だれになる？」をえらぼう';
- if(n===2)$('#guide').textContent='② その人なら、どうする？';
- if(n===3)$('#guide').textContent='③ 2人分わかった！ 「わかった！」を押そう';
+function tone(f=440,d=.05,g=.02){if(muted)return;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}if(!audio)return;if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),a=audio.createGain(),t=audio.currentTime;o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(audio.destination);o.start();o.stop(t+d+.02)}
+function addDiscovery(id){if(!discoveries.has(id)){discoveries.add(id);$('#collection').textContent='🔎 '+discoveries.size;tone(700,.05,.02)}}
+function renderTrack(){const t=$('#track');t.innerHTML='';for(let i=0;i<4;i++){const s=document.createElement('span');if(i<stage)s.className='done';else if(i===stage)s.className='on';t.appendChild(s)}}
+function flashMsg(text,good=true){flash.textContent=(good?'✨ ':'💥 ')+text;flash.classList.add('show');clearTimeout(flashMsg.t);flashMsg.t=setTimeout(()=>flash.classList.remove('show'),850);tone(good?640:170,.08,.025)}
+function setPlayer(){player.style.left=x+'%';player.style.bottom=y+'%'}
+function move(dx,dy){x=Math.max(3,Math.min(88,x+dx));y=Math.max(8,Math.min(54,y+dy));setPlayer();checkCollision()}
+function dpad(){control.innerHTML='<div class="controls"><span class="ctrl blank"></span><button class="ctrl" data-m="up">↑</button><span class="ctrl blank"></span><button class="ctrl" data-m="left">←</button><button class="ctrl" data-m="down">↓</button><button class="ctrl" data-m="right">→</button></div>';control.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{const m=b.dataset.m;if(m==='up')move(0,7);if(m==='down')move(0,-7);if(m==='left')move(-7,0);if(m==='right')move(7,0)})}
+function addObj(id,label,left,bottom,cls='coin'){const d=document.createElement('div');d.className=cls;d.dataset.id=id;d.style.left=left+'%';d.style.bottom=bottom+'%';d.textContent=label;objects.appendChild(d)}
+function checkCollision(){const px=x+3,py=y+3;objects.querySelectorAll('.coin:not(.collected),.item:not(.collected)').forEach(o=>{const ox=parseFloat(o.style.left),oy=parseFloat(o.style.bottom);if(Math.abs(px-ox)<8&&Math.abs(py-oy)<9)hitObject(o)})}
+function hitObject(o){
+ const type=stages[stage].type,id=o.dataset.id;
+ if(type==='walk'){o.classList.add('collected');score++;flashMsg(o.textContent+' をゲット！');if(id==='rest')addDiscovery('rest');if(id==='sign')addDiscovery('route');status.textContent='集めたもの '+score+' / 3';if(score>=3)setTimeout(()=>clearStage(),500)}
+ if(type==='collect'){o.classList.add('collected');score++;flashMsg(o.textContent+' の話を聞いた！');addDiscovery('exchange');status.textContent='聞いた話 '+score+' / 3';if(score>=3)setTimeout(()=>clearStage(),500)}
 }
 function render(){
- const s=stages[stage];currentRole=null;usedRoles=new Set();setStep(1);
- $('#stageLabel').textContent=(stage+1)+' / 6';$('#missionNo').textContent='ミッション'+(stage+1);$('#missionTitle').textContent=s.title;$('#missionText').textContent=s.text;$('#sceneTag').textContent=s.tag;
- $('#timeline').classList.toggle('show',s.timeline);answerBox.classList.remove('show');afterSuccess.style.display='none';
- document.querySelectorAll('.role').forEach(b=>b.classList.remove('used'));roleArea.style.display='grid';renderTrack();
+ const s=stages[stage];$('#stageLabel').textContent=(stage+1)+' / 4';$('#missionNo').textContent='ミッション'+(stage+1);$('#missionTitle').textContent=s.title;$('#missionText').textContent=s.text;$('#sceneTag').textContent=s.tag;renderTrack();
+ objects.innerHTML='';$('#normalScene').style.display=s.type==='timeline'?'none':'block';$('#timelineBoard').classList.toggle('show',s.type==='timeline');
+ x=7;y=18;score=0;carrying=null;setPlayer();
+ if(s.type==='walk')renderWalk();
+ if(s.type==='deliver')renderDeliver();
+ if(s.type==='collect')renderCollect();
+ if(s.type==='timeline')renderTimeline();
 }
-function chooseRole(role){
- if(usedRoles.has(role))return;
- currentRole=role;setStep(2);roleArea.style.display='none';answerBox.classList.add('show');
- const data=stages[stage].roles[role];$('#roleSpeech').textContent=data.speech;choicesEl.innerHTML='';feedback.textContent='どっちにする？';afterSuccess.style.display='none';
- data.choices.forEach(([label,id,good,text])=>{
-  const b=document.createElement('button');b.className='choice';b.textContent=label;
-  b.onclick=()=>resolveChoice(b,id,good,text);choicesEl.appendChild(b)
- });
+function renderWalk(){
+ $('#guide').textContent='矢印で歩いて、3つのアイテムを集めよう！';dpad();status.textContent='集めたもの 0 / 3';
+ addObj('water','💧',25,20);addObj('rest','🪑',48,36);addObj('sign','🪧',73,16)
 }
-function resolveChoice(btn,id,good,text){
- choicesEl.querySelectorAll('.choice').forEach(b=>b.classList.remove('good','bad'));btn.classList.add(good?'good':'bad');
- feedback.textContent=text;showEffect((good?'✅ ':'⚠️ ')+text);
- if(!good){tone(170,.09,.025);return}
- usedRoles.add(currentRole);addDiscovery(id);addDiscovery('translate');tone(620,.05,.02);
- document.querySelector('.role[data-role="'+currentRole+'"]').classList.add('used');
- choicesEl.querySelectorAll('.choice').forEach(b=>b.disabled=true);
- afterSuccess.style.display='block';
- if(usedRoles.size<2){
-   afterSuccess.textContent='つぎは、べつの人になってみる';
-   afterSuccess.className='bigBtn secondary';
-   afterSuccess.onclick=backToRoles
- }else{
-   setStep(3);afterSuccess.textContent='わかった！ ミッションをまとめる';
-   afterSuccess.className='bigBtn';
-   afterSuccess.onclick=clearStage
- }
+function renderDeliver(){
+ $('#guide').textContent='まず荷物をえらぶ → 次に届け先をタップ！';
+ control.innerHTML='<div class="actionRow"><button class="action" data-carry="letter">✉️ 手紙</button><button class="action" data-carry="goods">📦 荷物</button><button class="action" data-carry="traveler">🥾 旅人</button><button class="action" id="resetDeliver">🔄 やり直す</button></div>';
+ objects.innerHTML='';
+ const slots=[['office','📜 村の仕事',61,42],['store','📦 荷物置き',78,24],['rest','🪑 休けい',58,12]];
+ slots.forEach(([id,l,left,bottom])=>{const d=document.createElement('button');d.className='slot';d.dataset.slot=id;d.style.left=left+'%';d.style.bottom=bottom+'%';d.textContent=l;d.onclick=()=>deliverTo(id);objects.appendChild(d)});
+ control.querySelectorAll('[data-carry]').forEach(b=>b.onclick=()=>{carrying=b.dataset.carry;status.textContent='いま持っている：'+b.textContent;flashMsg('持った！ 次は届け先をタップ',true)});
+ $('#resetDeliver').onclick=()=>{score=0;carrying=null;status.textContent='3つを正しい場所へ運ぼう';objects.querySelectorAll('.slot').forEach(s=>s.style.opacity='1')};
+ status.textContent='3つを正しい場所へ運ぼう';
 }
-function backToRoles(){
- answerBox.classList.remove('show');roleArea.style.display='grid';currentRole=null;setStep(1);
- document.querySelectorAll('.role').forEach(b=>{b.disabled=usedRoles.has(b.dataset.role)});
- $('#guide').textContent='① さっきとちがう人をえらぼう'
+function deliverTo(slot){
+ if(!carrying){flashMsg('先に運ぶものをえらぼう',false);return}
+ const correct={letter:'office',goods:'store',traveler:'rest'};
+ if(correct[carrying]===slot){score++;flashMsg('ぴったり！',true);const target=objects.querySelector('[data-slot="'+slot+'"]');if(target)target.style.opacity='.35';if(carrying==='letter')addDiscovery('admin');if(carrying==='traveler')addDiscovery('rest');carrying=null;status.textContent='できた '+score+' / 3';if(score>=3)setTimeout(()=>clearStage(),500)}
+ else{flashMsg('そこじゃない！ だれが何に使う場所かな？',false)}
 }
-function clearStage(){
- const s=stages[stage];$('#clearEmoji').textContent=['🛣️','🏛️','⛵','🏢','🔥','🌉'][stage];$('#clearText').textContent=s.summary;$('#clear').classList.add('show');tone(650,.08,.03);setTimeout(()=>tone(820,.11,.03),90)
+function renderCollect(){
+ $('#guide').textContent='矢印で村の人に近づこう！';dpad();status.textContent='聞いた話 0 / 3';
+ addObj('story1','👵',24,18,'item');addObj('story2','👨',48,34,'item');addObj('story3','👧',73,17,'item')
 }
-function showEffect(text){effect.textContent=text;effect.classList.add('show');clearTimeout(showEffect.t);showEffect.t=setTimeout(()=>effect.classList.remove('show'),900)}
+function renderTimeline(){
+ $('#guide').textContent='カードをタップ → 空いている場所に入れよう！';
+ control.innerHTML='<div class="actionRow"><button id="checkTime" class="action">✅ ならびをチェック</button><button id="resetTime" class="action">🔄 やり直す</button></div>';
+ const cards=[
+  {id:'bansho',label:'① 番所の時代',order:1},
+  {id:'office',label:'② 役場になる',order:2},
+  {id:'war',label:'③ 戦争で失われる',order:3},
+  {id:'rebuild',label:'④ 2005年 再現',order:4},
+  {id:'road',label:'⑤ 2006年 道の駅',order:5}
+ ].sort(()=>Math.random()-.5);
+ const cardWrap=$('#timeCards'),slotWrap=$('#timeSlots');cardWrap.innerHTML='';slotWrap.innerHTML='';timelineOrder=[];selectedTime=null;
+ cards.forEach(c=>{const b=document.createElement('button');b.className='timeCard';b.dataset.id=c.id;b.dataset.order=c.order;b.textContent=c.label;b.onclick=()=>selectTime(b);cardWrap.appendChild(b)});
+ for(let i=0;i<5;i++){const s=document.createElement('button');s.className='timeSlot';s.dataset.index=i;s.textContent=(i+1)+'ばん';s.onclick=()=>placeTime(s);slotWrap.appendChild(s)}
+ $('#checkTime').onclick=checkTimeline;$('#resetTime').onclick=renderTimeline;status.textContent='古い順に5枚ならべよう';
+}
+function selectTime(card){selectedTime=card;document.querySelectorAll('.timeCard').forEach(c=>c.classList.remove('selected'));card.classList.add('selected')}
+function placeTime(slot){if(!selectedTime){flashMsg('先にカードをタップ！',false);return}const idx=+slot.dataset.index;timelineOrder[idx]={id:selectedTime.dataset.id,order:+selectedTime.dataset.order,label:selectedTime.textContent};slot.textContent=selectedTime.textContent;selectedTime.style.opacity='.3';selectedTime.disabled=true;selectedTime=null;document.querySelectorAll('.timeCard').forEach(c=>c.classList.remove('selected'))}
+function checkTimeline(){
+ if(timelineOrder.filter(Boolean).length<5){flashMsg('まだ空いている場所があるよ',false);return}
+ const ok=timelineOrder.every((x,i)=>x.order===i+1);
+ if(!ok){flashMsg('おしい！ 時間の流れをもう一度見よう',false);return}
+ addDiscovery('office');addDiscovery('war');addDiscovery('rebuild');addDiscovery('roadstation');flashMsg('大正解！',true);setTimeout(()=>clearStage(),500)
+}
+function clearStage(){const s=stages[stage];$('#clearEmoji').textContent=['🥾','📦','🏘️','⏳'][stage];$('#clearText').textContent=s.summary;$('#clear').classList.add('show');tone(650,.08,.03);setTimeout(()=>tone(820,.11,.03),90)}
 function showCollection(){const ul=$('#discoverList');ul.innerHTML='';allDiscoveries.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#collectionOverlay').classList.add('show')}
-document.querySelectorAll('.role').forEach(b=>b.onclick=()=>chooseRole(b.dataset.role));
 $('#start').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');render()};
-$('#next').onclick=()=>{$('#clear').classList.remove('show');if(stage<5){stage++;render()}else{$('#finishText').textContent='2人以上になりきって、同じ喜名番所がちがって見えることを発見できた！';$('#finish').classList.add('show')}};
+$('#next').onclick=()=>{$('#clear').classList.remove('show');if(stage<3){stage++;render()}else{$('#finishText').textContent='歩く・運ぶ・聞く・ならべる、4つのゲームで喜名番所の役わりと時間の変化を体験できた！';$('#finish').classList.add('show')}};
 $('#retry').onclick=()=>{$('#finish').classList.remove('show');stage=0;discoveries.clear();$('#collection').textContent='🔎 0';render()};
 $('#collection').onclick=showCollection;$('#showCollection').onclick=showCollection;$('#closeCollection').onclick=()=>$('#collectionOverlay').classList.remove('show');
 $('#mute').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
