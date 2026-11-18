@@ -175,6 +175,12 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
      </g>
      <g id="triB" class="triB">
       <polygon points="45,205 140,42 235,205"/>
+      <line class="pickSide pickSideB" data-k="sAB" x1="45" y1="205" x2="140" y2="42"/>
+      <line class="pickSide pickSideB" data-k="sBC" x1="140" y1="42" x2="235" y2="205"/>
+      <line class="pickSide pickSideB" data-k="sCA" x1="235" y1="205" x2="45" y2="205"/>
+      <circle class="pickAngle pickAngleB" data-k="aA" cx="45" cy="205" r="24"/>
+      <circle class="pickAngle pickAngleB" data-k="aB" cx="140" cy="42" r="24"/>
+      <circle class="pickAngle pickAngleB" data-k="aC" cx="235" cy="205" r="24"/>
       <text x="34" y="224">A′</text><text x="126" y="34">B′</text><text x="238" y="224">C′</text>
      </g>
      <g id="ghosts" class="ghosts">
@@ -235,7 +241,7 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
     <h2>遊び方</h2>
     <p><strong>合同</strong>は、移動するとぴったり重なる三角形。<br><strong>相似</strong>は、大きさを変えるとぴったり重なる三角形。</p>
     <ul>
-     <li>青い三角形の辺や頂点の角を直接タップして選択</li>
+     <li>青・赤どちらの三角形でも、辺や頂点の角を直接タップして選択</li>
      <li>合同は3つまで、相似は2〜3つの条件でTEST</li>
      <li>条件が足りないと、違う形の「ゴースト三角形」が出る</li>
      <li>十分なら2つの三角形が重なって、条件を発見できる</li>
@@ -486,7 +492,7 @@ $('#tAngleA').addEventListener('click',()=>tutorialTap('angle'));
 $('#tutorialDone').addEventListener('click',()=>{
  $('#tutorialModal').classList.remove('show');S.selected.clear();renderSelection();clearVisual();
  $('#modeBadge').textContent='合同ラボ';
- $('#missionText').innerHTML='👆 青い三角形の<b>辺や角を直接タップ</b>して、三角形が1つに決まる条件を探そう！';
+ $('#missionText').innerHTML='👆 三角形の<b>辺や角を直接タップ</b>して、三角形が1つに決まる条件を探そう！';
  message('辺や角をタップすると黄色くなるよ。2〜3個選んでTEST！');
  sfx('good');
 });
