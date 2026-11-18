@@ -3,64 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#5f4732">
-<title>喜名番所 時空ミッション — 子どものMIKATA</title>
+<meta name="theme-color" content="#5b452f">
+<title>喜名番所 なりきりミッション — 子どものMIKATA</title>
 <style>
 :root{
-  --wood:#5f4732;--wood2:#7a5b3d;--paper:#fffaf0;--sand:#e7d2ad;--ink:#332a23;
-  --gold:#e0b85b;--green:#557a55;--red:#a2574d;--blue:#557f91;--purple:#7a6a91;
-  --safe:env(safe-area-inset-bottom,0px)
+  --wood:#5b452f;--wood2:#77593b;--paper:#fffaf0;--ink:#302821;--gold:#f0cf6a;
+  --green:#5f8b61;--red:#a85b53;--blue:#628aa0;--sand:#d7b685;--safe:env(safe-area-inset-bottom,0px)
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#2d261f}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#2e261f}
 body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}
 button{font:inherit;touch-action:manipulation}
 #app{
   width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;overflow:hidden;position:relative;
-  background:linear-gradient(#b9d7d5 0%,#e7ddbe 48%,#d0ad7b 100%);
-  user-select:none
+  background:linear-gradient(#b9d8d4 0%,#e7ddbb 49%,#d6b47e 100%);user-select:none
 }
 header{
-  position:absolute;z-index:20;inset:0 0 auto 0;height:82px;padding:8px 10px;
-  background:linear-gradient(#70533a,#523d2d);color:#fff;border-bottom:3px solid #c89a52
+  position:absolute;z-index:20;inset:0 0 auto 0;height:78px;padding:8px 10px;
+  background:linear-gradient(#72543a,#533d2d);color:#fff;border-bottom:3px solid #c89d54
 }
 .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.brand{font-size:9px;font-weight:1000;opacity:.9}
+.brand{font-size:9px;font-weight:1000}
 .stage{font-size:11px;font-weight:1000;background:#ffffff20;padding:5px 8px;border-radius:999px}
-.tools{display:flex;gap:5px}
-.tools button{border:0;border-radius:999px;background:#fff;color:#60462f;min-height:30px;padding:0 9px;font-size:10px;font-weight:1000}
-.track{display:flex;gap:5px;margin-top:7px}
-.track span{height:7px;flex:1;background:#ffffff25;border-radius:99px}
-.track span.on{background:#f1ce66}.track span.done{background:#7fc38f}
+.tools{display:flex;gap:5px}.tools button{border:0;border-radius:999px;background:#fff;color:#5e452f;min-height:30px;padding:0 9px;font-size:10px;font-weight:1000}
+.track{display:flex;gap:5px;margin-top:7px}.track span{height:7px;flex:1;background:#ffffff25;border-radius:99px}.track span.on{background:var(--gold)}.track span.done{background:#7fc18b}
 .screen{position:absolute;inset:0;display:none}.screen.active{display:flex}
-.title{padding:92px 18px 16px;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.badge{background:#fff;padding:7px 14px;border-radius:999px;color:#644a33;font-size:11px;font-weight:1000;box-shadow:0 4px #60442d33}
+.title{padding:90px 18px 16px;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.badge{background:#fff;padding:7px 14px;border-radius:999px;color:#624933;font-size:11px;font-weight:1000;box-shadow:0 4px #60442d33}
 .title h1{font-size:clamp(34px,9vw,46px);line-height:1.02;color:#fff;text-shadow:0 4px #5e4632;margin:12px 0 4px}
-.title h1 em{font-style:normal;color:#f2d272}.title p{margin:0;color:#5a4635;font-size:13px;font-weight:900}
+.title h1 em{font-style:normal;color:#f4d36e}.title p{margin:0;color:#5d4734;font-size:13px;font-weight:900}
 .hero{height:min(31dvh,235px);min-height:150px;width:min(84vw,320px);display:grid;place-items:center}
-.start,.primary,.next,.retry,.small{
-  border:0;border-radius:999px;background:#f1d06e;color:#684718;font-weight:1000;
+.start,.bigBtn,.next,.retry,.small{
+  border:0;border-radius:999px;background:var(--gold);color:#684718;font-weight:1000;
   box-shadow:0 5px #ad8034,0 0 0 3px #fff inset
 }
-.start{width:min(88vw,330px);min-height:54px;font-size:19px}
-.start:active,.primary:active,.next:active,.retry:active,.small:active{transform:translateY(3px);box-shadow:0 2px #ad8034,0 0 0 3px #fff inset}
+.start{width:min(88vw,330px);min-height:54px;font-size:19px}.start:active,.bigBtn:active,.next:active,.retry:active,.small:active{transform:translateY(3px);box-shadow:0 2px #ad8034,0 0 0 3px #fff inset}
 .title small{max-width:340px;margin-top:9px;color:#654c39;font-size:10px;line-height:1.45;font-weight:800}
 
-.game{flex-direction:column;padding-top:88px;min-height:0}
-.mission{
-  margin:6px 9px 5px;background:#fff;border-radius:18px;padding:7px 10px;flex:0 0 auto;
-  box-shadow:0 4px #60482d28
+.game{flex-direction:column;padding-top:84px;min-height:0}
+.steps{
+  flex:0 0 auto;margin:5px 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:5px
 }
-.missionTop{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.mission b{font-size:9px;color:#93613f}.stamps{font-size:10px;font-weight:1000;color:#5d503f;background:#f4ead8;padding:4px 7px;border-radius:999px}
-.mission h2{font-size:15px;margin:3px 0 1px}.mission p{font-size:9px;color:#77685b;font-weight:800;margin:0;line-height:1.3}
+.step{border-radius:12px;background:#ffffff9e;padding:5px 4px;text-align:center;font-size:9px;font-weight:1000;color:#6b5b4f}
+.step strong{display:block;font-size:16px;line-height:1}.step.on{background:#fff0a8;color:#684719;box-shadow:0 0 0 2px #fff inset}.step.done{background:#e3f2df;color:#456d48}
+.mission{
+  flex:0 0 auto;margin:0 8px 5px;background:#fff;border-radius:17px;padding:7px 10px;box-shadow:0 4px #60482d28
+}
+.mission b{font-size:9px;color:#91613f}.mission h2{font-size:15px;margin:2px 0}.mission p{font-size:9px;color:#77685b;font-weight:800;margin:0;line-height:1.3}
 
 .scene{
   position:relative;flex:1 1 auto;min-height:155px;margin:0 8px 5px;border:3px solid #ffffffbb;border-radius:22px;
   overflow:hidden;background:#f7f1e4;box-shadow:inset 0 5px #8f765518
 }
 .sceneTag{position:absolute;z-index:4;left:8px;top:7px;background:#ffffffe0;padding:4px 7px;border-radius:999px;font-size:9px;font-weight:1000;color:#604b39}
-.weather{position:absolute;inset:0;background:linear-gradient(#b7d7d5 0 55%,#d8c18f 55%);transition:.25s}
 .ground{position:absolute;left:0;right:0;bottom:0;height:37%;background:#c6a879}
 .road{position:absolute;left:-15%;right:-15%;bottom:5%;height:22%;background:#b39162;transform:rotate(-3deg);border-top:3px solid #95764c;border-bottom:3px solid #95764c}
 .building{position:absolute;left:19%;bottom:21%;width:62%;height:46%;background:#8f714c;border:5px solid #5a4634}
@@ -69,34 +64,30 @@ header{
 .post{position:absolute;bottom:18%;width:5%;height:34%;background:#7d7667}.post.l{left:12%}.post.r{right:12%}
 .pine{position:absolute;bottom:34%;width:9px;height:34%;background:#5f4936}.pine:before,.pine:after{content:"";position:absolute;left:50%;transform:translateX(-50%);border-radius:50%;background:#4f7355}.pine:before{width:52px;height:28px;top:-4px}.pine:after{width:38px;height:24px;top:13px}.pine.a{left:7%}.pine.b{right:8%}
 .person{position:absolute;width:26px;height:46px;bottom:18%;transition:.25s}.person:before{content:"";position:absolute;left:50%;top:0;width:13px;height:13px;border-radius:50%;background:#d2a17d;transform:translateX(-50%)}.person:after{content:"";position:absolute;left:50%;top:13px;width:18px;height:26px;border-radius:6px;background:var(--pc,#6d8190);transform:translateX(-50%)}.person.t{left:10%;--pc:#678797}.person.o{left:28%;--pc:#895f50}.person.l{right:28%;--pc:#6c825e}.person.f{right:10%;--pc:#8e765d}
-.effect{position:absolute;z-index:5;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border-radius:18px;padding:10px 12px;max-width:76%;font-size:11px;font-weight:1000;text-align:center;box-shadow:0 5px #5e463225;opacity:0;pointer-events:none;transition:.18s}
-.effect.show{opacity:1}
+.effect{position:absolute;z-index:6;left:50%;top:52%;transform:translate(-50%,-50%);background:#fff;border-radius:18px;padding:11px 13px;max-width:78%;font-size:11px;font-weight:1000;text-align:center;box-shadow:0 5px #5e463225;opacity:0;pointer-events:none;transition:.18s}.effect.show{opacity:1}
 .timeline{position:absolute;inset:20% 7% 12%;display:none;align-items:center;justify-content:space-between}.timeline.show{display:flex}.line{position:absolute;left:7%;right:7%;top:47%;height:4px;background:#887152;z-index:0}.node{width:18%;text-align:center;font-size:8px;font-weight:1000;z-index:1}.dotT{width:20px;height:20px;border-radius:50%;background:#fff;border:5px solid #7c684d;margin:0 auto 5px}
-.rolePanel{flex:0 0 auto;margin:0 8px 5px;background:#ffffffd8;border-radius:18px;padding:7px;box-shadow:0 4px #5d46292a}
-.roleHeader{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:6px}
-.roleHeader strong{font-size:10px}.roleThought{font-size:9px;color:#65594e;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:65%}
-.roles{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.role{border:0;border-radius:13px;background:#efe7d9;color:#5b4938;min-height:48px;padding:4px 2px;font-size:9px;font-weight:1000}
-.role span{display:block;font-size:17px;line-height:1.1}
-.role.on{background:#fff0aa;box-shadow:0 0 0 2px #fff inset}.role.stamped{outline:2px solid #6ea477}.role.stamped:after{content:"✓";margin-left:2px;color:#4d8157}
-.actionPanel{flex:0 0 auto;background:#574332ea;color:#fff;border-top:3px solid #ffffff6d;padding:7px 8px calc(8px + var(--safe))}
-.prompt{text-align:center;font-size:10px;font-weight:1000;color:#f8ecdc;margin:0 0 6px}
-.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
-.action{min-height:44px;border:0;border-radius:13px;background:#fff;color:#5e4736;font-size:10px;font-weight:1000;padding:6px;box-shadow:0 4px #35281f}
-.action:active{transform:translateY(2px);box-shadow:0 2px #35281f}
-.action.good{background:#e4f3df}.action.bad{background:#f8dfdc}
-.synthesize{width:100%;min-height:42px;margin-top:6px;border:0;border-radius:999px;background:#f1d06e;color:#674618;font-size:12px;font-weight:1000;box-shadow:0 4px #ad8034}
-.synthesize[disabled]{opacity:.45;filter:grayscale(.4)}
-.feedback{min-height:28px;margin-top:5px;border-radius:10px;background:#ffffff16;padding:5px 7px;font-size:9px;font-weight:900;color:#fff4e5}
+
+.playPanel{flex:0 0 auto;background:#574332ea;color:#fff;border-top:3px solid #ffffff6d;padding:7px 8px calc(8px + var(--safe))}
+.guide{font-size:11px;font-weight:1000;text-align:center;margin:0 0 7px;color:#fff8e9}
+.roles{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.role{
+  min-height:54px;border:0;border-radius:15px;background:#fff;color:#5e4736;font-size:11px;font-weight:1000;box-shadow:0 4px #35281f;padding:6px
+}.role span{font-size:19px;margin-right:4px}.role.used{background:#e3f2df;color:#486c49}.role:active,.choice:active{transform:translateY(2px);box-shadow:0 2px #35281f}
+.roleSpeech{background:#fff7e8;color:#5d4938;border-radius:14px;padding:8px 10px;font-size:10px;font-weight:900;margin-bottom:7px}
+.choices{display:grid;grid-template-columns:1fr;gap:6px}.choice{min-height:46px;border:0;border-radius:13px;background:#fff;color:#5d4736;font-size:10px;font-weight:1000;box-shadow:0 4px #35281f;padding:6px}
+.choice.good{background:#e1f1dd}.choice.bad{background:#f8dfdc}
+.answerBox{display:none}.answerBox.show{display:block}.feedback{min-height:28px;border-radius:10px;background:#ffffff16;padding:6px 7px;font-size:9px;font-weight:900;color:#fff4e5;margin-top:6px}
+.bigBtn{width:100%;min-height:46px;margin-top:7px;font-size:13px}
+.bigBtn.secondary{background:#fff;color:#5b4432;box-shadow:0 4px #38291f,0 0 0 3px #fff inset}
+
 .overlay{position:absolute;z-index:50;inset:0;display:none;place-items:center;padding:17px;background:#2c241ddd}.overlay.show{display:grid}
 .card{width:100%;max-width:350px;background:#fff;border-radius:23px;padding:17px;text-align:center;box-shadow:0 10px #211a15}.emoji{font-size:38px}.card h2{margin:2px 0 6px;font-size:24px;color:#557a55}.card p{font-size:11px;font-weight:800;line-height:1.55;color:#5d5147}.next,.retry,.small{width:100%;min-height:46px;margin-top:7px;font-size:14px}
 .discoverList{list-style:none;padding:0;margin:9px 0;max-height:46dvh;overflow:auto;text-align:left}.discoverList li{font-size:10px;font-weight:800;background:#edf4ee;padding:8px 9px;margin:5px 0;border-radius:11px}.discoverList .locked{background:#f2f2f2;color:#9ba3a5}
 @media(max-height:650px){
-  header{height:74px}.game{padding-top:80px}.mission{padding:5px 8px}.mission h2{font-size:13px}.mission p{display:none}
-  .scene{min-height:128px}.role{min-height:41px}.role span{font-size:15px}.action{min-height:39px}.actionPanel{padding-top:5px}
+ header{height:70px}.game{padding-top:76px}.steps{margin-top:3px}.mission{padding:5px 8px}.mission h2{font-size:13px}.mission p{display:none}
+ .scene{min-height:125px}.role{min-height:47px}.playPanel{padding-top:5px}.guide{font-size:10px;margin-bottom:5px}
 }
 @media(max-height:570px){
-  .brand{display:none}.game{padding-top:72px}.scene{min-height:110px}.roleThought{display:none}.feedback{display:none}.prompt{display:none}
+ .brand{display:none}.game{padding-top:68px}.scene{min-height:105px}.steps{display:none}.mission{margin-top:3px}.feedback{display:none}
 }
 </style>
 </head>
@@ -104,16 +95,16 @@ header{
 <div id="app">
 <header>
   <div class="top">
-    <div><div class="brand">子どものMIKATA｜地域文化ゲーム</div><div id="stageLabel" class="stage">MISSION 1 / 6</div></div>
+    <div><div class="brand">子どものMIKATA｜地域文化ゲーム</div><div id="stageLabel" class="stage">1 / 6</div></div>
     <div class="tools"><button id="collection">🔎 0</button><button id="mute">🔊</button></div>
   </div>
   <div id="track" class="track"></div>
 </header>
 
 <main id="title" class="screen title active">
-  <div class="badge">役割を変えると、同じ場所が別のゲームになる</div>
-  <h1>喜名番所<br><em>時空ミッション</em></h1>
-  <p>誰の目で見る？ 何をする？ どうつなぐ？</p>
+  <div class="badge">小学4年生向け｜なりきりゲーム</div>
+  <h1>喜名番所<br><em>なりきりミッション</em></h1>
+  <p>だれになる？ → どうする？ → わかった！</p>
   <div class="hero" aria-hidden="true">
     <svg viewBox="0 0 320 210">
       <rect x="69" y="95" width="182" height="83" fill="#8f714c" stroke="#5b4734" stroke-width="6"/>
@@ -124,212 +115,202 @@ header{
       <rect x="18" y="58" width="8" height="88" fill="#5f4936"/><rect x="289" y="68" width="8" height="80" fill="#5f4936"/>
     </svg>
   </div>
-  <button id="start" class="start">ミッション開始</button>
-  <small>各ミッションで2人以上の視点スタンプを集めてから、最後の「まとめ」を解放する。適当に同じボタンを押すだけでは進めない。</small>
+  <button id="start" class="start">ゲームをはじめる</button>
+  <small>1人になりきって行動したら、次は別の人になってみよう。2人分わかったらミッションクリア。</small>
 </main>
 
 <main id="game" class="screen game">
+  <div class="steps">
+    <div id="step1" class="step on"><strong>①</strong>だれになる？</div>
+    <div id="step2" class="step"><strong>②</strong>どうする？</div>
+    <div id="step3" class="step"><strong>③</strong>わかった！</div>
+  </div>
+
   <section class="mission">
-    <div class="missionTop"><b id="missionNo">MISSION 01</b><span id="stampCount" class="stamps">視点スタンプ 0 / 2</span></div>
-    <h2 id="missionTitle"></h2><p id="missionText"></p>
+    <b id="missionNo">ミッション1</b>
+    <h2 id="missionTitle"></h2>
+    <p id="missionText"></p>
   </section>
 
   <section class="scene">
     <div id="sceneTag" class="sceneTag">喜名番所</div>
-    <div id="weather" class="weather"></div><div class="ground"></div><div class="road"></div>
+    <div class="ground"></div><div class="road"></div>
     <div class="building"></div><div class="roof"></div><div class="door"></div>
     <div class="post l"></div><div class="post r"></div><div class="pine a"></div><div class="pine b"></div>
     <div class="person t"></div><div class="person o"></div><div class="person l"></div><div class="person f"></div>
     <div id="effect" class="effect"></div>
-    <div id="timeline" class="timeline"><div class="line"></div><div class="node"><div class="dotT"></div>琉球王国</div><div class="node"><div class="dotT"></div>1853</div><div class="node"><div class="dotT"></div>村役場</div><div class="node"><div class="dotT"></div>戦争</div><div class="node"><div class="dotT"></div>現在</div></div>
+    <div id="timeline" class="timeline"><div class="line"></div><div class="node"><div class="dotT"></div>むかし</div><div class="node"><div class="dotT"></div>1853</div><div class="node"><div class="dotT"></div>役場</div><div class="node"><div class="dotT"></div>戦争</div><div class="node"><div class="dotT"></div>今</div></div>
   </section>
 
-  <section class="rolePanel">
-    <div class="roleHeader"><strong>① 誰の目で見る？</strong><span id="roleThought" class="roleThought">役割カードを選ぼう</span></div>
-    <div class="roles">
-      <button class="role" data-role="traveler"><span>🥾</span>旅人</button>
-      <button class="role" data-role="official"><span>📜</span>役人</button>
-      <button class="role" data-role="local"><span>🏘️</span>地域</button>
-      <button class="role" data-role="time"><span>⏳</span>時間</button>
+  <section class="playPanel">
+    <p id="guide" class="guide">① まず「だれになる？」をえらぼう</p>
+
+    <div id="roleArea" class="roles">
+      <button class="role" data-role="traveler"><span>🥾</span>旅をする人</button>
+      <button class="role" data-role="official"><span>📜</span>仕事をする人</button>
+      <button class="role" data-role="local"><span>🏘️</span>村の人</button>
+      <button class="role" data-role="time"><span>⏳</span>時間をみる人</button>
     </div>
-  </section>
 
-  <section class="actionPanel">
-    <p id="prompt" class="prompt">② その立場なら、何を見る・何をする？</p>
-    <div id="actions" class="actions"></div>
-    <button id="synthesize" class="synthesize" disabled>🔒 ③ 視点をつないでまとめる</button>
-    <div id="feedback" class="feedback" aria-live="polite">まず役割カードを選ぼう。</div>
+    <div id="answerBox" class="answerBox">
+      <div id="roleSpeech" class="roleSpeech"></div>
+      <div id="choices" class="choices"></div>
+      <div id="feedback" class="feedback"></div>
+      <button id="afterSuccess" class="bigBtn" style="display:none"></button>
+    </div>
   </section>
 </main>
 
-<div id="clear" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">ミッションクリア！</h2><p id="clearText"></p><button id="next" class="next">次のミッションへ</button></div></div>
-<div id="collectionOverlay" class="overlay"><div class="card"><div class="emoji">🔎</div><h2>喜名の発見</h2><ul id="discoverList" class="discoverList"></ul><button id="closeCollection" class="small">戻る</button></div></div>
-<div id="finish" class="overlay"><div class="card"><div class="emoji">🗺️✨</div><h2>喜名の時空ガイド！</h2><p id="finishText"></p><button id="showCollection" class="small">発見を見る</button><button id="retry" class="retry">最初からもう一度</button></div></div>
+<div id="clear" class="overlay"><div class="card"><div id="clearEmoji" class="emoji">✨</div><h2 id="clearTitle">わかった！</h2><p id="clearText"></p><button id="next" class="next">つぎのミッションへ</button></div></div>
+<div id="collectionOverlay" class="overlay"><div class="card"><div class="emoji">🔎</div><h2>みつけたこと</h2><ul id="discoverList" class="discoverList"></ul><button id="closeCollection" class="small">もどる</button></div></div>
+<div id="finish" class="overlay"><div class="card"><div class="emoji">🗺️✨</div><h2>喜名番所ガイド！</h2><p id="finishText"></p><button id="showCollection" class="small">みつけたことを見る</button><button id="retry" class="retry">もう一回あそぶ</button></div></div>
 </div>
 
 <script>
 (()=>{
-const roles=['traveler','official','local','time'];
-const roleNames={traveler:'🥾旅人',official:'📜役人',local:'🏘️地域',time:'⏳時間'};
 const discoveries=new Set();
 const allDiscoveries=[
- ['route','首里から中頭・国頭へ向かう街道の要所だった'],
- ['rest','旅人には休息・安心につながる宿場だった'],
- ['admin','行政を担う番所として地域運営の中心だった'],
- ['exchange','人の往来は情報・文化の交流にもつながった'],
+ ['route','喜名番所は、首里から北へ向かう道の大事な場所だった'],
+ ['rest','旅をする人にとって、休んだり安心したりできる場所だった'],
+ ['admin','仕事をする人にとって、村のことを決める場所だった'],
+ ['exchange','村の人にとって、人や話が集まる場所でもあった'],
  ['perry','1853年、ペリー一行の調査隊が喜名番所を訪れた'],
- ['heine','一行の画家ハイネが喜名番所の様子を描いた'],
- ['office','廃藩置県後は読谷の役場として使われた'],
- ['war','建物は沖縄戦で失われた'],
+ ['heine','一行の画家ハイネが喜名番所のようすを絵に残した'],
+ ['office','のちに読谷の役場として使われた'],
+ ['war','建物は沖縄戦でなくなった'],
  ['move','1946年、役場は喜名から波平へ移った'],
- ['rebuild','現在の建物は2005年に当時の雰囲気を再現して整備された'],
- ['roadstation','2006年に道の駅として認定された'],
- ['translate','同じ場所でも立場と時代で意味が変わる']
+ ['rebuild','今の建物は2005年に昔のふんいきを再現して作られた'],
+ ['roadstation','2006年に「道の駅」になった'],
+ ['translate','同じ場所でも、だれの目で見るかで意味が変わる']
 ];
 const stages=[
  {
-  title:'北へ向かう途中、なぜ喜名に立ち寄る？',text:'「ただの通過点」か、それ以上の意味があるのかを調べよう。',
-  tag:'宿道の要所',needed:2,timeline:false,
-  thoughts:{traveler:'長い道の途中。休める場所がほしい。',official:'人と道の動きを把握したい。',local:'人が集まると話も情報も集まる。',time:'街道の中で喜名の位置を見たい。'},
-  actions:{
-   traveler:[['休める場所を探す','rest',true,'旅人にとって、番所は宿場・休息の意味を持つ。'],['そのまま通り過ぎる','skip',false,'通り過ぎると「なぜここに番所があるか」を見落とす。']],
-   official:[['街道の要所として見る','route',true,'首里から中頭・国頭へ向かう道の要所として見える。'],['建物の形だけ見る','shape',false,'建物だけでは、場所の役割は見えてこない。']],
-   local:[['行き交う人の話を聞く','exchange',true,'往来は地域に情報や文化も運んでくる。'],['旅人を無視する','ignore',false,'人の往来そのものが地域の意味を作っている。']],
-   time:[['街道全体の中に置く','route',true,'喜名は単独の点ではなく、首里から北へ続く道の中にある。'],['現在だけを見る','now',false,'現在だけでは、なぜここが要所だったのか見えにくい。']]
-  },
-  summary:'喜名は「ただの途中」ではなく、旅・行政・交流が重なる街道の要所だった。'
+  title:'北へ行く旅のとちゅう。喜名に来た！',text:'ここは、ただ通るだけの場所かな？',tag:'宿道のとちゅう',timeline:false,
+  summary:'喜名は、旅をする人が休んだり、村の仕事をしたり、人や話が集まったりする大事な場所だった。',
+  roles:{
+   traveler:{speech:'「長い道を歩いてつかれたなあ…」',choices:[['休める場所をさがす','rest',true,'そう！ 旅をする人には、休める場所として見える。'],['すぐ通りすぎる','skip',false,'それだと、喜名が大事な場所だった理由を見のがしちゃう。']]},
+   official:{speech:'「この道を通る人や村のことを見ておこう。」',choices:[['大事な道の場所として見る','route',true,'そう！ 喜名は首里から北へ向かう道の大事な場所だった。'],['建物の形だけ見る','shape',false,'形だけでは、ここで何をしていたか分からないね。']]},
+   local:{speech:'「人が来ると、いろんな話も入ってくるね。」',choices:[['人の話を聞く','exchange',true,'そう！ 人が集まると、話や文化も集まる。'],['だれとも話さない','ignore',false,'人の行き来も、喜名の大事なところだよ。']]},
+   time:{speech:'「この場所を、長い道の中で見てみよう。」',choices:[['首里から北への道で考える','route',true,'そう！ 喜名は道の途中の大事な地点だった。'],['今だけを見る','now',false,'今だけだと、昔なぜ大事だったか分かりにくいね。']]}
+  }
  },
  {
-  title:'番所は「昔の役場」だけ？',text:'一つの説明に決めつけず、役割を重ねてみよう。',
-  tag:'琉球王国時代の番所',needed:2,timeline:false,
-  thoughts:{traveler:'ここで休めるのかな。',official:'行政の仕事をする場所だ。',local:'人が集まるから地域の情報も動く。',time:'役割は時代とともに変わる。'},
-  actions:{
-   traveler:[['宿場として見る','rest',true,'行政施設でも、旅人には宿場として見える。'],['役所だから近づかない','avoid',false,'旅人の視点では「役所」だけでは説明できない。']],
-   official:[['行政拠点として見る','admin',true,'番所は地域行政の中心的役割を担った。'],['休憩所だけだと思う','onlyrest',false,'宿場だけでは番所の役割を説明しきれない。']],
-   local:[['交流の節点として見る','exchange',true,'人と情報が集まる場所としての意味が見える。'],['建物だけを見る','shape',false,'場所の意味は建物の形だけでは分からない。']],
-   time:[['番所→役場への変化を予想','office',true,'この場所は後に行政拠点として役割を変えていく。'],['ずっと同じ役割だと思う','same',false,'同じ場所でも時代で役割は変わる。']]
-  },
-  summary:'喜名番所は、行政・宿場・交流が重なる場所だった。'
+  title:'番所って、昔の役場だけ？',text:'ひとつの仕事だけだったのかな？',tag:'琉球王国のころ',timeline:false,
+  summary:'喜名番所は、村の仕事をする場所でもあり、旅の休けい所でもあり、人が集まる場所でもあった。',
+  roles:{
+   traveler:{speech:'「ここで休ませてもらえるかな？」',choices:[['休けいする場所として見る','rest',true,'そう！ 旅をする人には宿場として見える。'],['役場だから関係ないと思う','avoid',false,'役場みたいな仕事だけじゃなかったんだ。']]},
+   official:{speech:'「村の仕事をする場所だ。」',choices:[['村の仕事をする','admin',true,'そう！ 番所は行政の仕事をする場所だった。'],['休けいだけする','onlyrest',false,'休けい所だけではないよ。']]},
+   local:{speech:'「ここには、いろんな人が来るね。」',choices:[['人や話が集まる場所として見る','exchange',true,'そう！ 交流する場所でもあった。'],['建物だけ見る','shape',false,'建物より、ここで何が起きていたかが大事。']]},
+   time:{speech:'「この場所、あとで役場にもなるんだ。」',choices:[['あとで役場になる流れを見る','office',true,'そう！ 時代が変わると役わりも変わる。'],['ずっと同じだと思う','same',false,'同じ場所でも、時代で役わりは変わるよ。']]}
+  }
  },
  {
-  title:'1853年、外から来た人が喜名を見た',text:'一つの記録だけで地域全体を語らないようにしよう。',
-  tag:'1853年',needed:2,timeline:false,
-  thoughts:{traveler:'外から見ると、ここはどんな場所に見える？',official:'外来者への対応も仕事になる。',local:'外から来た人を、地域側はどう見ただろう。',time:'1853年は長い歴史の一場面。'},
-  actions:{
-   traveler:[['訪問の記録を残す','perry',true,'1853年、ペリー一行の調査隊が喜名番所を訪れた。'],['何も記録しない','none',false,'この訪問は記録として残っている。']],
-   official:[['外来者の動きを把握する','perry',true,'行政側からは訪問者への対応という景色が見える。'],['宿場の役割だけを見る','rest',false,'1853年の出来事では外来者への対応も重要になる。']],
-   local:[['地域側の景色も考える','translate',true,'外来者の記録と地域の経験は同じではない。'],['外来者の記録だけを正解にする','onlyforeign',false,'一方の記録だけで地域全体を代表させると見落としが生まれる。']],
-   time:[['ハイネの絵も手がかりにする','heine',true,'一行の画家ハイネは喜名番所の様子を絵に残した。'],['1853年だけで全歴史を説明する','only1853',false,'1853年は重要だが、喜名の長い歴史の一場面。']]
-  },
-  summary:'1853年の訪問は重要な記録。でも外来者の記録と地域の景色を分けて考える。'
+  title:'1853年。外国から人が来た！',text:'だれの目で見ると、何が見える？',tag:'1853年',timeline:false,
+  summary:'1853年、ペリー一行の調査隊が喜名番所を訪れた。外から来た人の記録と、村の人から見た景色は同じとは限らない。',
+  roles:{
+   traveler:{speech:'「はじめて見る場所だ。記録しておこう。」',choices:[['見たことを記録する','perry',true,'そう！ 1853年にペリー一行の調査隊が訪れた記録がある。'],['何も残さない','none',false,'この訪問は記録に残っているよ。']]},
+   official:{speech:'「外から来た人には、どう対応しよう？」',choices:[['来た人の動きを確認する','perry',true,'そう！ 仕事をする人には、来訪者への対応として見える。'],['休けい所だけを見る','rest',false,'この日は「だれが来たか」も大事だね。']]},
+   local:{speech:'「村の人には、どう見えたんだろう？」',choices:[['村の人の見え方も考える','translate',true,'そう！ 外から来た人の記録だけが、すべてじゃない。'],['外国の人の記録だけで決める','onlyforeign',false,'村の人からの見え方もあるね。']]},
+   time:{speech:'「この時の絵も、今の手がかりになるね。」',choices:[['ハイネの絵も手がかりにする','heine',true,'そう！ 一行の画家ハイネが喜名番所のようすを絵に残した。'],['1853年だけで全部説明する','only1853',false,'1853年は大事だけど、喜名の歴史はもっと長いよ。']]}
+  }
  },
  {
-  title:'番所から村役場へ',text:'同じ場所でも、制度が変われば役割も変わる。',
-  tag:'近代の行政拠点',needed:2,timeline:true,
-  thoughts:{traveler:'旅の場所から、行政の場所へ見え方が変わる。',official:'ここが役場として機能する。',local:'相談や決定が集まる場所になる。',time:'番所→役場という役割変化を追う。'},
-  actions:{
-   traveler:[['昔との違いを見る','office',true,'旅人から見ても、場所の役割が変わっている。'],['昔と同じだと思う','same',false,'制度が変われば、場所の使われ方も変わる。']],
-   official:[['役場として使う','office',true,'廃藩置県後、喜名番所は読谷の役場として使われた。'],['番所のまま扱う','same',false,'近代には行政制度も役割も変化している。']],
-   local:[['地域の決定が集まる場所として見る','admin',true,'行政拠点は地域の相談や決定が集まる場所でもある。'],['建物だけ見る','shape',false,'行政拠点としての意味は建物以上に大きい。']],
-   time:[['番所→役場をつなぐ','office',true,'場所は続いても役割は変わる。'],['変化を切って考える','cut',false,'時間をつなぐと、場所の変化が見えやすい。']]
-  },
-  summary:'喜名は、琉球王国時代の番所から近代の村役場へと役割を変えた。'
+  title:'番所が、役場になった！',text:'同じ場所でも、仕事は変わる？',tag:'近代の役場',timeline:true,
+  summary:'喜名は、琉球王国の番所から、のちに読谷の役場として使われる場所へ変わった。',
+  roles:{
+   traveler:{speech:'「前に来た時と、使われ方がちがうみたい。」',choices:[['昔とのちがいを見る','office',true,'そう！ 同じ場所でも役わりは変わる。'],['昔と同じだと思う','same',false,'時代が変わると、使われ方も変わるよ。']]},
+   official:{speech:'「ここで村の仕事をしよう。」',choices:[['役場として使う','office',true,'そう！ のちに読谷の役場として使われた。'],['番所のままだと思う','same',false,'時代が変わって、役場として使われるようになった。']]},
+   local:{speech:'「村の相談をする場所になったんだね。」',choices:[['村の相談が集まる場所として見る','admin',true,'そう！ 行政の中心としての意味が強くなった。'],['建物だけを見る','shape',false,'建物より、そこで何をしていたかが大事だね。']]},
+   time:{speech:'「番所から役場へ、つながっているね。」',choices:[['番所→役場をつなげる','office',true,'そう！ 時間でつなぐと変化が見える。'],['別々の話だと思う','cut',false,'同じ場所の時間の流れとして見ると分かりやすいよ。']]}
+  }
  },
  {
-  title:'今の建物は、昔からそのまま？',text:'「残った」と「再現された」を区別しよう。',
-  tag:'戦争・移転・再現',needed:2,timeline:true,
-  thoughts:{traveler:'今見えている建物は昔のもの？',official:'行政拠点はどこへ移った？',local:'建物がなくなっても記憶は残る。',time:'戦争→移転→再現の順で見る。'},
-  actions:{
-   traveler:[['案内表示で建物の来歴を確かめる','rebuild',true,'現在の建物は2005年に当時の雰囲気を再現したもの。'],['昔の建物がそのまま残ったと思う','original',false,'これは重要な見落とし。現在の建物は当時の建物そのものではない。']],
-   official:[['役場の移転を見る','move',true,'1946年、役場は喜名から波平へ移った。'],['戦後も同じ場所で役場を続けたと思う','same',false,'戦後、行政拠点は移っている。']],
-   local:[['失われた建物と地域の記憶を分ける','war',true,'建物は沖縄戦で失われたが、場所の記憶は残った。'],['建物がない＝歴史も消えたと思う','gone',false,'建物がなくなっても、記録・記憶・場所の意味は残る。']],
-   time:[['2005→2006の流れを見る','roadstation',true,'2005年に再現整備、2006年に道の駅認定。'],['現在だけ見る','now',false,'時間をつなぐと「再現」の意味が分かる。']]
-  },
-  summary:'建物は戦争で失われ、役場も移転。現在の建物は再現整備されたもの。'
+  title:'今の建物は、昔のまま？',text:'ここは、よーく考えるミッション！',tag:'戦争・移転・再現',timeline:true,
+  summary:'建物は沖縄戦で失われ、役場も移った。今の建物は2005年に昔のふんいきを再現して作られた。',
+  roles:{
+   traveler:{speech:'「今の建物、ずっと昔から残っているのかな？」',choices:[['案内を見てたしかめる','rebuild',true,'そう！ 今の建物は2005年に再現されたもの。'],['昔の建物がそのまま残ったと思う','original',false,'ここが大事！ 今の建物は昔のものそのままではないよ。']]},
+   official:{speech:'「戦争のあと、役場はどうなった？」',choices:[['役場が移ったことを見る','move',true,'そう！ 1946年、役場は喜名から波平へ移った。'],['ずっとここで役場を続けたと思う','same',false,'戦後、役場は別の場所へ移っているよ。']]},
+   local:{speech:'「建物がなくなったら、歴史もなくなるの？」',choices:[['建物と記憶を分けて考える','war',true,'そう！ 建物は失われても、記録や記憶は残る。'],['建物がない＝歴史もない','gone',false,'建物がなくなっても、歴史や記憶は残るよ。']]},
+   time:{speech:'「2005年、2006年…何があった？」',choices:[['2005→2006の流れを見る','roadstation',true,'そう！ 2005年に再現、2006年に道の駅になった。'],['今だけを見る','now',false,'時間で見ると、「再現された場所」だと分かるね。']]}
+  }
  },
  {
-  title:'喜名番所を、相手に合わせてガイドせよ',text:'最後は知識ではなく「翻訳」。誰に何から伝える？',
-  tag:'翻訳ミッション',needed:3,timeline:false,
-  thoughts:{traveler:'今ここに来た人へ、何から話す？',official:'行政史を入口にすると伝わる人もいる。',local:'地域のつながりから話すと伝わる。',time:'変化の物語として伝えられる。'},
-  actions:{
-   traveler:[['「昔も今も人が立ち止まる場所」と案内','translate',true,'旅行者には「立ち止まる場所」という入口が分かりやすい。'],['「番所です」だけ言う','flat',false,'一語だけでは、その人に合う入口になりにくい。']],
-   official:[['行政の中心→役場への変化で説明','translate',true,'制度の変化を軸にすると行政史として伝わる。'],['年号だけ並べる','years',false,'年号だけでは、なぜ大事かが見えにくい。']],
-   local:[['人と情報が集まる場所として説明','translate',true,'地域のつながりを入口にすると生活の歴史として伝わる。'],['外から来た人の記録だけ話す','foreign',false,'地域側の景色も残すと説明が立体的になる。']],
-   time:[['番所→役場→戦争→再現を物語にする','translate',true,'時間の流れでつなぐと、場所の意味の変化が見える。'],['現在の建物だけ説明する','now',false,'現在だけでは、再現された意味が伝わらない。']]
-  },
-  summary:'喜名番所は一つの説明では足りない。相手に合わせて、旅・行政・地域・時間を入口に変える。'
+  title:'さいご！ 喜名番所をだれかに教えよう',text:'相手によって、話しはじめを変えよう。',tag:'ガイドミッション',timeline:false,
+  summary:'喜名番所は、旅・村の仕事・人の交流・時間の変化を重ねると、もっとよく分かる。',
+  roles:{
+   traveler:{speech:'「旅行で来た人には、何から話す？」',choices:[['「昔も今も、人が立ち止まる場所」と話す','translate',true,'いいね！ 旅行の人には「立ち止まる場所」から話すと分かりやすい。'],['「番所です」だけ言う','flat',false,'それだけだと、どんな場所かイメージしにくいね。']]},
+   official:{speech:'「歴史が好きな人には、何から話す？」',choices:[['番所→役場の変化から話す','translate',true,'いいね！ 仕事の変化から話すと、歴史の流れが見える。'],['年号だけ言う','years',false,'年号だけだと、何が大事か伝わりにくいよ。']]},
+   local:{speech:'「村の人には、何から話す？」',choices:[['人や話が集まる場所として話す','translate',true,'いいね！ 地域のつながりから話せる。'],['外国の人の記録だけ話す','foreign',false,'村の人から見た景色も大事だね。']]},
+   time:{speech:'「時間の流れで話すなら？」',choices:[['番所→役場→戦争→再現で話す','translate',true,'いいね！ 場所の変化が一つの物語になる。'],['今の建物だけ話す','now',false,'今だけでは、なぜ再現されたか分からないね。']]}
+  }
  }
 ];
 
-let stage=0,activeRole=null,stamps=new Set(),muted=false,audio=null;
-const $=s=>document.querySelector(s);
-const actionsEl=$('#actions'),feedback=$('#feedback'),synth=$('#synthesize'),effect=$('#effect');
+let stage=0,currentRole=null,usedRoles=new Set(),muted=false,audio=null,step=1;
+const $=s=>document.querySelector(s),roleArea=$('#roleArea'),answerBox=$('#answerBox'),choicesEl=$('#choices'),feedback=$('#feedback'),afterSuccess=$('#afterSuccess'),effect=$('#effect');
 
 function tone(f=440,d=.05,g=.02){
- if(muted)return;
- if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}
+ if(muted)return;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}
  if(!audio)return;if(audio.state==='suspended')audio.resume();
- const o=audio.createOscillator(),a=audio.createGain(),t=audio.currentTime;
- o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);
+ const o=audio.createOscillator(),a=audio.createGain(),t=audio.currentTime;o.type='triangle';o.frequency.value=f;
+ a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);
  o.connect(a).connect(audio.destination);o.start();o.stop(t+d+.02)
 }
-function addDiscovery(id){
- if(!discoveries.has(id)){discoveries.add(id);$('#collection').textContent='🔎 '+discoveries.size;tone(720,.05,.02)}
-}
-function renderTrack(){
- const t=$('#track');t.innerHTML='';
- for(let i=0;i<6;i++){const s=document.createElement('span');if(i<stage)s.className='done';else if(i===stage)s.className='on';t.appendChild(s)}
+function addDiscovery(id){if(!discoveries.has(id)){discoveries.add(id);$('#collection').textContent='🔎 '+discoveries.size;tone(720,.05,.02)}}
+function renderTrack(){const t=$('#track');t.innerHTML='';for(let i=0;i<6;i++){const s=document.createElement('span');if(i<stage)s.className='done';else if(i===stage)s.className='on';t.appendChild(s)}}
+function setStep(n){
+ step=n;
+ [1,2,3].forEach(i=>{const el=$('#step'+i);el.classList.toggle('on',i===n);el.classList.toggle('done',i<n)});
+ if(n===1)$('#guide').textContent='① まず「だれになる？」をえらぼう';
+ if(n===2)$('#guide').textContent='② その人なら、どうする？';
+ if(n===3)$('#guide').textContent='③ 2人分わかった！ 「わかった！」を押そう';
 }
 function render(){
- const s=stages[stage];activeRole=null;stamps=new Set();
- $('#stageLabel').textContent='MISSION '+(stage+1)+' / 6';$('#missionNo').textContent='MISSION '+String(stage+1).padStart(2,'0');
- $('#missionTitle').textContent=s.title;$('#missionText').textContent=s.text;$('#sceneTag').textContent=s.tag;
- $('#timeline').classList.toggle('show',s.timeline);
- document.querySelectorAll('.role').forEach(b=>b.classList.remove('on','stamped'));
- $('#roleThought').textContent='役割カードを選ぼう';actionsEl.innerHTML='';feedback.textContent='まず役割カードを選ぼう。';
- updateStampUI();renderTrack();
+ const s=stages[stage];currentRole=null;usedRoles=new Set();setStep(1);
+ $('#stageLabel').textContent=(stage+1)+' / 6';$('#missionNo').textContent='ミッション'+(stage+1);$('#missionTitle').textContent=s.title;$('#missionText').textContent=s.text;$('#sceneTag').textContent=s.tag;
+ $('#timeline').classList.toggle('show',s.timeline);answerBox.classList.remove('show');afterSuccess.style.display='none';
+ document.querySelectorAll('.role').forEach(b=>b.classList.remove('used'));roleArea.style.display='grid';renderTrack();
 }
 function chooseRole(role){
- activeRole=role;
- document.querySelectorAll('.role').forEach(b=>b.classList.toggle('on',b.dataset.role===role));
- $('#roleThought').textContent=stages[stage].thoughts[role];
- renderActions();
-}
-function renderActions(){
- const items=stages[stage].actions[activeRole];actionsEl.innerHTML='';
- items.forEach(([label,id,good,text])=>{
-  const b=document.createElement('button');b.className='action';b.textContent=label;
-  b.addEventListener('click',()=>resolveAction(b,id,good,text));actionsEl.appendChild(b)
+ if(usedRoles.has(role))return;
+ currentRole=role;setStep(2);roleArea.style.display='none';answerBox.classList.add('show');
+ const data=stages[stage].roles[role];$('#roleSpeech').textContent=data.speech;choicesEl.innerHTML='';feedback.textContent='どっちにする？';afterSuccess.style.display='none';
+ data.choices.forEach(([label,id,good,text])=>{
+  const b=document.createElement('button');b.className='choice';b.textContent=label;
+  b.onclick=()=>resolveChoice(b,id,good,text);choicesEl.appendChild(b)
  });
- feedback.textContent='この立場なら、どちらを選ぶ？';
 }
-function resolveAction(btn,id,good,text){
- actionsEl.querySelectorAll('.action').forEach(b=>b.classList.remove('good','bad'));
- btn.classList.add(good?'good':'bad');feedback.textContent=text;showEffect(good?'✅ '+text:'⚠️ '+text);
- if(good){
-   stamps.add(activeRole);document.querySelector('.role[data-role="'+activeRole+'"]').classList.add('stamped');addDiscovery(id);tone(620,.05,.02)
- }else tone(170,.09,.025);
- updateStampUI()
+function resolveChoice(btn,id,good,text){
+ choicesEl.querySelectorAll('.choice').forEach(b=>b.classList.remove('good','bad'));btn.classList.add(good?'good':'bad');
+ feedback.textContent=text;showEffect((good?'✅ ':'⚠️ ')+text);
+ if(!good){tone(170,.09,.025);return}
+ usedRoles.add(currentRole);addDiscovery(id);addDiscovery('translate');tone(620,.05,.02);
+ document.querySelector('.role[data-role="'+currentRole+'"]').classList.add('used');
+ choicesEl.querySelectorAll('.choice').forEach(b=>b.disabled=true);
+ afterSuccess.style.display='block';
+ if(usedRoles.size<2){
+   afterSuccess.textContent='つぎは、べつの人になってみる';
+   afterSuccess.className='bigBtn secondary';
+   afterSuccess.onclick=backToRoles
+ }else{
+   setStep(3);afterSuccess.textContent='わかった！ ミッションをまとめる';
+   afterSuccess.className='bigBtn';
+   afterSuccess.onclick=clearStage
+ }
 }
-function updateStampUI(){
- const need=stages[stage].needed;$('#stampCount').textContent='視点スタンプ '+stamps.size+' / '+need;
- synth.disabled=stamps.size<need;synth.textContent=stamps.size<need?'🔒 ③ 視点をつないでまとめる':'🔓 ③ 視点をつないでまとめる'
+function backToRoles(){
+ answerBox.classList.remove('show');roleArea.style.display='grid';currentRole=null;setStep(1);
+ document.querySelectorAll('.role').forEach(b=>{b.disabled=usedRoles.has(b.dataset.role)});
+ $('#guide').textContent='① さっきとちがう人をえらぼう'
 }
-function showEffect(text){
- effect.textContent=text;effect.classList.add('show');clearTimeout(showEffect.t);showEffect.t=setTimeout(()=>effect.classList.remove('show'),900)
+function clearStage(){
+ const s=stages[stage];$('#clearEmoji').textContent=['🛣️','🏛️','⛵','🏢','🔥','🌉'][stage];$('#clearText').textContent=s.summary;$('#clear').classList.add('show');tone(650,.08,.03);setTimeout(()=>tone(820,.11,.03),90)
 }
-function synthesize(){
- if(synth.disabled)return;
- addDiscovery('translate');$('#clearEmoji').textContent=['🛣️','🏛️','⛵','🏢','🔥','🌉'][stage];
- $('#clearTitle').textContent='ミッションクリア！';$('#clearText').textContent=stages[stage].summary;$('#clear').classList.add('show');tone(650,.08,.03);setTimeout(()=>tone(820,.11,.03),90)
-}
-function showCollection(){
- const ul=$('#discoverList');ul.innerHTML='';allDiscoveries.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#collectionOverlay').classList.add('show')
-}
-document.querySelectorAll('.role').forEach(b=>b.addEventListener('click',()=>chooseRole(b.dataset.role)));
-synth.addEventListener('click',synthesize);
+function showEffect(text){effect.textContent=text;effect.classList.add('show');clearTimeout(showEffect.t);showEffect.t=setTimeout(()=>effect.classList.remove('show'),900)}
+function showCollection(){const ul=$('#discoverList');ul.innerHTML='';allDiscoveries.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#collectionOverlay').classList.add('show')}
+document.querySelectorAll('.role').forEach(b=>b.onclick=()=>chooseRole(b.dataset.role));
 $('#start').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');render()};
-$('#next').onclick=()=>{$('#clear').classList.remove('show');if(stage<5){stage++;render()}else{$('#finishText').textContent='発見 '+discoveries.size+' / '+allDiscoveries.length+'。役割を切り替え、2つ以上の景色を集めてから一つの物語にまとめられた。';$('#finish').classList.add('show')}};
+$('#next').onclick=()=>{$('#clear').classList.remove('show');if(stage<5){stage++;render()}else{$('#finishText').textContent='2人以上になりきって、同じ喜名番所がちがって見えることを発見できた！';$('#finish').classList.add('show')}};
 $('#retry').onclick=()=>{$('#finish').classList.remove('show');stage=0;discoveries.clear();$('#collection').textContent='🔎 0';render()};
 $('#collection').onclick=showCollection;$('#showCollection').onclick=showCollection;$('#closeCollection').onclick=()=>$('#collectionOverlay').classList.remove('show');
 $('#mute').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
