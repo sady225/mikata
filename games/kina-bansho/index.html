@@ -1,187 +1,305 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#5b452f">
+<meta name="theme-color" content="#6a3f2d">
 <title>喜名番所 おしごと大作戦！</title>
 <style>
-:root{--wood:#5b452f;--gold:#f2cf68;--paper:#fffaf0;--ink:#302820;--green:#5e8a61;--red:#b45d53;--blue:#658da1;--safe:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#2c251f}
-body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:var(--ink)}
-button{font:inherit;touch-action:manipulation}
-#app{width:min(100vw,480px);height:100vh;height:100dvh;margin:auto;position:relative;overflow:hidden;background:linear-gradient(#b9d9d5,#e6ddbd 52%,#d2ae78);user-select:none}
-header{position:absolute;z-index:20;inset:0 0 auto;height:78px;padding:8px 10px;background:linear-gradient(#71543a,#523d2d);color:#fff;border-bottom:3px solid #c99b52}
-.top{display:flex;justify-content:space-between;align-items:center;gap:8px}.brand{font-size:9px;font-weight:1000}.day{font-size:11px;font-weight:1000;background:#ffffff20;border-radius:999px;padding:5px 8px}.hud{display:flex;gap:5px}.hud span,.hud button{border:0;border-radius:999px;background:#fff;color:#5e452f;min-height:30px;padding:6px 9px;font-size:10px;font-weight:1000}
-.meters{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}.meter{height:7px;border-radius:99px;background:#ffffff25;overflow:hidden}.meter i{display:block;height:100%;width:100%;background:#82c58e;transition:.2s}.meter.time i{background:#f0ce68}
-.screen{position:absolute;inset:0;display:none}.screen.active{display:flex}
-.title{padding:90px 18px 16px;flex-direction:column;align-items:center;justify-content:center;text-align:center}.badge{background:#fff;padding:7px 14px;border-radius:999px;color:#634a34;font-size:11px;font-weight:1000}.title h1{font-size:clamp(34px,9vw,46px);line-height:1.02;color:#fff;text-shadow:0 4px #5e4632;margin:12px 0 4px}.title h1 em{font-style:normal;color:#f4d36f}.title p{font-size:13px;font-weight:900;color:#5d4734;margin:0}.hero{height:min(29dvh,220px);min-height:145px;width:min(84vw,320px);display:grid;place-items:center}
-.start,.next,.retry,.small{border:0;border-radius:999px;background:var(--gold);color:#684718;font-weight:1000;box-shadow:0 5px #ad8034,0 0 0 3px #fff inset}.start{width:min(88vw,330px);min-height:54px;font-size:19px}.start:active,.next:active,.retry:active,.small:active{transform:translateY(3px);box-shadow:0 2px #ad8034,0 0 0 3px #fff inset}.title small{max-width:340px;margin-top:9px;color:#654c39;font-size:10px;line-height:1.45;font-weight:800}
-.game{flex-direction:column;padding-top:84px}.mission{margin:5px 8px;background:#fff;border-radius:17px;padding:7px 10px;box-shadow:0 4px #60482d28;flex:0 0 auto}.mission b{font-size:9px;color:#91613f}.mission h2{font-size:15px;margin:2px 0}.mission p{font-size:9px;color:#76685b;font-weight:800;margin:0;line-height:1.3}
-.board{position:relative;flex:1 1 auto;min-height:250px;margin:0 8px 5px;border:3px solid #ffffffbb;border-radius:22px;background:#f7f1e4;overflow:hidden}
-.sky{position:absolute;inset:0;background:linear-gradient(#bcdad7 0 58%,#c8aa79 58%)}
-.road{position:absolute;left:-8%;right:-8%;bottom:3%;height:20%;background:#b18e60;border-top:3px solid #94744b;transform:rotate(-2deg)}
-.mainHouse{position:absolute;left:31%;bottom:22%;width:38%;height:39%;background:#8e704c;border:5px solid #5a4634}.roof{position:absolute;left:25%;bottom:58%;width:50%;height:18%;background:#68675f;clip-path:polygon(7% 100%,20% 20%,50% 0,80% 20%,93% 100%)}.door{position:absolute;left:46%;bottom:22%;width:9%;height:26%;background:#44362c}
-.zone{position:absolute;z-index:6;width:29%;min-height:54px;border:3px dashed #6e5a43;border-radius:14px;background:#ffffffbd;padding:5px;text-align:center;font-size:10px;font-weight:1000;display:grid;place-items:center}.zone.hotel{left:3%;top:15%}.zone.office{right:3%;top:15%}.zone.guide{left:3%;bottom:7%}.zone.store{right:3%;bottom:7%}
-.zone strong{display:block;font-size:20px}.zone.hit{background:#e3f2df}.zone.bad{background:#f8dfdc}
-.queue{position:absolute;left:34%;right:34%;top:7%;bottom:6%;z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
-.guest{width:92%;min-height:58px;border-radius:16px;background:#fff;border:3px solid #d5b66d;padding:6px 8px;box-shadow:0 4px #5e463225;display:grid;grid-template-columns:44px 1fr;gap:7px;align-items:center;transition:.2s}.guest .face{font-size:28px;text-align:center}.guest b{font-size:11px}.guest p{font-size:9px;line-height:1.3;margin:2px 0;color:#6b5b50;font-weight:800}.guest.selected{outline:4px solid #f1cf68;transform:scale(1.02)}.guest.waiting{animation:pulse .7s ease-in-out infinite alternate}.guest.done{opacity:.15;transform:scale(.7)}
-@keyframes pulse{to{transform:translateY(-2px)}}
-.flash{position:absolute;z-index:20;left:50%;top:51%;transform:translate(-50%,-50%);background:#fff;border-radius:18px;padding:11px 13px;max-width:80%;font-size:11px;font-weight:1000;text-align:center;box-shadow:0 5px #0002;opacity:0;pointer-events:none;transition:.18s}.flash.show{opacity:1}
-.panel{flex:0 0 auto;background:#574332ea;color:#fff;border-top:3px solid #ffffff6d;padding:7px 8px calc(8px + var(--safe))}
-.guideText{text-align:center;font-size:11px;font-weight:1000;margin:0 0 6px}.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.act{min-height:46px;border:0;border-radius:13px;background:#fff;color:#5c4635;font-size:9px;font-weight:1000;box-shadow:0 4px #35281f;padding:4px}.act strong{display:block;font-size:18px}.act:active{transform:translateY(2px);box-shadow:0 2px #35281f}.status{margin-top:6px;background:#ffffff16;border-radius:10px;padding:6px 8px;font-size:9px;font-weight:900;min-height:28px}
-.overlay{position:absolute;z-index:50;inset:0;display:none;place-items:center;padding:17px;background:#2b241ddd}.overlay.show{display:grid}.card{width:100%;max-width:350px;background:#fff;border-radius:23px;padding:17px;text-align:center;box-shadow:0 10px #211a15}.emoji{font-size:38px}.card h2{margin:2px 0 6px;font-size:24px;color:#557a55}.card p{font-size:11px;font-weight:800;line-height:1.55;color:#5d5147}.scoreBox{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}.scoreItem{background:#f6efe2;border-radius:13px;padding:8px;font-size:10px;font-weight:1000}.scoreItem strong{display:block;font-size:20px}.next,.retry,.small{width:100%;min-height:46px;margin-top:7px;font-size:14px}.discoverList{list-style:none;padding:0;margin:9px 0;max-height:45dvh;overflow:auto;text-align:left}.discoverList li{font-size:10px;font-weight:800;background:#edf4ee;padding:8px 9px;margin:5px 0;border-radius:11px}.discoverList .locked{background:#f2f2f2;color:#9ba3a5}
-@media(max-height:650px){header{height:68px}.game{padding-top:73px}.mission{padding:5px 8px}.mission h2{font-size:13px}.mission p{display:none}.board{min-height:205px}.guest{min-height:52px}.panel{padding-top:5px}.act{min-height:40px}}
-@media(max-height:570px){.brand{display:none}.game{padding-top:66px}.board{min-height:175px}.status{display:none}.queue{gap:4px}.guest{min-height:45px;padding:4px}.guest p{display:none}}
+html,body{margin:0;height:100%;overflow:hidden;background:#2b211b}
+body{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;color:#fff}
+button{font:inherit;border:0;cursor:pointer}
+.app{position:relative;width:min(100vw,calc(100dvh*.62));height:100dvh;margin:auto;overflow:hidden;background:linear-gradient(#87c9d4 0%,#cfe1c6 45%,#d9bb82 72%,#b68a55 100%);user-select:none;touch-action:none}
+
+/* HUD */
+.hud{position:absolute;z-index:30;left:0;right:0;top:0;height:120px;padding:8px 12px 0;background:#7a4630}
+.wave{position:absolute;left:0;right:0;top:119px;height:12px;background:radial-gradient(circle at 12px 0,#7a4630 11px,transparent 12px) repeat-x;background-size:24px 12px}
+.row1{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.lbl{font-size:10px;font-weight:900;letter-spacing:.1em;opacity:.9}
+.score{font-size:36px;line-height:1;color:#ffe16d;font-weight:900;text-shadow:0 3px #4e291d;font-variant-numeric:tabular-nums}
+.best{font-size:11px;font-weight:800;margin-top:2px}
+.nextWrap{display:flex;align-items:center;gap:8px}
+.nextBubble{width:58px;height:58px;border-radius:50%;background:#fff;color:#594334;display:grid;place-items:center;box-shadow:0 3px #4e291d;position:relative}
+.nextBubble::after{content:"";position:absolute;left:-4px;bottom:6px;border:8px solid transparent;border-right-color:#fff;border-left:0;transform:rotate(-20deg)}
+.nextFace{font-size:30px;animation:bob 1.5s ease-in-out infinite}
+.evo{display:flex;gap:5px;align-items:center;margin-top:8px;padding:5px 7px;background:rgba(0,0,0,.18);border-radius:16px}
+.tier{flex:1;text-align:center;font-size:9px;font-weight:900;opacity:.35;transition:.25s}
+.tier span{display:block;font-size:20px;line-height:1.05}
+.tier.on{opacity:1;transform:translateY(-1px)}
+.tier.now{background:#ffffff1f;border-radius:10px;padding:3px 0}
+
+/* play field */
+.field{position:absolute;inset:132px 0 96px;overflow:hidden}
+.road{position:absolute;left:0;right:0;bottom:0;height:38%;background:#bc8f5c;clip-path:polygon(0 38%,100% 0,100% 100%,0 100%)}
+.house{position:absolute;left:50%;bottom:19%;width:56%;height:40%;transform:translateX(-50%);background:#95724f;border:5px solid #5c4736}
+.roof{position:absolute;left:50%;bottom:56%;width:72%;height:18%;transform:translateX(-50%);background:#60625b;clip-path:polygon(8% 100%,20% 20%,50% 0,80% 20%,92% 100%)}
+.door{position:absolute;left:50%;bottom:19%;width:13%;height:26%;transform:translateX(-50%);background:#49382e}
+.tree{position:absolute;bottom:31%;width:9px;height:30%;background:#614b38}.tree::before{content:"";position:absolute;left:50%;top:-7px;width:50px;height:30px;border-radius:50%;background:#52795a;transform:translateX(-50%)}.tree.a{left:6%}.tree.b{right:7%}
+.sign{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);background:#fff7de;color:#684f38;border:3px solid #7c6145;border-radius:12px;padding:5px 10px;font-size:11px;font-weight:900}
+
+.queueLane{position:absolute;left:12%;right:12%;top:4%;bottom:10%}
+.guest{position:absolute;left:50%;width:84%;min-height:66px;transform:translateX(-50%);border-radius:24px;background:#fff;color:#523f32;border:4px solid #e2bb65;box-shadow:0 5px rgba(64,42,28,.2);display:grid;grid-template-columns:52px 1fr 42px;align-items:center;padding:7px 8px;transition:transform .12s,opacity .2s,filter .2s}
+.guest.current{border-color:#ffe162;box-shadow:0 0 0 5px #fff7a5,0 5px rgba(64,42,28,.2);animation:currentPulse .8s ease-in-out infinite alternate}
+.guest .face{font-size:32px;text-align:center}
+.guest .need{font-size:13px;font-weight:900}.guest .sub{font-size:9px;font-weight:800;color:#7d6b60;margin-top:2px}
+.patience{width:12px;height:46px;border-radius:10px;background:#eadfd2;overflow:hidden;justify-self:end;display:flex;align-items:flex-end}.patience i{display:block;width:100%;height:100%;background:#67a96c;transition:height .1s,background .1s}
+.guest.bad{animation:shake .22s linear 2;border-color:#d95c55}.guest.done{opacity:0;transform:translateX(-50%) scale(.5) translateY(-25px)}
+.pop{position:absolute;z-index:25;pointer-events:none;font-size:24px;font-weight:900;color:#fff;text-shadow:0 3px #6d3c2a;animation:popUp .9s ease-out forwards}
+.combo{position:absolute;z-index:20;left:50%;top:37%;transform:translateX(-50%);font-size:31px;font-weight:900;color:#ffe162;text-shadow:0 4px #75402b;pointer-events:none;animation:comboPop .8s ease-out forwards}
+.toast{position:absolute;z-index:24;left:50%;top:57%;transform:translateX(-50%);max-width:82%;background:#fff;color:#604735;border-radius:22px;padding:10px 15px;font-size:12px;font-weight:900;text-align:center;box-shadow:0 5px rgba(70,45,28,.2);animation:toastIn .2s ease-out}
+
+/* bottom controls */
+.bar{position:absolute;z-index:30;left:0;right:0;bottom:0;height:96px;padding:7px 8px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:linear-gradient(transparent,#3b6e95 18%)}
+.service{position:relative;height:64px;border-radius:23px;background:#fff;color:#5b4332;font-weight:900;font-size:10px;box-shadow:0 4px #1b527b,0 0 0 3px #ffe16c inset;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;transition:.08s}
+.service span{font-size:24px;line-height:1}.service:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px #1b527b,0 0 0 3px #ffe16c inset}.service:disabled{filter:grayscale(1);opacity:.34}
+.lock{position:absolute;right:-2px;top:-7px;background:#6b7890;color:#fff;border-radius:999px;padding:3px 6px;font-size:9px;border:2px solid #fff}
+.specials{position:absolute;z-index:31;right:8px;bottom:103px;display:flex;flex-direction:column;gap:6px}
+.special{width:58px;height:58px;border-radius:50%;background:#fff;color:#5d4330;font-size:10px;font-weight:900;box-shadow:0 4px #396c90,0 0 0 3px #ffe16c inset}.special span{display:block;font-size:22px}.special:disabled{opacity:.35;filter:grayscale(.7)}.badgeCount{position:absolute;right:-4px;top:-5px;min-width:22px;height:22px;border-radius:12px;background:#d8584f;color:#fff;font-size:12px;display:grid;place-items:center;border:2px solid #fff}
+
+/* title/modal */
+.title{position:absolute;z-index:50;inset:0;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(rgba(69,43,31,.28),rgba(255,255,255,.02) 40%,rgba(69,43,31,.4));pointer-events:none}
+.titleTop{padding-top:calc(28px + env(safe-area-inset-top));text-align:center}
+.chip{display:inline-block;background:#7a4630;color:#fff;font-weight:900;font-size:13px;padding:6px 16px;border-radius:20px;box-shadow:0 3px #4d2a1d;margin-bottom:14px}
+.logo{margin:0;font-weight:900;line-height:1.02;transform:rotate(-3deg)}.ln{display:block;color:#ffe16b;text-shadow:0 6px #5b4030}.ln.a{font-size:min(14vw,70px)}.ln.b{font-size:min(12vw,62px)}
+.titleBot{padding:0 20px calc(24px + env(safe-area-inset-bottom));text-align:center;pointer-events:none}
+.play{pointer-events:auto;width:80%;max-width:320px;height:68px;border-radius:36px;background:#7a4630;color:#fff;font-size:27px;font-weight:900;letter-spacing:.08em;box-shadow:0 6px #4d2a1d,0 0 0 5px #ffe16b;animation:pulse 1.6s ease-in-out infinite}
+.howto{margin-top:18px;font-size:14px;font-weight:800;text-shadow:0 2px #5e4632}.howto b{color:#ffe16b}
+.modal{position:absolute;z-index:60;inset:0;display:none;align-items:center;justify-content:center;background:rgba(45,32,24,.6);padding:24px}.modal.show{display:flex}
+.card{width:100%;max-width:340px;background:#fff;color:#5c4535;border-radius:30px;padding:22px;text-align:center;box-shadow:0 8px rgba(0,0,0,.18),0 0 0 6px #7a4630;animation:cardPop .35s cubic-bezier(.2,1.5,.4,1)}
+.card h2{margin:0;color:#7a4630;font-size:24px}.bigScore{font-size:50px;font-weight:900;color:#7a4630;line-height:1.05;margin-top:8px}.smallLine{font-size:12px;font-weight:800;margin-top:5px}.clearIcon{font-size:72px;margin:6px auto}.again{width:100%;height:58px;border-radius:29px;background:#7a4630;color:#fff;font-size:19px;font-weight:900;box-shadow:0 5px #4d2a1d,0 0 0 4px #ffe16b;margin-top:14px}
+
+@keyframes bob{50%{transform:translateY(-4px) rotate(4deg)}}
+@keyframes pulse{50%{transform:scale(1.04)}}
+@keyframes currentPulse{to{transform:translateX(-50%) scale(1.025)}}
+@keyframes shake{25%{transform:translateX(calc(-50% - 6px))}75%{transform:translateX(calc(-50% + 6px))}}
+@keyframes popUp{to{opacity:0;transform:translateY(-70px) scale(1.25)}}
+@keyframes comboPop{to{opacity:0;transform:translate(-50%,-45px) scale(1.2)}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}}
+@keyframes cardPop{from{transform:scale(.6);opacity:0}}
 </style>
 </head>
 <body>
-<div id="app">
-<header>
-  <div class="top">
-    <div><div class="brand">子どものMIKATA｜地域文化シミュレーション</div><div id="dayLabel" class="day">1日目</div></div>
-    <div class="hud"><span id="rep">⭐ 100</span><button id="collection">🔎 0</button><button id="mute">🔊</button></div>
-  </div>
-  <div class="meters"><div class="meter"><i id="repBar"></i></div><div class="meter time"><i id="timeBar"></i></div></div>
-</header>
-
-<main id="title" class="screen title active">
-  <div class="badge">小学4年生向け｜番所を運営しよう</div>
-  <h1>喜名番所<br><em>おしごと大作戦！</em></h1>
-  <p>昔のホテル＋役場をキミが運営！</p>
-  <div class="hero" aria-hidden="true">
-    <svg viewBox="0 0 320 210">
-      <rect x="69" y="95" width="182" height="83" fill="#8f714c" stroke="#5b4734" stroke-width="6"/>
-      <polygon points="52,99 90,48 160,34 232,48 268,99" fill="#68675f"/>
-      <rect x="142" y="126" width="38" height="52" fill="#43362c"/>
-      <circle cx="63" cy="178" r="15" fill="#d4a17d"/><rect x="52" y="190" width="22" height="16" rx="6" fill="#678797"/>
-      <circle cx="256" cy="178" r="15" fill="#d4a17d"/><rect x="245" y="190" width="22" height="16" rx="6" fill="#8a6552"/>
-    </svg>
-  </div>
-  <button id="start" class="start">番所をオープン！</button>
-  <small>お客さんの困りごとを見て、宿・役場・道案内・荷物置きへ正しく案内しよう。</small>
-</main>
-
-<main id="game" class="screen game">
-  <section class="mission">
-    <b id="missionNo">1日目</b>
-    <h2 id="missionTitle"></h2>
-    <p id="missionText"></p>
-  </section>
-
-  <section class="board">
-    <div class="sky"></div><div class="road"></div><div class="mainHouse"></div><div class="roof"></div><div class="door"></div>
-    <button class="zone hotel" data-zone="hotel"><strong>🛏️</strong>宿・休けい</button>
-    <button class="zone office" data-zone="office"><strong>📜</strong>村の仕事</button>
-    <button class="zone guide" data-zone="guide"><strong>🪧</strong>道案内</button>
-    <button class="zone store" data-zone="store"><strong>📦</strong>荷物置き</button>
-    <div id="queue" class="queue"></div>
-    <div id="flash" class="flash"></div>
-  </section>
-
-  <section class="panel">
-    <p class="guideText">① お客さんをタップ → ② 行き先をタップ</p>
-    <div class="actions">
-      <button class="act" data-zone="hotel"><strong>🛏️</strong>休ませる</button>
-      <button class="act" data-zone="office"><strong>📜</strong>相談を聞く</button>
-      <button class="act" data-zone="guide"><strong>🪧</strong>道を教える</button>
-      <button class="act" data-zone="store"><strong>📦</strong>荷物を置く</button>
+<div class="app" id="app">
+  <div class="hud" id="hud">
+    <div class="row1">
+      <div>
+        <div class="lbl">ばんじょポイント</div>
+        <div class="score" id="score">0</div>
+        <div class="best">BEST <span id="best">0</span></div>
+      </div>
+      <div class="nextWrap">
+        <div><div class="lbl">つぎのお客さん</div></div>
+        <div class="nextBubble"><div class="nextFace" id="nextFace">🥾</div></div>
+      </div>
     </div>
-    <div id="status" class="status">お客さんを選ぼう。</div>
-  </section>
-</main>
+    <div class="evo" id="evo">
+      <div class="tier on now" data-tier="0"><span>🛏️</span>宿</div>
+      <div class="tier" data-tier="1"><span>📜</span>行政</div>
+      <div class="tier" data-tier="2"><span>🪧</span>道案内</div>
+      <div class="tier" data-tier="3"><span>🤝</span>交流</div>
+    </div>
+    <div class="wave"></div>
+  </div>
 
-<div id="dayClear" class="overlay"><div class="card"><div id="dayEmoji" class="emoji">✨</div><h2 id="dayTitle">1日目クリア！</h2><p id="dayText"></p><div class="scoreBox"><div class="scoreItem">今日の評判<strong id="dayRep">100</strong></div><div class="scoreItem">対応した人<strong id="dayServed">0</strong></div></div><button id="nextDay" class="next">つぎの日へ</button></div></div>
-<div id="collectionOverlay" class="overlay"><div class="card"><div class="emoji">🔎</div><h2>番所でわかったこと</h2><ul id="discoverList" class="discoverList"></ul><button id="closeCollection" class="small">もどる</button></div></div>
-<div id="finish" class="overlay"><div class="card"><div class="emoji">🏆</div><h2>番所の名スタッフ！</h2><p id="finishText"></p><div class="scoreBox"><div class="scoreItem">最終評判<strong id="finalRep">100</strong></div><div class="scoreItem">全部の対応<strong id="finalServed">0</strong></div></div><button id="showCollection" class="small">わかったことを見る</button><button id="retry" class="retry">もう一回あそぶ</button></div></div>
+  <div class="field" id="field">
+    <div class="road"></div>
+    <div class="house"></div><div class="roof"></div><div class="door"></div>
+    <div class="tree a"></div><div class="tree b"></div>
+    <div class="sign">喜名番所</div>
+    <div class="queueLane" id="queueLane"></div>
+    <div class="specials">
+      <button class="special" id="tea"><span>🍵</span>お茶<div class="badgeCount" id="teaCount">2</div></button>
+      <button class="special" id="help"><span>👴</span>お助け<div class="badgeCount" id="helpCount">1</div></button>
+    </div>
+  </div>
+
+  <div class="bar">
+    <button class="service" data-type="inn"><span>🛏️</span>やすむ</button>
+    <button class="service" data-type="admin" disabled><span>📜</span>村の仕事<div class="lock">800</div></button>
+    <button class="service" data-type="guide" disabled><span>🪧</span>道案内<div class="lock">2200</div></button>
+    <button class="service" data-type="exchange" disabled><span>🤝</span>交流<div class="lock">4500</div></button>
+  </div>
+
+  <div class="title" id="title">
+    <div class="titleTop">
+      <div class="chip">小学4年生向け｜ずっと遊べる番所ゲーム</div>
+      <h1 class="logo"><span class="ln a">喜名番所</span><span class="ln b">おしごと大作戦！</span></h1>
+    </div>
+    <div class="titleBot">
+      <button class="play" id="play">スタート！</button>
+      <div class="howto"><b>お客さんのマークを見て</b><br>ぴったりのお仕事ボタンを押そう！</div>
+    </div>
+  </div>
+
+  <div class="modal" id="overModal">
+    <div class="card">
+      <div class="clearIcon">😵</div>
+      <h2>行列がいっぱい！</h2>
+      <div class="bigScore" id="overScore">0</div>
+      <div class="smallLine">番所の仕事をうまく分けると、もっと長く続くよ。</div>
+      <button class="again" id="again">もう一回！</button>
+    </div>
+  </div>
+
+  <div class="modal" id="clearModal">
+    <div class="card">
+      <div class="clearIcon">🏆</div>
+      <h2>喜名番所マスター！</h2>
+      <div class="bigScore" id="clearScore">0</div>
+      <div class="smallLine">宿・行政・道案内・交流。いろいろな役わりを回せた！</div>
+      <button class="again" id="continue">つづけて遊ぶ！</button>
+    </div>
+  </div>
 </div>
 
 <script>
 (()=>{
-const days=[
- {title:'宿のお仕事をおぼえよう！',text:'旅人を休ませて、荷物もあずかろう。',emoji:'🛏️',
-  guests:[
-   {face:'🥾',name:'つかれた旅人',say:'「たくさん歩いて、もうクタクタ…」',zone:'hotel',discover:'rest'},
-   {face:'📦',name:'荷物を持った旅人',say:'「この荷物、どこに置こう？」',zone:'store',discover:'store'},
-   {face:'🥾',name:'もう一人の旅人',say:'「少し休んでから北へ行きたいな」',zone:'hotel',discover:'rest'}
-  ],
-  clear:'旅人を休ませたり、荷物をあずかったりする「宿場」の仕事がわかった！'},
- {title:'村のお仕事をしよう！',text:'相談や手紙は、村の仕事の場所へ。',emoji:'📜',
-  guests:[
-   {face:'👨',name:'村の人',say:'「村のことで相談があります」',zone:'office',discover:'admin'},
-   {face:'✉️',name:'手紙を持った人',say:'「この手紙を役人に届けたい」',zone:'office',discover:'admin'},
-   {face:'🥾',name:'旅人',say:'「今日はここで休みたい」',zone:'hotel',discover:'rest'}
-  ],
-  clear:'喜名番所は、旅人の宿だけでなく「村の仕事」をする場所でもあった！'},
- {title:'道と人をつなごう！',text:'道を聞く人、荷物を置く人、相談する人が次々来る。',emoji:'🪧',
-  guests:[
-   {face:'🧭',name:'道に迷った旅人',say:'「国頭へ行く道はどっち？」',zone:'guide',discover:'guide'},
-   {face:'📦',name:'荷物を運ぶ人',say:'「いったん荷物を置きたい」',zone:'store',discover:'store'},
-   {face:'👵',name:'村のおばぁ',say:'「村のことで話があります」',zone:'office',discover:'admin'},
-   {face:'🥾',name:'遠くから来た旅人',say:'「水を飲んで休みたい」',zone:'hotel',discover:'rest'}
-  ],
-  clear:'喜名は、人・荷物・道・村の仕事が集まる「交通と交流の場所」でもあった！'},
- {title:'大いそがしの日！ 全部の仕事をまわせ',text:'4つのお仕事をまちがえずに全部こなそう。',emoji:'🔥',
-  guests:[
-   {face:'🥾',name:'旅人',say:'「休ませて〜！」',zone:'hotel',discover:'rest'},
-   {face:'👨',name:'村の人',say:'「相談があります」',zone:'office',discover:'admin'},
-   {face:'🧭',name:'道を聞く人',say:'「北へ行く道は？」',zone:'guide',discover:'guide'},
-   {face:'📦',name:'荷物を運ぶ人',say:'「ここに置ける？」',zone:'store',discover:'store'},
-   {face:'✉️',name:'手紙を持った人',say:'「役人に届けたい」',zone:'office',discover:'admin'},
-   {face:'🥾',name:'もう一人の旅人',say:'「少し休ませて」',zone:'hotel',discover:'rest'}
-  ],
-  clear:'宿・行政・道案内・荷物。いろいろな仕事が一つの場所に集まっていた！'}
-];
-const allDiscoveries=[
- ['rest','喜名番所は旅人が休む宿場の役わりもあった'],
- ['store','旅人や往来する人の荷物を扱う場所として考えられる'],
- ['admin','喜名番所は村の行政の仕事をする場所だった'],
- ['guide','首里から中頭・国頭へ向かう道の要所だった'],
- ['hub','喜名番所には、旅・行政・交通・交流の役わりが重なっていた']
-];
-let day=0,reputation=100,timeLeft=100,totalServed=0,served=0,selected=null,timer=null,muted=false,audio=null;
-const discoveries=new Set();
-const $=s=>document.querySelector(s),queue=$('#queue'),status=$('#status'),flash=$('#flash');
+const TYPES={
+  inn:{icon:'🥾',face:'🥾',need:'休みたい！',sub:'長い道でつかれた旅人',pts:90},
+  admin:{icon:'📜',face:'👨',need:'村の相談です',sub:'村の仕事をたずねる人',pts:130},
+  guide:{icon:'🧭',face:'🧭',need:'道を教えて！',sub:'北へ行きたい旅人',pts:170},
+  exchange:{icon:'🗣️',face:'🗣️',need:'話を伝えたい！',sub:'人や情報をつなぐ人',pts:210}
+};
+const unlocks=[0,800,2200,4500];
+const clearScoreTarget=7000;
+let state={screen:'title',score:0,best:0,tier:0,combo:0,lastHit:0,guests:[],nextType:'inn',spawnT:0,spawnGap:1.6,time:0,tea:2,help:1,slowed:0,cleared:false,uid:1};
+try{state.best=+localStorage.getItem('kina_bansho_best')||0}catch(e){}
+const $=s=>document.querySelector(s);
+const lane=$('#queueLane'),scoreEl=$('#score'),bestEl=$('#best'),nextFace=$('#nextFace');
+bestEl.textContent=state.best;
+let audio=null,muted=false;
 
-function tone(f=440,d=.05,g=.02){if(muted)return;if(!audio){const C=window.AudioContext||window.webkitAudioContext;if(C)audio=new C()}if(!audio)return;if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),a=audio.createGain(),t=audio.currentTime;o.type='triangle';o.frequency.value=f;a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(a).connect(audio.destination);o.start();o.stop(t+d+.02)}
-function addDiscovery(id){if(!discoveries.has(id)){discoveries.add(id);$('#collection').textContent='🔎 '+discoveries.size;tone(740,.05,.02)}}
-function flashMsg(t,good=true){flash.textContent=(good?'✨ ':'💥 ')+t;flash.classList.add('show');clearTimeout(flashMsg.t);flashMsg.t=setTimeout(()=>flash.classList.remove('show'),850);tone(good?650:170,.08,.025)}
-function updateHud(){reputation=Math.max(0,Math.min(100,reputation));timeLeft=Math.max(0,Math.min(100,timeLeft));$('#rep').textContent='⭐ '+reputation;$('#repBar').style.width=reputation+'%';$('#timeBar').style.width=timeLeft+'%'}
-function renderDay(){
- clearInterval(timer);selected=null;served=0;timeLeft=100;
- const d=days[day];$('#dayLabel').textContent=(day+1)+'日目';$('#missionNo').textContent=(day+1)+'日目';$('#missionTitle').textContent=d.title;$('#missionText').textContent=d.text;queue.innerHTML='';
- d.guests.forEach((g,i)=>{const el=document.createElement('button');el.className='guest'+(i===0?' waiting':'');el.dataset.index=i;el.innerHTML='<div class="face">'+g.face+'</div><div><b>'+g.name+'</b><p>'+g.say+'</p></div>';el.onclick=()=>selectGuest(el,i);queue.appendChild(el)});
- status.textContent='お客さんを選ぼう。';document.querySelectorAll('.zone').forEach(z=>z.classList.remove('hit','bad'));updateHud();
- timer=setInterval(()=>{timeLeft-=1.2;if(timeLeft<=0){clearInterval(timer);reputation-=10;updateHud();flashMsg('時間切れ！ 評判が下がった',false);setTimeout(()=>endDay(),650)}else updateHud()},700)
+function tone(freq=440,d=.07,g=.035,type='triangle'){
+ if(muted)return;
+ try{
+  audio||(audio=new (window.AudioContext||window.webkitAudioContext)());
+  if(audio.state==='suspended')audio.resume();
+  const o=audio.createOscillator(),a=audio.createGain(),t=audio.currentTime;
+  o.type=type;o.frequency.value=freq;
+  a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(g,t+.01);a.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(a).connect(audio.destination);o.start();o.stop(t+d+.03)
+ }catch(e){}
 }
-function selectGuest(el,i){
- if(el.classList.contains('done'))return;queue.querySelectorAll('.guest').forEach(g=>g.classList.remove('selected'));el.classList.add('selected');selected=i;
- const g=days[day].guests[i];status.textContent=g.face+' '+g.name+'：'+g.say+' → どこへ案内する？'
+function sfxGood(tier){tone(520+tier*80,.12,.04);setTimeout(()=>tone(760+tier*90,.12,.025),55)}
+function sfxBad(){tone(150,.13,.045,'sawtooth')}
+function sfxUnlock(){[523,659,784].forEach((f,i)=>setTimeout(()=>tone(f,.18,.035),i*80))}
+function randomType(){
+ const avail=['inn'];
+ if(state.tier>=1)avail.push('admin');
+ if(state.tier>=2)avail.push('guide');
+ if(state.tier>=3)avail.push('exchange');
+ return avail[Math.floor(Math.random()*avail.length)]
 }
-function sendTo(zone){
- if(selected===null){flashMsg('先にお客さんを選ぼう！',false);return}
- const g=days[day].guests[selected],el=queue.querySelector('[data-index="'+selected+'"]');
- document.querySelectorAll('.zone').forEach(z=>z.classList.remove('hit','bad'));
- const target=document.querySelector('.zone[data-zone="'+zone+'"]');
- if(zone===g.zone){
-   target.classList.add('hit');el.classList.remove('selected','waiting');el.classList.add('done');served++;totalServed++;reputation=Math.min(100,reputation+3);timeLeft=Math.min(100,timeLeft+7);addDiscovery(g.discover);flashMsg('ありがとう！ ぴったりの対応！',true);
-   selected=null;const next=[...queue.querySelectorAll('.guest:not(.done)')][0];if(next)next.classList.add('waiting');status.textContent='次のお客さんを選ぼう。';updateHud();
-   if(served>=days[day].guests.length){addDiscovery('hub');setTimeout(()=>endDay(),650)}
- }else{
-   target.classList.add('bad');reputation-=8;timeLeft-=6;flashMsg('ちがうみたい！ 困りごとをもう一度見よう',false);updateHud()
+function reset(){
+ state.score=0;state.combo=0;state.lastHit=0;state.guests=[];state.tier=0;state.spawnT=.4;state.spawnGap=1.55;state.time=0;state.tea=2;state.help=1;state.slowed=0;state.cleared=false;state.uid=1;state.nextType='inn';
+ lane.innerHTML='';$('#teaCount').textContent=2;$('#helpCount').textContent=1;$('#tea').disabled=false;$('#help').disabled=false;
+ $('#overModal').classList.remove('show');$('#clearModal').classList.remove('show');updateHUD()
+}
+function start(){
+ reset();state.screen='play';$('#title').style.display='none';spawnGuest();state.nextType=randomType()
+}
+function saveBest(){try{localStorage.setItem('kina_bansho_best',String(state.best))}catch(e){}}
+function updateTier(){
+ let nt=0;for(let i=0;i<unlocks.length;i++)if(state.score>=unlocks[i])nt=i;
+ if(nt>state.tier){
+   state.tier=nt;sfxUnlock();toast(['宿のお仕事スタート！','📜 村の仕事が開放！','🪧 道案内が開放！','🤝 交流が開放！'][nt]);
+   if(nt===1)state.help++;
+   if(nt===2)state.tea++;
+   $('#helpCount').textContent=state.help;$('#teaCount').textContent=state.tea
  }
 }
-function endDay(){
- clearInterval(timer);const d=days[day];$('#dayEmoji').textContent=d.emoji;$('#dayTitle').textContent=(day+1)+'日目クリア！';$('#dayText').textContent=d.clear;$('#dayRep').textContent=reputation;$('#dayServed').textContent=served;$('#dayClear').classList.add('show')
+function updateHUD(){
+ scoreEl.textContent=state.score;bestEl.textContent=state.best;nextFace.textContent=TYPES[state.nextType].face;
+ updateTier();
+ document.querySelectorAll('.service').forEach((b,i)=>{
+   const locked=i>state.tier;b.disabled=locked;
+   const lk=b.querySelector('.lock');if(lk)lk.style.display=locked?'block':'none'
+ });
+ document.querySelectorAll('.tier').forEach((e,i)=>{e.classList.toggle('on',i<=state.tier);e.classList.toggle('now',i===state.tier)});
+ $('#tea').disabled=state.tea<=0;$('#help').disabled=state.help<=0
 }
-function showCollection(){const ul=$('#discoverList');ul.innerHTML='';allDiscoveries.forEach(([id,t])=>{const li=document.createElement('li');li.className=discoveries.has(id)?'':'locked';li.textContent=(discoveries.has(id)?'✅ ':'🔒 ')+t;ul.appendChild(li)});$('#collectionOverlay').classList.add('show')}
-document.querySelectorAll('[data-zone]').forEach(b=>b.onclick=()=>sendTo(b.dataset.zone));
-$('#start').onclick=()=>{$('#title').classList.remove('active');$('#game').classList.add('active');renderDay()};
-$('#nextDay').onclick=()=>{$('#dayClear').classList.remove('show');if(day<3){day++;renderDay()}else{$('#finalRep').textContent=reputation;$('#finalServed').textContent=totalServed;$('#finishText').textContent='喜名番所は、旅人を休ませるだけでなく、村の仕事・道案内・人や荷物の行き来を支える場所だった！';$('#finish').classList.add('show')}};
-$('#retry').onclick=()=>{$('#finish').classList.remove('show');day=0;reputation=100;timeLeft=100;totalServed=0;discoveries.clear();$('#collection').textContent='🔎 0';renderDay()};
-$('#collection').onclick=showCollection;$('#showCollection').onclick=showCollection;$('#closeCollection').onclick=()=>$('#collectionOverlay').classList.remove('show');
-$('#mute').onclick=e=>{muted=!muted;e.currentTarget.textContent=muted?'🔇':'🔊'};
+function spawnGuest(){
+ if(state.guests.length>=6){gameOver();return}
+ const type=state.guests.length===0?'inn':state.nextType;
+ state.nextType=randomType();
+ const data=TYPES[type],g={id:state.uid++,type,pat:1,y:-82,el:null};
+ const el=document.createElement('div');el.className='guest';el.dataset.id=g.id;
+ el.innerHTML='<div class="face">'+data.face+'</div><div><div class="need">'+data.need+'</div><div class="sub">'+data.sub+'</div></div><div class="patience"><i></i></div>';
+ lane.appendChild(el);g.el=el;state.guests.push(g);layoutGuests();updateCurrent();updateHUD()
+}
+function layoutGuests(){
+ state.guests.forEach((g,i)=>{g.y=i*76+8;g.el.style.top=g.y+'px'})
+}
+function updateCurrent(){
+ state.guests.forEach((g,i)=>g.el.classList.toggle('current',i===0))
+}
+function service(type){
+ if(state.screen!=='play'||!state.guests.length)return;
+ const g=state.guests[0];
+ if(g.type===type)success(g);else fail(g)
+}
+function success(g){
+ const now=state.time;
+ state.combo=now-state.lastHit<1.7?state.combo+1:1;state.lastHit=now;
+ const base=TYPES[g.type].pts,bonus=Math.round(base*(1+.35*(state.combo-1))),points=bonus+Math.round(g.pat*40);
+ state.score+=points;if(state.score>state.best){state.best=state.score;saveBest()}
+ addPop('+'+points,g.el);if(state.combo>=2)addCombo('れんぞく ×'+state.combo+'！');
+ sfxGood(state.tier);
+ g.el.classList.add('done');state.guests.shift();setTimeout(()=>g.el.remove(),180);layoutGuests();updateCurrent();
+ if(g.type==='inn'&&state.score<300)toast('旅人を休ませる「宿場」の仕事！');
+ if(g.type==='admin'&&state.score<1600)toast('村の相談を受ける「行政」の仕事！');
+ if(g.type==='guide'&&state.score<3500)toast('喜名は北へ向かう道の大事な場所！');
+ if(g.type==='exchange'&&state.score<6000)toast('人が集まると、話や情報も集まる！');
+ state.spawnGap=Math.max(.72,1.55-state.score/11000);
+ if(!state.cleared&&state.score>=clearScoreTarget){state.cleared=true;setTimeout(showClear,350)}
+ updateHUD()
+}
+function fail(g){
+ state.combo=0;g.pat=Math.max(0,g.pat-.22);g.el.classList.add('bad');setTimeout(()=>g.el.classList.remove('bad'),420);
+ const i=g.el.querySelector('.patience i');i.style.height=(g.pat*100)+'%';i.style.background=g.pat<.35?'#d85c53':'#e7a94c';
+ addPop('ちがう！',g.el,'#ff6b61');sfxBad();
+ if(g.pat<=0){toast('お客さんが帰っちゃった！');g.el.classList.add('done');state.guests.shift();setTimeout(()=>g.el.remove(),180);layoutGuests();updateCurrent()}
+}
+function addPop(txt,el,color='#fff'){
+ const r=el.getBoundingClientRect(),fr=$('#field').getBoundingClientRect(),p=document.createElement('div');p.className='pop';p.textContent=txt;p.style.color=color;p.style.left=(r.left-fr.left+r.width/2-28)+'px';p.style.top=(r.top-fr.top+8)+'px';$('#field').appendChild(p);setTimeout(()=>p.remove(),950)
+}
+function addCombo(txt){const d=document.createElement('div');d.className='combo';d.textContent=txt;$('#field').appendChild(d);setTimeout(()=>d.remove(),850)}
+function toast(txt){const old=$('#field .toast');if(old)old.remove();const d=document.createElement('div');d.className='toast';d.textContent=txt;$('#field').appendChild(d);setTimeout(()=>d.remove(),1500)}
+function useTea(){
+ if(state.screen!=='play'||state.tea<=0)return;state.tea--;state.slowed=6;state.guests.forEach(g=>{g.pat=Math.min(1,g.pat+.35);const i=g.el.querySelector('.patience i');i.style.height=(g.pat*100)+'%';i.style.background='#67a96c'});toast('🍵 お茶でみんなニコニコ！');tone(1100,.14,.03);updateHUD();$('#teaCount').textContent=state.tea
+}
+function useHelp(){
+ if(state.screen!=='play'||state.help<=0||!state.guests.length)return;state.help--;toast('👴 おじぃが手伝ってくれた！');success(state.guests[0]);$('#helpCount').textContent=state.help;updateHUD()
+}
+function gameOver(){
+ if(state.screen!=='play')return;state.screen='over';saveBest();$('#overScore').textContent=state.score;$('#overModal').classList.add('show');tone(330,.2,.04);setTimeout(()=>tone(240,.25,.035),140)
+}
+function showClear(){if(state.screen!=='play')return;state.screen='clear';$('#clearScore').textContent=state.score;$('#clearModal').classList.add('show');[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.25,.04),i*100))}
+let last=performance.now();
+function loop(now){
+ const dt=Math.min(.035,(now-last)/1000);last=now;
+ if(state.screen==='play'){
+   state.time+=dt;
+   if(state.slowed>0)state.slowed-=dt;
+   const slow=state.slowed>0?.48:1;
+   state.spawnT-=dt*slow;
+   if(state.spawnT<=0){spawnGuest();state.spawnT=state.spawnGap}
+   state.guests.forEach((g,i)=>{
+     const drain=(.038+state.score/160000)*dt*slow*(1+i*.08);g.pat=Math.max(0,g.pat-drain);
+     const bar=g.el.querySelector('.patience i');bar.style.height=(g.pat*100)+'%';bar.style.background=g.pat<.3?'#d85c53':g.pat<.55?'#e7aa4b':'#67a96c';
+   });
+   if(state.guests[0]&&state.guests[0].pat<=0){const g=state.guests[0];g.el.classList.add('done');state.guests.shift();setTimeout(()=>g.el.remove(),180);layoutGuests();updateCurrent();state.combo=0}
+   if(state.guests.length>=6)gameOver()
+ }
+ requestAnimationFrame(loop)
+}
+requestAnimationFrame(loop);
+
+document.querySelectorAll('.service').forEach(b=>b.addEventListener('click',()=>service(b.dataset.type)));
+$('#tea').onclick=useTea;$('#help').onclick=useHelp;
+$('#play').onclick=start;$('#again').onclick=start;
+$('#continue').onclick=()=>{state.screen='play';$('#clearModal').classList.remove('show');toast('まだまだ営業中！')};
 })();
 </script>
 </body>
