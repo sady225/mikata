@@ -223,11 +223,11 @@ button:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
     <svg id="tutorialSvg" class="tutorialSvg" viewBox="0 0 320 230" aria-label="辺と角をタップする練習">
      <polygon points="45,190 160,38 275,190"/>
      <line id="tSideAB" class="pickSide pickPulse" data-t="side" x1="45" y1="190" x2="160" y2="38"/>
-     <line class="pickSide" x1="160" y1="38" x2="275" y2="190"/>
-     <line class="pickSide" x1="275" y1="190" x2="45" y2="190"/>
+     <line class="pickSide" data-t="other" x1="160" y1="38" x2="275" y2="190"/>
+     <line class="pickSide" data-t="other" x1="275" y1="190" x2="45" y2="190"/>
      <circle id="tAngleA" class="pickAngle" data-t="angle" cx="45" cy="190" r="27"/>
-     <circle class="pickAngle" cx="160" cy="38" r="27"/>
-     <circle class="pickAngle" cx="275" cy="190" r="27"/>
+     <circle class="pickAngle" data-t="other" cx="160" cy="38" r="27"/>
+     <circle class="pickAngle" data-t="other" cx="275" cy="190" r="27"/>
      <text x="26" y="216" class="pickHint">A</text><text x="152" y="24" class="pickHint">B</text><text x="282" y="216" class="pickHint">C</text>
      <text x="72" y="113" class="pickHint">辺AB</text>
     </svg>
@@ -436,7 +436,7 @@ function tutorialTap(kind){
   $('#tutorialMsg').textContent='黄色くなったところが、いま選んでいる条件だよ。';
   $('#tutorialDone').classList.add('show');
  }else{
-  sfx('fail');$('#tutorialMsg').textContent='いま光っている場所をタップしてみよう。';
+  sfx('fail');$('#tutorialMsg').textContent=S.tutorialStep===0?'黄色く光っている辺ABをタップしよう。':S.tutorialStep===1?'今度は頂点Aの角をタップしよう。':'黄色い辺ABをもう一度タップして解除しよう。';
  }
 }
 function createAudio(){
@@ -498,8 +498,7 @@ document.querySelectorAll('#gameScreen [data-k]').forEach(el=>{
 });
 $('#tSideAB').setAttribute('tabindex','0');$('#tSideAB').setAttribute('role','button');$('#tSideAB').setAttribute('aria-label','練習用の辺AB');
 $('#tAngleA').setAttribute('tabindex','0');$('#tAngleA').setAttribute('role','button');$('#tAngleA').setAttribute('aria-label','練習用の角A');
-$('#tSideAB').addEventListener('click',()=>tutorialTap('side'));
-$('#tAngleA').addEventListener('click',()=>tutorialTap('angle'));
+document.querySelectorAll('#tutorialSvg [data-t]').forEach(el=>el.addEventListener('click',()=>tutorialTap(el.dataset.t)));
 $('#tSideAB').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tutorialTap('side')}});
 $('#tAngleA').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tutorialTap('angle')}});
 $('#tutorialDone').addEventListener('click',()=>{
