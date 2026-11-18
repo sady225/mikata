@@ -38,7 +38,11 @@ button{font:inherit;border:0;cursor:pointer}
 .tree{position:absolute;bottom:31%;width:9px;height:30%;background:#614b38}.tree::before{content:"";position:absolute;left:50%;top:-7px;width:50px;height:30px;border-radius:50%;background:#52795a;transform:translateX(-50%)}.tree.a{left:6%}.tree.b{right:7%}
 .sign{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);background:#fff7de;color:#684f38;border:3px solid #7c6145;border-radius:12px;padding:5px 10px;font-size:11px;font-weight:900}
 
-.queueLane{position:absolute;left:12%;right:12%;top:4%;bottom:10%}
+.station{position:absolute;z-index:5;width:86px;height:62px;border-radius:18px;background:#fff8e6;color:#5a4331;border:3px solid #d9b35e;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:900;box-shadow:0 4px rgba(70,45,28,.18);transition:.18s}
+.station span{font-size:25px;line-height:1}.station small{font-size:8px;color:#7b695b}.station.inn{left:3%;top:12%}.station.admin{right:3%;top:12%}.station.guide{left:3%;bottom:12%}.station.exchange{right:3%;bottom:12%}
+.station.locked{filter:grayscale(1);opacity:.35}.station.hot{animation:stationPulse .55s ease-in-out infinite alternate;box-shadow:0 0 0 5px #fff3a5,0 4px rgba(70,45,28,.18)}
+.walker{position:absolute;z-index:18;width:48px;height:48px;border-radius:50%;background:#fff;border:3px solid #f0c95f;display:grid;place-items:center;font-size:28px;box-shadow:0 4px rgba(55,36,24,.22);pointer-events:none}
+.queueLane{position:absolute;left:16%;right:16%;top:6%;bottom:10%}
 .guest{position:absolute;left:50%;width:84%;min-height:66px;transform:translateX(-50%);border-radius:24px;background:#fff;color:#523f32;border:4px solid #e2bb65;box-shadow:0 5px rgba(64,42,28,.2);display:grid;grid-template-columns:52px 1fr 42px;align-items:center;padding:7px 8px;transition:transform .12s,opacity .2s,filter .2s}
 .guest.current{border-color:#ffe162;box-shadow:0 0 0 5px #fff7a5,0 5px rgba(64,42,28,.2);animation:currentPulse .8s ease-in-out infinite alternate}
 .guest .face{font-size:32px;text-align:center}
@@ -76,6 +80,7 @@ button{font:inherit;border:0;cursor:pointer}
 @keyframes popUp{to{opacity:0;transform:translateY(-70px) scale(1.25)}}
 @keyframes comboPop{to{opacity:0;transform:translate(-50%,-45px) scale(1.2)}}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}}
+@keyframes stationPulse{to{transform:scale(1.06)}}
 @keyframes cardPop{from{transform:scale(.6);opacity:0}}
 </style>
 </head>
@@ -107,6 +112,10 @@ button{font:inherit;border:0;cursor:pointer}
     <div class="house"></div><div class="roof"></div><div class="door"></div>
     <div class="tree a"></div><div class="tree b"></div>
     <div class="sign">喜名番所</div>
+    <div class="station inn" data-station="inn"><span>🛏️</span>宿・休けい<small>旅人はこちら</small></div>
+    <div class="station admin locked" data-station="admin"><span>📜</span>村の仕事<small>800点で開く</small></div>
+    <div class="station guide locked" data-station="guide"><span>🪧</span>道案内<small>2200点で開く</small></div>
+    <div class="station exchange locked" data-station="exchange"><span>🤝</span>交流<small>4500点で開く</small></div>
     <div class="queueLane" id="queueLane"></div>
     <div class="specials">
       <button class="special" id="tea"><span>🍵</span>お茶<div class="badgeCount" id="teaCount">2</div></button>
@@ -128,7 +137,7 @@ button{font:inherit;border:0;cursor:pointer}
     </div>
     <div class="titleBot">
       <button class="play" id="play">スタート！</button>
-      <div class="howto"><b>お客さんのマークを見て</b><br>ぴったりのお仕事ボタンを押そう！</div>
+      <div class="howto"><b>人が歩いてやってくる！</b><br>困りごとを見て、行き先ボタンを押そう。正解ならその場所へ歩いていくよ！</div>
     </div>
   </div>
 
@@ -137,7 +146,7 @@ button{font:inherit;border:0;cursor:pointer}
       <div class="clearIcon">😵</div>
       <h2>行列がいっぱい！</h2>
       <div class="bigScore" id="overScore">0</div>
-      <div class="smallLine">番所の仕事をうまく分けると、もっと長く続くよ。</div>
+      <div class="smallLine">人の動きと行き先を見ながら、番所の仕事をうまく分けよう！</div>
       <button class="again" id="again">もう一回！</button>
     </div>
   </div>
@@ -156,10 +165,10 @@ button{font:inherit;border:0;cursor:pointer}
 <script>
 (()=>{
 const TYPES={
-  inn:{icon:'🥾',face:'🥾',need:'休みたい！',sub:'長い道でつかれた旅人',pts:90},
-  admin:{icon:'📜',face:'👨',need:'村の相談です',sub:'村の仕事をたずねる人',pts:130},
-  guide:{icon:'🧭',face:'🧭',need:'道を教えて！',sub:'北へ行きたい旅人',pts:170},
-  exchange:{icon:'🗣️',face:'🗣️',need:'話を伝えたい！',sub:'人や情報をつなぐ人',pts:210}
+  inn:{icon:'🥾',face:'🥾',need:'休みたい！',sub:'長い道でつかれた旅人',pts:90,station:'🛏️'},
+  admin:{icon:'📜',face:'👨',need:'村の相談です',sub:'村の仕事をたずねる人',pts:130,station:'📜'},
+  guide:{icon:'🧭',face:'🧭',need:'道を教えて！',sub:'北へ行きたい旅人',pts:170,station:'🪧'},
+  exchange:{icon:'🗣️',face:'🗣️',need:'話を伝えたい！',sub:'人や情報をつなぐ人',pts:210,station:'🤝'}
 };
 const unlocks=[0,800,2200,4500];
 const clearScoreTarget=7000;
@@ -167,6 +176,7 @@ let state={screen:'title',score:0,best:0,tier:0,combo:0,lastHit:0,guests:[],next
 try{state.best=+localStorage.getItem('kina_bansho_best')||0}catch(e){}
 const $=s=>document.querySelector(s);
 const lane=$('#queueLane'),scoreEl=$('#score'),bestEl=$('#best'),nextFace=$('#nextFace');
+const field=$('#field');
 bestEl.textContent=state.best;
 let audio=null,muted=false;
 
@@ -217,7 +227,25 @@ function updateHUD(){
    const lk=b.querySelector('.lock');if(lk)lk.style.display=locked?'block':'none'
  });
  document.querySelectorAll('.tier').forEach((e,i)=>{e.classList.toggle('on',i<=state.tier);e.classList.toggle('now',i===state.tier)});
+ document.querySelectorAll('.station').forEach((s,i)=>s.classList.toggle('locked',i>state.tier));
+ const front=state.guests[0];
+ document.querySelectorAll('.station').forEach(s=>s.classList.toggle('hot',!!front&&s.dataset.station===front.type));
  $('#tea').disabled=state.tea<=0;$('#help').disabled=state.help<=0
+}
+function stationCenter(type){
+ const s=document.querySelector('.station[data-station="'+type+'"]'),fr=field.getBoundingClientRect(),r=s.getBoundingClientRect();
+ return{x:r.left-fr.left+r.width/2,y:r.top-fr.top+r.height/2}
+}
+function animateWalker(g,type,successMove=true){
+ const fr=field.getBoundingClientRect(),gr=g.el.getBoundingClientRect(),to=stationCenter(type);
+ const w=document.createElement('div');w.className='walker';w.textContent=TYPES[g.type].face;
+ w.style.left=(gr.left-fr.left+8)+'px';w.style.top=(gr.top-fr.top+10)+'px';field.appendChild(w);
+ const sx=parseFloat(w.style.left),sy=parseFloat(w.style.top),tx=to.x-24,ty=to.y-24;
+ const frames=successMove
+   ?[{left:sx+'px',top:sy+'px',transform:'scale(1)'},{left:tx+'px',top:ty+'px',transform:'scale(1.08)'},{left:tx+'px',top:ty+'px',transform:'scale(.75)',opacity:.15}]
+   :[{left:sx+'px',top:sy+'px'},{left:(sx+(tx-sx)*.55)+'px',top:(sy+(ty-sy)*.55)+'px'},{left:sx+'px',top:sy+'px'}];
+ const a=w.animate(frames,{duration:successMove?650:430,easing:'ease-in-out'});
+ a.onfinish=()=>w.remove()
 }
 function spawnGuest(){
  if(state.guests.length>=6){gameOver();return}
@@ -226,13 +254,20 @@ function spawnGuest(){
  const data=TYPES[type],g={id:state.uid++,type,pat:1,y:-82,el:null};
  const el=document.createElement('div');el.className='guest';el.dataset.id=g.id;
  el.innerHTML='<div class="face">'+data.face+'</div><div><div class="need">'+data.need+'</div><div class="sub">'+data.sub+'</div></div><div class="patience"><i></i></div>';
- lane.appendChild(el);g.el=el;state.guests.push(g);layoutGuests();updateCurrent();updateHUD()
+ lane.appendChild(el);g.el=el;state.guests.push(g);layoutGuests();updateCurrent();updateHUD();
+ el.animate([{opacity:0,transform:'translateX(75%) translateY(-18px) scale(.8)'},{opacity:1,transform:'translateX(-50%) translateY(0) scale(1)'}],{duration:520,easing:'cubic-bezier(.2,.9,.3,1)'})
 }
 function layoutGuests(){
  state.guests.forEach((g,i)=>{g.y=i*76+8;g.el.style.top=g.y+'px'})
 }
 function updateCurrent(){
- state.guests.forEach((g,i)=>g.el.classList.toggle('current',i===0))
+ state.guests.forEach((g,i)=>g.el.classList.toggle('current',i===0));
+ const front=state.guests[0];
+ document.querySelectorAll('.station').forEach(s=>s.classList.toggle('hot',!!front&&s.dataset.station===front.type));
+ if(front&&state.score<350){
+   const label={inn:'🛏️ 宿へ行きたいみたい！',admin:'📜 村の仕事かな？',guide:'🪧 道案内かな？',exchange:'🤝 交流かな？'}[front.type];
+   toast(label)
+ }
 }
 function service(type){
  if(state.screen!=='play'||!state.guests.length)return;
@@ -246,7 +281,9 @@ function success(g){
  state.score+=points;if(state.score>state.best){state.best=state.score;saveBest()}
  addPop('+'+points,g.el);if(state.combo>=2)addCombo('れんぞく ×'+state.combo+'！');
  sfxGood(state.tier);
- g.el.classList.add('done');state.guests.shift();setTimeout(()=>g.el.remove(),180);layoutGuests();updateCurrent();
+ animateWalker(g,g.type,true);
+ const st=document.querySelector('.station[data-station="'+g.type+'"]');st.classList.add('hot');setTimeout(()=>st.classList.remove('hot'),700);
+ g.el.classList.add('done');state.guests.shift();setTimeout(()=>g.el.remove(),620);layoutGuests();updateCurrent();
  if(g.type==='inn'&&state.score<300)toast('旅人を休ませる「宿場」の仕事！');
  if(g.type==='admin'&&state.score<1600)toast('村の相談を受ける「行政」の仕事！');
  if(g.type==='guide'&&state.score<3500)toast('喜名は北へ向かう道の大事な場所！');
@@ -258,6 +295,7 @@ function success(g){
 function fail(g){
  state.combo=0;g.pat=Math.max(0,g.pat-.22);g.el.classList.add('bad');setTimeout(()=>g.el.classList.remove('bad'),420);
  const i=g.el.querySelector('.patience i');i.style.height=(g.pat*100)+'%';i.style.background=g.pat<.35?'#d85c53':'#e7a94c';
+ const pressed=window.__lastServiceType||g.type;animateWalker(g,pressed,false);
  addPop('ちがう！',g.el,'#ff6b61');sfxBad();
  if(g.pat<=0){toast('お客さんが帰っちゃった！');g.el.classList.add('done');state.guests.shift();setTimeout(()=>g.el.remove(),180);layoutGuests();updateCurrent()}
 }
@@ -296,7 +334,7 @@ function loop(now){
 }
 requestAnimationFrame(loop);
 
-document.querySelectorAll('.service').forEach(b=>b.addEventListener('click',()=>service(b.dataset.type)));
+document.querySelectorAll('.service').forEach(b=>b.addEventListener('click',()=>{window.__lastServiceType=b.dataset.type;service(b.dataset.type)}));
 $('#tea').onclick=useTea;$('#help').onclick=useHelp;
 $('#play').onclick=start;$('#again').onclick=start;
 $('#continue').onclick=()=>{state.screen='play';$('#clearModal').classList.remove('show');toast('まだまだ営業中！')};
